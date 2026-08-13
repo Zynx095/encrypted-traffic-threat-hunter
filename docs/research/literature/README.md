@@ -35,6 +35,20 @@ literature/
 4. **ML Methods for Encrypted Traffic Classification** — supervised, deep learning, explainability, concept drift.
 5. **Challenges, Gaps, and Positioning of ETTH** — synthesis, limitations, research gap statement, hypotheses.
 
+## Research Corpus Status
+
+**Phase:** Literature Review Phase 1 — Research Corpus Discovery  
+**Date completed:** 2026-08-14  
+**Sources discovered:** 28  
+**Distribution across research areas:**
+- Area 1 (Encrypted Traffic Analysis): 6 sources
+- Area 2 (TLS Fingerprinting: JA3/JA4/ECH): 8 sources
+- Area 3 (Flow-Based Network Intrusion Detection): 6 sources
+- Area 4 (Machine Learning for Network Security): 7 sources
+- Area 5 (Research Gaps): 4 sources (2 cross-listed from Areas 2 and 4)
+
+**Status:** Corpus manifest populated in `corpus-manifest.csv`. Annotated bibliography and literature matrix are pending Phase 2.
+
 ## How to Add Papers
 
 1. Search and screen sources using the search strategy in the literature review plan.
