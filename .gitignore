@@ -1,0 +1,145 @@
+﻿# ─────────────────────────────────────────────────────────────
+# .gitignore — Encrypted Traffic Threat Hunter (ETTH)
+# ─────────────────────────────────────────────────────────────
+
+# ── Python ───────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.cpython-*.p
+.pypy_v
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+pip-wheel-metadata/
+*.manifest
+*.spec
+.installed.cfg
+*.whl
+conda-meta/
+.ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.sphinx/
+sphinx-docs/
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+*.cov
+.hypothesis/
+
+# ── Virtual Environments ─────────────────────────────────────
+.venv/
+venv/
+env/
+ENV/
+.env
+.venv.bak/
+venv.bak/
+
+# ── FastAPI ──────────────────────────────────────────────────
+*.sqlite3
+*.sqlite3-journal
+
+# ── Node / React ─────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.yarn/
+dist/
+build/
+*.tsbuildinfo
+.next/
+.nuxt/
+.vite/
+.parcel-cache/
+.eslintcache
+
+# ── Environment Files ────────────────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ── IDE ─────────────────────────────────────────────────────
+.vscode/
+*.code-workspace
+.idea/
+*.iml
+*.iws
+out/
+*.sublime-project
+*.sublime-workspace
+
+# ── OS ───────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# ── Data — Large Datasets, PCAP, ML Artifacts ────────────────
+data/raw/
+data/processed/
+data/interim/
+data/external/
+*.pcap
+*.pcapng
+*.cap
+*.dmp
+models/
+ml/models/*.pkl
+ml/models/*.pt
+ml/models/*.pth
+ml/models/*.h5
+ml/models/*.keras
+ml/models/*.onnx
+ml/models/*.joblib
+ml/models/*.bin
+ml/models/*.safetensors
+mlruns/
+*.mlflow
+
+# ── Logs ─────────────────────────────────────────────────────
+*.log
+logs/
+.log/
+celerybeat-schedule
+celerybeat.pid
+
+# ── Docker ───────────────────────────────────────────────────
+*.pid
+docker-compose.override.yml
+docker-compose.local.yml
+.docker.ignore
+
+# ── Compiled / Build ─────────────────────────────────────────
+target/
+*.class
+*.jar
+*.war
+*.o
+*.obj
+*.exe
+*.dll
+*.dylib
+*.a
+*.lib
+*.out
+*.app
+*.ipa
+*.apk
+*.msi
