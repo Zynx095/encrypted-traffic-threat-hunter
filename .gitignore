@@ -1,4 +1,4 @@
-﻿# ─────────────────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────
 # .gitignore — Encrypted Traffic Threat Hunter (ETTH)
 # ─────────────────────────────────────────────────────────────
 
@@ -96,6 +96,8 @@ data/raw/
 data/processed/
 data/interim/
 data/external/
+data/samples/
+data/verification/output/
 *.pcap
 *.pcapng
 *.cap

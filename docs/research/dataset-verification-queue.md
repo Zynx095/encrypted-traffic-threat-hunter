@@ -14,7 +14,7 @@
 
 ## P0 — Required Before Primary Dataset Selection
 
-### Task: DS-003 JA3/JA4 Computability
+### [DONE] Task: DS-003 JA3/JA4 Computability
 - **dataset:** DS-003 (USTC-TFC2016)
 - **unresolved question:** Are JA4 and JA3 fingerprints actually computable from the raw PCAPs?
 - **evidence required:** Raw PCAPs containing valid TLS ClientHello records.
@@ -23,8 +23,9 @@
 - **acceptance criterion:** JA4 correctly extracts without failure for the majority of TLS flows in the sample.
 - **dependency:** Access to GitHub repository (Verified).
 - **priority:** P0
+- **status:** **DONE (FAILED)** — Empirical verification showed malware relies on SSL 3.0 (no extensions for JA4) and benign lacks ClientHellos entirely.
 
-### Task: DS-003 Encrypted Flow Volume
+### [DONE] Task: DS-003 Encrypted Flow Volume
 - **dataset:** DS-003 (USTC-TFC2016)
 - **unresolved question:** Is there a sufficient volume of encrypted traffic once the 94.7% unencrypted traffic is filtered out?
 - **evidence required:** Count of TLS-encrypted flows versus total flows in the dataset.
@@ -33,8 +34,9 @@
 - **acceptance criterion:** The estimated encrypted flow volume remains sufficient for stratified train/test splitting (e.g., >10,000 flows).
 - **dependency:** None.
 - **priority:** P0
+- **status:** **DONE (FAILED)** — Empirical verification showed extreme scarcity of encrypted flows (e.g., 0.16% in Zeus sample).
 
-### Task: Access Verification for Modern TLS Datasets
+### [DONE] Task: Access Verification for Modern TLS Datasets
 - **dataset:** DS-004 (CipherSpectrum), DS-005 (CSTNET-TLS1.3)
 - **unresolved question:** Can these datasets actually be downloaded and do they contain raw PCAPs?
 - **evidence required:** Confirmation of access and PCAP availability.
@@ -43,6 +45,18 @@
 - **acceptance criterion:** Datasets are accessible without unreasonable barriers and contain raw PCAPs.
 - **dependency:** None.
 - **priority:** P0
+- **status:** **DONE** — DS-004 is publicly available at `cspectrum.web.cse.unsw.edu.au` with PCAPs. DS-005 is TSV-only.
+
+### [DONE] Task: DS-004 (CipherSpectrum) Empirical PCAP Verification
+- **dataset:** DS-004 (CipherSpectrum)
+- **unresolved question:** Do the downloaded ZIP files actually contain readable TLS 1.3 PCAPs that successfully parse to JA4 fingerprints and flow features?
+- **evidence required:** Extracted JA4 fingerprints and flow feature measurements from a sample of the PCAPs.
+- **verification method:** Download a ZIP sample, extract PCAP, run `verify_ds004.py`.
+- **expected output:** High success rate of JA4 extraction.
+- **acceptance criterion:** JA4 computable on modern TLS 1.3 sessions.
+- **dependency:** None (Access verified).
+- **priority:** P0
+- **status:** **DONE (SUCCESS)** — Sample PCAPs parsed successfully. Valid ClientHellos, ServerHellos, and modern TLS 1.3 attributes present. JA4 correctly computable. Bidirectional flow confirmed.
 
 ---
 
