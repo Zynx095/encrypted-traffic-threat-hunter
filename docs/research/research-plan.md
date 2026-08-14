@@ -1,4 +1,4 @@
-# ETTH Research Plan
+﻿# ETTH Research Plan
 
 ## Encrypted Traffic Threat Hunter (ETTH)
 
@@ -67,7 +67,7 @@ The research problem is therefore to determine whether these two sources of meta
 
 # 4. Research Hypotheses
 
-### Null Hypothesis — H0
+### Null Hypothesis ΓÇö H0
 
 There is no statistically significant difference in detection performance between:
 
@@ -77,7 +77,7 @@ There is no statistically significant difference in detection performance betwee
 
 configurations.
 
-### Alternative Hypothesis — H1
+### Alternative Hypothesis ΓÇö H1
 
 The combined **JA4 + Flow** configuration provides a statistically significant improvement in detection performance compared with the individual feature families.
 
@@ -89,7 +89,7 @@ If feature fusion does not improve performance, that result will still provide u
 
 # 5. Research Objectives
 
-## Objective 1 — Understand the Existing Research
+## Objective 1 ΓÇö Understand the Existing Research
 
 Perform a structured literature review covering:
 
@@ -108,7 +108,7 @@ Perform a structured literature review covering:
 
 ---
 
-## Objective 2 — Identify Suitable Datasets
+## Objective 2 ΓÇö Identify Suitable Datasets
 
 Investigate datasets that contain:
 
@@ -124,7 +124,7 @@ Dataset selection will be treated as a research decision rather than simply choo
 
 ---
 
-## Objective 3 — Verify JA3/JA4 Computability
+## Objective 3 ΓÇö Verify JA3/JA4 Computability
 
 Before using a dataset, verify whether the required packet information is actually present.
 
@@ -143,7 +143,7 @@ A dataset containing TLS traffic will **not automatically be considered JA4-comp
 
 ---
 
-## Objective 4 — Build a Reproducible Traffic-Extraction Pipeline
+## Objective 4 ΓÇö Build a Reproducible Traffic-Extraction Pipeline
 
 Develop a controlled pipeline for converting PCAP traffic into research features.
 
@@ -151,19 +151,19 @@ Conceptually:
 
 ```text
 PCAP
-  ↓
+  Γåô
 Packet Parsing
-  ↓
+  Γåô
 TLS Handshake Extraction
-  ↓
+  Γåô
 JA3 / JA3S / JA4 Extraction
-  ↓
+  Γåô
 Flow Construction
-  ↓
+  Γåô
 Flow Behavioral Features
-  ↓
+  Γåô
 Feature Validation
-  ↓
+  Γåô
 Research Dataset
 ```
 
@@ -171,7 +171,7 @@ The exact implementation tools will be selected only after dataset verification.
 
 ---
 
-## Objective 5 — Construct Controlled Experimental Configurations
+## Objective 5 ΓÇö Construct Controlled Experimental Configurations
 
 The initial comparison will contain five configurations:
 
@@ -387,7 +387,7 @@ TLS 1.3, ECH, QUIC, and HTTP/3 can change the observable information available t
 
 # 12. Research Phases
 
-## Phase 1 — Research Foundation
+## Phase 1 ΓÇö Research Foundation
 
 **Status:** Completed
 
@@ -408,7 +408,7 @@ Deliverables:
 
 ---
 
-## Phase 2 — Literature and Dataset Discovery
+## Phase 2 ΓÇö Literature and Dataset Discovery
 
 **Status:** Completed / Continuing
 
@@ -431,7 +431,7 @@ Deliverables:
 
 ---
 
-## Phase 3 — Research Gap Validation
+## Phase 3 ΓÇö Research Gap Validation
 
 **Status:** Completed / Under refinement
 
@@ -449,7 +449,7 @@ The project should focus on rigorous evaluation of **feature fusion, leakage con
 
 ---
 
-## Phase 4 — Experimental Design
+## Phase 4 ΓÇö Experimental Design
 
 **Status:** Completed
 
@@ -471,7 +471,7 @@ Deliverables:
 
 ---
 
-## Phase 5 — Dataset Evaluation
+## Phase 5 ΓÇö Dataset Evaluation
 
 **Status:** Completed / Requires final verification
 
@@ -492,7 +492,7 @@ Current priority:
 
 ---
 
-## Phase 6 — Direct Dataset Verification
+## Phase 6 ΓÇö Direct Dataset Verification
 
 **Next major phase**
 
@@ -518,7 +518,7 @@ Tasks:
 
 ---
 
-## Phase 7 — Data Extraction Pipeline
+## Phase 7 ΓÇö Data Extraction Pipeline
 
 Tasks:
 
@@ -536,7 +536,7 @@ Deliverable:
 
 ---
 
-## Phase 8 — Baseline Experiments
+## Phase 8 ΓÇö Baseline Experiments
 
 Run:
 
@@ -555,7 +555,7 @@ Deliverables:
 
 ---
 
-## Phase 9 — Feature Fusion Experiments
+## Phase 9 ΓÇö Feature Fusion Experiments
 
 Run:
 
@@ -570,7 +570,7 @@ Primary question:
 
 ---
 
-## Phase 10 — Statistical Evaluation
+## Phase 10 ΓÇö Statistical Evaluation
 
 Perform:
 
@@ -584,7 +584,7 @@ The goal is to determine whether observed improvements are statistically meaning
 
 ---
 
-## Phase 11 — Explainability
+## Phase 11 ΓÇö Explainability
 
 Use SHAP or another justified XAI method to analyze:
 
@@ -597,7 +597,7 @@ Use SHAP or another justified XAI method to analyze:
 
 ---
 
-## Phase 12 — Generalization and Robustness
+## Phase 12 ΓÇö Generalization and Robustness
 
 Evaluate:
 
@@ -610,7 +610,7 @@ Evaluate:
 
 ---
 
-## Phase 13 — Final Analysis
+## Phase 13 ΓÇö Final Analysis
 
 Analyze:
 
@@ -627,7 +627,7 @@ The project will report negative findings honestly.
 
 ---
 
-## Phase 14 — Research Paper
+## Phase 14 ΓÇö Research Paper
 
 Final paper structure:
 
@@ -688,31 +688,31 @@ At the current stage:
 
 ```text
 Research Foundation
-        ↓
+        Γåô
 Literature Review
-        ↓
+        Γåô
 Research Gap Validation
-        ↓
+        Γåô
 Experimental Design
-        ↓
+        Γåô
 Dataset Landscape
-        ↓
+        Γåô
 [CURRENT POSITION]
-        ↓
+        Γåô
 Direct Dataset Verification
-        ↓
+        Γåô
 Feature Extraction
-        ↓
+        Γåô
 Baseline Experiments
-        ↓
+        Γåô
 Feature Fusion
-        ↓
+        Γåô
 Statistical Evaluation
-        ↓
+        Γåô
 Explainability
-        ↓
+        Γåô
 Generalization
-        ↓
+        Γåô
 Research Paper
 ```
 
@@ -741,7 +741,7 @@ The project will follow these principles throughout development:
 
 ## 17. Immediate Next Step
 
-**Phase 6 — Direct Dataset Verification**
+**Phase 6 ΓÇö Direct Dataset Verification**
 
 Before writing the extraction pipeline or training any ML model, ETTH will verify the strongest candidate datasets directly.
 
