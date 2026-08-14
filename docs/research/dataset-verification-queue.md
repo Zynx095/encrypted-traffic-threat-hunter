@@ -14,6 +14,17 @@
 
 ## P0 — Required Before Primary Dataset Selection
 
+### [NEW] Task: DATASET_REQUIRED: Modern Malware PCAPs
+- **dataset:** TBD (e.g., Stratosphere IPS, CIC-MalMem2022)
+- **unresolved question:** Does there exist a publicly accessible dataset containing real malware traffic encrypted with modern TLS (1.2+) that supports JA4 extraction?
+- **evidence required:** Raw PCAPs containing malware ClientHellos with TLS extensions.
+- **verification method:** Locate candidate, download sample PCAPs, run `verify_ds004.py` script logic.
+- **expected output:** Successful JA4 hashes for malware traffic.
+- **acceptance criterion:** JA4 computable on malware sessions.
+- **dependency:** None.
+- **priority:** P0
+- **status:** **PENDING** — Required because no currently registered dataset contains JA4-computable malware traffic.
+
 ### [DONE] Task: DS-003 JA3/JA4 Computability
 - **dataset:** DS-003 (USTC-TFC2016)
 - **unresolved question:** Are JA4 and JA3 fingerprints actually computable from the raw PCAPs?
