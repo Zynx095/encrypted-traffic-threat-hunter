@@ -25,6 +25,28 @@
 - **priority:** P0
 - **status:** **PENDING** — Required because no currently registered dataset contains JA4-computable malware traffic.
 
+### [NEW] Task: DS-006 and DS-007 Academic Access Request
+- **dataset:** DS-006 (Beyond JA4+), DS-007 (Annotated Encrypted Network Traffic Dataset)
+- **unresolved question:** Can we obtain the full, raw PCAPs for these datasets?
+- **evidence required:** Approval from authors and receipt of PCAP files.
+- **verification method:** Draft and send academic request to Petr Matoušek and Ondřej Ryšavý at Brno University of Technology.
+- **expected output:** Download links for the full PCAP datasets.
+- **acceptance criterion:** PCAPs are successfully downloaded and readable.
+- **dependency:** None.
+- **priority:** P0
+- **status:** **PENDING** — Request must be drafted and sent.
+
+### [NEW] Task: DS-008 MTA Sample Verification
+- **dataset:** DS-008 (Malware-Traffic-Analysis.net)
+- **unresolved question:** Can we cleanly extract TLS 1.3 ClientHellos and compute JA4 from a representative sample of these PCAPs?
+- **evidence required:** Successful JA4 extraction and bidirectional flow parsing.
+- **verification method:** Manually download 5-10 recent (2024-2026) TLS 1.3 malware PCAPs from MTA and run `verify_ds004.py` script logic.
+- **expected output:** Valid JA4 hashes.
+- **acceptance criterion:** JA4 correctly extracts without failure for the majority of TLS flows in the sample.
+- **dependency:** None.
+- **priority:** P0
+- **status:** **PENDING** — Manual sample download required.
+
 ### [DONE] Task: DS-003 JA3/JA4 Computability
 - **dataset:** DS-003 (USTC-TFC2016)
 - **unresolved question:** Are JA4 and JA3 fingerprints actually computable from the raw PCAPs?
@@ -92,6 +114,17 @@
 - **acceptance criterion:** Leakage is sufficiently controlled such that the model must rely on behavioral or generic fingerprint traits.
 - **dependency:** Selection of primary dataset (P0).
 - **priority:** P1
+
+### [NEW] Task: DS-009 MCFP Sample Curation and Verification
+- **dataset:** DS-009 (Stratosphere MCFP)
+- **unresolved question:** Can we isolate modern TLS 1.3 malware captures from the broader dataset and successfully extract JA4?
+- **evidence required:** Identified TLS 1.3 PCAPs and successful JA4 hashes.
+- **verification method:** Locate recent (2024-2025) captures in the MCFP repository, download a small PCAP sample, and run extraction logic.
+- **expected output:** A curated list of usable PCAPs and verified JA4 computability.
+- **acceptance criterion:** At least some MCFP captures support JA4 extraction on TLS 1.3.
+- **dependency:** None.
+- **priority:** P1
+- **status:** **PENDING** — Requires manual repository traversal.
 
 ---
 

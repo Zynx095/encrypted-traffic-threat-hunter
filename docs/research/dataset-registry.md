@@ -120,7 +120,10 @@ The registry prevents these problems by making every assumption explicit, dated,
 |-------|---------|
 | `PRIMARY_TRAINING` | Used as the main training dataset for one or more experiments. |
 | `PRIMARY_TEST` | Used as the main held-out test dataset. |
+| `PRIMARY_CANDIDATE` | A dataset currently under evaluation to become the primary dataset. |
+| `SECONDARY_MALWARE` | Used to provide additional malware samples, usually requiring cross-dataset blending. |
 | `SECONDARY_VALIDATION` | Used to validate findings from the primary dataset. |
+| `SUPPLEMENTARY` | Used for a specialized, peripheral purpose (e.g., IoT traffic comparison). |
 | `CROSS_DATASET_GENERALIZATION` | Used specifically to test whether models trained on one dataset generalize to another. |
 | `MODERN_TLS_VALIDATION` | Used to validate JA4 and flow-feature behavior under TLS 1.3 or modern protocol conditions. |
 | `TLS13_BENIGN_BASELINE` | Used as a baseline for benign TLS 1.3 traffic. |
