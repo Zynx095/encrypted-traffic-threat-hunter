@@ -34,9 +34,9 @@
 - **acceptance criterion:** PCAPs are successfully downloaded and readable.
 - **dependency:** None.
 - **priority:** P0
-- **status:** **PENDING** — Request must be drafted and sent.
+- **status:** **DRAFTED** — Drafts created in `dataset-access-request-drafts.md`. Pending institutional approval/sending.
 
-### [NEW] Task: DS-008 MTA Sample Verification
+### [NEW] Task: DS-008 MTA Sample Verification (Ready for Step 14)
 - **dataset:** DS-008 (Malware-Traffic-Analysis.net)
 - **unresolved question:** Can we cleanly extract TLS 1.3 ClientHellos and compute JA4 from a representative sample of these PCAPs?
 - **evidence required:** Successful JA4 extraction and bidirectional flow parsing.
@@ -45,7 +45,7 @@
 - **acceptance criterion:** JA4 correctly extracts without failure for the majority of TLS flows in the sample.
 - **dependency:** None.
 - **priority:** P0
-- **status:** **PENDING** — Manual sample download required.
+- **status:** **READY** — Authorized for immediate execution in Step 14 while awaiting DS-006/DS-007 academic requests.
 
 ### [DONE] Task: DS-003 JA3/JA4 Computability
 - **dataset:** DS-003 (USTC-TFC2016)
