@@ -36,7 +36,7 @@
 - **priority:** P0
 - **status:** **DRAFTED** — Drafts created in `dataset-access-request-drafts.md`. Pending institutional approval/sending.
 
-### [NEW] Task: DS-008 MTA Sample Verification (Ready for Step 14)
+### [DONE] Task: DS-008 MTA Sample Verification (Ready for Step 14)
 - **dataset:** DS-008 (Malware-Traffic-Analysis.net)
 - **unresolved question:** Can we cleanly extract TLS 1.3 ClientHellos and compute JA4 from a representative sample of these PCAPs?
 - **evidence required:** Successful JA4 extraction and bidirectional flow parsing.
@@ -45,7 +45,18 @@
 - **acceptance criterion:** JA4 correctly extracts without failure for the majority of TLS flows in the sample.
 - **dependency:** None.
 - **priority:** P0
-- **status:** **READY** — Authorized for immediate execution in Step 14 while awaiting DS-006/DS-007 academic requests.
+- **status:** **DONE** — Empirically verified via Step 14 scripts.
+
+### [NEW] Task: DS-008 Benign Baseline Acquisition
+- **dataset:** DS-008 (Malware-Traffic-Analysis.net) / TBD Benign
+- **unresolved question:** Since DS-008 lacks benign traffic, how will we construct a defensible binary classification experiment without introducing massive cross-dataset leakage?
+- **evidence required:** A paired benign dataset or masking strategy that isolates malware behavior rather than capture environments.
+- **verification method:** Literature review and dataset search for compatible SOHO/Enterprise benign datasets.
+- **expected output:** A selected secondary benign dataset.
+- **acceptance criterion:** The combined dataset must not allow the ML model to trivialize the task based on IP, SNI, or timing artifacts alone.
+- **dependency:** Step 14 verification completion.
+- **priority:** P0
+- **status:** **PENDING** — Awaiting Phase 5 closure review (Step 15).
 
 ### [DONE] Task: DS-003 JA3/JA4 Computability
 - **dataset:** DS-003 (USTC-TFC2016)
