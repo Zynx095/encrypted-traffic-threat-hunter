@@ -25,16 +25,31 @@
 - **priority:** P0
 - **status:** **PENDING** — Required because no currently registered dataset contains JA4-computable malware traffic.
 
+## Phase 6 Transition Queue (Active Tasks)
+
+### [NEW] Task: DS-008 Benign Baseline Acquisition & Leakage Normalization
+- **dataset:** DS-008 (Malware) / DS-004 (Benign)
+- **unresolved question:** How to construct a defensible binary classification experiment without introducing massive cross-dataset leakage?
+- **evidence required:** A feature normalization strategy that isolates malware behavior rather than capture environments.
+- **verification method:** Build the Phase 6 pipeline to strip IP, Port, MAC, and absolute timestamps, then analyze remaining baseline variance.
+- **expected output:** A clean, normalized feature matrix for DS-008/DS-004.
+- **acceptance criterion:** The combined dataset must not allow the ML model to trivialize the task based on environment artifacts alone.
+- **dependency:** None (Phase 6 ready).
+- **priority:** P0
+- **status:** **ACTIVE** — Carried over from Phase 5.
+
 ### [NEW] Task: DS-006 and DS-007 Academic Access Request
-- **dataset:** DS-006 (Beyond JA4+), DS-007 (Annotated Encrypted Network Traffic Dataset)
-- **unresolved question:** Can we obtain the full, raw PCAPs for these datasets?
+- **dataset:** DS-006, DS-007
+- **unresolved question:** Can we obtain the full, raw PCAPs for these unified datasets?
 - **evidence required:** Approval from authors and receipt of PCAP files.
-- **verification method:** Draft and send academic request to Petr Matoušek and Ondřej Ryšavý at Brno University of Technology.
+- **verification method:** Draft and send academic request to authors.
 - **expected output:** Download links for the full PCAP datasets.
 - **acceptance criterion:** PCAPs are successfully downloaded and readable.
 - **dependency:** None.
 - **priority:** P0
-- **status:** **DRAFTED** — Drafts created in `dataset-access-request-drafts.md`. Pending institutional approval/sending.
+- **status:** **DRAFTED** — Pending institutional approval/sending. Carried over from Phase 5.
+
+## Phase 5 Closed Verification Tasks
 
 ### [DONE] Task: DS-008 MTA Sample Verification (Ready for Step 14)
 - **dataset:** DS-008 (Malware-Traffic-Analysis.net)
@@ -46,17 +61,6 @@
 - **dependency:** None.
 - **priority:** P0
 - **status:** **DONE** — Empirically verified via Step 14 scripts.
-
-### [NEW] Task: DS-008 Benign Baseline Acquisition
-- **dataset:** DS-008 (Malware-Traffic-Analysis.net) / TBD Benign
-- **unresolved question:** Since DS-008 lacks benign traffic, how will we construct a defensible binary classification experiment without introducing massive cross-dataset leakage?
-- **evidence required:** A paired benign dataset or masking strategy that isolates malware behavior rather than capture environments.
-- **verification method:** Literature review and dataset search for compatible SOHO/Enterprise benign datasets.
-- **expected output:** A selected secondary benign dataset.
-- **acceptance criterion:** The combined dataset must not allow the ML model to trivialize the task based on IP, SNI, or timing artifacts alone.
-- **dependency:** Step 14 verification completion.
-- **priority:** P0
-- **status:** **PENDING** — Awaiting Phase 5 closure review (Step 15).
 
 ### [DONE] Task: DS-003 JA3/JA4 Computability
 - **dataset:** DS-003 (USTC-TFC2016)
