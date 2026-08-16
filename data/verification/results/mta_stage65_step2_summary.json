@@ -1,0 +1,19 @@
+{
+    "total_candidates_attempted": 10,
+    "successful_downloads": 10,
+    "failed_downloads": 0,
+    "valid_pcaps": 10,
+    "invalid_pcaps": 0,
+    "tls_capable": 10,
+    "tls12_capable": 5,
+    "tls13_capable": 7,
+    "clienthello_capable": 9,
+    "ja3_capable": 9,
+    "ja3s_capable": 9,
+    "ja4_capable": 9,
+    "bidirectional_flow_capable": 10,
+    "high_quality": 5,
+    "medium_quality": 4,
+    "low_quality": 0,
+    "rejected": 1
+}

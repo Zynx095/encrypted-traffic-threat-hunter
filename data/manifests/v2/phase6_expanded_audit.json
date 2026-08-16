@@ -1,0 +1,24 @@
+{
+  "flows_total": 2549,
+  "tls_flows": 200,
+  "tls12_flows": 113,
+  "tls13_flows": 87,
+  "ja3_flows": 200,
+  "ja3s_flows": 202,
+  "ja4_flows": 200,
+  "behavioral_feature_rows": 2549,
+  "model_safe_rows": 2549,
+  "experiment_A_rows": 2068,
+  "experiment_B_rows": 160,
+  "experiment_C_rows": 160,
+  "experiment_D_rows": 160,
+  "experiment_E_rows": 160,
+  "duplicates": {
+    "exact_duplicate_count": 1005,
+    "duplicate_groups": 75,
+    "cross_pcap_duplicate_groups": 0,
+    "cross_label_duplicate_groups": 0
+  },
+  "ds008_flows": 2543,
+  "ds004_flows": 6
+}
