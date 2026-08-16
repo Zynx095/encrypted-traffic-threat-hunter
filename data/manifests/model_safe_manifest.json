@@ -1,0 +1,17 @@
+{
+    "schema_version": "1.0",
+    "pipeline_version": "Phase6_Step7",
+    "generation_timestamp": 1786788667.8206756,
+    "input_rows": 1460,
+    "output_rows": 1460,
+    "total_columns": 92,
+    "model_safe_columns": 90,
+    "excluded_columns": [
+        "flow_id",
+        "dataset_id",
+        "source_file"
+    ],
+    "duplicate_count": 553,
+    "missing_value_policy": "Semantic missingness preserved natively as null/NaN. No imputation performed.",
+    "leakage_check": "Provenance and known forbidden string subsets (ip, port, mac, timestamp, absolute time, raw domains) actively stripped."
+}

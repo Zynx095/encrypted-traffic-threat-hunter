@@ -3,7 +3,7 @@ Tests for Phase 6 Step 3 protocol validation logic.
 """
 import unittest
 import struct
-from step3_analysis import parse_tls_extensions
+from pipeline.tls_fingerprinting import parse_tls_extensions
 
 class TestStep3Analysis(unittest.TestCase):
     def test_parse_tls_extensions(self):

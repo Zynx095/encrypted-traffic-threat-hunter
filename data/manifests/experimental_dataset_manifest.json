@@ -1,0 +1,88 @@
+{
+    "schema_version": "1.0",
+    "pipeline_version": "Phase6_Step8",
+    "random_seed": 42,
+    "split_strategy": "GroupShuffleSplit (n_splits=1, test_size=0.2)",
+    "grouping_strategy": "behavioral_hash (exact feature vector identity)",
+    "duplicate_strategy": "Duplicates kept together in same split",
+    "creation_timestamp": 1786789496.90167,
+    "duplicate_analysis": {
+        "exact_duplicate_count": 553,
+        "duplicate_groups": 41,
+        "cross_pcap_duplicate_groups": 2,
+        "cross_label_duplicate_groups": 0
+    },
+    "fingerprint_coverage": {
+        "total_rows": 1460,
+        "ja3_coverage": 68,
+        "ja3s_coverage": 68,
+        "ja4_coverage": 68
+    },
+    "experiments": {
+        "A_flow": {
+            "train_rows": 807,
+            "test_rows": 653,
+            "features": 83,
+            "train_class_balance": {
+                "MALICIOUS": 802,
+                "BENIGN_VALIDATION": 5
+            },
+            "test_class_balance": {
+                "MALICIOUS": 652,
+                "BENIGN_VALIDATION": 1
+            }
+        },
+        "B_ja3": {
+            "train_rows": 54,
+            "test_rows": 14,
+            "features": 1,
+            "train_class_balance": {
+                "MALICIOUS": 49,
+                "BENIGN_VALIDATION": 5
+            },
+            "test_class_balance": {
+                "MALICIOUS": 13,
+                "BENIGN_VALIDATION": 1
+            }
+        },
+        "C_ja4": {
+            "train_rows": 54,
+            "test_rows": 14,
+            "features": 1,
+            "train_class_balance": {
+                "MALICIOUS": 49,
+                "BENIGN_VALIDATION": 5
+            },
+            "test_class_balance": {
+                "MALICIOUS": 13,
+                "BENIGN_VALIDATION": 1
+            }
+        },
+        "D_ja3_flow": {
+            "train_rows": 54,
+            "test_rows": 14,
+            "features": 84,
+            "train_class_balance": {
+                "MALICIOUS": 49,
+                "BENIGN_VALIDATION": 5
+            },
+            "test_class_balance": {
+                "MALICIOUS": 13,
+                "BENIGN_VALIDATION": 1
+            }
+        },
+        "E_ja4_flow": {
+            "train_rows": 54,
+            "test_rows": 14,
+            "features": 84,
+            "train_class_balance": {
+                "MALICIOUS": 49,
+                "BENIGN_VALIDATION": 5
+            },
+            "test_class_balance": {
+                "MALICIOUS": 13,
+                "BENIGN_VALIDATION": 1
+            }
+        }
+    }
+}

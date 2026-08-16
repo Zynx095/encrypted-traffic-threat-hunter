@@ -1,0 +1,44 @@
+{
+  "audit_version": "1.0",
+  "phase": 6,
+  "step": 9,
+  "audit_date": "2026-08-15",
+  "test_count": 46,
+  "tests_passed": 46,
+  "tests_failed": 0,
+  "total_rows": 1460,
+  "dataset_counts": {
+    "DS-004": 6,
+    "DS-008": 1454
+  },
+  "fingerprint_counts": {
+    "JA3": 68,
+    "JA3S": 68,
+    "JA4": 68
+  },
+  "duplicate_counts": {
+    "exact_duplicates": 553,
+    "duplicate_groups": 41,
+    "cross_pcap": 2,
+    "cross_label": 0
+  },
+  "experiment_counts": {
+    "A": 1460,
+    "B": 68,
+    "C": 68,
+    "D": 68,
+    "E": 68
+  },
+  "experiment_statuses": {
+    "A": "READY WITH CONDITIONS",
+    "B": "READY WITH CONDITIONS",
+    "C": "READY WITH CONDITIONS",
+    "D": "READY WITH CONDITIONS",
+    "E": "READY WITH CONDITIONS"
+  },
+  "leakage_status": "NO DIRECT IDENTIFIERS LEAKED. DATASET-SOURCE CONFOUNDER PRESENT.",
+  "reproducibility_status": "DETERMINISTIC",
+  "engineering_readiness": "READY",
+  "scientific_readiness": "READY WITH CONDITIONS",
+  "phase6_status": "COMPLETE"
+}
