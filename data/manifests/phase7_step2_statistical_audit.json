@@ -1,0 +1,37 @@
+{
+  "A": {
+    "rows": 2118,
+    "cols": 87,
+    "malicious": 2114,
+    "benign_validation": 4,
+    "missing_label": 0
+  },
+  "B": {
+    "rows": 160,
+    "cols": 3,
+    "malicious": 156,
+    "benign_validation": 4,
+    "missing_label": 0
+  },
+  "C": {
+    "rows": 160,
+    "cols": 3,
+    "malicious": 156,
+    "benign_validation": 4,
+    "missing_label": 0
+  },
+  "D": {
+    "rows": 160,
+    "cols": 88,
+    "malicious": 156,
+    "benign_validation": 4,
+    "missing_label": 0
+  },
+  "E": {
+    "rows": 160,
+    "cols": 88,
+    "malicious": 156,
+    "benign_validation": 4,
+    "missing_label": 0
+  }
+}
