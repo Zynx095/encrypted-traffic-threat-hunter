@@ -183,3 +183,47 @@ def get_fingerprint_stats(fp_type: str, hash_val: str):
         "benign_flows": int((subset["label"] == "BENIGN").sum()),
         "datasets": subset["dataset_id"].unique().tolist()
     }
+
+from fastapi import WebSocket, WebSocketDisconnect
+from backend.ws_manager import manager
+from backend.replay_engine import replay_engine
+
+@app.websocket("/ws/live-stream")
+async def websocket_live_stream(websocket: WebSocket):
+    await manager.connect(websocket)
+    # Send welcome handshake message
+    await manager.send_json({
+        "type": "CONNECTED",
+        "connection_id": str(id(websocket)),
+        "state": replay_engine.state,
+        "speed": replay_engine.speed
+    }, websocket)
+    
+    try:
+        while True:
+            data = await websocket.receive_json()
+            action = data.get("action")
+            
+            if action == "START_REPLAY":
+                speed = float(data.get("speed", 1.0))
+                threats_only = bool(data.get("threats_only", False))
+                await replay_engine.start(speed=speed, threats_only=threats_only)
+                
+            elif action == "PAUSE_REPLAY":
+                await replay_engine.pause()
+                
+            elif action == "RESUME_REPLAY":
+                await replay_engine.resume()
+                
+            elif action == "SET_SPEED":
+                speed = float(data.get("speed", 1.0))
+                await replay_engine.set_speed(speed)
+                
+            elif action == "STOP_REPLAY":
+                await replay_engine.stop()
+                
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)
+    except Exception:
+        manager.disconnect(websocket)
+

@@ -183,3 +183,43 @@ export interface FingerprintStats {
   benign_flows: number
   datasets?: string[]
 }
+
+export interface LiveFlowEvent {
+  event_id: string
+  timestamp: string
+  flow_id: string
+  dataset_id?: string
+  protocol: 'TCP' | 'UDP'
+  forward_endpoint: string
+  reverse_endpoint: string
+  clienthello_present: boolean
+  serverhello_present: boolean
+  ja3_hash?: string | null
+  ja3s_hash?: string | null
+  ja4?: string | null
+  sni_present: boolean
+  alpn_value?: string | null
+  duration: number
+  total_packets: number
+  total_bytes: number
+  packets_per_second: number
+  bytes_per_second: number
+  prediction: 'MALICIOUS' | 'BENIGN' | 'UNKNOWN'
+  threat_score: number
+  model_name: string
+  confidence: number
+  label_ground_truth?: string
+}
+
+export type WSClientMessage =
+  | { action: 'START_REPLAY'; speed?: number; threats_only?: boolean }
+  | { action: 'PAUSE_REPLAY' }
+  | { action: 'RESUME_REPLAY' }
+  | { action: 'SET_SPEED'; speed: number }
+  | { action: 'STOP_REPLAY' }
+
+export type WSServerMessage =
+  | { type: 'CONNECTED'; connection_id: string; state: string; speed: number }
+  | { type: 'STREAM_STATE'; state: 'RUNNING' | 'PAUSED' | 'STOPPED'; speed: number; threats_only?: boolean }
+  | { type: 'FLOW_EVENT'; data: LiveFlowEvent }
+  | { type: 'ERROR'; message: string }

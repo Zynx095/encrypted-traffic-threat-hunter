@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { etthApi } from '../lib/api'
-import type { PilotSummary, PilotFoldResult, Phase6Audit, ModelSafeFlow, BehavioralFeature } from '../types/api'
+import type { PilotSummary, PilotFoldResult, Phase6Audit, ModelSafeFlow, BehavioralFeature, LiveFlowEvent } from '../types/api'
 
 interface ETTHStore {
   // Pilot data
@@ -13,6 +13,11 @@ interface ETTHStore {
   behavioralFeatures: BehavioralFeature[] | null
   totalFlows: number
   totalBehavioralFeatures: number
+
+  // Real-Time Stream State
+  wsConnected: boolean
+  latestLiveEvent: LiveFlowEvent | null
+  liveThreatCount: number
   
   // Loading states
   loading: boolean
@@ -22,6 +27,8 @@ interface ETTHStore {
   fetchPilotData: () => Promise<void>
   fetchPhase6Audit: () => Promise<void>
   fetchFlows: (limit?: number, offset?: number) => Promise<void>
+  setWSConnected: (connected: boolean) => void
+  addLiveEvent: (event: LiveFlowEvent) => void
   setLoading: (loading: boolean) => void
   setError: (error: string) => void
 }
@@ -34,6 +41,9 @@ export const useETTHStore = create<ETTHStore>((set) => ({
   behavioralFeatures: null,
   totalFlows: 0,
   totalBehavioralFeatures: 0,
+  wsConnected: false,
+  latestLiveEvent: null,
+  liveThreatCount: 0,
   loading: false,
   error: null,
 
@@ -79,6 +89,11 @@ export const useETTHStore = create<ETTHStore>((set) => ({
     }
   },
 
+  setWSConnected: (connected) => set({ wsConnected: connected }),
+  addLiveEvent: (event) => set((state) => ({
+    latestLiveEvent: event,
+    liveThreatCount: event.prediction === 'MALICIOUS' ? state.liveThreatCount + 1 : state.liveThreatCount
+  })),
   setLoading: (loading) => set({ loading }),
   setError: (error) => set({ error }),
 }))
