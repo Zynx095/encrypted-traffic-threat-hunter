@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
 import { useETTHStore } from '../store/etthStore'
 import { LoadingState, ErrorState } from '../components/ui/StatusStates'
-import { Card, CardHeader, CardBody, CardTitle } from '../components/ui/Card'
+import { PageHeader } from '../components/ui/PageHeader'
+import { SectionHeader } from '../components/ui/SectionHeader'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import { CHART_COLORS, RECHARTS_TOOLTIP, RECHARTS_GRID, RECHARTS_AXIS } from '../lib/constants'
 
@@ -44,94 +44,87 @@ export default function Models() {
   }))
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 max-w-7xl mx-auto space-y-8">
+      <PageHeader 
+        title="Model Analysis" 
+        description="Model comparison and performance analysis." 
+      />
+
+      <div className="border-l-2 border-warning/50 bg-warning/5 px-4 py-3 text-sm text-etth-text/80">
+        <span className="font-medium text-warning mr-2">Note:</span>
+        Model metrics are from a controlled pilot with extreme class imbalance. 
+        Results demonstrate pipeline functionality, not production-grade performance.
+      </div>
+
       <div>
-        <h1 className="text-2xl font-semibold text-etth-text">Model Analysis</h1>
-        <p className="text-sm text-etth-text/50 mt-1">Model comparison and performance analysis</p>
-      </div>
-
-      <div className="bg-warning/10 border border-warning/30 rounded-lg p-4">
-        <p className="text-sm text-warning">
-          <strong>Note:</strong> Model metrics are from a controlled pilot with extreme class imbalance. 
-          Results demonstrate pipeline functionality, not production-grade performance.
-        </p>
-      </div>
-
-      <Card className="bg-surface-800 border-surface-700">
-        <CardHeader>
-          <CardTitle>Model Performance Summary</CardTitle>
-        </CardHeader>
-        <CardBody>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-surface-700">
-                  <th className="text-left py-2 px-3 text-etth-text/60">Model</th>
-                  <th className="text-right py-2 px-3 text-etth-text/60">Precision</th>
-                  <th className="text-right py-2 px-3 text-etth-text/60">Recall</th>
-                  <th className="text-right py-2 px-3 text-etth-text/60">F1</th>
-                  <th className="text-right py-2 px-3 text-etth-text/60">PR-AUC</th>
-                  <th className="text-right py-2 px-3 text-etth-text/60">Balanced Acc</th>
+        <SectionHeader title="Model Performance Summary" />
+        <div className="mt-4 border border-surface-700/50 rounded-sm overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead className="bg-surface-800/50 border-b border-surface-700/50">
+              <tr>
+                <th className="text-left py-3 px-4 font-medium text-etth-text/60">Model</th>
+                <th className="text-right py-3 px-4 font-medium text-etth-text/60">Precision</th>
+                <th className="text-right py-3 px-4 font-medium text-etth-text/60">Recall</th>
+                <th className="text-right py-3 px-4 font-medium text-etth-text/60">F1</th>
+                <th className="text-right py-3 px-4 font-medium text-etth-text/60">PR-AUC</th>
+                <th className="text-right py-3 px-4 font-medium text-etth-text/60">Balanced Acc</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-surface-700/50">
+              {modelMetrics.map((m) => (
+                <tr key={m.model} className="hover:bg-surface-700/20 transition-colors">
+                  <td className="py-3 px-4 font-medium text-etth-text">{m.model}</td>
+                  <td className="py-3 px-4 text-right font-mono text-etth-text/80">{m.avg_precision.toFixed(3)}</td>
+                  <td className="py-3 px-4 text-right font-mono text-etth-text/80">{m.avg_recall.toFixed(3)}</td>
+                  <td className="py-3 px-4 text-right font-mono text-etth-text/80">{m.avg_f1.toFixed(3)}</td>
+                  <td className="py-3 px-4 text-right font-mono">
+                    <span className={m.avg_pr_auc >= 0.99 ? 'text-accent' : 'text-etth-text/80'}>
+                      {m.avg_pr_auc.toFixed(3)}
+                    </span>
+                  </td>
+                  <td className="py-3 px-4 text-right font-mono text-etth-text/80">{m.avg_balanced_accuracy.toFixed(3)}</td>
                 </tr>
-              </thead>
-              <tbody>
-                {modelMetrics.map((m) => (
-                  <tr key={m.model} className="border-b border-surface-700/50 hover:bg-surface-700/20">
-                    <td className="py-3 px-3 font-medium">{m.model}</td>
-                    <td className="py-3 px-3 text-right font-mono">{m.avg_precision.toFixed(3)}</td>
-                    <td className="py-3 px-3 text-right font-mono">{m.avg_recall.toFixed(3)}</td>
-                    <td className="py-3 px-3 text-right font-mono">{m.avg_f1.toFixed(3)}</td>
-                    <td className="py-3 px-3 text-right font-mono">
-                      <span className={m.avg_pr_auc >= 0.99 ? 'text-warning' : 'text-etth-text'}>
-                        {m.avg_pr_auc.toFixed(3)}
-                      </span>
-                    </td>
-                    <td className="py-3 px-3 text-right font-mono">{m.avg_balanced_accuracy.toFixed(3)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div>
+          <SectionHeader title="Metric Comparison" />
+          <div className="mt-4 border border-surface-700/50 p-4 rounded-sm bg-surface-800/20">
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={chartData}>
+                <CartesianGrid {...RECHARTS_GRID} />
+                <XAxis dataKey="name" stroke={RECHARTS_AXIS.stroke} tick={RECHARTS_AXIS.tick} />
+                <YAxis stroke={RECHARTS_AXIS.stroke} tick={RECHARTS_AXIS.tick} domain={[0, 1]} />
+                <Tooltip {...RECHARTS_TOOLTIP} />
+                <Legend />
+                <Bar dataKey="Precision" fill={CHART_COLORS.info} name="Precision" />
+                <Bar dataKey="Recall" fill={CHART_COLORS.success} name="Recall" />
+                <Bar dataKey="F1" fill={CHART_COLORS.warning} name="F1" />
+                <Bar dataKey="PR-AUC" fill={CHART_COLORS.accent} name="PR-AUC" />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
-        </CardBody>
-      </Card>
+        </div>
 
-      <Card className="bg-surface-800 border-surface-700">
-        <CardHeader>
-          <CardTitle>Metric Comparison</CardTitle>
-        </CardHeader>
-        <CardBody>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={chartData}>
-              <CartesianGrid {...RECHARTS_GRID} />
-              <XAxis dataKey="name" stroke={RECHARTS_AXIS.stroke} tick={RECHARTS_AXIS.tick} />
-              <YAxis stroke={RECHARTS_AXIS.stroke} tick={RECHARTS_AXIS.tick} domain={[0, 1]} />
-              <Tooltip {...RECHARTS_TOOLTIP} />
-              <Legend />
-              <Bar dataKey="Precision" fill={CHART_COLORS.info} name="Precision" />
-              <Bar dataKey="Recall" fill={CHART_COLORS.success} name="Recall" />
-              <Bar dataKey="F1" fill={CHART_COLORS.warning} name="F1" />
-              <Bar dataKey="PR-AUC" fill={CHART_COLORS.accent} name="PR-AUC" />
-            </BarChart>
-          </ResponsiveContainer>
-        </CardBody>
-      </Card>
-
-      <Card className="bg-surface-800 border-surface-700">
-        <CardHeader>
-          <CardTitle>Interpretation Guidelines</CardTitle>
-        </CardHeader>
-        <CardBody className="space-y-3 text-sm text-etth-text/70">
-          <p>
-            <strong className="text-etth-text">PR-AUC is primary:</strong> With extreme class imbalance, PR-AUC provides the most meaningful assessment of model performance on the minority class.
-          </p>
-          <p>
-            <strong className="text-etth-text">Balanced Accuracy:</strong> This metric accounts for class imbalance by averaging recall per class. Values near 0.5 indicate performance no better than random.
-          </p>
-          <p>
-            <strong className="text-etth-text">Caution:</strong> All models show near-perfect metrics due to the source-confounded nature of the pilot dataset. This is expected and documented.
-          </p>
-        </CardBody>
-      </Card>
+        <div>
+          <SectionHeader title="Interpretation Guidelines" />
+          <div className="mt-4 border border-surface-700/50 p-5 rounded-sm bg-surface-800/20 space-y-4 text-sm text-etth-text/70">
+            <div>
+              <span className="font-medium text-etth-text">PR-AUC is primary:</span> With extreme class imbalance, PR-AUC provides the most meaningful assessment of model performance on the minority class.
+            </div>
+            <div>
+              <span className="font-medium text-etth-text">Balanced Accuracy:</span> This metric accounts for class imbalance by averaging recall per class. Values near 0.5 indicate performance no better than random.
+            </div>
+            <div>
+              <span className="font-medium text-etth-text">Caution:</span> All models show near-perfect metrics due to the source-confounded nature of the pilot dataset. This is expected and documented.
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

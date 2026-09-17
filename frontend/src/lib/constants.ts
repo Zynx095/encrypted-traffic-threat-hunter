@@ -40,10 +40,11 @@ export const CHART_PALETTE = [
 export const RECHARTS_TOOLTIP = {
   contentStyle: {
     backgroundColor: 'rgb(14, 17, 23)',
-    border: '1px solid rgb(26, 30, 39)',
-    borderRadius: '8px',
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.4)',
+    border: '1px solid rgb(30, 33, 41)',
+    borderRadius: '2px',
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.5)',
     fontSize: '12px',
+    padding: '8px 10px',
   },
   labelStyle: {
     color: 'rgb(226, 232, 240)',

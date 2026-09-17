@@ -1,8 +1,7 @@
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useETTHStore } from '../store/etthStore'
 import { LoadingState, ErrorState } from '../components/ui/StatusStates'
-import { Card, CardHeader, CardTitle, CardBody } from '../components/ui/Card'
-import { MetricCard } from '../components/ui/MetricCard'
+import { PageHeader } from '../components/ui/PageHeader'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import { CHART_COLORS, RECHARTS_TOOLTIP, RECHARTS_GRID, RECHARTS_AXIS } from '../lib/constants'
 import type { Phase6Audit } from '../types/api'
@@ -32,103 +31,119 @@ export default function TLSIntelligence() {
   ]
 
   return (
-    <div className="p-6 space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold text-etth-text">TLS Intelligence</h1>
-        <p className="text-sm text-etth-text/50 mt-1">TLS protocol analysis and fingerprint coverage</p>
+    <div className="p-4 lg:p-6 space-y-6 max-w-[1600px] mx-auto font-sans">
+      <PageHeader
+        title="TLS Intelligence & Fingerprints"
+        description="Global TLS protocol distribution and fingerprint coverage across operational data streams."
+      />
+
+      {/* Typographic Grouped Summary Strip */}
+      <div className="bg-surface-800 border border-surface-700 rounded-sm p-4">
+        <div className="flex flex-wrap items-center justify-between gap-6 text-xs font-mono">
+          <div>
+            <span className="text-etth-text/40 text-[10px] block uppercase">TOTAL FLOW RECORDS</span>
+            <span className="text-xl font-bold text-etth-text mt-0.5 block">{(audit.total_rows || 0).toLocaleString()}</span>
+          </div>
+
+          <div className="h-8 w-px bg-surface-700 hidden sm:block" />
+
+          <div>
+            <span className="text-etth-text/40 text-[10px] block uppercase">TLS OBSERVABLE FLOWS</span>
+            <span className="text-xl font-bold text-success mt-0.5 block">{(auditFp?.TLS || 0).toLocaleString()}</span>
+          </div>
+
+          <div className="h-8 w-px bg-surface-700 hidden sm:block" />
+
+          <div>
+            <span className="text-etth-text/40 text-[10px] block uppercase">JA3 FINGERPRINTS</span>
+            <span className="text-xl font-bold text-accent mt-0.5 block">{(auditFp?.JA3 || 0).toLocaleString()}</span>
+          </div>
+
+          <div className="h-8 w-px bg-surface-700 hidden sm:block" />
+
+          <div>
+            <span className="text-etth-text/40 text-[10px] block uppercase">JA4 FINGERPRINTS</span>
+            <span className="text-xl font-bold text-info mt-0.5 block">{(auditFp?.JA4 || 0).toLocaleString()}</span>
+          </div>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <MetricCard label="Total Flows" value={audit.total_rows || 0} />
-        <MetricCard label="TLS Flows" value={auditFp?.TLS || 0} />
-        <MetricCard label="TLS 1.2" value={0} />
-        <MetricCard label="TLS 1.3" value={auditFp?.TLS || 0} />
-      </div>
-
+      {/* Analytical Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="bg-surface-800 border-surface-700">
-          <CardHeader>
-            <CardTitle>TLS Version Distribution</CardTitle>
-          </CardHeader>
-          <CardBody>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={tlsVersionData.filter(d => d.value > 0)}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={100}
-                  paddingAngle={5}
-                  dataKey="value"
-                >
-                  {tlsVersionData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip {...RECHARTS_TOOLTIP} />
-              </PieChart>
-            </ResponsiveContainer>
-            <div className="flex justify-center gap-6 mt-4">
-              {tlsVersionData.map((item) => (
-                <div key={item.name} className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
-                  <span className="text-sm text-etth-text/70">{item.name}</span>
-                  <span className="text-sm font-mono">{item.value === 0 ? 'Not available' : item.value}</span>
-                </div>
-              ))}
-            </div>
-          </CardBody>
-        </Card>
+        <div className="border border-surface-700 rounded-sm bg-surface-800 p-4 space-y-4">
+          <div className="text-xs font-semibold text-etth-text uppercase tracking-wider">TLS Version Distribution</div>
+          <ResponsiveContainer width="100%" height={260}>
+            <PieChart>
+              <Pie
+                data={tlsVersionData.filter(d => d.value > 0)}
+                cx="50%"
+                cy="50%"
+                innerRadius={60}
+                outerRadius={90}
+                paddingAngle={5}
+                dataKey="value"
+              >
+                {tlsVersionData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip {...RECHARTS_TOOLTIP} />
+            </PieChart>
+          </ResponsiveContainer>
+          <div className="flex justify-center gap-6 text-xs">
+            {tlsVersionData.map((item) => (
+              <div key={item.name} className="flex items-center gap-2 font-mono">
+                <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
+                <span className="text-etth-text/70">{item.name}:</span>
+                <span className="text-etth-text font-bold">{item.value === 0 ? 'UNAVAILABLE' : item.value.toLocaleString()}</span>
+              </div>
+            ))}
+          </div>
+        </div>
 
-        <Card className="bg-surface-800 border-surface-700">
-          <CardHeader>
-            <CardTitle>Fingerprint Coverage</CardTitle>
-          </CardHeader>
-          <CardBody>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={fingerprintCoverage}>
-                <CartesianGrid {...RECHARTS_GRID} />
-                <XAxis dataKey="name" stroke={RECHARTS_AXIS.stroke} tick={RECHARTS_AXIS.tick} />
-                <YAxis stroke={RECHARTS_AXIS.stroke} tick={RECHARTS_AXIS.tick} />
-                <Tooltip {...RECHARTS_TOOLTIP} />
-                <Bar dataKey="available" fill={CHART_COLORS.accent} name="Available" />
-                <Bar dataKey="total" fill={CHART_COLORS.info} name="Total TLS" />
-              </BarChart>
-            </ResponsiveContainer>
-            <div className="mt-4 space-y-2">
-              {fingerprintCoverage.map((fp) => (
-                <div key={fp.name} className="flex items-center justify-between text-sm">
-                  <span className="text-etth-text/70">{fp.name}</span>
-                  <span className="font-mono">
-                    {fp.available} / {fp.total}{' '}
-                    <span className="text-etth-text/40">
-                      ({Math.round((fp.available / Math.max(fp.total, 1)) * 100)}%)
-                    </span>
+        <div className="border border-surface-700 rounded-sm bg-surface-800 p-4 space-y-4">
+          <div className="text-xs font-semibold text-etth-text uppercase tracking-wider">Fingerprint Coverage</div>
+          <ResponsiveContainer width="100%" height={260}>
+            <BarChart data={fingerprintCoverage}>
+              <CartesianGrid {...RECHARTS_GRID} />
+              <XAxis dataKey="name" stroke={RECHARTS_AXIS.stroke} tick={RECHARTS_AXIS.tick} />
+              <YAxis stroke={RECHARTS_AXIS.stroke} tick={RECHARTS_AXIS.tick} />
+              <Tooltip {...RECHARTS_TOOLTIP} />
+              <Bar dataKey="available" fill={CHART_COLORS.accent} name="Available" />
+              <Bar dataKey="total" fill={CHART_COLORS.info} name="Total TLS" />
+            </BarChart>
+          </ResponsiveContainer>
+          <div className="space-y-2 pt-2 border-t border-surface-700/50 text-xs font-mono">
+            {fingerprintCoverage.map((fp) => (
+              <div key={fp.name} className="flex items-center justify-between">
+                <span className="text-etth-text/70">{fp.name} Coverage:</span>
+                <span className="text-etth-text font-semibold">
+                  {fp.available.toLocaleString()} / {fp.total.toLocaleString()}{' '}
+                  <span className="text-etth-text/40">
+                    ({Math.round((fp.available / Math.max(fp.total, 1)) * 100)}%)
                   </span>
-                </div>
-              ))}
-            </div>
-          </CardBody>
-        </Card>
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
-      <Card className="bg-surface-800 border-surface-700">
-        <CardHeader>
-          <CardTitle>Analysis Notes</CardTitle>
-        </CardHeader>
-        <CardBody className="space-y-3 text-sm text-etth-text/70">
+      {/* Analysis Notes */}
+      <div className="border border-surface-700 rounded-sm bg-surface-800 p-4 space-y-2 text-xs">
+        <div className="text-xs font-semibold text-etth-text uppercase tracking-wider mb-2">Protocol Analysis Notes</div>
+        <div className="text-etth-text/70 space-y-1.5 leading-relaxed">
           <p>
             <strong className="text-etth-text">ClientHello Availability:</strong> Only {auditFp?.TLS || 0} out of {audit.total_rows || 0} flows contain TLS records necessary for fingerprinting.
           </p>
           <p>
-            <strong className="text-etth-text">Coverage Gap:</strong> The gap between total flows and TLS-capable flows indicates significant non-TLS traffic in the dataset, including TCP noise and application-layer protocols.
+            <strong className="text-etth-text">Coverage Gap:</strong> The gap between total flows and TLS-capable flows indicates non-TLS traffic in the dataset, including raw TCP handshakes and application-layer noise.
           </p>
           <p>
-            <strong className="text-etth-text">Fingerprint Utility:</strong> With ~{Math.round(((auditFp?.JA4 || 0) / Math.max(auditFp?.TLS || 1, 1)) * 100)}% coverage on TLS flows, fingerprint-based experiments (B, C, D, E) have substantially smaller sample sizes than flow-only experiments.
+            <strong className="text-etth-text">Fingerprint Utility:</strong> With ~{Math.round(((auditFp?.JA4 || 0) / Math.max(auditFp?.TLS || 1, 1)) * 100)}% coverage on TLS flows, fingerprint-based experiments (B, C, D, E) operate on precise sub-samples compared to flow-only feature baselines.
           </p>
-        </CardBody>
-      </Card>
+        </div>
+      </div>
     </div>
   )
 }

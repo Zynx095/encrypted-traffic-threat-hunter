@@ -133,60 +133,28 @@ Client (Frontend)                                       Server (FastAPI Backend)
 
 ---
 
-## 4. Proposed Event & Message Schema
+### Hardened Canonical Event Schema (`ETTHStreamEvent`)
 
-### WebSocket Control Client Message (`ClientMessage`)
+In Phase 7.1, the WebSocket event protocol was hardened into a single canonical contract validated by Pydantic ([`backend/schemas.py`](file:///E:/UserBenchmark/encrypted-traffic-threat-hunter/backend/schemas.py)). Full specification is available in [`PHASE7_EVENT_PROTOCOL.md`](file:///E:/UserBenchmark/encrypted-traffic-threat-hunter/PHASE7_EVENT_PROTOCOL.md).
+
 ```typescript
-type ClientMessage =
-  | { action: 'START_REPLAY'; dataset_id?: string; speed?: number; threats_only?: boolean }
-  | { action: 'PAUSE_REPLAY' }
-  | { action: 'RESUME_REPLAY' }
-  | { action: 'SET_SPEED'; speed: number }
-  | { action: 'SEEK_REPLAY'; position_ratio: number };
-```
-
-### WebSocket Server Message (`ServerMessage`)
-```typescript
-type ServerMessage =
-  | { type: 'CONNECTED'; connection_id: string; available_datasets: string[] }
-  | { type: 'STREAM_STATE'; state: 'RUNNING' | 'PAUSED' | 'STOPPED'; speed: number }
-  | { type: 'FLOW_EVENT'; data: LiveFlowEvent }
-  | { type: 'ERROR'; message: string };
-
-interface LiveFlowEvent {
-  event_id: string;
-  timestamp: string; // ISO-8601 UTC
-  flow_id: string;
-  source_file?: string;
+export interface ETTHStreamEvent {
+  event_id: string          // Stable unique ID: evt_{stream_id}_{sequence:05d}
+  sequence: number          // Monotonically increasing 1, 2, 3...
+  timestamp: string         // ISO-8601 UTC
+  stream_id: string         // Session stream identifier
+  source: string            // Source dataset (e.g. DS-008)
+  mode: 'REPLAY' | 'LIVE'   // Explicit replay mode indicator
+  event_type: EventType     // stream.started | flow.detected | stream.paused | etc.
   
-  // Network / 5-tuple
-  protocol: 'TCP' | 'UDP';
-  forward_endpoint: string;
-  reverse_endpoint: string;
-  
-  // TLS & Fingerprints
-  clienthello_present: boolean;
-  serverhello_present: boolean;
-  ja3_hash?: string;
-  ja3s_hash?: string;
-  ja4?: string;
-  sni_present: boolean;
-  alpn?: string;
-  
-  // Statistical / Behavioral Metrics
-  duration: number;
-  total_packets: number;
-  total_bytes: number;
-  packets_per_second: number;
-  bytes_per_second: number;
-  
-  // ML Inference Output
-  prediction: 'MALICIOUS' | 'BENIGN' | 'UNKNOWN';
-  threat_score: number; // 0.0 to 1.0 probability
-  model_name: string;
-  confidence: number;
+  flow?: FlowDetails | null
+  tls?: TLSDetails | null
+  detection?: DetectionDetails | null
+  provenance?: ProvenanceDetails | null
+  metadata?: StreamLifecycleMetadata | null
 }
 ```
+
 
 ---
 

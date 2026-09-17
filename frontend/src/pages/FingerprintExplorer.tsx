@@ -7,6 +7,7 @@ import { Card, CardBody } from '../components/ui/Card'
 import { Input } from '../components/ui/Input'
 import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
+import { PageHeader } from '../components/ui/PageHeader'
 import { Search, Copy, Check, Filter } from 'lucide-react'
 
 export default function FingerprintExplorer() {
@@ -55,12 +56,10 @@ export default function FingerprintExplorer() {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold text-etth-text">Fingerprint Explorer</h1>
-          <p className="text-sm text-etth-text/50 mt-1">Investigate JA3, JA3S, and JA4 fingerprints as evidence</p>
-        </div>
-      </div>
+      <PageHeader 
+        title="Fingerprint Explorer" 
+        description="Investigate JA3, JA3S, and JA4 fingerprints as evidence." 
+      />
 
       <div className="flex items-center gap-2">
         <Button
@@ -144,7 +143,7 @@ export default function FingerprintExplorer() {
         </div>
       )}
 
-      <div className="bg-info/10 border border-info/30 rounded-lg p-4">
+      <div className="bg-info/10 border border-info/30 rounded-sm p-4">
         <p className="text-sm text-info/80">
           <strong>Evidence Note:</strong> Fingerprints are observable metadata — not inherently malicious. 
           Each fingerprint should be evaluated in context with behavioral patterns and model predictions.

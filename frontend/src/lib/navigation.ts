@@ -1,5 +1,3 @@
-import type { LucideIcon } from 'lucide-react'
-
 export interface RouteConfig {
   path: string
   label: string
@@ -10,21 +8,26 @@ export interface RouteConfig {
 }
 
 export const NAV_GROUPS = [
-  { id: 'command', label: 'Console' },
-  { id: 'tls', label: 'Intelligence' },
-  { id: 'research', label: 'Analytics' },
+  { id: 'operate', label: 'OPERATE' },
+  { id: 'investigate', label: 'INVESTIGATE' },
+  { id: 'research', label: 'RESEARCH' },
 ] as const
 
 export type NavGroupId = typeof NAV_GROUPS[number]['id']
 
 export const NAVIGATION: RouteConfig[] = [
-  { path: '/overview',     label: 'Dashboard',         icon: 'LayoutDashboard', group: 'command' },
-  { path: '/threat-hunt',  label: 'Threat Hunt',       icon: 'Search',          group: 'command' },
-  { path: '/live',         label: 'Live Stream',       icon: 'Radio',           group: 'command' },
+  // OPERATE
+  { path: '/targets',      label: 'Targets',           icon: 'Target',          group: 'operate' },
+  { path: '/live',         label: 'Monitor',           icon: 'Radio',           group: 'operate' },
+  { path: '/sessions',     label: 'Sessions',          icon: 'Activity',        group: 'operate' },
 
-  { path: '/tls',          label: 'TLS Analysis',      icon: 'Lock',            group: 'tls' },
-  { path: '/fingerprints', label: 'Fingerprints',      icon: 'Fingerprint',     group: 'tls' },
+  // INVESTIGATE
+  { path: '/threat-hunt',  label: 'Threat Hunt',       icon: 'Search',          group: 'investigate' },
+  { path: '/flows',        label: 'Flows',             icon: 'Activity',        group: 'investigate' },
+  { path: '/tls',          label: 'TLS',               icon: 'Lock',            group: 'investigate' },
+  { path: '/fingerprints', label: 'Fingerprints',      icon: 'Fingerprint',     group: 'investigate' },
 
+  // RESEARCH
   { path: '/experiments',    label: 'Experiments',      icon: 'FlaskConical',   group: 'research' },
   { path: '/models',         label: 'Models',           icon: 'Brain',          group: 'research' },
   { path: '/explainability', label: 'Explainability',   icon: 'Lightbulb',      group: 'research' },

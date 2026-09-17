@@ -1,9 +1,24 @@
-import type { PilotSummary, PilotFoldResult, Phase6Audit, ExperimentalManifest, ModelSafeFlow, BehavioralFeature, DatasetRegistryEntry, FingerprintStats } from '../types/api'
+import type { 
+  PilotSummary, 
+  PilotFoldResult, 
+  Phase6Audit, 
+  ExperimentalManifest, 
+  ModelSafeFlow, 
+  BehavioralFeature, 
+  DatasetRegistryEntry, 
+  FingerprintStats, 
+  LiveCaptureStatusResponse,
+  Target,
+  CreateTargetRequest,
+  UpdateTargetRequest,
+  Session,
+  CreateSessionRequest
+} from '../types/api'
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
-async function request<T>(path: string): Promise<T> {
-  const response = await fetch(`${API_BASE}${path}`)
+async function request<T>(path: string, options?: RequestInit): Promise<T> {
+  const response = await fetch(`${API_BASE}${path}`, options)
   if (!response.ok) {
     throw new Error(`API error: ${response.status} ${response.statusText}`)
   }
@@ -67,6 +82,52 @@ export const etthApi = {
   fingerprints: {
     getStats: (type: string = 'ja3') => request<FingerprintStats[]>(`/api/fingerprints/stats?fp_type=${type}`),
     getByHash: (type: string, hash: string) => request<FingerprintStats>(`/api/fingerprints/${type}/${hash}`),
+  },
+
+  liveStream: {
+    interfaces: () => request<LiveCaptureStatusResponse>('/api/live-stream/interfaces'),
+    status: () => request<LiveCaptureStatusResponse>('/api/live-stream/status'),
+  },
+
+  targets: {
+    list: (includeDisabled = false) => request<Target[]>(`/api/targets?include_disabled=${includeDisabled}`),
+    create: (data: CreateTargetRequest) => request<Target>('/api/targets', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    }),
+    get: (targetId: string) => request<Target>(`/api/targets/${targetId}`),
+    update: (targetId: string, data: UpdateTargetRequest) => request<Target>(`/api/targets/${targetId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    }),
+    delete: (targetId: string) => request<{ status: string; target_id: string; disabled: boolean }>(`/api/targets/${targetId}`, {
+      method: 'DELETE',
+    }),
+  },
+
+  dns: {
+    addObservation: (data: { hostname: string; resolved_ip: string; ttl?: number; source?: string }) =>
+      request<{ status: string; hostname: string; resolved_ip: string }>('/api/dns/observations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      }),
+  },
+
+  sessions: {
+    list: () => request<Session[]>('/api/sessions'),
+    listByTarget: (targetId: string) => request<Session[]>(`/api/targets/${targetId}/sessions`),
+    createForTarget: (targetId: string, data: CreateSessionRequest) => request<Session>(`/api/targets/${targetId}/sessions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    }),
+    get: (sessionId: string) => request<Session>(`/api/sessions/${sessionId}`),
+    stop: (sessionId: string) => request<Session>(`/api/sessions/${sessionId}/stop`, {
+      method: 'POST',
+    }),
   },
 
   datasets: {

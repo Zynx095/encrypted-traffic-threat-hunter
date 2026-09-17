@@ -1,8 +1,6 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
-import { ChevronLeft } from 'lucide-react'
-import { Button } from './Button'
 import { cn } from '../../lib/utils'
+import { BackButton } from './BackButton'
 
 export interface PageHeaderProps {
   title: string
@@ -13,32 +11,25 @@ export interface PageHeaderProps {
 }
 
 export function PageHeader({ title, description, actions, backTo, className }: PageHeaderProps) {
-  const navigate = useNavigate()
-
   return (
-    <div className={cn("flex flex-col md:flex-row md:items-start justify-between gap-4 mb-6", className)}>
-      <div className="flex flex-col gap-1">
+    <div className={cn("flex items-start justify-between gap-4", className)}>
+      <div className="min-w-0">
         {backTo && (
-          <Button
-            variant="ghost"
-            size="sm"
-            className="w-fit -ml-3 mb-2 text-etth-text/50 hover:text-etth-text"
-            onClick={() => navigate(backTo.path)}
-          >
-            <ChevronLeft className="w-4 h-4 mr-1" />
-            {backTo.label}
-          </Button>
+          <div className="mb-2">
+            <BackButton label={backTo.label} to={backTo.path} />
+          </div>
         )}
-        <h1 className="text-xl font-semibold text-etth-text">{title}</h1>
+        <h1 className="text-base font-medium text-etth-text">{title}</h1>
         {description && (
-          <p className="text-sm text-etth-text/50">{description}</p>
+          <p className="text-xs text-etth-text/40 mt-0.5">{description}</p>
         )}
       </div>
       {actions && (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           {actions}
         </div>
       )}
     </div>
   )
 }
+

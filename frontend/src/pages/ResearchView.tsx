@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useETTHStore } from '../store/etthStore'
 import { LoadingState, ErrorState } from '../components/ui/StatusStates'
 import { Card, CardHeader, CardBody, CardTitle } from '../components/ui/Card'
+import { PageHeader } from '../components/ui/PageHeader'
 import { cn } from '../lib/utils'
 
 export default function ResearchView() {
@@ -24,10 +25,10 @@ export default function ResearchView() {
 
   return (
     <div className="p-6 space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold text-etth-text">Research Methodology</h1>
-        <p className="text-sm text-etth-text/50 mt-1">Data provenance, pipeline architecture, and experiment design</p>
-      </div>
+      <PageHeader 
+        title="Research Methodology" 
+        description="Data provenance, pipeline architecture, and experiment design." 
+      />
 
       {/* Methodology Pipeline */}
       <Card className="bg-surface-800 border-surface-700">
@@ -36,7 +37,7 @@ export default function ResearchView() {
         </CardHeader>
         <CardBody>
           <div className="flex flex-col items-center space-y-4 py-6">
-            <div className={cn('px-4 py-3 rounded-lg border text-center', 'bg-success/20 border-success/50 text-success')}>
+            <div className={cn('px-4 py-3 rounded-sm border text-center', 'bg-success/20 border-success/50 text-success')}>
               <div className="text-xs font-mono opacity-75">1</div>
               <div className="text-sm font-medium">Dataset Selection</div>
               <div className="text-xs opacity-75 mt-1">Benign (DS-004) & Malicious (DS-008) PCAPs</div>
@@ -48,7 +49,7 @@ export default function ResearchView() {
               </svg>
             </div>
             
-            <div className={cn('px-4 py-3 rounded-lg border text-center', 'bg-success/20 border-success/50 text-success')}>
+            <div className={cn('px-4 py-3 rounded-sm border text-center', 'bg-success/20 border-success/50 text-success')}>
               <div className="text-xs font-mono opacity-75">2</div>
               <div className="text-sm font-medium">Flow Reconstruction</div>
               <div className="text-xs opacity-75 mt-1">Zeek connection logging</div>
@@ -60,7 +61,7 @@ export default function ResearchView() {
               </svg>
             </div>
             
-            <div className={cn('px-4 py-3 rounded-lg border text-center', 'bg-success/20 border-success/50 text-success')}>
+            <div className={cn('px-4 py-3 rounded-sm border text-center', 'bg-success/20 border-success/50 text-success')}>
               <div className="text-xs font-mono opacity-75">3</div>
               <div className="text-sm font-medium">Traffic Labeling</div>
               <div className="text-xs opacity-75 mt-1">Source-based implicit labeling</div>
@@ -72,7 +73,7 @@ export default function ResearchView() {
               </svg>
             </div>
             
-            <div className={cn('px-4 py-3 rounded-lg border text-center', 'bg-success/20 border-success/50 text-success')}>
+            <div className={cn('px-4 py-3 rounded-sm border text-center', 'bg-success/20 border-success/50 text-success')}>
               <div className="text-xs font-mono opacity-75">4</div>
               <div className="text-sm font-medium">Feature Extraction</div>
               <div className="text-xs opacity-75 mt-1">Behavioral + TLS features</div>
@@ -84,7 +85,7 @@ export default function ResearchView() {
               </svg>
             </div>
             
-            <div className={cn('px-4 py-3 rounded-lg border text-center', 'bg-success/20 border-success/50 text-success', 'border-accent/50')}>
+            <div className={cn('px-4 py-3 rounded-sm border text-center', 'bg-success/20 border-success/50 text-success', 'border-accent/50')}>
               <div className="text-xs font-mono opacity-75">5</div>
               <div className="text-sm font-medium">Leakage-Safe Preprocessing</div>
               <div className="text-xs opacity-75 mt-1">Identifier removal, duplicate grouping</div>
@@ -98,7 +99,7 @@ export default function ResearchView() {
             
             <div className="flex gap-4 flex-wrap justify-center">
               {['A', 'B', 'C', 'D', 'E'].map(exp => (
-                <div key={exp} className={cn('px-4 py-3 rounded-lg border text-center', 'bg-success/20 border-success/50 text-success', exp === 'E' && 'border-accent/50')}>
+                <div key={exp} className={cn('px-4 py-3 rounded-sm border text-center', 'bg-success/20 border-success/50 text-success', exp === 'E' && 'border-accent/50')}>
                   <div className="text-xs font-mono opacity-75">6{exp.toLowerCase()}</div>
                   <div className="text-sm font-medium">Exp {exp}</div>
                   <div className="text-xs opacity-75 mt-1">
@@ -114,7 +115,7 @@ export default function ResearchView() {
               </svg>
             </div>
             
-            <div className={cn('px-4 py-3 rounded-lg border text-center', 'bg-warning/20 border-warning/50 text-warning')}>
+            <div className={cn('px-4 py-3 rounded-sm border text-center', 'bg-warning/20 border-warning/50 text-warning')}>
               <div className="text-xs font-mono opacity-75">7</div>
               <div className="text-sm font-medium">Model Evaluation</div>
               <div className="text-xs opacity-75 mt-1">CV, metrics, statistical analysis</div>
@@ -126,7 +127,7 @@ export default function ResearchView() {
               </svg>
             </div>
             
-            <div className={cn('px-4 py-3 rounded-lg border text-center', 'bg-surface-700 border-surface-600 text-etth-text/50')}>
+            <div className={cn('px-4 py-3 rounded-sm border text-center', 'bg-surface-700 border-surface-600 text-etth-text/50')}>
               <div className="text-xs font-mono opacity-75">8</div>
               <div className="text-sm font-medium">Interpretation</div>
               <div className="text-xs opacity-75 mt-1">Feature importance, explanations</div>
@@ -234,7 +235,7 @@ export default function ResearchView() {
               description: "All metrics reported are from a controlled pilot. Results should not be interpreted as production-grade performance."
             }
           ].map((limit, idx) => (
-            <div key={idx} className="p-3 bg-surface-700/30 rounded border border-surface-700">
+            <div key={idx} className="p-3 bg-surface-700/30 rounded-sm border border-surface-700">
               <p className="text-sm font-medium text-etth-text">{limit.title}</p>
               <p className="text-xs text-etth-text/60 mt-1">{limit.description}</p>
             </div>

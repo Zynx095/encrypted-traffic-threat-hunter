@@ -184,42 +184,229 @@ export interface FingerprintStats {
   datasets?: string[]
 }
 
-export interface LiveFlowEvent {
-  event_id: string
-  timestamp: string
+export interface FlowDetails {
   flow_id: string
-  dataset_id?: string
   protocol: 'TCP' | 'UDP'
   forward_endpoint: string
   reverse_endpoint: string
-  clienthello_present: boolean
-  serverhello_present: boolean
-  ja3_hash?: string | null
-  ja3s_hash?: string | null
-  ja4?: string | null
-  sni_present: boolean
-  alpn_value?: string | null
   duration: number
   total_packets: number
   total_bytes: number
   packets_per_second: number
   bytes_per_second: number
+}
+
+export interface TLSDetails {
+  clienthello_present: boolean
+  serverhello_present: boolean
+  ja3_hash: string | null
+  ja3s_hash: string | null
+  ja4: string | null
+  sni_present: boolean
+  sni_value?: string | null
+  alpn: string | null
+}
+
+export type ModelTrack = 'A_FLOW' | 'B_JA3' | 'C_JA4' | 'D_JA3_FLOW' | 'E_JA4_FLOW'
+
+export interface DetectionDetails {
   prediction: 'MALICIOUS' | 'BENIGN' | 'UNKNOWN'
   threat_score: number
   model_name: string
   confidence: number
-  label_ground_truth?: string
+  track?: ModelTrack
+  status?: 'COMPLETED' | 'SKIPPED' | 'ERROR'
+  skip_reason?: string | null
+  evidence?: string[]
+  inference_type?: string
+}
+
+export interface ProvenanceDetails {
+  dataset_id: string
+  source_file: string | null
+  label_ground_truth: string
+  caveat: string
+}
+
+export type StreamState = 'IDLE' | 'PLAYING' | 'PAUSED' | 'COMPLETED' | 'STOPPED' | 'ERROR'
+
+export interface StreamLifecycleMetadata {
+  speed?: number
+  threats_only?: boolean
+  total_events?: number | null
+  state?: StreamState
+  error_message?: string | null
+}
+
+export interface StreamTelemetry {
+  stream_id: string
+  target_id?: string | null
+  session_id?: string | null
+  mode: 'REPLAY' | 'LIVE'
+  source: string
+  state: StreamState
+  selected_track: ModelTrack
+  playback_speed: number
+  total_events: number
+  processed_events: number
+  flow_events: number
+  malicious_events: number
+  benign_events: number
+  skipped_events: number
+  error_events: number
+  events_per_second: number | null
+  elapsed_seconds: number
+  progress_percentage: number
+  connected_clients: number
+  processing_duration_ms: number | null
+  inference_duration_ms: number | null
+}
+
+export type EventType =
+  | 'stream.started'
+  | 'flow.detected'
+  | 'stream.paused'
+  | 'stream.resumed'
+  | 'stream.completed'
+  | 'stream.stopped'
+  | 'stream.error'
+  | 'stream.telemetry'
+
+export type AttributionStatus = 'ATTRIBUTED' | 'PROBABLE' | 'UNKNOWN' | 'NOT_MATCHED'
+
+export type EvidenceType =
+  | 'SNI_EXACT'
+  | 'SNI_SUBDOMAIN'
+  | 'DNS_MATCH'
+  | 'DESTINATION_IP_MATCH'
+  | 'HOSTNAME_MATCH'
+  | 'TARGET_METADATA_MATCH'
+  | 'NO_EVIDENCE'
+  | 'CONFLICTING_EVIDENCE'
+
+export interface AttributionEvidence {
+  type: EvidenceType
+  value: string
+  detail?: string | null
+}
+
+export interface TargetAttribution {
+  status: AttributionStatus
+  confidence: number
+  target_id?: string | null
+  evidence: AttributionEvidence[]
+  resolver_version: string
+}
+
+export interface ETTHStreamEvent {
+  event_id: string
+  sequence: number
+  timestamp: string
+  stream_id: string
+  target_id?: string | null
+  session_id?: string | null
+  source: string
+  mode: 'REPLAY' | 'LIVE'
+  event_type: EventType
+  flow?: FlowDetails | null
+  tls?: TLSDetails | null
+  attribution?: TargetAttribution | null
+  detection?: DetectionDetails | null
+  provenance?: ProvenanceDetails | null
+  metadata?: StreamLifecycleMetadata | null
+  telemetry?: StreamTelemetry | null
 }
 
 export type WSClientMessage =
-  | { action: 'START_REPLAY'; speed?: number; threats_only?: boolean }
+  | { action: 'START_REPLAY'; speed?: number; threats_only?: boolean; track?: ModelTrack; target_id?: string; session_id?: string }
+  | { action: 'START_LIVE'; interface?: string; track?: ModelTrack; target_id?: string; session_id?: string }
   | { action: 'PAUSE_REPLAY' }
   | { action: 'RESUME_REPLAY' }
   | { action: 'SET_SPEED'; speed: number }
+  | { action: 'SET_TRACK'; track: ModelTrack }
   | { action: 'STOP_REPLAY' }
+  | { action: 'STOP_LIVE' }
+  | { action: 'STOP_STREAM' }
+  | { action: 'SELECT_INTERFACE'; interface: string }
 
-export type WSServerMessage =
-  | { type: 'CONNECTED'; connection_id: string; state: string; speed: number }
-  | { type: 'STREAM_STATE'; state: 'RUNNING' | 'PAUSED' | 'STOPPED'; speed: number; threats_only?: boolean }
-  | { type: 'FLOW_EVENT'; data: LiveFlowEvent }
-  | { type: 'ERROR'; message: string }
+export type CaptureStatus = 'CAPTURE_UNAVAILABLE' | 'READY' | 'CAPTURING' | 'STOPPED' | 'ERROR'
+
+export interface NetworkInterface {
+  id: string
+  name: string
+  win_name: string
+  ip: string
+}
+
+export interface LiveCaptureStatusResponse {
+  available: boolean
+  status: CaptureStatus
+  selected_interface?: string | null
+  packets_observed: number
+  active_flows: number
+  finalized_flows: number
+  capture_errors: number
+  error_message?: string | null
+  interfaces: NetworkInterface[]
+}
+
+export type TargetType = 'WEB' | 'CUSTOM' | string
+
+export interface TargetLogo {
+  type: string
+  reference: string
+}
+
+export interface Target {
+  target_id: string
+  name: string
+  hostname: string
+  display_name: string
+  target_type: TargetType
+  logo?: TargetLogo | null
+  aliases?: string[]
+  enabled: boolean
+  created_at: string
+  metadata?: Record<string, unknown>
+}
+
+export interface CreateTargetRequest {
+  hostname: string
+  display_name?: string
+  target_type?: TargetType
+  logo?: TargetLogo
+  aliases?: string[]
+  metadata?: Record<string, unknown>
+}
+
+export interface UpdateTargetRequest {
+  display_name?: string
+  target_type?: TargetType
+  logo?: TargetLogo
+  aliases?: string[]
+  enabled?: boolean
+  metadata?: Record<string, unknown>
+}
+
+export type SessionStatus = 'CREATED' | 'ACTIVE' | 'PAUSED' | 'COMPLETED' | 'STOPPED' | 'ERROR'
+
+export interface Session {
+  session_id: string
+  target_id: string
+  status: SessionStatus
+  started_at: string
+  ended_at?: string | null
+  source_mode: 'REPLAY' | 'LIVE'
+  interface_id?: string | null
+  flow_count: number
+  threat_count: number
+  approved_flow_count: number
+  skipped_flow_count: number
+  metadata?: Record<string, unknown>
+}
+
+export interface CreateSessionRequest {
+  source_mode?: 'REPLAY' | 'LIVE'
+  interface_id?: string
+  metadata?: Record<string, unknown>
+}
