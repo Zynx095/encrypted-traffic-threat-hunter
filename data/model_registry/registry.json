@@ -1,0 +1,2096 @@
+{
+  "schema_version": "1.0",
+  "models": [
+    {
+      "model_id": "etth-a_flow-random_forest",
+      "version": 1,
+      "track": "A_FLOW",
+      "estimator": "random_forest",
+      "params": {
+        "min_samples_leaf": 5
+      },
+      "status": "ACTIVE",
+      "research_status": "RESEARCH_PILOT_SOURCE_CONFOUNDED",
+      "created_at": "2026-10-16T17:26:22.206223Z",
+      "feature_schema": {
+        "schema_version": "9.0.0",
+        "fingerprint": "0d63dd6fed740020",
+        "numeric": [
+          "flow_duration",
+          "total_packets",
+          "total_bytes",
+          "forward_packets",
+          "reverse_packets",
+          "forward_bytes",
+          "reverse_bytes",
+          "packets_per_second",
+          "bytes_per_second",
+          "forward_packet_ratio",
+          "reverse_packet_ratio",
+          "forward_byte_ratio",
+          "reverse_byte_ratio",
+          "packet_count_asymmetry",
+          "byte_count_asymmetry",
+          "packet_length_mean",
+          "packet_length_median",
+          "packet_length_std",
+          "packet_length_min",
+          "packet_length_max",
+          "packet_length_p25",
+          "packet_length_p75",
+          "packet_length_p90",
+          "packet_length_p95",
+          "fwd_packet_length_mean",
+          "fwd_packet_length_median",
+          "fwd_packet_length_std",
+          "fwd_packet_length_min",
+          "fwd_packet_length_max",
+          "fwd_packet_length_p25",
+          "fwd_packet_length_p75",
+          "fwd_packet_length_p90",
+          "fwd_packet_length_p95",
+          "rev_packet_length_mean",
+          "rev_packet_length_median",
+          "rev_packet_length_std",
+          "rev_packet_length_min",
+          "rev_packet_length_max",
+          "rev_packet_length_p25",
+          "rev_packet_length_p75",
+          "rev_packet_length_p90",
+          "rev_packet_length_p95",
+          "iat_mean",
+          "iat_median",
+          "iat_std",
+          "iat_min",
+          "iat_max",
+          "iat_p25",
+          "iat_p75",
+          "iat_p90",
+          "iat_p95",
+          "fwd_iat_mean",
+          "fwd_iat_median",
+          "fwd_iat_std",
+          "fwd_iat_min",
+          "fwd_iat_max",
+          "fwd_iat_p25",
+          "fwd_iat_p75",
+          "fwd_iat_p90",
+          "fwd_iat_p95",
+          "rev_iat_mean",
+          "rev_iat_median",
+          "rev_iat_std",
+          "rev_iat_min",
+          "rev_iat_max",
+          "rev_iat_p25",
+          "rev_iat_p75",
+          "rev_iat_p90",
+          "rev_iat_p95",
+          "number_of_bursts",
+          "mean_burst_size",
+          "maximum_burst_size",
+          "idle_gap_count",
+          "maximum_idle_gap",
+          "clienthello_present",
+          "serverhello_present",
+          "sni_present"
+        ],
+        "categorical": [
+          "tls_version",
+          "alpn_value"
+        ],
+        "population": "ALL"
+      },
+      "missing_feature_policy": "REJECT: every required input column must be present in the flow record; a NaN value is accepted only where it means 'undefined for this flow' and is median-imputed with a missing indicator exactly as in training. Records lacking the track's fingerprint are not scored.",
+      "training": {
+        "dataset": {
+          "corpus_manifest": "data/processed/v3/corpus_manifest.json",
+          "corpus_manifest_sha256": "c67f53458f9f0f7dc3590c6bc98683b7d457f6744573ba31863c4db362db1e7c",
+          "corpus_outputs": {
+            "data/processed/v3/corpus_flows.parquet": "84f496ed79eb71a34babf09e2ef1a4e296d4f11ad108c1faa35fe350b034714e",
+            "data/processed/v3/corpus_provenance.parquet": "aff3a854fa2c26f2c78d3e25002025d1105b9f1f941485dbac17af7c7dc8a0a4"
+          },
+          "corpus_version": "v3",
+          "inputs": {
+            "DS008-C001": "4b079d83abe301a9aee90d68565429b7fc9dd6b9b43c4cb8e2c44b99fcede894",
+            "DS008-C002": "ef8b0d488efe3cc7b9f1e2c33b4aea00f0613be60a119fb07d7006add89fafc8",
+            "DS008-C003": "a430dc87508451dad8e70a7ed9b5d912054482d16745b4eadd93411e44dd41fc",
+            "DS008-C004": "c63d9260c5d93b98c51b353f4f6059c52b756ab648cc27c814d3aede41142d23",
+            "DS008-C005": "805fc5b533f990ae63beeacdee52b656bfddfd21145089dfbb54a82c6ea17aba",
+            "DS008-C006": "24de7b31a2248763c4fd3e92acfc6b6fa9462b129c7b4ff8024932407ebeae4b",
+            "DS008-C007": "903844e8c40fde617c3636a69ba902a668d740e67c79d9624998b4ab6df09ccd",
+            "DS008-C008": "47b1cc4c0148245878a1a2f2eadb37323d80d20a5dbc196b872b3780b8108095",
+            "DS008-C009": "f1bfadc000a21dae71a1d1d71613b169a6e01bedb7d9829822d111987ed4caeb",
+            "DS008-C010": "5f74ed42f609284180f70d104dacdb82cde86dda86020994464b416cd1bbb17f",
+            "DS004-sample1": null,
+            "DS004-sample2": null,
+            "DS004-sample3": null,
+            "DS004-sample4": null,
+            "DS004-sample5": null,
+            "DS004-sample6": null,
+            "DS011-CTU-Normal-20": "c78a00728f115ab8fc495fd395894c43fd90cb61054eb9ef4f2d024658d5ffc5",
+            "DS011-CTU-Normal-21": "53acb10b26ca6446b5bba2efd9d957a9faa15209029d58c10a8c1d1bd299c42b",
+            "DS011-CTU-Normal-23": "50ccaa483200a73c87be73ce3cae95c16afe0941021ff6d5e8e1cacf5a90807b",
+            "DS011-CTU-Normal-24": "31a9a2a88b0d24283288058f7c2dbad057e3d7d7bb2ad2427302dc954c7e1471",
+            "DS011-CTU-Normal-26": "b66103fd89c8f0fc53b76e718f53320f3af27edd302c58695fc1870ede3663c5",
+            "DS011-CTU-Normal-28": "a2f3e60fa0eb2a924a3795644ac09a0f1ea48c45c30ebcc663af9641580b9a5c",
+            "DS009-CTU-MCB-238-1": "b03bf9bca9d2cb217e0ff96506314afddbe791fc7c6abaf80a41c256da2bd27f",
+            "DS009-CTU-MCB-240-1": "9369b771130396f349ca74a24c9f5a2a7c0ebff90a9aec635e99fb97b39472a9",
+            "DS009-CTU-MCB-246-1": "2425bf206592b0dc24c71b449a85df451bfaf493ffcd3daddcbfbbc0eb31cb37",
+            "DS009-CTU-MCB-248-1": "76b88b66b3a0eb6041c459ecd549b21aa53681f3e0e141281c9fd924237096d8",
+            "DS009-CTU-MCB-249-1": "49f0b2c1d7ae270a048a6cccfc9f85cc23992d20ea068e59f0a39f03c396c97b",
+            "DS009-CTU-MCB-259-1": "f4bc1edb5b926e22e4080dc011be7826862b4b683b2c780355848fc4aacd28d7",
+            "DS009-CTU-MCB-260-1": "3135369b8556071018154652ddc78a5828dc6bd1241aadfaada8414db1635dea",
+            "DS009-CTU-MCB-264-1": "a92b52e5fb9eae4983713434909f5954c8beb12876320d4b7f3f15c36ec46bcb",
+            "DS009-CTU-MCB-268-1": "c2f1edf1ffd78afe45e3a958e217692e9f6afb907763e1073779806fbbc449ea"
+          }
+        },
+        "rows": 62543,
+        "positives": 38543,
+        "negatives": 24000,
+        "captures": [
+          "DS008-C001",
+          "DS008-C002",
+          "DS008-C003",
+          "DS008-C004",
+          "DS008-C005",
+          "DS008-C006",
+          "DS008-C007",
+          "DS008-C008",
+          "DS008-C009",
+          "DS008-C010",
+          "DS009-CTU-MCB-238-1",
+          "DS009-CTU-MCB-240-1",
+          "DS009-CTU-MCB-246-1",
+          "DS009-CTU-MCB-248-1",
+          "DS009-CTU-MCB-249-1",
+          "DS009-CTU-MCB-259-1",
+          "DS009-CTU-MCB-260-1",
+          "DS009-CTU-MCB-264-1",
+          "DS009-CTU-MCB-268-1",
+          "DS011-CTU-Normal-20",
+          "DS011-CTU-Normal-21",
+          "DS011-CTU-Normal-23",
+          "DS011-CTU-Normal-24",
+          "DS011-CTU-Normal-26",
+          "DS011-CTU-Normal-28"
+        ],
+        "datasets": [
+          "DS-008",
+          "DS-009",
+          "DS-011"
+        ],
+        "seed": 42
+      },
+      "evaluation": {
+        "experiments": [
+          "EXP-20261016T164342-f849786e-5707"
+        ],
+        "protocol_of_reference": "CAPTURE_GROUP_KFOLD (nested selection)",
+        "inner_validation_for_calibration": {
+          "n": 62543,
+          "n_pos": 38543,
+          "n_neg": 24000,
+          "prevalence": 0.6162640103608718,
+          "average_precision": 0.9316585036896584,
+          "pr_auc_trapezoid": 0.9336945459087467,
+          "roc_auc": 0.90513705850176,
+          "brier": 0.11797824064559173,
+          "ece_15bin": 0.0798457130895845,
+          "tpr@fpr=0.001": 0.0718418389850297,
+          "tpr@fpr=0.01": 0.4139013569260307,
+          "tpr@fpr=0.05": 0.5670030874607581
+        },
+        "validation_note": null
+      },
+      "calibration": {
+        "status": "PLATT_ON_INNER_CAPTURE_OOF",
+        "params": {
+          "a": 6.047056649743079,
+          "b": -1.9725270272220254
+        }
+      },
+      "thresholds": {
+        "fpr<=0.01": 0.9728110093782477,
+        "fpr<=0.05": 0.9052496856533704
+      },
+      "ood_reference": {
+        "numeric_quantiles": {
+          "flow_duration": {
+            "q005": 0.0,
+            "q995": 194.90588809000013
+          },
+          "total_packets": {
+            "q005": 1.0,
+            "q995": 146.0
+          },
+          "total_bytes": {
+            "q005": 40.0,
+            "q995": 90817.15000000011
+          },
+          "forward_packets": {
+            "q005": 1.0,
+            "q995": 53.0
+          },
+          "reverse_packets": {
+            "q005": 0.0,
+            "q995": 92.29000000000087
+          },
+          "forward_bytes": {
+            "q005": 40.0,
+            "q995": 11840.21000000013
+          },
+          "reverse_bytes": {
+            "q005": 0.0,
+            "q995": 79006.59000000049
+          },
+          "packets_per_second": {
+            "q005": 0.06694943429736452,
+            "q995": 95237.37005377238
+          },
+          "bytes_per_second": {
+            "q005": 6.96841254865622,
+            "q995": 5512513.828571429
+          },
+          "forward_packet_ratio": {
+            "q005": 0.3125,
+            "q995": 1.0
+          },
+          "reverse_packet_ratio": {
+            "q005": 0.0,
+            "q995": 0.6875
+          },
+          "forward_byte_ratio": {
+            "q005": 0.03343376891223434,
+            "q995": 1.0
+          },
+          "reverse_byte_ratio": {
+            "q005": 0.0,
+            "q995": 0.9665662310877656
+          },
+          "packet_count_asymmetry": {
+            "q005": -0.375,
+            "q995": 1.0
+          },
+          "byte_count_asymmetry": {
+            "q005": -0.9331324621755314,
+            "q995": 1.0
+          },
+          "packet_length_mean": {
+            "q005": 40.0,
+            "q995": 800.7318931159422
+          },
+          "packet_length_median": {
+            "q005": 40.0,
+            "q995": 1270.320000000007
+          },
+          "packet_length_std": {
+            "q005": 0.0,
+            "q995": 685.4763553113452
+          },
+          "packet_length_min": {
+            "q005": 40.0,
+            "q995": 109.0
+          },
+          "packet_length_max": {
+            "q005": 40.0,
+            "q995": 1500.0
+          },
+          "packet_length_p25": {
+            "q005": 40.0,
+            "q995": 169.0
+          },
+          "packet_length_p75": {
+            "q005": 40.0,
+            "q995": 1460.0
+          },
+          "packet_length_p90": {
+            "q005": 40.0,
+            "q995": 1500.0
+          },
+          "packet_length_p95": {
+            "q005": 40.0,
+            "q995": 1500.0
+          },
+          "fwd_packet_length_mean": {
+            "q005": 40.0,
+            "q995": 587.4
+          },
+          "fwd_packet_length_median": {
+            "q005": 40.0,
+            "q995": 573.0
+          },
+          "fwd_packet_length_std": {
+            "q005": 0.0,
+            "q995": 520.0279223272535
+          },
+          "fwd_packet_length_min": {
+            "q005": 40.0,
+            "q995": 158.0
+          },
+          "fwd_packet_length_max": {
+            "q005": 40.0,
+            "q995": 1500.0
+          },
+          "fwd_packet_length_p25": {
+            "q005": 40.0,
+            "q995": 169.0
+          },
+          "fwd_packet_length_p75": {
+            "q005": 40.0,
+            "q995": 695.0
+          },
+          "fwd_packet_length_p90": {
+            "q005": 40.0,
+            "q995": 1365.9220000000016
+          },
+          "fwd_packet_length_p95": {
+            "q005": 40.0,
+            "q995": 1420.0
+          },
+          "rev_packet_length_mean": {
+            "q005": 40.0,
+            "q995": 1182.5001398601398
+          },
+          "rev_packet_length_median": {
+            "q005": 40.0,
+            "q995": 1500.0
+          },
+          "rev_packet_length_std": {
+            "q005": 0.0,
+            "q995": 671.5900341268595
+          },
+          "rev_packet_length_min": {
+            "q005": 40.0,
+            "q995": 472.0
+          },
+          "rev_packet_length_max": {
+            "q005": 40.0,
+            "q995": 1500.0
+          },
+          "rev_packet_length_p25": {
+            "q005": 40.0,
+            "q995": 1365.679999999993
+          },
+          "rev_packet_length_p75": {
+            "q005": 40.0,
+            "q995": 1500.0
+          },
+          "rev_packet_length_p90": {
+            "q005": 40.0,
+            "q995": 1500.0
+          },
+          "rev_packet_length_p95": {
+            "q005": 40.0,
+            "q995": 1500.0
+          },
+          "iat_mean": {
+            "q005": 1.899993745610118e-05,
+            "q995": 21.83104011999795
+          },
+          "iat_median": {
+            "q005": 1.3589859008789062e-05,
+            "q995": 6.499473879993979
+          },
+          "iat_std": {
+            "q005": 0.0,
+            "q995": 26.596984717488553
+          },
+          "iat_min": {
+            "q005": 0.0,
+            "q995": 4.032572679999917
+          },
+          "iat_max": {
+            "q005": 1.9000053871423006e-05,
+            "q995": 113.2809835399262
+          },
+          "iat_p25": {
+            "q005": 6.9141387939453125e-06,
+            "q995": 4.1872600799999145
+          },
+          "iat_p75": {
+            "q005": 1.811981201171875e-05,
+            "q995": 28.884138790000353
+          },
+          "iat_p90": {
+            "q005": 1.9000028260052204e-05,
+            "q995": 32.47978264010977
+          },
+          "iat_p95": {
+            "q005": 1.9000028260052204e-05,
+            "q995": 62.1126552329209
+          },
+          "fwd_iat_mean": {
+            "q005": 1.3281106948852542e-05,
+            "q995": 32.47584112494253
+          },
+          "fwd_iat_median": {
+            "q005": 1.1976574314758182e-05,
+            "q995": 32.475719159994625
+          },
+          "fwd_iat_std": {
+            "q005": 0.0,
+            "q995": 38.435578022443764
+          },
+          "fwd_iat_min": {
+            "q005": 0.0,
+            "q995": 32.47418801505002
+          },
+          "fwd_iat_max": {
+            "q005": 1.3281106948852542e-05,
+            "q995": 112.24745439010553
+          },
+          "fwd_iat_p25": {
+            "q005": 8.786320686340334e-06,
+            "q995": 32.475545274985485
+          },
+          "fwd_iat_p75": {
+            "q005": 1.2874603271484375e-05,
+            "q995": 32.47769264503091
+          },
+          "fwd_iat_p90": {
+            "q005": 1.3281106948852542e-05,
+            "q995": 63.391191311999854
+          },
+          "fwd_iat_p95": {
+            "q005": 1.3281106948852542e-05,
+            "q995": 78.37660669000589
+          },
+          "rev_iat_mean": {
+            "q005": 1.556873321533203e-05,
+            "q995": 39.485679599999884
+          },
+          "rev_iat_median": {
+            "q005": 1.3899803161621093e-05,
+            "q995": 39.485679599999884
+          },
+          "rev_iat_std": {
+            "q005": 0.0,
+            "q995": 25.844868734720762
+          },
+          "rev_iat_min": {
+            "q005": 0.0,
+            "q995": 38.75847209999976
+          },
+          "rev_iat_max": {
+            "q005": 1.5735626220703125e-05,
+            "q995": 72.62474810000073
+          },
+          "rev_iat_p25": {
+            "q005": 9.316205978393555e-06,
+            "q995": 39.27036499999977
+          },
+          "rev_iat_p75": {
+            "q005": 1.5020370483398438e-05,
+            "q995": 43.77113540000028
+          },
+          "rev_iat_p90": {
+            "q005": 1.556873321533203e-05,
+            "q995": 64.7456868600009
+          },
+          "rev_iat_p95": {
+            "q005": 1.5735626220703125e-05,
+            "q995": 67.98656237000063
+          },
+          "number_of_bursts": {
+            "q005": 0.0,
+            "q995": 15.0
+          },
+          "mean_burst_size": {
+            "q005": 1.0,
+            "q995": 67.62399999999907
+          },
+          "maximum_burst_size": {
+            "q005": 1.0,
+            "q995": 119.77999999999884
+          },
+          "idle_gap_count": {
+            "q005": 0.0,
+            "q995": 14.0
+          },
+          "maximum_idle_gap": {
+            "q005": 1.0051982453058008,
+            "q995": 119.99507448562305
+          },
+          "clienthello_present": {
+            "q005": 0.0,
+            "q995": 1.0
+          },
+          "serverhello_present": {
+            "q005": 0.0,
+            "q995": 1.0
+          },
+          "sni_present": {
+            "q005": 0.0,
+            "q995": 1.0
+          }
+        },
+        "categorical_vocab_size": {}
+      },
+      "known_vocab": {
+        "tls_version": [
+          "1.2",
+          "1.3"
+        ],
+        "alpn_value": [
+          "h2"
+        ]
+      },
+      "limitations": [
+        "Trained on exploratory, source-confounded data: each dataset contributes a single class.",
+        "Labels are capture-level; benign background traffic inside malware captures is labelled malicious.",
+        "Benign training traffic is 2017 browser traffic; modern benign clients are out of distribution.",
+        "Scores are not evidence of maliciousness in live traffic; they indicate similarity to the training captures."
+      ],
+      "artifact": {
+        "format": "etth-tabular-model/1",
+        "path": "artifacts/etth-a_flow-random_forest/v1",
+        "sha256": {
+          "model.json": "8da77d0958d7b845ab0a56d5e27dc727b5da878eb2228daf622f84bac012c717",
+          "arrays.npz": "1d35028148bbdefe115a8a7541d5078d9316bf8aadac30fbbf2d1c54b8b35d69"
+        }
+      }
+    },
+    {
+      "model_id": "etth-b_ja3-random_forest",
+      "version": 1,
+      "track": "B_JA3",
+      "estimator": "random_forest",
+      "params": {
+        "min_samples_leaf": 1
+      },
+      "status": "ACTIVE",
+      "research_status": "RESEARCH_PILOT_SOURCE_CONFOUNDED",
+      "created_at": "2026-10-16T17:26:30.701601Z",
+      "feature_schema": {
+        "schema_version": "9.0.0",
+        "fingerprint": "86c5fab51f77d8ba",
+        "numeric": [],
+        "categorical": [
+          "ja3_hash"
+        ],
+        "population": "JA3_AVAILABLE"
+      },
+      "missing_feature_policy": "REJECT: every required input column must be present in the flow record; a NaN value is accepted only where it means 'undefined for this flow' and is median-imputed with a missing indicator exactly as in training. Records lacking the track's fingerprint are not scored.",
+      "training": {
+        "dataset": {
+          "corpus_manifest": "data/processed/v3/corpus_manifest.json",
+          "corpus_manifest_sha256": "c67f53458f9f0f7dc3590c6bc98683b7d457f6744573ba31863c4db362db1e7c",
+          "corpus_outputs": {
+            "data/processed/v3/corpus_flows.parquet": "84f496ed79eb71a34babf09e2ef1a4e296d4f11ad108c1faa35fe350b034714e",
+            "data/processed/v3/corpus_provenance.parquet": "aff3a854fa2c26f2c78d3e25002025d1105b9f1f941485dbac17af7c7dc8a0a4"
+          },
+          "corpus_version": "v3",
+          "inputs": {
+            "DS008-C001": "4b079d83abe301a9aee90d68565429b7fc9dd6b9b43c4cb8e2c44b99fcede894",
+            "DS008-C002": "ef8b0d488efe3cc7b9f1e2c33b4aea00f0613be60a119fb07d7006add89fafc8",
+            "DS008-C003": "a430dc87508451dad8e70a7ed9b5d912054482d16745b4eadd93411e44dd41fc",
+            "DS008-C004": "c63d9260c5d93b98c51b353f4f6059c52b756ab648cc27c814d3aede41142d23",
+            "DS008-C005": "805fc5b533f990ae63beeacdee52b656bfddfd21145089dfbb54a82c6ea17aba",
+            "DS008-C006": "24de7b31a2248763c4fd3e92acfc6b6fa9462b129c7b4ff8024932407ebeae4b",
+            "DS008-C007": "903844e8c40fde617c3636a69ba902a668d740e67c79d9624998b4ab6df09ccd",
+            "DS008-C008": "47b1cc4c0148245878a1a2f2eadb37323d80d20a5dbc196b872b3780b8108095",
+            "DS008-C009": "f1bfadc000a21dae71a1d1d71613b169a6e01bedb7d9829822d111987ed4caeb",
+            "DS008-C010": "5f74ed42f609284180f70d104dacdb82cde86dda86020994464b416cd1bbb17f",
+            "DS004-sample1": null,
+            "DS004-sample2": null,
+            "DS004-sample3": null,
+            "DS004-sample4": null,
+            "DS004-sample5": null,
+            "DS004-sample6": null,
+            "DS011-CTU-Normal-20": "c78a00728f115ab8fc495fd395894c43fd90cb61054eb9ef4f2d024658d5ffc5",
+            "DS011-CTU-Normal-21": "53acb10b26ca6446b5bba2efd9d957a9faa15209029d58c10a8c1d1bd299c42b",
+            "DS011-CTU-Normal-23": "50ccaa483200a73c87be73ce3cae95c16afe0941021ff6d5e8e1cacf5a90807b",
+            "DS011-CTU-Normal-24": "31a9a2a88b0d24283288058f7c2dbad057e3d7d7bb2ad2427302dc954c7e1471",
+            "DS011-CTU-Normal-26": "b66103fd89c8f0fc53b76e718f53320f3af27edd302c58695fc1870ede3663c5",
+            "DS011-CTU-Normal-28": "a2f3e60fa0eb2a924a3795644ac09a0f1ea48c45c30ebcc663af9641580b9a5c",
+            "DS009-CTU-MCB-238-1": "b03bf9bca9d2cb217e0ff96506314afddbe791fc7c6abaf80a41c256da2bd27f",
+            "DS009-CTU-MCB-240-1": "9369b771130396f349ca74a24c9f5a2a7c0ebff90a9aec635e99fb97b39472a9",
+            "DS009-CTU-MCB-246-1": "2425bf206592b0dc24c71b449a85df451bfaf493ffcd3daddcbfbbc0eb31cb37",
+            "DS009-CTU-MCB-248-1": "76b88b66b3a0eb6041c459ecd549b21aa53681f3e0e141281c9fd924237096d8",
+            "DS009-CTU-MCB-249-1": "49f0b2c1d7ae270a048a6cccfc9f85cc23992d20ea068e59f0a39f03c396c97b",
+            "DS009-CTU-MCB-259-1": "f4bc1edb5b926e22e4080dc011be7826862b4b683b2c780355848fc4aacd28d7",
+            "DS009-CTU-MCB-260-1": "3135369b8556071018154652ddc78a5828dc6bd1241aadfaada8414db1635dea",
+            "DS009-CTU-MCB-264-1": "a92b52e5fb9eae4983713434909f5954c8beb12876320d4b7f3f15c36ec46bcb",
+            "DS009-CTU-MCB-268-1": "c2f1edf1ffd78afe45e3a958e217692e9f6afb907763e1073779806fbbc449ea"
+          }
+        },
+        "rows": 11220,
+        "positives": 8591,
+        "negatives": 2629,
+        "captures": [
+          "DS008-C001",
+          "DS008-C002",
+          "DS008-C003",
+          "DS008-C004",
+          "DS008-C005",
+          "DS008-C006",
+          "DS008-C007",
+          "DS008-C008",
+          "DS008-C009",
+          "DS008-C010",
+          "DS009-CTU-MCB-238-1",
+          "DS009-CTU-MCB-240-1",
+          "DS009-CTU-MCB-246-1",
+          "DS009-CTU-MCB-248-1",
+          "DS009-CTU-MCB-249-1",
+          "DS009-CTU-MCB-260-1",
+          "DS011-CTU-Normal-20",
+          "DS011-CTU-Normal-21",
+          "DS011-CTU-Normal-23",
+          "DS011-CTU-Normal-24",
+          "DS011-CTU-Normal-26",
+          "DS011-CTU-Normal-28"
+        ],
+        "datasets": [
+          "DS-008",
+          "DS-009",
+          "DS-011"
+        ],
+        "seed": 42
+      },
+      "evaluation": {
+        "experiments": [
+          "EXP-20261016T165046-82f49ed4-8867"
+        ],
+        "protocol_of_reference": "CAPTURE_GROUP_KFOLD (nested selection)",
+        "inner_validation_for_calibration": {
+          "n": 11220,
+          "n_pos": 8591,
+          "n_neg": 2629,
+          "prevalence": 0.765686274509804,
+          "average_precision": 0.9987303657506962,
+          "pr_auc_trapezoid": 0.9989547063289261,
+          "roc_auc": 0.9963177870779433,
+          "brier": 0.014042010166749488,
+          "ece_15bin": 0.02525114825386877,
+          "tpr@fpr=0.001": 0.982772669072285,
+          "tpr@fpr=0.01": 0.982772669072285,
+          "tpr@fpr=0.05": 0.982772669072285
+        },
+        "validation_note": null
+      },
+      "calibration": {
+        "status": "PLATT_ON_INNER_CAPTURE_OOF",
+        "params": {
+          "a": 16.994030953984215,
+          "b": -11.445765802225955
+        }
+      },
+      "thresholds": {
+        "fpr<=0.01": 0.3174761120365442,
+        "fpr<=0.05": 0.3174761120365442
+      },
+      "ood_reference": {
+        "numeric_quantiles": {},
+        "categorical_vocab_size": {}
+      },
+      "known_vocab": {
+        "ja3_hash": [
+          "075b102409434354fe8cc2a05af8465e",
+          "07af4aa9e4d215a5ee63f9a0a277fbe3",
+          "07b4162d4db57554961824a21c4a0fde",
+          "091f51a7a1c3a4504a224cc081ce9cee",
+          "0ffee3ba8e615ad22535e7f771690a28",
+          "1a5fe5677b0e4fbbc854e8908225637d",
+          "258a5a1e95b8a911872bae9081526644",
+          "2800f914a7a4ba98aa9df62d316a460c",
+          "28a2c9bd18a11de089ef85a160da29e4",
+          "31e9eb1069522058eb96aba87cf5fbc4",
+          "3c293bdf2a25c07559b560ba86debc77",
+          "5919f6108f098e14c2f37619021ebd4d",
+          "61d0d709fe7ac199ef4b2c52bc8cef75",
+          "65005c9d9ae0f0ebeaf22c210571d482",
+          "6634ba84945fce7cc2d7864edc49b103",
+          "6a5d235ee78c6aede6a61448b4e9ff1e",
+          "6b87ab76e189e2222a12ff9d643060cd",
+          "72a589da586844d7f0818ce684948eea",
+          "9a35e493f961ac377f948690b5334a9c",
+          "a0e9f5d64349fb13191bc781f81f42e1",
+          "d7268fba5c8ebdc86121861931c04402",
+          "dda6c525431b3259dac349220160cdcb",
+          "f077ec57edf4450cc8f176595b966b1f",
+          "fae0e5d973c96ae1888b99538efa0363"
+        ]
+      },
+      "limitations": [
+        "Trained on exploratory, source-confounded data: each dataset contributes a single class.",
+        "Labels are capture-level; benign background traffic inside malware captures is labelled malicious.",
+        "Benign training traffic is 2017 browser traffic; modern benign clients are out of distribution.",
+        "Scores are not evidence of maliciousness in live traffic; they indicate similarity to the training captures."
+      ],
+      "artifact": {
+        "format": "etth-tabular-model/1",
+        "path": "artifacts/etth-b_ja3-random_forest/v1",
+        "sha256": {
+          "model.json": "22bec1bcbe4a6ced75935346004c48ca710bcbc5ad1faedc595da31eb8ef7f0a",
+          "arrays.npz": "dcb822430623c10b6af55fcd8601c19e0780e071c9cf085bbc8211a22eb7166f"
+        }
+      }
+    },
+    {
+      "model_id": "etth-c_ja4-random_forest",
+      "version": 1,
+      "track": "C_JA4",
+      "estimator": "random_forest",
+      "params": {
+        "min_samples_leaf": 1
+      },
+      "status": "ACTIVE",
+      "research_status": "RESEARCH_PILOT_SOURCE_CONFOUNDED",
+      "created_at": "2026-10-16T17:26:38.287848Z",
+      "feature_schema": {
+        "schema_version": "9.0.0",
+        "fingerprint": "154ecd717e4d9021",
+        "numeric": [],
+        "categorical": [
+          "ja4"
+        ],
+        "population": "JA4_AVAILABLE"
+      },
+      "missing_feature_policy": "REJECT: every required input column must be present in the flow record; a NaN value is accepted only where it means 'undefined for this flow' and is median-imputed with a missing indicator exactly as in training. Records lacking the track's fingerprint are not scored.",
+      "training": {
+        "dataset": {
+          "corpus_manifest": "data/processed/v3/corpus_manifest.json",
+          "corpus_manifest_sha256": "c67f53458f9f0f7dc3590c6bc98683b7d457f6744573ba31863c4db362db1e7c",
+          "corpus_outputs": {
+            "data/processed/v3/corpus_flows.parquet": "84f496ed79eb71a34babf09e2ef1a4e296d4f11ad108c1faa35fe350b034714e",
+            "data/processed/v3/corpus_provenance.parquet": "aff3a854fa2c26f2c78d3e25002025d1105b9f1f941485dbac17af7c7dc8a0a4"
+          },
+          "corpus_version": "v3",
+          "inputs": {
+            "DS008-C001": "4b079d83abe301a9aee90d68565429b7fc9dd6b9b43c4cb8e2c44b99fcede894",
+            "DS008-C002": "ef8b0d488efe3cc7b9f1e2c33b4aea00f0613be60a119fb07d7006add89fafc8",
+            "DS008-C003": "a430dc87508451dad8e70a7ed9b5d912054482d16745b4eadd93411e44dd41fc",
+            "DS008-C004": "c63d9260c5d93b98c51b353f4f6059c52b756ab648cc27c814d3aede41142d23",
+            "DS008-C005": "805fc5b533f990ae63beeacdee52b656bfddfd21145089dfbb54a82c6ea17aba",
+            "DS008-C006": "24de7b31a2248763c4fd3e92acfc6b6fa9462b129c7b4ff8024932407ebeae4b",
+            "DS008-C007": "903844e8c40fde617c3636a69ba902a668d740e67c79d9624998b4ab6df09ccd",
+            "DS008-C008": "47b1cc4c0148245878a1a2f2eadb37323d80d20a5dbc196b872b3780b8108095",
+            "DS008-C009": "f1bfadc000a21dae71a1d1d71613b169a6e01bedb7d9829822d111987ed4caeb",
+            "DS008-C010": "5f74ed42f609284180f70d104dacdb82cde86dda86020994464b416cd1bbb17f",
+            "DS004-sample1": null,
+            "DS004-sample2": null,
+            "DS004-sample3": null,
+            "DS004-sample4": null,
+            "DS004-sample5": null,
+            "DS004-sample6": null,
+            "DS011-CTU-Normal-20": "c78a00728f115ab8fc495fd395894c43fd90cb61054eb9ef4f2d024658d5ffc5",
+            "DS011-CTU-Normal-21": "53acb10b26ca6446b5bba2efd9d957a9faa15209029d58c10a8c1d1bd299c42b",
+            "DS011-CTU-Normal-23": "50ccaa483200a73c87be73ce3cae95c16afe0941021ff6d5e8e1cacf5a90807b",
+            "DS011-CTU-Normal-24": "31a9a2a88b0d24283288058f7c2dbad057e3d7d7bb2ad2427302dc954c7e1471",
+            "DS011-CTU-Normal-26": "b66103fd89c8f0fc53b76e718f53320f3af27edd302c58695fc1870ede3663c5",
+            "DS011-CTU-Normal-28": "a2f3e60fa0eb2a924a3795644ac09a0f1ea48c45c30ebcc663af9641580b9a5c",
+            "DS009-CTU-MCB-238-1": "b03bf9bca9d2cb217e0ff96506314afddbe791fc7c6abaf80a41c256da2bd27f",
+            "DS009-CTU-MCB-240-1": "9369b771130396f349ca74a24c9f5a2a7c0ebff90a9aec635e99fb97b39472a9",
+            "DS009-CTU-MCB-246-1": "2425bf206592b0dc24c71b449a85df451bfaf493ffcd3daddcbfbbc0eb31cb37",
+            "DS009-CTU-MCB-248-1": "76b88b66b3a0eb6041c459ecd549b21aa53681f3e0e141281c9fd924237096d8",
+            "DS009-CTU-MCB-249-1": "49f0b2c1d7ae270a048a6cccfc9f85cc23992d20ea068e59f0a39f03c396c97b",
+            "DS009-CTU-MCB-259-1": "f4bc1edb5b926e22e4080dc011be7826862b4b683b2c780355848fc4aacd28d7",
+            "DS009-CTU-MCB-260-1": "3135369b8556071018154652ddc78a5828dc6bd1241aadfaada8414db1635dea",
+            "DS009-CTU-MCB-264-1": "a92b52e5fb9eae4983713434909f5954c8beb12876320d4b7f3f15c36ec46bcb",
+            "DS009-CTU-MCB-268-1": "c2f1edf1ffd78afe45e3a958e217692e9f6afb907763e1073779806fbbc449ea"
+          }
+        },
+        "rows": 11220,
+        "positives": 8591,
+        "negatives": 2629,
+        "captures": [
+          "DS008-C001",
+          "DS008-C002",
+          "DS008-C003",
+          "DS008-C004",
+          "DS008-C005",
+          "DS008-C006",
+          "DS008-C007",
+          "DS008-C008",
+          "DS008-C009",
+          "DS008-C010",
+          "DS009-CTU-MCB-238-1",
+          "DS009-CTU-MCB-240-1",
+          "DS009-CTU-MCB-246-1",
+          "DS009-CTU-MCB-248-1",
+          "DS009-CTU-MCB-249-1",
+          "DS009-CTU-MCB-260-1",
+          "DS011-CTU-Normal-20",
+          "DS011-CTU-Normal-21",
+          "DS011-CTU-Normal-23",
+          "DS011-CTU-Normal-24",
+          "DS011-CTU-Normal-26",
+          "DS011-CTU-Normal-28"
+        ],
+        "datasets": [
+          "DS-008",
+          "DS-009",
+          "DS-011"
+        ],
+        "seed": 42
+      },
+      "evaluation": {
+        "experiments": [
+          "EXP-20261016T165145-c043adda-fc48"
+        ],
+        "protocol_of_reference": "CAPTURE_GROUP_KFOLD (nested selection)",
+        "inner_validation_for_calibration": {
+          "n": 11220,
+          "n_pos": 8591,
+          "n_neg": 2629,
+          "prevalence": 0.765686274509804,
+          "average_precision": 0.9988052545810946,
+          "pr_auc_trapezoid": 0.9990145249241035,
+          "roc_auc": 0.9965307533218196,
+          "brier": 0.011356828156854076,
+          "ece_15bin": 0.021253092004396623,
+          "tpr@fpr=0.001": 0.983587475264812,
+          "tpr@fpr=0.01": 0.983587475264812,
+          "tpr@fpr=0.05": 0.983587475264812
+        },
+        "validation_note": null
+      },
+      "calibration": {
+        "status": "PLATT_ON_INNER_CAPTURE_OOF",
+        "params": {
+          "a": 14.860200740223446,
+          "b": -8.978932513676817
+        }
+      },
+      "thresholds": {
+        "fpr<=0.01": 0.2729353067382673,
+        "fpr<=0.05": 0.2729353067382673
+      },
+      "ood_reference": {
+        "numeric_quantiles": {},
+        "categorical_vocab_size": {}
+      },
+      "known_vocab": {
+        "ja4": [
+          "t12d1109h2_43e74fd21232_56ea29cb59a2",
+          "t12d1110h2_43e74fd21232_6bf5526f7e0a",
+          "t12d120300_d94e65cdb899_c2f961105e84",
+          "t12d1509h2_073e58a039a6_ffd9648b5eb7",
+          "t12d1510h2_073e58a039a6_28ab5075c90d",
+          "t12d1510h2_073e58a039a6_fa4d8b5b3663",
+          "t12d1511h2_073e58a039a6_46219aa07ce6",
+          "t12d180700_4b22cbed5bed_6c134f388a40",
+          "t12d180800_4b22cbed5bed_86f5337e7f36",
+          "t12d1809h2_4b22cbed5bed_86f5337e7f36",
+          "t12d190800_d83cc789557e_86f5337e7f36",
+          "t12d1909h2_d83cc789557e_86f5337e7f36",
+          "t12n060500_4dc025c38c38_1a3805c3aa63",
+          "t12n120200_d94e65cdb899_c2f961105e84",
+          "t12n190700_d83cc789557e_86f5337e7f36",
+          "t12n210300_b973bfd88a0e_e23af3f3b0f5",
+          "t13d1516h2_8daaf6152771_09bc80a13a6f",
+          "t13d1517h2_8daaf6152771_8541eb7915a8",
+          "t13d201100_2b729b4bf6f3_359576663374",
+          "t13d201200_2b729b4bf6f3_0e7ae04a4f16",
+          "t13d201200_2b729b4bf6f3_fa8177739d0c",
+          "t13d2012h2_2b729b4bf6f3_359576663374",
+          "t13d201300_2b729b4bf6f3_45a815ea57af",
+          "t13d2013h2_2b729b4bf6f3_fa8177739d0c",
+          "t13d2014h2_2b729b4bf6f3_45a815ea57af",
+          "t13n140900_cbb2034c60b8_76f88aac36de"
+        ]
+      },
+      "limitations": [
+        "Trained on exploratory, source-confounded data: each dataset contributes a single class.",
+        "Labels are capture-level; benign background traffic inside malware captures is labelled malicious.",
+        "Benign training traffic is 2017 browser traffic; modern benign clients are out of distribution.",
+        "Scores are not evidence of maliciousness in live traffic; they indicate similarity to the training captures."
+      ],
+      "artifact": {
+        "format": "etth-tabular-model/1",
+        "path": "artifacts/etth-c_ja4-random_forest/v1",
+        "sha256": {
+          "model.json": "4d0990a57c8416261657ba7a202c9f72e8959eaa0e4550303f06b47bd70ca93c",
+          "arrays.npz": "aceb4fac8ea8974af3a2debe7b04081731a26cec8f8998ba3a266276e6232c44"
+        }
+      }
+    },
+    {
+      "model_id": "etth-d_ja3_flow-random_forest",
+      "version": 1,
+      "track": "D_JA3_FLOW",
+      "estimator": "random_forest",
+      "params": {
+        "min_samples_leaf": 1
+      },
+      "status": "ACTIVE",
+      "research_status": "RESEARCH_PILOT_SOURCE_CONFOUNDED",
+      "created_at": "2026-10-16T17:26:45.161475Z",
+      "feature_schema": {
+        "schema_version": "9.0.0",
+        "fingerprint": "9bc40ddfb11a6811",
+        "numeric": [
+          "flow_duration",
+          "total_packets",
+          "total_bytes",
+          "forward_packets",
+          "reverse_packets",
+          "forward_bytes",
+          "reverse_bytes",
+          "packets_per_second",
+          "bytes_per_second",
+          "forward_packet_ratio",
+          "reverse_packet_ratio",
+          "forward_byte_ratio",
+          "reverse_byte_ratio",
+          "packet_count_asymmetry",
+          "byte_count_asymmetry",
+          "packet_length_mean",
+          "packet_length_median",
+          "packet_length_std",
+          "packet_length_min",
+          "packet_length_max",
+          "packet_length_p25",
+          "packet_length_p75",
+          "packet_length_p90",
+          "packet_length_p95",
+          "fwd_packet_length_mean",
+          "fwd_packet_length_median",
+          "fwd_packet_length_std",
+          "fwd_packet_length_min",
+          "fwd_packet_length_max",
+          "fwd_packet_length_p25",
+          "fwd_packet_length_p75",
+          "fwd_packet_length_p90",
+          "fwd_packet_length_p95",
+          "rev_packet_length_mean",
+          "rev_packet_length_median",
+          "rev_packet_length_std",
+          "rev_packet_length_min",
+          "rev_packet_length_max",
+          "rev_packet_length_p25",
+          "rev_packet_length_p75",
+          "rev_packet_length_p90",
+          "rev_packet_length_p95",
+          "iat_mean",
+          "iat_median",
+          "iat_std",
+          "iat_min",
+          "iat_max",
+          "iat_p25",
+          "iat_p75",
+          "iat_p90",
+          "iat_p95",
+          "fwd_iat_mean",
+          "fwd_iat_median",
+          "fwd_iat_std",
+          "fwd_iat_min",
+          "fwd_iat_max",
+          "fwd_iat_p25",
+          "fwd_iat_p75",
+          "fwd_iat_p90",
+          "fwd_iat_p95",
+          "rev_iat_mean",
+          "rev_iat_median",
+          "rev_iat_std",
+          "rev_iat_min",
+          "rev_iat_max",
+          "rev_iat_p25",
+          "rev_iat_p75",
+          "rev_iat_p90",
+          "rev_iat_p95",
+          "number_of_bursts",
+          "mean_burst_size",
+          "maximum_burst_size",
+          "idle_gap_count",
+          "maximum_idle_gap",
+          "clienthello_present",
+          "serverhello_present",
+          "sni_present"
+        ],
+        "categorical": [
+          "tls_version",
+          "alpn_value",
+          "ja3_hash"
+        ],
+        "population": "JA3_AVAILABLE"
+      },
+      "missing_feature_policy": "REJECT: every required input column must be present in the flow record; a NaN value is accepted only where it means 'undefined for this flow' and is median-imputed with a missing indicator exactly as in training. Records lacking the track's fingerprint are not scored.",
+      "training": {
+        "dataset": {
+          "corpus_manifest": "data/processed/v3/corpus_manifest.json",
+          "corpus_manifest_sha256": "c67f53458f9f0f7dc3590c6bc98683b7d457f6744573ba31863c4db362db1e7c",
+          "corpus_outputs": {
+            "data/processed/v3/corpus_flows.parquet": "84f496ed79eb71a34babf09e2ef1a4e296d4f11ad108c1faa35fe350b034714e",
+            "data/processed/v3/corpus_provenance.parquet": "aff3a854fa2c26f2c78d3e25002025d1105b9f1f941485dbac17af7c7dc8a0a4"
+          },
+          "corpus_version": "v3",
+          "inputs": {
+            "DS008-C001": "4b079d83abe301a9aee90d68565429b7fc9dd6b9b43c4cb8e2c44b99fcede894",
+            "DS008-C002": "ef8b0d488efe3cc7b9f1e2c33b4aea00f0613be60a119fb07d7006add89fafc8",
+            "DS008-C003": "a430dc87508451dad8e70a7ed9b5d912054482d16745b4eadd93411e44dd41fc",
+            "DS008-C004": "c63d9260c5d93b98c51b353f4f6059c52b756ab648cc27c814d3aede41142d23",
+            "DS008-C005": "805fc5b533f990ae63beeacdee52b656bfddfd21145089dfbb54a82c6ea17aba",
+            "DS008-C006": "24de7b31a2248763c4fd3e92acfc6b6fa9462b129c7b4ff8024932407ebeae4b",
+            "DS008-C007": "903844e8c40fde617c3636a69ba902a668d740e67c79d9624998b4ab6df09ccd",
+            "DS008-C008": "47b1cc4c0148245878a1a2f2eadb37323d80d20a5dbc196b872b3780b8108095",
+            "DS008-C009": "f1bfadc000a21dae71a1d1d71613b169a6e01bedb7d9829822d111987ed4caeb",
+            "DS008-C010": "5f74ed42f609284180f70d104dacdb82cde86dda86020994464b416cd1bbb17f",
+            "DS004-sample1": null,
+            "DS004-sample2": null,
+            "DS004-sample3": null,
+            "DS004-sample4": null,
+            "DS004-sample5": null,
+            "DS004-sample6": null,
+            "DS011-CTU-Normal-20": "c78a00728f115ab8fc495fd395894c43fd90cb61054eb9ef4f2d024658d5ffc5",
+            "DS011-CTU-Normal-21": "53acb10b26ca6446b5bba2efd9d957a9faa15209029d58c10a8c1d1bd299c42b",
+            "DS011-CTU-Normal-23": "50ccaa483200a73c87be73ce3cae95c16afe0941021ff6d5e8e1cacf5a90807b",
+            "DS011-CTU-Normal-24": "31a9a2a88b0d24283288058f7c2dbad057e3d7d7bb2ad2427302dc954c7e1471",
+            "DS011-CTU-Normal-26": "b66103fd89c8f0fc53b76e718f53320f3af27edd302c58695fc1870ede3663c5",
+            "DS011-CTU-Normal-28": "a2f3e60fa0eb2a924a3795644ac09a0f1ea48c45c30ebcc663af9641580b9a5c",
+            "DS009-CTU-MCB-238-1": "b03bf9bca9d2cb217e0ff96506314afddbe791fc7c6abaf80a41c256da2bd27f",
+            "DS009-CTU-MCB-240-1": "9369b771130396f349ca74a24c9f5a2a7c0ebff90a9aec635e99fb97b39472a9",
+            "DS009-CTU-MCB-246-1": "2425bf206592b0dc24c71b449a85df451bfaf493ffcd3daddcbfbbc0eb31cb37",
+            "DS009-CTU-MCB-248-1": "76b88b66b3a0eb6041c459ecd549b21aa53681f3e0e141281c9fd924237096d8",
+            "DS009-CTU-MCB-249-1": "49f0b2c1d7ae270a048a6cccfc9f85cc23992d20ea068e59f0a39f03c396c97b",
+            "DS009-CTU-MCB-259-1": "f4bc1edb5b926e22e4080dc011be7826862b4b683b2c780355848fc4aacd28d7",
+            "DS009-CTU-MCB-260-1": "3135369b8556071018154652ddc78a5828dc6bd1241aadfaada8414db1635dea",
+            "DS009-CTU-MCB-264-1": "a92b52e5fb9eae4983713434909f5954c8beb12876320d4b7f3f15c36ec46bcb",
+            "DS009-CTU-MCB-268-1": "c2f1edf1ffd78afe45e3a958e217692e9f6afb907763e1073779806fbbc449ea"
+          }
+        },
+        "rows": 11220,
+        "positives": 8591,
+        "negatives": 2629,
+        "captures": [
+          "DS008-C001",
+          "DS008-C002",
+          "DS008-C003",
+          "DS008-C004",
+          "DS008-C005",
+          "DS008-C006",
+          "DS008-C007",
+          "DS008-C008",
+          "DS008-C009",
+          "DS008-C010",
+          "DS009-CTU-MCB-238-1",
+          "DS009-CTU-MCB-240-1",
+          "DS009-CTU-MCB-246-1",
+          "DS009-CTU-MCB-248-1",
+          "DS009-CTU-MCB-249-1",
+          "DS009-CTU-MCB-260-1",
+          "DS011-CTU-Normal-20",
+          "DS011-CTU-Normal-21",
+          "DS011-CTU-Normal-23",
+          "DS011-CTU-Normal-24",
+          "DS011-CTU-Normal-26",
+          "DS011-CTU-Normal-28"
+        ],
+        "datasets": [
+          "DS-008",
+          "DS-009",
+          "DS-011"
+        ],
+        "seed": 42
+      },
+      "evaluation": {
+        "experiments": [
+          "EXP-20261016T165253-e33ffae4-0dda"
+        ],
+        "protocol_of_reference": "CAPTURE_GROUP_KFOLD (nested selection)",
+        "inner_validation_for_calibration": {
+          "n": 11220,
+          "n_pos": 8591,
+          "n_neg": 2629,
+          "prevalence": 0.765686274509804,
+          "average_precision": 0.9996539125560225,
+          "pr_auc_trapezoid": 0.9996643397295725,
+          "roc_auc": 0.998878827918803,
+          "brier": 0.015395239852767497,
+          "ece_15bin": 0.017417923016633145,
+          "tpr@fpr=0.001": 0.978116633686416,
+          "tpr@fpr=0.01": 0.9844022814573391,
+          "tpr@fpr=0.05": 0.9913863345361424
+        },
+        "validation_note": null
+      },
+      "calibration": {
+        "status": "PLATT_ON_INNER_CAPTURE_OOF",
+        "params": {
+          "a": 14.843392392780157,
+          "b": -10.264137944415065
+        }
+      },
+      "thresholds": {
+        "fpr<=0.01": 0.9425702159306136,
+        "fpr<=0.05": 0.6940088166394474
+      },
+      "ood_reference": {
+        "numeric_quantiles": {
+          "flow_duration": {
+            "q005": 0.00046399981889408084,
+            "q995": 368.7485180650016
+          },
+          "total_packets": {
+            "q005": 5.0,
+            "q995": 905.2900000000118
+          },
+          "total_bytes": {
+            "q005": 384.0,
+            "q995": 817591.4850000534
+          },
+          "forward_packets": {
+            "q005": 3.0,
+            "q995": 290.19500000001244
+          },
+          "reverse_packets": {
+            "q005": 2.0,
+            "q995": 624.1000000000131
+          },
+          "forward_bytes": {
+            "q005": 292.0,
+            "q995": 30724.930000000986
+          },
+          "reverse_bytes": {
+            "q005": 92.0,
+            "q995": 586435.8550000164
+          },
+          "packets_per_second": {
+            "q005": 0.14753975240773817,
+            "q995": 10775.866274942227
+          },
+          "bytes_per_second": {
+            "q005": 20.02235104201073,
+            "q995": 829373.5909040164
+          },
+          "forward_packet_ratio": {
+            "q005": 0.21205512960934647,
+            "q995": 0.6666666666666666
+          },
+          "reverse_packet_ratio": {
+            "q005": 0.3333333333333333,
+            "q995": 0.7879448703906535
+          },
+          "forward_byte_ratio": {
+            "q005": 0.016300762636751863,
+            "q995": 0.8120054568099505
+          },
+          "reverse_byte_ratio": {
+            "q005": 0.18799454319004993,
+            "q995": 0.9836992373632483
+          },
+          "packet_count_asymmetry": {
+            "q005": -0.5758897407813071,
+            "q995": 0.3333333333333333
+          },
+          "byte_count_asymmetry": {
+            "q005": -0.9673984747264963,
+            "q995": 0.6240109136199012
+          },
+          "packet_length_mean": {
+            "q005": 76.8,
+            "q995": 936.7447513061658
+          },
+          "packet_length_median": {
+            "q005": 41.0,
+            "q995": 1460.0
+          },
+          "packet_length_std": {
+            "q005": 61.833324348606716,
+            "q995": 698.8955487230992
+          },
+          "packet_length_min": {
+            "q005": 40.0,
+            "q995": 52.0
+          },
+          "packet_length_max": {
+            "q005": 200.0,
+            "q995": 1500.0
+          },
+          "packet_length_p25": {
+            "q005": 40.0,
+            "q995": 80.0
+          },
+          "packet_length_p75": {
+            "q005": 41.0,
+            "q995": 1500.0
+          },
+          "packet_length_p90": {
+            "q005": 118.02850000000001,
+            "q995": 1500.0
+          },
+          "packet_length_p95": {
+            "q005": 170.39999999999998,
+            "q995": 1500.0
+          },
+          "fwd_packet_length_mean": {
+            "q005": 58.84310411827765,
+            "q995": 488.18324448529563
+          },
+          "fwd_packet_length_median": {
+            "q005": 40.0,
+            "q995": 200.0
+          },
+          "fwd_packet_length_std": {
+            "q005": 43.99151467301984,
+            "q995": 577.1839406124388
+          },
+          "fwd_packet_length_min": {
+            "q005": 40.0,
+            "q995": 52.0
+          },
+          "fwd_packet_length_max": {
+            "q005": 200.0,
+            "q995": 1500.0
+          },
+          "fwd_packet_length_p25": {
+            "q005": 40.0,
+            "q995": 54.0
+          },
+          "fwd_packet_length_p75": {
+            "q005": 40.0,
+            "q995": 951.5262500000067
+          },
+          "fwd_packet_length_p90": {
+            "q005": 41.0,
+            "q995": 1500.0
+          },
+          "fwd_packet_length_p95": {
+            "q005": 94.34199999999949,
+            "q995": 1500.0
+          },
+          "rev_packet_length_mean": {
+            "q005": 46.0,
+            "q995": 1298.4788214285738
+          },
+          "rev_packet_length_median": {
+            "q005": 40.0,
+            "q995": 1500.0
+          },
+          "rev_packet_length_std": {
+            "q005": 6.0,
+            "q995": 681.2501973177513
+          },
+          "rev_packet_length_min": {
+            "q005": 40.0,
+            "q995": 52.0
+          },
+          "rev_packet_length_max": {
+            "q005": 52.0,
+            "q995": 1500.0
+          },
+          "rev_packet_length_p25": {
+            "q005": 40.0,
+            "q995": 1500.0
+          },
+          "rev_packet_length_p75": {
+            "q005": 40.0,
+            "q995": 1500.0
+          },
+          "rev_packet_length_p90": {
+            "q005": 50.8,
+            "q995": 1500.0
+          },
+          "rev_packet_length_p95": {
+            "q005": 51.4,
+            "q995": 1500.0
+          },
+          "iat_mean": {
+            "q005": 0.00011599995472352021,
+            "q995": 7.177579326769074
+          },
+          "iat_median": {
+            "q005": 2.507925033569336e-05,
+            "q995": 0.3768201499874721
+          },
+          "iat_std": {
+            "q005": 6.589556252825474e-05,
+            "q995": 27.69707817741348
+          },
+          "iat_min": {
+            "q005": 0.0,
+            "q995": 0.001002810000331921
+          },
+          "iat_max": {
+            "q005": 0.0002429999876767397,
+            "q995": 117.09900261994918
+          },
+          "iat_p25": {
+            "q005": 6.687045097351074e-06,
+            "q995": 0.010838811264620912
+          },
+          "iat_p75": {
+            "q005": 0.0001277737334021367,
+            "q995": 9.999393138444603
+          },
+          "iat_p90": {
+            "q005": 0.0002003000117838383,
+            "q995": 14.8013548744992
+          },
+          "iat_p95": {
+            "q005": 0.0002225690141458471,
+            "q995": 60.45237212699999
+          },
+          "fwd_iat_mean": {
+            "q005": 0.00020650005899369717,
+            "q995": 15.819838297130275
+          },
+          "fwd_iat_median": {
+            "q005": 0.00020399998174980283,
+            "q995": 10.00486930999974
+          },
+          "fwd_iat_std": {
+            "q005": 1.1500087566673756e-05,
+            "q995": 39.081138128955445
+          },
+          "fwd_iat_min": {
+            "q005": 0.0,
+            "q995": 0.056317220000200986
+          },
+          "fwd_iat_max": {
+            "q005": 0.00024306020699441433,
+            "q995": 117.24613931985576
+          },
+          "fwd_iat_p25": {
+            "q005": 2.3603439331054688e-05,
+            "q995": 0.643857335023641
+          },
+          "fwd_iat_p75": {
+            "q005": 0.00022626500227488578,
+            "q995": 10.442323595000003
+          },
+          "fwd_iat_p90": {
+            "q005": 0.0002371059770230204,
+            "q995": 62.699335428000005
+          },
+          "fwd_iat_p95": {
+            "q005": 0.00024065309087745846,
+            "q995": 77.72343203582308
+          },
+          "rev_iat_mean": {
+            "q005": 0.00037199992802925406,
+            "q995": 13.370059939982603
+          },
+          "rev_iat_median": {
+            "q005": 3.300001844763756e-05,
+            "q995": 10.012076550000007
+          },
+          "rev_iat_std": {
+            "q005": 0.0,
+            "q995": 25.84622776320502
+          },
+          "rev_iat_min": {
+            "q005": 0.0,
+            "q995": 0.14234455000016705
+          },
+          "rev_iat_max": {
+            "q005": 0.0003730000462383032,
+            "q995": 70.29061139999956
+          },
+          "rev_iat_p25": {
+            "q005": 1.0499966447241604e-05,
+            "q995": 0.794045012499262
+          },
+          "rev_iat_p75": {
+            "q005": 0.0003435249935137108,
+            "q995": 15.349118450013348
+          },
+          "rev_iat_p90": {
+            "q005": 0.0003690500045195222,
+            "q995": 60.59243643999998
+          },
+          "rev_iat_p95": {
+            "q005": 0.00037199981161393223,
+            "q995": 64.9388837799998
+          },
+          "number_of_bursts": {
+            "q005": 1.0,
+            "q995": 24.0
+          },
+          "mean_burst_size": {
+            "q005": 2.4289382239382236,
+            "q995": 188.7016666666756
+          },
+          "maximum_burst_size": {
+            "q005": 4.0,
+            "q995": 538.5250000000033
+          },
+          "idle_gap_count": {
+            "q005": 0.0,
+            "q995": 23.0
+          },
+          "maximum_idle_gap": {
+            "q005": 1.0043910799734295,
+            "q995": 118.25159063994418
+          },
+          "clienthello_present": {
+            "q005": 1.0,
+            "q995": 1.0
+          },
+          "serverhello_present": {
+            "q005": 0.0,
+            "q995": 1.0
+          },
+          "sni_present": {
+            "q005": 0.0,
+            "q995": 1.0
+          }
+        },
+        "categorical_vocab_size": {}
+      },
+      "known_vocab": {
+        "tls_version": [
+          "1.2",
+          "1.3"
+        ],
+        "alpn_value": [
+          "h2"
+        ],
+        "ja3_hash": [
+          "075b102409434354fe8cc2a05af8465e",
+          "07af4aa9e4d215a5ee63f9a0a277fbe3",
+          "07b4162d4db57554961824a21c4a0fde",
+          "091f51a7a1c3a4504a224cc081ce9cee",
+          "0ffee3ba8e615ad22535e7f771690a28",
+          "1a5fe5677b0e4fbbc854e8908225637d",
+          "258a5a1e95b8a911872bae9081526644",
+          "2800f914a7a4ba98aa9df62d316a460c",
+          "28a2c9bd18a11de089ef85a160da29e4",
+          "31e9eb1069522058eb96aba87cf5fbc4",
+          "3c293bdf2a25c07559b560ba86debc77",
+          "5919f6108f098e14c2f37619021ebd4d",
+          "61d0d709fe7ac199ef4b2c52bc8cef75",
+          "65005c9d9ae0f0ebeaf22c210571d482",
+          "6634ba84945fce7cc2d7864edc49b103",
+          "6a5d235ee78c6aede6a61448b4e9ff1e",
+          "6b87ab76e189e2222a12ff9d643060cd",
+          "72a589da586844d7f0818ce684948eea",
+          "9a35e493f961ac377f948690b5334a9c",
+          "a0e9f5d64349fb13191bc781f81f42e1",
+          "d7268fba5c8ebdc86121861931c04402",
+          "dda6c525431b3259dac349220160cdcb",
+          "f077ec57edf4450cc8f176595b966b1f",
+          "fae0e5d973c96ae1888b99538efa0363"
+        ]
+      },
+      "limitations": [
+        "Trained on exploratory, source-confounded data: each dataset contributes a single class.",
+        "Labels are capture-level; benign background traffic inside malware captures is labelled malicious.",
+        "Benign training traffic is 2017 browser traffic; modern benign clients are out of distribution.",
+        "Scores are not evidence of maliciousness in live traffic; they indicate similarity to the training captures."
+      ],
+      "artifact": {
+        "format": "etth-tabular-model/1",
+        "path": "artifacts/etth-d_ja3_flow-random_forest/v1",
+        "sha256": {
+          "model.json": "a2210283789fca0d9b8a1e62d94b72b45f6ec72e7874fee0071b79446d02c480",
+          "arrays.npz": "119aee51f50938ef222c653f2c5e2860fe74bdf93b7349f4d19305e502757d7a"
+        }
+      }
+    },
+    {
+      "model_id": "etth-e_ja4_flow-random_forest",
+      "version": 1,
+      "track": "E_JA4_FLOW",
+      "estimator": "random_forest",
+      "params": {
+        "min_samples_leaf": 1
+      },
+      "status": "ACTIVE",
+      "research_status": "RESEARCH_PILOT_SOURCE_CONFOUNDED",
+      "created_at": "2026-10-16T17:26:52.154250Z",
+      "feature_schema": {
+        "schema_version": "9.0.0",
+        "fingerprint": "2c6b57f2849c4973",
+        "numeric": [
+          "flow_duration",
+          "total_packets",
+          "total_bytes",
+          "forward_packets",
+          "reverse_packets",
+          "forward_bytes",
+          "reverse_bytes",
+          "packets_per_second",
+          "bytes_per_second",
+          "forward_packet_ratio",
+          "reverse_packet_ratio",
+          "forward_byte_ratio",
+          "reverse_byte_ratio",
+          "packet_count_asymmetry",
+          "byte_count_asymmetry",
+          "packet_length_mean",
+          "packet_length_median",
+          "packet_length_std",
+          "packet_length_min",
+          "packet_length_max",
+          "packet_length_p25",
+          "packet_length_p75",
+          "packet_length_p90",
+          "packet_length_p95",
+          "fwd_packet_length_mean",
+          "fwd_packet_length_median",
+          "fwd_packet_length_std",
+          "fwd_packet_length_min",
+          "fwd_packet_length_max",
+          "fwd_packet_length_p25",
+          "fwd_packet_length_p75",
+          "fwd_packet_length_p90",
+          "fwd_packet_length_p95",
+          "rev_packet_length_mean",
+          "rev_packet_length_median",
+          "rev_packet_length_std",
+          "rev_packet_length_min",
+          "rev_packet_length_max",
+          "rev_packet_length_p25",
+          "rev_packet_length_p75",
+          "rev_packet_length_p90",
+          "rev_packet_length_p95",
+          "iat_mean",
+          "iat_median",
+          "iat_std",
+          "iat_min",
+          "iat_max",
+          "iat_p25",
+          "iat_p75",
+          "iat_p90",
+          "iat_p95",
+          "fwd_iat_mean",
+          "fwd_iat_median",
+          "fwd_iat_std",
+          "fwd_iat_min",
+          "fwd_iat_max",
+          "fwd_iat_p25",
+          "fwd_iat_p75",
+          "fwd_iat_p90",
+          "fwd_iat_p95",
+          "rev_iat_mean",
+          "rev_iat_median",
+          "rev_iat_std",
+          "rev_iat_min",
+          "rev_iat_max",
+          "rev_iat_p25",
+          "rev_iat_p75",
+          "rev_iat_p90",
+          "rev_iat_p95",
+          "number_of_bursts",
+          "mean_burst_size",
+          "maximum_burst_size",
+          "idle_gap_count",
+          "maximum_idle_gap",
+          "clienthello_present",
+          "serverhello_present",
+          "sni_present"
+        ],
+        "categorical": [
+          "tls_version",
+          "alpn_value",
+          "ja4"
+        ],
+        "population": "JA4_AVAILABLE"
+      },
+      "missing_feature_policy": "REJECT: every required input column must be present in the flow record; a NaN value is accepted only where it means 'undefined for this flow' and is median-imputed with a missing indicator exactly as in training. Records lacking the track's fingerprint are not scored.",
+      "training": {
+        "dataset": {
+          "corpus_manifest": "data/processed/v3/corpus_manifest.json",
+          "corpus_manifest_sha256": "c67f53458f9f0f7dc3590c6bc98683b7d457f6744573ba31863c4db362db1e7c",
+          "corpus_outputs": {
+            "data/processed/v3/corpus_flows.parquet": "84f496ed79eb71a34babf09e2ef1a4e296d4f11ad108c1faa35fe350b034714e",
+            "data/processed/v3/corpus_provenance.parquet": "aff3a854fa2c26f2c78d3e25002025d1105b9f1f941485dbac17af7c7dc8a0a4"
+          },
+          "corpus_version": "v3",
+          "inputs": {
+            "DS008-C001": "4b079d83abe301a9aee90d68565429b7fc9dd6b9b43c4cb8e2c44b99fcede894",
+            "DS008-C002": "ef8b0d488efe3cc7b9f1e2c33b4aea00f0613be60a119fb07d7006add89fafc8",
+            "DS008-C003": "a430dc87508451dad8e70a7ed9b5d912054482d16745b4eadd93411e44dd41fc",
+            "DS008-C004": "c63d9260c5d93b98c51b353f4f6059c52b756ab648cc27c814d3aede41142d23",
+            "DS008-C005": "805fc5b533f990ae63beeacdee52b656bfddfd21145089dfbb54a82c6ea17aba",
+            "DS008-C006": "24de7b31a2248763c4fd3e92acfc6b6fa9462b129c7b4ff8024932407ebeae4b",
+            "DS008-C007": "903844e8c40fde617c3636a69ba902a668d740e67c79d9624998b4ab6df09ccd",
+            "DS008-C008": "47b1cc4c0148245878a1a2f2eadb37323d80d20a5dbc196b872b3780b8108095",
+            "DS008-C009": "f1bfadc000a21dae71a1d1d71613b169a6e01bedb7d9829822d111987ed4caeb",
+            "DS008-C010": "5f74ed42f609284180f70d104dacdb82cde86dda86020994464b416cd1bbb17f",
+            "DS004-sample1": null,
+            "DS004-sample2": null,
+            "DS004-sample3": null,
+            "DS004-sample4": null,
+            "DS004-sample5": null,
+            "DS004-sample6": null,
+            "DS011-CTU-Normal-20": "c78a00728f115ab8fc495fd395894c43fd90cb61054eb9ef4f2d024658d5ffc5",
+            "DS011-CTU-Normal-21": "53acb10b26ca6446b5bba2efd9d957a9faa15209029d58c10a8c1d1bd299c42b",
+            "DS011-CTU-Normal-23": "50ccaa483200a73c87be73ce3cae95c16afe0941021ff6d5e8e1cacf5a90807b",
+            "DS011-CTU-Normal-24": "31a9a2a88b0d24283288058f7c2dbad057e3d7d7bb2ad2427302dc954c7e1471",
+            "DS011-CTU-Normal-26": "b66103fd89c8f0fc53b76e718f53320f3af27edd302c58695fc1870ede3663c5",
+            "DS011-CTU-Normal-28": "a2f3e60fa0eb2a924a3795644ac09a0f1ea48c45c30ebcc663af9641580b9a5c",
+            "DS009-CTU-MCB-238-1": "b03bf9bca9d2cb217e0ff96506314afddbe791fc7c6abaf80a41c256da2bd27f",
+            "DS009-CTU-MCB-240-1": "9369b771130396f349ca74a24c9f5a2a7c0ebff90a9aec635e99fb97b39472a9",
+            "DS009-CTU-MCB-246-1": "2425bf206592b0dc24c71b449a85df451bfaf493ffcd3daddcbfbbc0eb31cb37",
+            "DS009-CTU-MCB-248-1": "76b88b66b3a0eb6041c459ecd549b21aa53681f3e0e141281c9fd924237096d8",
+            "DS009-CTU-MCB-249-1": "49f0b2c1d7ae270a048a6cccfc9f85cc23992d20ea068e59f0a39f03c396c97b",
+            "DS009-CTU-MCB-259-1": "f4bc1edb5b926e22e4080dc011be7826862b4b683b2c780355848fc4aacd28d7",
+            "DS009-CTU-MCB-260-1": "3135369b8556071018154652ddc78a5828dc6bd1241aadfaada8414db1635dea",
+            "DS009-CTU-MCB-264-1": "a92b52e5fb9eae4983713434909f5954c8beb12876320d4b7f3f15c36ec46bcb",
+            "DS009-CTU-MCB-268-1": "c2f1edf1ffd78afe45e3a958e217692e9f6afb907763e1073779806fbbc449ea"
+          }
+        },
+        "rows": 11220,
+        "positives": 8591,
+        "negatives": 2629,
+        "captures": [
+          "DS008-C001",
+          "DS008-C002",
+          "DS008-C003",
+          "DS008-C004",
+          "DS008-C005",
+          "DS008-C006",
+          "DS008-C007",
+          "DS008-C008",
+          "DS008-C009",
+          "DS008-C010",
+          "DS009-CTU-MCB-238-1",
+          "DS009-CTU-MCB-240-1",
+          "DS009-CTU-MCB-246-1",
+          "DS009-CTU-MCB-248-1",
+          "DS009-CTU-MCB-249-1",
+          "DS009-CTU-MCB-260-1",
+          "DS011-CTU-Normal-20",
+          "DS011-CTU-Normal-21",
+          "DS011-CTU-Normal-23",
+          "DS011-CTU-Normal-24",
+          "DS011-CTU-Normal-26",
+          "DS011-CTU-Normal-28"
+        ],
+        "datasets": [
+          "DS-008",
+          "DS-009",
+          "DS-011"
+        ],
+        "seed": 42
+      },
+      "evaluation": {
+        "experiments": [
+          "EXP-20261016T165724-4b88a60d-a29c"
+        ],
+        "protocol_of_reference": "CAPTURE_GROUP_KFOLD (nested selection)",
+        "inner_validation_for_calibration": {
+          "n": 11220,
+          "n_pos": 8591,
+          "n_neg": 2629,
+          "prevalence": 0.765686274509804,
+          "average_precision": 0.999724210344039,
+          "pr_auc_trapezoid": 0.9997285633885535,
+          "roc_auc": 0.9990900895472137,
+          "brier": 0.013442679509966055,
+          "ece_15bin": 0.016041108298939503,
+          "tpr@fpr=0.001": 0.980211849610057,
+          "tpr@fpr=0.01": 0.9867302991502735,
+          "tpr@fpr=0.05": 0.9930159469211965
+        },
+        "validation_note": null
+      },
+      "calibration": {
+        "status": "PLATT_ON_INNER_CAPTURE_OOF",
+        "params": {
+          "a": 14.414721457292455,
+          "b": -9.632472566075528
+        }
+      },
+      "thresholds": {
+        "fpr<=0.01": 0.9290371087636209,
+        "fpr<=0.05": 0.589460196914814
+      },
+      "ood_reference": {
+        "numeric_quantiles": {
+          "flow_duration": {
+            "q005": 0.00046399981889408084,
+            "q995": 368.7485180650016
+          },
+          "total_packets": {
+            "q005": 5.0,
+            "q995": 905.2900000000118
+          },
+          "total_bytes": {
+            "q005": 384.0,
+            "q995": 817591.4850000534
+          },
+          "forward_packets": {
+            "q005": 3.0,
+            "q995": 290.19500000001244
+          },
+          "reverse_packets": {
+            "q005": 2.0,
+            "q995": 624.1000000000131
+          },
+          "forward_bytes": {
+            "q005": 292.0,
+            "q995": 30724.930000000986
+          },
+          "reverse_bytes": {
+            "q005": 92.0,
+            "q995": 586435.8550000164
+          },
+          "packets_per_second": {
+            "q005": 0.14753975240773817,
+            "q995": 10775.866274942227
+          },
+          "bytes_per_second": {
+            "q005": 20.02235104201073,
+            "q995": 829373.5909040164
+          },
+          "forward_packet_ratio": {
+            "q005": 0.21205512960934647,
+            "q995": 0.6666666666666666
+          },
+          "reverse_packet_ratio": {
+            "q005": 0.3333333333333333,
+            "q995": 0.7879448703906535
+          },
+          "forward_byte_ratio": {
+            "q005": 0.016300762636751863,
+            "q995": 0.8120054568099505
+          },
+          "reverse_byte_ratio": {
+            "q005": 0.18799454319004993,
+            "q995": 0.9836992373632483
+          },
+          "packet_count_asymmetry": {
+            "q005": -0.5758897407813071,
+            "q995": 0.3333333333333333
+          },
+          "byte_count_asymmetry": {
+            "q005": -0.9673984747264963,
+            "q995": 0.6240109136199012
+          },
+          "packet_length_mean": {
+            "q005": 76.8,
+            "q995": 936.7447513061658
+          },
+          "packet_length_median": {
+            "q005": 41.0,
+            "q995": 1460.0
+          },
+          "packet_length_std": {
+            "q005": 61.833324348606716,
+            "q995": 698.8955487230992
+          },
+          "packet_length_min": {
+            "q005": 40.0,
+            "q995": 52.0
+          },
+          "packet_length_max": {
+            "q005": 200.0,
+            "q995": 1500.0
+          },
+          "packet_length_p25": {
+            "q005": 40.0,
+            "q995": 80.0
+          },
+          "packet_length_p75": {
+            "q005": 41.0,
+            "q995": 1500.0
+          },
+          "packet_length_p90": {
+            "q005": 118.02850000000001,
+            "q995": 1500.0
+          },
+          "packet_length_p95": {
+            "q005": 170.39999999999998,
+            "q995": 1500.0
+          },
+          "fwd_packet_length_mean": {
+            "q005": 58.84310411827765,
+            "q995": 488.18324448529563
+          },
+          "fwd_packet_length_median": {
+            "q005": 40.0,
+            "q995": 200.0
+          },
+          "fwd_packet_length_std": {
+            "q005": 43.99151467301984,
+            "q995": 577.1839406124388
+          },
+          "fwd_packet_length_min": {
+            "q005": 40.0,
+            "q995": 52.0
+          },
+          "fwd_packet_length_max": {
+            "q005": 200.0,
+            "q995": 1500.0
+          },
+          "fwd_packet_length_p25": {
+            "q005": 40.0,
+            "q995": 54.0
+          },
+          "fwd_packet_length_p75": {
+            "q005": 40.0,
+            "q995": 951.5262500000067
+          },
+          "fwd_packet_length_p90": {
+            "q005": 41.0,
+            "q995": 1500.0
+          },
+          "fwd_packet_length_p95": {
+            "q005": 94.34199999999949,
+            "q995": 1500.0
+          },
+          "rev_packet_length_mean": {
+            "q005": 46.0,
+            "q995": 1298.4788214285738
+          },
+          "rev_packet_length_median": {
+            "q005": 40.0,
+            "q995": 1500.0
+          },
+          "rev_packet_length_std": {
+            "q005": 6.0,
+            "q995": 681.2501973177513
+          },
+          "rev_packet_length_min": {
+            "q005": 40.0,
+            "q995": 52.0
+          },
+          "rev_packet_length_max": {
+            "q005": 52.0,
+            "q995": 1500.0
+          },
+          "rev_packet_length_p25": {
+            "q005": 40.0,
+            "q995": 1500.0
+          },
+          "rev_packet_length_p75": {
+            "q005": 40.0,
+            "q995": 1500.0
+          },
+          "rev_packet_length_p90": {
+            "q005": 50.8,
+            "q995": 1500.0
+          },
+          "rev_packet_length_p95": {
+            "q005": 51.4,
+            "q995": 1500.0
+          },
+          "iat_mean": {
+            "q005": 0.00011599995472352021,
+            "q995": 7.177579326769074
+          },
+          "iat_median": {
+            "q005": 2.507925033569336e-05,
+            "q995": 0.3768201499874721
+          },
+          "iat_std": {
+            "q005": 6.589556252825474e-05,
+            "q995": 27.69707817741348
+          },
+          "iat_min": {
+            "q005": 0.0,
+            "q995": 0.001002810000331921
+          },
+          "iat_max": {
+            "q005": 0.0002429999876767397,
+            "q995": 117.09900261994918
+          },
+          "iat_p25": {
+            "q005": 6.687045097351074e-06,
+            "q995": 0.010838811264620912
+          },
+          "iat_p75": {
+            "q005": 0.0001277737334021367,
+            "q995": 9.999393138444603
+          },
+          "iat_p90": {
+            "q005": 0.0002003000117838383,
+            "q995": 14.8013548744992
+          },
+          "iat_p95": {
+            "q005": 0.0002225690141458471,
+            "q995": 60.45237212699999
+          },
+          "fwd_iat_mean": {
+            "q005": 0.00020650005899369717,
+            "q995": 15.819838297130275
+          },
+          "fwd_iat_median": {
+            "q005": 0.00020399998174980283,
+            "q995": 10.00486930999974
+          },
+          "fwd_iat_std": {
+            "q005": 1.1500087566673756e-05,
+            "q995": 39.081138128955445
+          },
+          "fwd_iat_min": {
+            "q005": 0.0,
+            "q995": 0.056317220000200986
+          },
+          "fwd_iat_max": {
+            "q005": 0.00024306020699441433,
+            "q995": 117.24613931985576
+          },
+          "fwd_iat_p25": {
+            "q005": 2.3603439331054688e-05,
+            "q995": 0.643857335023641
+          },
+          "fwd_iat_p75": {
+            "q005": 0.00022626500227488578,
+            "q995": 10.442323595000003
+          },
+          "fwd_iat_p90": {
+            "q005": 0.0002371059770230204,
+            "q995": 62.699335428000005
+          },
+          "fwd_iat_p95": {
+            "q005": 0.00024065309087745846,
+            "q995": 77.72343203582308
+          },
+          "rev_iat_mean": {
+            "q005": 0.00037199992802925406,
+            "q995": 13.370059939982603
+          },
+          "rev_iat_median": {
+            "q005": 3.300001844763756e-05,
+            "q995": 10.012076550000007
+          },
+          "rev_iat_std": {
+            "q005": 0.0,
+            "q995": 25.84622776320502
+          },
+          "rev_iat_min": {
+            "q005": 0.0,
+            "q995": 0.14234455000016705
+          },
+          "rev_iat_max": {
+            "q005": 0.0003730000462383032,
+            "q995": 70.29061139999956
+          },
+          "rev_iat_p25": {
+            "q005": 1.0499966447241604e-05,
+            "q995": 0.794045012499262
+          },
+          "rev_iat_p75": {
+            "q005": 0.0003435249935137108,
+            "q995": 15.349118450013348
+          },
+          "rev_iat_p90": {
+            "q005": 0.0003690500045195222,
+            "q995": 60.59243643999998
+          },
+          "rev_iat_p95": {
+            "q005": 0.00037199981161393223,
+            "q995": 64.9388837799998
+          },
+          "number_of_bursts": {
+            "q005": 1.0,
+            "q995": 24.0
+          },
+          "mean_burst_size": {
+            "q005": 2.4289382239382236,
+            "q995": 188.7016666666756
+          },
+          "maximum_burst_size": {
+            "q005": 4.0,
+            "q995": 538.5250000000033
+          },
+          "idle_gap_count": {
+            "q005": 0.0,
+            "q995": 23.0
+          },
+          "maximum_idle_gap": {
+            "q005": 1.0043910799734295,
+            "q995": 118.25159063994418
+          },
+          "clienthello_present": {
+            "q005": 1.0,
+            "q995": 1.0
+          },
+          "serverhello_present": {
+            "q005": 0.0,
+            "q995": 1.0
+          },
+          "sni_present": {
+            "q005": 0.0,
+            "q995": 1.0
+          }
+        },
+        "categorical_vocab_size": {}
+      },
+      "known_vocab": {
+        "tls_version": [
+          "1.2",
+          "1.3"
+        ],
+        "alpn_value": [
+          "h2"
+        ],
+        "ja4": [
+          "t12d1109h2_43e74fd21232_56ea29cb59a2",
+          "t12d1110h2_43e74fd21232_6bf5526f7e0a",
+          "t12d120300_d94e65cdb899_c2f961105e84",
+          "t12d1509h2_073e58a039a6_ffd9648b5eb7",
+          "t12d1510h2_073e58a039a6_28ab5075c90d",
+          "t12d1510h2_073e58a039a6_fa4d8b5b3663",
+          "t12d1511h2_073e58a039a6_46219aa07ce6",
+          "t12d180700_4b22cbed5bed_6c134f388a40",
+          "t12d180800_4b22cbed5bed_86f5337e7f36",
+          "t12d1809h2_4b22cbed5bed_86f5337e7f36",
+          "t12d190800_d83cc789557e_86f5337e7f36",
+          "t12d1909h2_d83cc789557e_86f5337e7f36",
+          "t12n060500_4dc025c38c38_1a3805c3aa63",
+          "t12n120200_d94e65cdb899_c2f961105e84",
+          "t12n190700_d83cc789557e_86f5337e7f36",
+          "t12n210300_b973bfd88a0e_e23af3f3b0f5",
+          "t13d1516h2_8daaf6152771_09bc80a13a6f",
+          "t13d1517h2_8daaf6152771_8541eb7915a8",
+          "t13d201100_2b729b4bf6f3_359576663374",
+          "t13d201200_2b729b4bf6f3_0e7ae04a4f16",
+          "t13d201200_2b729b4bf6f3_fa8177739d0c",
+          "t13d2012h2_2b729b4bf6f3_359576663374",
+          "t13d201300_2b729b4bf6f3_45a815ea57af",
+          "t13d2013h2_2b729b4bf6f3_fa8177739d0c",
+          "t13d2014h2_2b729b4bf6f3_45a815ea57af",
+          "t13n140900_cbb2034c60b8_76f88aac36de"
+        ]
+      },
+      "limitations": [
+        "Trained on exploratory, source-confounded data: each dataset contributes a single class.",
+        "Labels are capture-level; benign background traffic inside malware captures is labelled malicious.",
+        "Benign training traffic is 2017 browser traffic; modern benign clients are out of distribution.",
+        "Scores are not evidence of maliciousness in live traffic; they indicate similarity to the training captures."
+      ],
+      "artifact": {
+        "format": "etth-tabular-model/1",
+        "path": "artifacts/etth-e_ja4_flow-random_forest/v1",
+        "sha256": {
+          "model.json": "aeba4e4c5a4ddf1efbb386f4b43bfbd5c781fda41229713a22d5b75b4ec4db6c",
+          "arrays.npz": "c1254224e596b9d4b74ac7a2565f314e9e55eec7b14b43a7780e18083c31155f"
+        }
+      }
+    }
+  ],
+  "activation_history": [
+    {
+      "at": "2026-10-16T17:29:56.467395Z",
+      "track": "A_FLOW",
+      "activated": "etth-a_flow-random_forest:v1",
+      "previous": null,
+      "reason": "Initial research-pilot activation for replay/live integration; trained on exploratory source-confounded corpus v3 (pooled_capture_cv-20261016T164118Z). Not a validated detector."
+    },
+    {
+      "at": "2026-10-16T17:29:58.564103Z",
+      "track": "B_JA3",
+      "activated": "etth-b_ja3-random_forest:v1",
+      "previous": null,
+      "reason": "Initial research-pilot activation for replay/live integration; trained on exploratory source-confounded corpus v3 (pooled_capture_cv-20261016T164118Z). Not a validated detector."
+    },
+    {
+      "at": "2026-10-16T17:30:00.817292Z",
+      "track": "C_JA4",
+      "activated": "etth-c_ja4-random_forest:v1",
+      "previous": null,
+      "reason": "Initial research-pilot activation for replay/live integration; trained on exploratory source-confounded corpus v3 (pooled_capture_cv-20261016T164118Z). Not a validated detector."
+    },
+    {
+      "at": "2026-10-16T17:30:03.009239Z",
+      "track": "D_JA3_FLOW",
+      "activated": "etth-d_ja3_flow-random_forest:v1",
+      "previous": null,
+      "reason": "Initial research-pilot activation for replay/live integration; trained on exploratory source-confounded corpus v3 (pooled_capture_cv-20261016T164118Z). Not a validated detector."
+    },
+    {
+      "at": "2026-10-16T17:30:05.066372Z",
+      "track": "E_JA4_FLOW",
+      "activated": "etth-e_ja4_flow-random_forest:v1",
+      "previous": null,
+      "reason": "Initial research-pilot activation for replay/live integration; trained on exploratory source-confounded corpus v3 (pooled_capture_cv-20261016T164118Z). Not a validated detector."
+    }
+  ],
+  "updated_at": "2026-10-16T17:30:05.066372Z"
+}
