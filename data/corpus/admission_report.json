@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-16T16:29:47.369344Z",
+  "generated_at": "2026-10-16T18:11:47.019436Z",
   "corpus_rows": 577238,
   "funnel_by_dataset": {
     "DS-004": {
@@ -106,6 +106,189 @@
       "10 non-monotonic timestamps"
     ]
   },
+  "duplicate_raw_files": [],
+  "provenance_flags": [
+    {
+      "capture_id": "DS008-C003",
+      "flag": "ACQUISITION_TIME_NOT_RECORDED",
+      "detail": "Archive present in repository before Phase 8; original acquisition time not recorded."
+    },
+    {
+      "capture_id": "DS008-C004",
+      "flag": "ACQUISITION_TIME_NOT_RECORDED",
+      "detail": "Archive present in repository before Phase 8; original acquisition time not recorded."
+    },
+    {
+      "capture_id": "DS008-C005",
+      "flag": "ACQUISITION_TIME_NOT_RECORDED",
+      "detail": "Archive present in repository before Phase 8; original acquisition time not recorded."
+    },
+    {
+      "capture_id": "DS008-C007",
+      "flag": "ACQUISITION_TIME_NOT_RECORDED",
+      "detail": "Archive present in repository before Phase 8; original acquisition time not recorded."
+    },
+    {
+      "capture_id": "DS008-C008",
+      "flag": "ACQUISITION_TIME_NOT_RECORDED",
+      "detail": "Archive present in repository before Phase 8; original acquisition time not recorded."
+    },
+    {
+      "capture_id": "DS008-C009",
+      "flag": "ACQUISITION_TIME_NOT_RECORDED",
+      "detail": "Archive present in repository before Phase 8; original acquisition time not recorded."
+    },
+    {
+      "capture_id": "DS008-C010",
+      "flag": "ACQUISITION_TIME_NOT_RECORDED",
+      "detail": "Archive present in repository before Phase 8; original acquisition time not recorded."
+    },
+    {
+      "capture_id": "DS004-sample1",
+      "flag": "UNKNOWN_COLLECTION_DATE",
+      "detail": ""
+    },
+    {
+      "capture_id": "DS004-sample1",
+      "flag": "ACQUISITION_TIME_NOT_RECORDED",
+      "detail": "Acquired on the original E: workstation; not present in this working copy."
+    },
+    {
+      "capture_id": "DS004-sample2",
+      "flag": "UNKNOWN_COLLECTION_DATE",
+      "detail": ""
+    },
+    {
+      "capture_id": "DS004-sample2",
+      "flag": "ACQUISITION_TIME_NOT_RECORDED",
+      "detail": "Acquired on the original E: workstation; not present in this working copy."
+    },
+    {
+      "capture_id": "DS004-sample3",
+      "flag": "UNKNOWN_COLLECTION_DATE",
+      "detail": ""
+    },
+    {
+      "capture_id": "DS004-sample3",
+      "flag": "ACQUISITION_TIME_NOT_RECORDED",
+      "detail": "Acquired on the original E: workstation; not present in this working copy."
+    },
+    {
+      "capture_id": "DS004-sample4",
+      "flag": "UNKNOWN_COLLECTION_DATE",
+      "detail": ""
+    },
+    {
+      "capture_id": "DS004-sample4",
+      "flag": "ACQUISITION_TIME_NOT_RECORDED",
+      "detail": "Acquired on the original E: workstation; not present in this working copy."
+    },
+    {
+      "capture_id": "DS004-sample5",
+      "flag": "UNKNOWN_COLLECTION_DATE",
+      "detail": ""
+    },
+    {
+      "capture_id": "DS004-sample5",
+      "flag": "ACQUISITION_TIME_NOT_RECORDED",
+      "detail": "Acquired on the original E: workstation; not present in this working copy."
+    },
+    {
+      "capture_id": "DS004-sample6",
+      "flag": "UNKNOWN_COLLECTION_DATE",
+      "detail": ""
+    },
+    {
+      "capture_id": "DS004-sample6",
+      "flag": "ACQUISITION_TIME_NOT_RECORDED",
+      "detail": "Acquired on the original E: workstation; not present in this working copy."
+    },
+    {
+      "capture_id": "DS011-CTU-Normal-20",
+      "flag": "NO_PUBLISHED_CHECKSUM",
+      "detail": "SHA-256 recorded at first verification (trust-on-first-download)"
+    },
+    {
+      "capture_id": "DS011-CTU-Normal-21",
+      "flag": "NO_PUBLISHED_CHECKSUM",
+      "detail": "SHA-256 recorded at first verification (trust-on-first-download)"
+    },
+    {
+      "capture_id": "DS011-CTU-Normal-23",
+      "flag": "NO_PUBLISHED_CHECKSUM",
+      "detail": "SHA-256 recorded at first verification (trust-on-first-download)"
+    },
+    {
+      "capture_id": "DS011-CTU-Normal-23",
+      "flag": "METADATA_CONFLICT",
+      "detail": "UNKNOWN (CONFLICT: filename says Windows, README says Kali Linux)"
+    },
+    {
+      "capture_id": "DS011-CTU-Normal-24",
+      "flag": "NO_PUBLISHED_CHECKSUM",
+      "detail": "SHA-256 recorded at first verification (trust-on-first-download)"
+    },
+    {
+      "capture_id": "DS011-CTU-Normal-24",
+      "flag": "METADATA_CONFLICT",
+      "detail": "UNKNOWN (CONFLICT: filename says Windows, README says Kali Linux)"
+    },
+    {
+      "capture_id": "DS011-CTU-Normal-26",
+      "flag": "NO_PUBLISHED_CHECKSUM",
+      "detail": "SHA-256 recorded at first verification (trust-on-first-download)"
+    },
+    {
+      "capture_id": "DS011-CTU-Normal-28",
+      "flag": "NO_PUBLISHED_CHECKSUM",
+      "detail": "SHA-256 recorded at first verification (trust-on-first-download)"
+    },
+    {
+      "capture_id": "DS009-CTU-MCB-238-1",
+      "flag": "NO_PUBLISHED_CHECKSUM",
+      "detail": "SHA-256 recorded at first verification (trust-on-first-download)"
+    },
+    {
+      "capture_id": "DS009-CTU-MCB-240-1",
+      "flag": "NO_PUBLISHED_CHECKSUM",
+      "detail": "SHA-256 recorded at first verification (trust-on-first-download)"
+    },
+    {
+      "capture_id": "DS009-CTU-MCB-246-1",
+      "flag": "NO_PUBLISHED_CHECKSUM",
+      "detail": "SHA-256 recorded at first verification (trust-on-first-download)"
+    },
+    {
+      "capture_id": "DS009-CTU-MCB-248-1",
+      "flag": "NO_PUBLISHED_CHECKSUM",
+      "detail": "SHA-256 recorded at first verification (trust-on-first-download)"
+    },
+    {
+      "capture_id": "DS009-CTU-MCB-249-1",
+      "flag": "NO_PUBLISHED_CHECKSUM",
+      "detail": "SHA-256 recorded at first verification (trust-on-first-download)"
+    },
+    {
+      "capture_id": "DS009-CTU-MCB-259-1",
+      "flag": "NO_PUBLISHED_CHECKSUM",
+      "detail": "SHA-256 recorded at first verification (trust-on-first-download)"
+    },
+    {
+      "capture_id": "DS009-CTU-MCB-260-1",
+      "flag": "NO_PUBLISHED_CHECKSUM",
+      "detail": "SHA-256 recorded at first verification (trust-on-first-download)"
+    },
+    {
+      "capture_id": "DS009-CTU-MCB-264-1",
+      "flag": "NO_PUBLISHED_CHECKSUM",
+      "detail": "SHA-256 recorded at first verification (trust-on-first-download)"
+    },
+    {
+      "capture_id": "DS009-CTU-MCB-268-1",
+      "flag": "NO_PUBLISHED_CHECKSUM",
+      "detail": "SHA-256 recorded at first verification (trust-on-first-download)"
+    }
+  ],
   "label_distribution": {
     "by_label": {
       "MALICIOUS": 450106,

@@ -1,6 +1,6 @@
 # ETTH Corpus Admission Report
 
-Generated: 2026-10-16T16:29:47.369344Z (from `data/corpus/admission_report.json`; all counts computed from data).
+Generated: 2026-10-16T18:11:47.019436Z (from `data/corpus/admission_report.json`; all counts computed from data).
 
 ## Processing funnel by dataset
 
@@ -10,6 +10,49 @@ Generated: 2026-10-16T16:29:47.369344Z (from `data/corpus/admission_report.json`
 | DS-008 | 12 | 10 | 10 | 10 | 10 | 10 | 2543 | 194 | 194 | 194 |
 | DS-009 | 9 | 9 | 9 | 9 | 9 | 9 | 447563 | 66612 | 66612 | 66612 |
 | DS-011 | 6 | 6 | 6 | 6 | 6 | 6 | 127132 | 13845 | 13845 | 13845 |
+
+Duplicate raw files (identical SHA-256): none
+
+## Provenance flags
+
+| Capture | Flag | Detail |
+|---|---|---|
+| DS008-C003 | ACQUISITION_TIME_NOT_RECORDED | Archive present in repository before Phase 8; original acquisition time not recorded. |
+| DS008-C004 | ACQUISITION_TIME_NOT_RECORDED | Archive present in repository before Phase 8; original acquisition time not recorded. |
+| DS008-C005 | ACQUISITION_TIME_NOT_RECORDED | Archive present in repository before Phase 8; original acquisition time not recorded. |
+| DS008-C007 | ACQUISITION_TIME_NOT_RECORDED | Archive present in repository before Phase 8; original acquisition time not recorded. |
+| DS008-C008 | ACQUISITION_TIME_NOT_RECORDED | Archive present in repository before Phase 8; original acquisition time not recorded. |
+| DS008-C009 | ACQUISITION_TIME_NOT_RECORDED | Archive present in repository before Phase 8; original acquisition time not recorded. |
+| DS008-C010 | ACQUISITION_TIME_NOT_RECORDED | Archive present in repository before Phase 8; original acquisition time not recorded. |
+| DS004-sample1 | UNKNOWN_COLLECTION_DATE |  |
+| DS004-sample1 | ACQUISITION_TIME_NOT_RECORDED | Acquired on the original E: workstation; not present in this working copy. |
+| DS004-sample2 | UNKNOWN_COLLECTION_DATE |  |
+| DS004-sample2 | ACQUISITION_TIME_NOT_RECORDED | Acquired on the original E: workstation; not present in this working copy. |
+| DS004-sample3 | UNKNOWN_COLLECTION_DATE |  |
+| DS004-sample3 | ACQUISITION_TIME_NOT_RECORDED | Acquired on the original E: workstation; not present in this working copy. |
+| DS004-sample4 | UNKNOWN_COLLECTION_DATE |  |
+| DS004-sample4 | ACQUISITION_TIME_NOT_RECORDED | Acquired on the original E: workstation; not present in this working copy. |
+| DS004-sample5 | UNKNOWN_COLLECTION_DATE |  |
+| DS004-sample5 | ACQUISITION_TIME_NOT_RECORDED | Acquired on the original E: workstation; not present in this working copy. |
+| DS004-sample6 | UNKNOWN_COLLECTION_DATE |  |
+| DS004-sample6 | ACQUISITION_TIME_NOT_RECORDED | Acquired on the original E: workstation; not present in this working copy. |
+| DS011-CTU-Normal-20 | NO_PUBLISHED_CHECKSUM | SHA-256 recorded at first verification (trust-on-first-download) |
+| DS011-CTU-Normal-21 | NO_PUBLISHED_CHECKSUM | SHA-256 recorded at first verification (trust-on-first-download) |
+| DS011-CTU-Normal-23 | NO_PUBLISHED_CHECKSUM | SHA-256 recorded at first verification (trust-on-first-download) |
+| DS011-CTU-Normal-23 | METADATA_CONFLICT | UNKNOWN (CONFLICT: filename says Windows, README says Kali Linux) |
+| DS011-CTU-Normal-24 | NO_PUBLISHED_CHECKSUM | SHA-256 recorded at first verification (trust-on-first-download) |
+| DS011-CTU-Normal-24 | METADATA_CONFLICT | UNKNOWN (CONFLICT: filename says Windows, README says Kali Linux) |
+| DS011-CTU-Normal-26 | NO_PUBLISHED_CHECKSUM | SHA-256 recorded at first verification (trust-on-first-download) |
+| DS011-CTU-Normal-28 | NO_PUBLISHED_CHECKSUM | SHA-256 recorded at first verification (trust-on-first-download) |
+| DS009-CTU-MCB-238-1 | NO_PUBLISHED_CHECKSUM | SHA-256 recorded at first verification (trust-on-first-download) |
+| DS009-CTU-MCB-240-1 | NO_PUBLISHED_CHECKSUM | SHA-256 recorded at first verification (trust-on-first-download) |
+| DS009-CTU-MCB-246-1 | NO_PUBLISHED_CHECKSUM | SHA-256 recorded at first verification (trust-on-first-download) |
+| DS009-CTU-MCB-248-1 | NO_PUBLISHED_CHECKSUM | SHA-256 recorded at first verification (trust-on-first-download) |
+| DS009-CTU-MCB-249-1 | NO_PUBLISHED_CHECKSUM | SHA-256 recorded at first verification (trust-on-first-download) |
+| DS009-CTU-MCB-259-1 | NO_PUBLISHED_CHECKSUM | SHA-256 recorded at first verification (trust-on-first-download) |
+| DS009-CTU-MCB-260-1 | NO_PUBLISHED_CHECKSUM | SHA-256 recorded at first verification (trust-on-first-download) |
+| DS009-CTU-MCB-264-1 | NO_PUBLISHED_CHECKSUM | SHA-256 recorded at first verification (trust-on-first-download) |
+| DS009-CTU-MCB-268-1 | NO_PUBLISHED_CHECKSUM | SHA-256 recorded at first verification (trust-on-first-download) |
 
 ## Exclusions
 

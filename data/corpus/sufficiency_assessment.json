@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-16T16:29:51.108794Z",
+  "generated_at": "2026-10-16T18:11:50.770754Z",
   "thresholds": {
     "A_pipeline": {
       "min_captures_per_class": 1,
