@@ -3,20 +3,41 @@ import asyncio
 from backend.inference_engine import inference_engine
 from backend.detection_pipeline import detection_pipeline
 from backend.schemas import ETTHStreamEvent
+from tests.ml_fixtures import complete_flow_record, fixture_models
+
+# Phase 9 contract change (documented in docs/research/PHASE_9_BENCHMARK_PROTOCOL.md, section 10):
+# inference now requires a registered model and a complete input schema. These tests install
+# synthetic fixture models and give the flow/fusion tracks complete flow records, keeping every
+# original assertion. Sparse records are now SKIPPED instead of being zero-filled (see test_1b).
+
+
+@pytest.fixture(autouse=True, scope="module")
+def _fixture_models(tmp_path_factory):
+    for track, (entry, model) in fixture_models(tmp_path_factory.mktemp("models")).items():
+        inference_engine.install(track, entry, model)
+    yield
+    inference_engine.reload()
 
 def test_1_flow_only_inference():
-    flow = {
+    flow = complete_flow_record(**{
         "flow_id": "test_f1",
         "flow_duration": 10.0,
         "total_packets": 50,
         "total_bytes": 10000,
         "label": "BENIGN"
-    }
+    })
     res = inference_engine.predict(flow, track="A_FLOW")
     assert res["status"] == "COMPLETED"
     assert res["track"] == "A_FLOW"
     assert 0.0 <= res["threat_score"] <= 1.0
     assert len(res["evidence"]) > 0
+
+def test_1b_sparse_flow_is_not_zero_filled():
+    flow = {"flow_id": "test_f1b", "flow_duration": 10.0, "total_packets": 50, "total_bytes": 10000, "label": "BENIGN"}
+    res = inference_engine.predict(flow, track="A_FLOW")
+    assert res["status"] == "SKIPPED"
+    assert res["skip_reason"].startswith("INCOMPATIBLE_FEATURE_SCHEMA")
+    assert res["prediction"] == "UNKNOWN"
 
 def test_2_ja3_only_inference():
     flow = {
@@ -39,23 +60,23 @@ def test_3_ja4_only_inference():
     assert res["track"] == "C_JA4"
 
 def test_4_ja3_flow_inference():
-    flow = {
+    flow = complete_flow_record(**{
         "flow_id": "test_f4",
         "flow_duration": 15.0,
         "ja3_hash": "e7d705a3286e19ea42f587b344ee6865",
         "label": "MALICIOUS"
-    }
+    })
     res = inference_engine.predict(flow, track="D_JA3_FLOW")
     assert res["status"] == "COMPLETED"
     assert res["track"] == "D_JA3_FLOW"
 
 def test_5_ja4_flow_inference():
-    flow = {
+    flow = complete_flow_record(**{
         "flow_id": "test_f5",
         "flow_duration": 15.0,
         "ja4": "t13d151600_8daaf6152771_e8006e86689d",
         "label": "MALICIOUS"
-    }
+    })
     res = inference_engine.predict(flow, track="E_JA4_FLOW")
     assert res["status"] == "COMPLETED"
     assert res["track"] == "E_JA4_FLOW"
