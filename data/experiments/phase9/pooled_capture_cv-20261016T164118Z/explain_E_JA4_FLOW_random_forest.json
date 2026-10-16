@@ -1,0 +1,519 @@
+{
+  "status": "COMPLETED",
+  "track": "E_JA4_FLOW",
+  "model": "random_forest",
+  "params": {
+    "min_samples_leaf": 1
+  },
+  "folds_used": 5,
+  "method": "permutation importance on outer test folds (<= 4000 stratified rows/fold, 5 repeats, AP drop)",
+  "permutation_importance": [
+    {
+      "feature": "alpn_value",
+      "mean_ap_drop": 0.03978402998727689,
+      "sd_across_folds": 0.01362741573672714
+    },
+    {
+      "feature": "sni_present",
+      "mean_ap_drop": 0.0002497681237846816,
+      "sd_across_folds": 0.00048803805839932866
+    },
+    {
+      "feature": "fwd_packet_length_p75",
+      "mean_ap_drop": 9.095577510558784e-05,
+      "sd_across_folds": 0.00020297439066610426
+    },
+    {
+      "feature": "packet_length_max",
+      "mean_ap_drop": 5.082383020618142e-05,
+      "sd_across_folds": 0.00011108173579785585
+    },
+    {
+      "feature": "tls_version",
+      "mean_ap_drop": 2.687875194621103e-05,
+      "sd_across_folds": 4.454265085575942e-05
+    },
+    {
+      "feature": "flow_duration",
+      "mean_ap_drop": 1.9260746775406902e-05,
+      "sd_across_folds": 4.277904690825871e-05
+    },
+    {
+      "feature": "forward_bytes",
+      "mean_ap_drop": 1.6812529532965746e-05,
+      "sd_across_folds": 3.730430088702202e-05
+    },
+    {
+      "feature": "maximum_idle_gap",
+      "mean_ap_drop": 1.6186442461885165e-05,
+      "sd_across_folds": 3.5941267825679976e-05
+    },
+    {
+      "feature": "rev_iat_max",
+      "mean_ap_drop": 1.5443049030960943e-05,
+      "sd_across_folds": 3.406113845809666e-05
+    },
+    {
+      "feature": "rev_iat_std",
+      "mean_ap_drop": 1.4907905466428061e-05,
+      "sd_across_folds": 3.2721344488889624e-05
+    },
+    {
+      "feature": "iat_max",
+      "mean_ap_drop": 1.4354472338369282e-05,
+      "sd_across_folds": 3.109786338837977e-05
+    },
+    {
+      "feature": "packets_per_second",
+      "mean_ap_drop": 1.1325374016530887e-05,
+      "sd_across_folds": 2.5215980657764925e-05
+    },
+    {
+      "feature": "fwd_packet_length_p25",
+      "mean_ap_drop": 1.1178823189945675e-05,
+      "sd_across_folds": 2.4816227823550153e-05
+    },
+    {
+      "feature": "reverse_byte_ratio",
+      "mean_ap_drop": 1.0875626424362572e-05,
+      "sd_across_folds": 2.431863998276769e-05
+    },
+    {
+      "feature": "packet_length_std",
+      "mean_ap_drop": 1.000921712582592e-05,
+      "sd_across_folds": 2.2128887282266464e-05
+    },
+    {
+      "feature": "fwd_iat_p95",
+      "mean_ap_drop": 9.326307930699328e-06,
+      "sd_across_folds": 2.0818245597201057e-05
+    },
+    {
+      "feature": "rev_packet_length_p25",
+      "mean_ap_drop": 9.11930106896719e-06,
+      "sd_across_folds": 2.035524120253789e-05
+    },
+    {
+      "feature": "rev_iat_p90",
+      "mean_ap_drop": 8.9442087046665e-06,
+      "sd_across_folds": 1.9819577531996135e-05
+    },
+    {
+      "feature": "iat_mean",
+      "mean_ap_drop": 8.589247237185127e-06,
+      "sd_across_folds": 1.9206140697898203e-05
+    },
+    {
+      "feature": "fwd_iat_mean",
+      "mean_ap_drop": 7.068014487270347e-06,
+      "sd_across_folds": 1.5624412546071823e-05
+    },
+    {
+      "feature": "iat_p90",
+      "mean_ap_drop": 6.704265639894125e-06,
+      "sd_across_folds": 1.4955064771805573e-05
+    },
+    {
+      "feature": "mean_burst_size",
+      "mean_ap_drop": 6.557240331295233e-06,
+      "sd_across_folds": 1.448233629822512e-05
+    },
+    {
+      "feature": "byte_count_asymmetry",
+      "mean_ap_drop": 5.43511810253694e-06,
+      "sd_across_folds": 1.2153293543012267e-05
+    },
+    {
+      "feature": "forward_packets",
+      "mean_ap_drop": 5.168620940714241e-06,
+      "sd_across_folds": 1.1305553112380227e-05
+    },
+    {
+      "feature": "bytes_per_second",
+      "mean_ap_drop": 4.734978473153184e-06,
+      "sd_across_folds": 1.0587733737968682e-05
+    },
+    {
+      "feature": "ja4",
+      "mean_ap_drop": 4.494659277067825e-06,
+      "sd_across_folds": 7.039716877214145e-06
+    },
+    {
+      "feature": "fwd_packet_length_p95",
+      "mean_ap_drop": 4.440113051451533e-06,
+      "sd_across_folds": 9.748624536174877e-06
+    },
+    {
+      "feature": "rev_iat_median",
+      "mean_ap_drop": 3.176360892984675e-06,
+      "sd_across_folds": 6.958839957913694e-06
+    },
+    {
+      "feature": "packet_length_min",
+      "mean_ap_drop": 3.043978278323145e-06,
+      "sd_across_folds": 6.278867466554229e-06
+    },
+    {
+      "feature": "reverse_packet_ratio",
+      "mean_ap_drop": 2.9128178990411867e-06,
+      "sd_across_folds": 6.334031038308093e-06
+    },
+    {
+      "feature": "packet_length_median",
+      "mean_ap_drop": 2.909089571092593e-06,
+      "sd_across_folds": 6.4688274960188325e-06
+    },
+    {
+      "feature": "forward_packet_ratio",
+      "mean_ap_drop": 2.8983781339686485e-06,
+      "sd_across_folds": 6.301750673592515e-06
+    },
+    {
+      "feature": "iat_p95",
+      "mean_ap_drop": 2.7000107659702622e-06,
+      "sd_across_folds": 6.001317797772923e-06
+    },
+    {
+      "feature": "number_of_bursts",
+      "mean_ap_drop": 2.689060506515517e-06,
+      "sd_across_folds": 6.012922088178711e-06
+    },
+    {
+      "feature": "rev_iat_mean",
+      "mean_ap_drop": 2.4058117796910137e-06,
+      "sd_across_folds": 5.130039037034279e-06
+    },
+    {
+      "feature": "fwd_iat_p90",
+      "mean_ap_drop": 2.363812817036681e-06,
+      "sd_across_folds": 5.1067904928437615e-06
+    },
+    {
+      "feature": "rev_iat_p95",
+      "mean_ap_drop": 2.359324793679285e-06,
+      "sd_across_folds": 5.096758748314258e-06
+    },
+    {
+      "feature": "idle_gap_count",
+      "mean_ap_drop": 2.2032766793245173e-06,
+      "sd_across_folds": 4.9266764282096265e-06
+    },
+    {
+      "feature": "maximum_burst_size",
+      "mean_ap_drop": 1.2525026401766226e-06,
+      "sd_across_folds": 2.6236446808378016e-06
+    },
+    {
+      "feature": "rev_iat_p75",
+      "mean_ap_drop": 1.244404897273732e-06,
+      "sd_across_folds": 2.782573941837707e-06
+    },
+    {
+      "feature": "rev_packet_length_mean",
+      "mean_ap_drop": 1.2038735910646638e-06,
+      "sd_across_folds": 2.5497845432298196e-06
+    },
+    {
+      "feature": "rev_packet_length_std",
+      "mean_ap_drop": 5.657546720039264e-07,
+      "sd_across_folds": 1.0932945436894873e-06
+    },
+    {
+      "feature": "packet_length_mean",
+      "mean_ap_drop": 5.384813266617883e-07,
+      "sd_across_folds": 1.0328413019159978e-06
+    },
+    {
+      "feature": "fwd_packet_length_min",
+      "mean_ap_drop": 5.132168136068316e-07,
+      "sd_across_folds": 7.369917024734605e-07
+    },
+    {
+      "feature": "fwd_packet_length_max",
+      "mean_ap_drop": 7.816970164942205e-08,
+      "sd_across_folds": 1.4015609659522533e-07
+    },
+    {
+      "feature": "serverhello_present",
+      "mean_ap_drop": 6.467631765705307e-08,
+      "sd_across_folds": 1.4462064281554059e-07
+    },
+    {
+      "feature": "clienthello_present",
+      "mean_ap_drop": 0.0,
+      "sd_across_folds": 0.0
+    },
+    {
+      "feature": "rev_packet_length_min",
+      "mean_ap_drop": -1.0041433871066374e-07,
+      "sd_across_folds": 4.288162704021648e-07
+    },
+    {
+      "feature": "fwd_packet_length_std",
+      "mean_ap_drop": -1.9755973716062416e-07,
+      "sd_across_folds": 6.380870070110975e-07
+    },
+    {
+      "feature": "packet_count_asymmetry",
+      "mean_ap_drop": -2.8364957153304006e-07,
+      "sd_across_folds": 8.269769315841344e-07
+    },
+    {
+      "feature": "fwd_iat_max",
+      "mean_ap_drop": -5.418083053188028e-07,
+      "sd_across_folds": 1.518099831172604e-06
+    },
+    {
+      "feature": "fwd_iat_std",
+      "mean_ap_drop": -1.4185717361581138e-06,
+      "sd_across_folds": 6.508123007880095e-06
+    },
+    {
+      "feature": "fwd_packet_length_p90",
+      "mean_ap_drop": -1.4211465813351865e-06,
+      "sd_across_folds": 3.1777803618569107e-06
+    },
+    {
+      "feature": "fwd_iat_min",
+      "mean_ap_drop": -1.4636457479211275e-06,
+      "sd_across_folds": 3.3455906079224702e-06
+    },
+    {
+      "feature": "fwd_packet_length_mean",
+      "mean_ap_drop": -1.6750523225450563e-06,
+      "sd_across_folds": 3.891764096896732e-06
+    },
+    {
+      "feature": "rev_packet_length_median",
+      "mean_ap_drop": -2.0518022246829305e-06,
+      "sd_across_folds": 4.5879692507763286e-06
+    },
+    {
+      "feature": "fwd_iat_p75",
+      "mean_ap_drop": -2.191802612832028e-06,
+      "sd_across_folds": 5.083724305985821e-06
+    },
+    {
+      "feature": "iat_p75",
+      "mean_ap_drop": -2.262854511396739e-06,
+      "sd_across_folds": 5.059896510675181e-06
+    },
+    {
+      "feature": "iat_std",
+      "mean_ap_drop": -2.3517619248858423e-06,
+      "sd_across_folds": 5.404230658378962e-06
+    },
+    {
+      "feature": "fwd_iat_median",
+      "mean_ap_drop": -2.37014025169735e-06,
+      "sd_across_folds": 5.482548852944363e-06
+    },
+    {
+      "feature": "packet_length_p25",
+      "mean_ap_drop": -2.758762669077264e-06,
+      "sd_across_folds": 6.351100517340539e-06
+    },
+    {
+      "feature": "reverse_packets",
+      "mean_ap_drop": -3.445065355296428e-06,
+      "sd_across_folds": 7.812317593923132e-06
+    },
+    {
+      "feature": "iat_min",
+      "mean_ap_drop": -3.494615301389281e-06,
+      "sd_across_folds": 7.850402483940423e-06
+    },
+    {
+      "feature": "fwd_packet_length_median",
+      "mean_ap_drop": -4.3824118294510935e-06,
+      "sd_across_folds": 1.0054201528840242e-05
+    },
+    {
+      "feature": "packet_length_p75",
+      "mean_ap_drop": -4.71203704948131e-06,
+      "sd_across_folds": 1.0718125706812936e-05
+    },
+    {
+      "feature": "rev_iat_min",
+      "mean_ap_drop": -4.930227621429139e-06,
+      "sd_across_folds": 1.102428295054584e-05
+    },
+    {
+      "feature": "total_packets",
+      "mean_ap_drop": -5.2688736160178e-06,
+      "sd_across_folds": 1.2110649757292295e-05
+    },
+    {
+      "feature": "forward_byte_ratio",
+      "mean_ap_drop": -5.629707373970839e-06,
+      "sd_across_folds": 1.2660842600199067e-05
+    },
+    {
+      "feature": "rev_packet_length_p75",
+      "mean_ap_drop": -5.68415430135083e-06,
+      "sd_across_folds": 1.271015541241828e-05
+    },
+    {
+      "feature": "reverse_bytes",
+      "mean_ap_drop": -5.806449884082631e-06,
+      "sd_across_folds": 1.3906103095370616e-05
+    },
+    {
+      "feature": "iat_median",
+      "mean_ap_drop": -6.42079182237687e-06,
+      "sd_across_folds": 1.542482008376544e-05
+    },
+    {
+      "feature": "packet_length_p95",
+      "mean_ap_drop": -8.59805626386656e-06,
+      "sd_across_folds": 1.927360296457171e-05
+    },
+    {
+      "feature": "total_bytes",
+      "mean_ap_drop": -9.358102534680058e-06,
+      "sd_across_folds": 2.1288415327336135e-05
+    },
+    {
+      "feature": "packet_length_p90",
+      "mean_ap_drop": -1.1220719503697296e-05,
+      "sd_across_folds": 2.512646233483142e-05
+    },
+    {
+      "feature": "rev_iat_p25",
+      "mean_ap_drop": -1.4947487569072492e-05,
+      "sd_across_folds": 3.360466584629442e-05
+    },
+    {
+      "feature": "rev_packet_length_max",
+      "mean_ap_drop": -2.0926880896130483e-05,
+      "sd_across_folds": 4.897797559612813e-05
+    },
+    {
+      "feature": "fwd_iat_p25",
+      "mean_ap_drop": -2.2044563280156918e-05,
+      "sd_across_folds": 4.9873890282461727e-05
+    },
+    {
+      "feature": "iat_p25",
+      "mean_ap_drop": -3.0831712391998775e-05,
+      "sd_across_folds": 6.883322609769193e-05
+    },
+    {
+      "feature": "rev_packet_length_p90",
+      "mean_ap_drop": -3.323281073404516e-05,
+      "sd_across_folds": 7.423841129852596e-05
+    },
+    {
+      "feature": "rev_packet_length_p95",
+      "mean_ap_drop": -5.3878866805754386e-05,
+      "sd_across_folds": 0.00012061955835661464
+    }
+  ],
+  "caveat": "Association within this corpus only; not causal; may reflect capture-environment shortcuts.",
+  "model_internal_importance": {
+    "kind": "impurity (training data, biased)",
+    "top": [
+      {
+        "feature": "alpn_value",
+        "value": 0.28188976420048706
+      },
+      {
+        "feature": "sni_present",
+        "value": 0.11378398876890886
+      },
+      {
+        "feature": "ja4",
+        "value": 0.04351355485020027
+      },
+      {
+        "feature": "fwd_packet_length_p75",
+        "value": 0.04153162554455173
+      },
+      {
+        "feature": "iat_median",
+        "value": 0.03782070162748223
+      },
+      {
+        "feature": "total_bytes",
+        "value": 0.03750429608641124
+      },
+      {
+        "feature": "reverse_bytes",
+        "value": 0.03591644575548923
+      },
+      {
+        "feature": "rev_packet_length_p95",
+        "value": 0.03556934071320796
+      },
+      {
+        "feature": "packet_length_p95",
+        "value": 0.03294694696174201
+      },
+      {
+        "feature": "fwd_iat_p25",
+        "value": 0.020962763351963558
+      },
+      {
+        "feature": "rev_packet_length_p90",
+        "value": 0.01861620608340977
+      },
+      {
+        "feature": "total_packets",
+        "value": 0.014854034241674193
+      },
+      {
+        "feature": "reverse_packets",
+        "value": 0.013206450015946813
+      },
+      {
+        "feature": "rev_packet_length_std",
+        "value": 0.01310685292926525
+      },
+      {
+        "feature": "rev_packet_length_max",
+        "value": 0.012335943843111883
+      },
+      {
+        "feature": "packet_length_median",
+        "value": 0.012272010666558714
+      },
+      {
+        "feature": "fwd_packet_length_median",
+        "value": 0.011487703964481469
+      },
+      {
+        "feature": "byte_count_asymmetry",
+        "value": 0.010587019264252748
+      },
+      {
+        "feature": "packet_length_p90",
+        "value": 0.010494120187103351
+      },
+      {
+        "feature": "forward_bytes",
+        "value": 0.010090795880607264
+      },
+      {
+        "feature": "reverse_byte_ratio",
+        "value": 0.010070025552553836
+      },
+      {
+        "feature": "forward_packets",
+        "value": 0.010024195293603603
+      },
+      {
+        "feature": "rev_packet_length_median",
+        "value": 0.00993438419533024
+      },
+      {
+        "feature": "iat_p25",
+        "value": 0.009082840290316713
+      },
+      {
+        "feature": "forward_byte_ratio",
+        "value": 0.008882256465517649
+      }
+    ]
+  },
+  "source_experiment": "EXP-20261016T165724-4b88a60d-a29c"
+}

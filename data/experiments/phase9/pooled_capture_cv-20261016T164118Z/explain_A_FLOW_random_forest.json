@@ -1,0 +1,514 @@
+{
+  "status": "COMPLETED",
+  "track": "A_FLOW",
+  "model": "random_forest",
+  "params": {
+    "min_samples_leaf": 5
+  },
+  "folds_used": 5,
+  "method": "permutation importance on outer test folds (<= 4000 stratified rows/fold, 5 repeats, AP drop)",
+  "permutation_importance": [
+    {
+      "feature": "alpn_value",
+      "mean_ap_drop": 0.004636364862332062,
+      "sd_across_folds": 0.0029278579286874666
+    },
+    {
+      "feature": "packet_length_min",
+      "mean_ap_drop": 0.002712743876864345,
+      "sd_across_folds": 0.004439030077085318
+    },
+    {
+      "feature": "tls_version",
+      "mean_ap_drop": 0.0003509558810136459,
+      "sd_across_folds": 0.0008967907610733509
+    },
+    {
+      "feature": "sni_present",
+      "mean_ap_drop": 2.5882450084502295e-05,
+      "sd_across_folds": 0.00104052175926828
+    },
+    {
+      "feature": "rev_iat_p25",
+      "mean_ap_drop": -0.00020059018601105368,
+      "sd_across_folds": 0.0012092226574872322
+    },
+    {
+      "feature": "clienthello_present",
+      "mean_ap_drop": -0.0006715709067589205,
+      "sd_across_folds": 0.0022887684937671817
+    },
+    {
+      "feature": "idle_gap_count",
+      "mean_ap_drop": -0.0013022601664131495,
+      "sd_across_folds": 0.0017911250702327968
+    },
+    {
+      "feature": "rev_iat_mean",
+      "mean_ap_drop": -0.001531166299617026,
+      "sd_across_folds": 0.0026615426210319076
+    },
+    {
+      "feature": "rev_iat_min",
+      "mean_ap_drop": -0.001565667071534773,
+      "sd_across_folds": 0.0016614823024096535
+    },
+    {
+      "feature": "rev_iat_p75",
+      "mean_ap_drop": -0.001637071848120324,
+      "sd_across_folds": 0.0024249227263797553
+    },
+    {
+      "feature": "packet_length_p25",
+      "mean_ap_drop": -0.0019928946377445246,
+      "sd_across_folds": 0.0016713383989350873
+    },
+    {
+      "feature": "rev_iat_std",
+      "mean_ap_drop": -0.0019938053692800085,
+      "sd_across_folds": 0.0028485082096120842
+    },
+    {
+      "feature": "fwd_packet_length_min",
+      "mean_ap_drop": -0.0019945700841933036,
+      "sd_across_folds": 0.001514180470725489
+    },
+    {
+      "feature": "rev_iat_median",
+      "mean_ap_drop": -0.0021632704248758738,
+      "sd_across_folds": 0.0019971146904757733
+    },
+    {
+      "feature": "rev_packet_length_mean",
+      "mean_ap_drop": -0.002480778840445512,
+      "sd_across_folds": 0.004693636965744677
+    },
+    {
+      "feature": "rev_iat_max",
+      "mean_ap_drop": -0.0025629700876816973,
+      "sd_across_folds": 0.002296506400332025
+    },
+    {
+      "feature": "serverhello_present",
+      "mean_ap_drop": -0.002571861803334183,
+      "sd_across_folds": 0.0029234842024096837
+    },
+    {
+      "feature": "rev_packet_length_min",
+      "mean_ap_drop": -0.002751951054623576,
+      "sd_across_folds": 0.004584173319191427
+    },
+    {
+      "feature": "maximum_idle_gap",
+      "mean_ap_drop": -0.002787805706377862,
+      "sd_across_folds": 0.0019643663285844664
+    },
+    {
+      "feature": "rev_packet_length_p95",
+      "mean_ap_drop": -0.0028344168532945125,
+      "sd_across_folds": 0.0029030161892155655
+    },
+    {
+      "feature": "rev_iat_p90",
+      "mean_ap_drop": -0.0029215787147725257,
+      "sd_across_folds": 0.0029329196556511124
+    },
+    {
+      "feature": "packet_length_median",
+      "mean_ap_drop": -0.002939873465829921,
+      "sd_across_folds": 0.008381146935196397
+    },
+    {
+      "feature": "rev_packet_length_std",
+      "mean_ap_drop": -0.0030254733499185393,
+      "sd_across_folds": 0.0033843182884908058
+    },
+    {
+      "feature": "rev_packet_length_p75",
+      "mean_ap_drop": -0.003063430818332531,
+      "sd_across_folds": 0.0036864076418832038
+    },
+    {
+      "feature": "rev_packet_length_p90",
+      "mean_ap_drop": -0.0030714131314326524,
+      "sd_across_folds": 0.003935179009198829
+    },
+    {
+      "feature": "rev_iat_p95",
+      "mean_ap_drop": -0.0032880373865571146,
+      "sd_across_folds": 0.002331456363630638
+    },
+    {
+      "feature": "fwd_packet_length_p75",
+      "mean_ap_drop": -0.0033881984684028766,
+      "sd_across_folds": 0.0067454095813943345
+    },
+    {
+      "feature": "fwd_packet_length_std",
+      "mean_ap_drop": -0.003595120581544737,
+      "sd_across_folds": 0.0038893676309188284
+    },
+    {
+      "feature": "rev_packet_length_max",
+      "mean_ap_drop": -0.003621097936599273,
+      "sd_across_folds": 0.0062798410598580755
+    },
+    {
+      "feature": "total_packets",
+      "mean_ap_drop": -0.003665125328109138,
+      "sd_across_folds": 0.003670619463372818
+    },
+    {
+      "feature": "byte_count_asymmetry",
+      "mean_ap_drop": -0.0038163354080873505,
+      "sd_across_folds": 0.004400441934569795
+    },
+    {
+      "feature": "iat_std",
+      "mean_ap_drop": -0.0038331230618639097,
+      "sd_across_folds": 0.0027243027301141333
+    },
+    {
+      "feature": "fwd_iat_p25",
+      "mean_ap_drop": -0.004003843588972051,
+      "sd_across_folds": 0.007073665955470276
+    },
+    {
+      "feature": "flow_duration",
+      "mean_ap_drop": -0.0040050412373839215,
+      "sd_across_folds": 0.00894671032605092
+    },
+    {
+      "feature": "forward_byte_ratio",
+      "mean_ap_drop": -0.004109667298863479,
+      "sd_across_folds": 0.003861420782013536
+    },
+    {
+      "feature": "number_of_bursts",
+      "mean_ap_drop": -0.004125680692313516,
+      "sd_across_folds": 0.0033891062944800187
+    },
+    {
+      "feature": "reverse_packets",
+      "mean_ap_drop": -0.004269221275347368,
+      "sd_across_folds": 0.002881528678131881
+    },
+    {
+      "feature": "forward_packets",
+      "mean_ap_drop": -0.004336940003163758,
+      "sd_across_folds": 0.0032253536770928152
+    },
+    {
+      "feature": "forward_packet_ratio",
+      "mean_ap_drop": -0.004453943373014751,
+      "sd_across_folds": 0.0044254219769459795
+    },
+    {
+      "feature": "reverse_byte_ratio",
+      "mean_ap_drop": -0.004509824361534415,
+      "sd_across_folds": 0.0031838923490569893
+    },
+    {
+      "feature": "fwd_packet_length_mean",
+      "mean_ap_drop": -0.004552433037315532,
+      "sd_across_folds": 0.005647627083458054
+    },
+    {
+      "feature": "mean_burst_size",
+      "mean_ap_drop": -0.004700549754296594,
+      "sd_across_folds": 0.004372002426004237
+    },
+    {
+      "feature": "reverse_bytes",
+      "mean_ap_drop": -0.0047123916653535585,
+      "sd_across_folds": 0.0036113000086453366
+    },
+    {
+      "feature": "packet_length_p95",
+      "mean_ap_drop": -0.004761491083967302,
+      "sd_across_folds": 0.004166152369692777
+    },
+    {
+      "feature": "maximum_burst_size",
+      "mean_ap_drop": -0.004848719482100834,
+      "sd_across_folds": 0.004607802821953929
+    },
+    {
+      "feature": "fwd_iat_median",
+      "mean_ap_drop": -0.004946826621340264,
+      "sd_across_folds": 0.0059462621675028865
+    },
+    {
+      "feature": "rev_packet_length_p25",
+      "mean_ap_drop": -0.004994853551411866,
+      "sd_across_folds": 0.0043215362259989105
+    },
+    {
+      "feature": "packet_length_max",
+      "mean_ap_drop": -0.005062377712144741,
+      "sd_across_folds": 0.004810012200479504
+    },
+    {
+      "feature": "fwd_packet_length_p95",
+      "mean_ap_drop": -0.005093556463412683,
+      "sd_across_folds": 0.004828219377402927
+    },
+    {
+      "feature": "rev_packet_length_median",
+      "mean_ap_drop": -0.005133763240339477,
+      "sd_across_folds": 0.004514639237306533
+    },
+    {
+      "feature": "packet_length_mean",
+      "mean_ap_drop": -0.005164930369996443,
+      "sd_across_folds": 0.004673673540775948
+    },
+    {
+      "feature": "packet_length_std",
+      "mean_ap_drop": -0.005196847895087715,
+      "sd_across_folds": 0.005073818964794905
+    },
+    {
+      "feature": "total_bytes",
+      "mean_ap_drop": -0.005319764612914538,
+      "sd_across_folds": 0.004510642338983831
+    },
+    {
+      "feature": "packet_length_p75",
+      "mean_ap_drop": -0.005334608853084344,
+      "sd_across_folds": 0.006908190542032682
+    },
+    {
+      "feature": "packet_length_p90",
+      "mean_ap_drop": -0.005343430828149157,
+      "sd_across_folds": 0.005043336987197824
+    },
+    {
+      "feature": "fwd_packet_length_max",
+      "mean_ap_drop": -0.00534882238071253,
+      "sd_across_folds": 0.0042711559278870385
+    },
+    {
+      "feature": "fwd_iat_std",
+      "mean_ap_drop": -0.005361133119086548,
+      "sd_across_folds": 0.004115194318380062
+    },
+    {
+      "feature": "packet_count_asymmetry",
+      "mean_ap_drop": -0.005392038211169252,
+      "sd_across_folds": 0.004439194831179409
+    },
+    {
+      "feature": "iat_p25",
+      "mean_ap_drop": -0.0054455384882795155,
+      "sd_across_folds": 0.010103145435678671
+    },
+    {
+      "feature": "forward_bytes",
+      "mean_ap_drop": -0.0055447026769504994,
+      "sd_across_folds": 0.0060383107574378545
+    },
+    {
+      "feature": "fwd_iat_p90",
+      "mean_ap_drop": -0.005591048585841975,
+      "sd_across_folds": 0.007172251376276519
+    },
+    {
+      "feature": "reverse_packet_ratio",
+      "mean_ap_drop": -0.005628836704356131,
+      "sd_across_folds": 0.004826220919866108
+    },
+    {
+      "feature": "fwd_packet_length_p90",
+      "mean_ap_drop": -0.005855551400995451,
+      "sd_across_folds": 0.0052004245784100876
+    },
+    {
+      "feature": "fwd_iat_min",
+      "mean_ap_drop": -0.005893100307132744,
+      "sd_across_folds": 0.007207782206184993
+    },
+    {
+      "feature": "iat_p75",
+      "mean_ap_drop": -0.005898129695648779,
+      "sd_across_folds": 0.009546365868243714
+    },
+    {
+      "feature": "fwd_packet_length_median",
+      "mean_ap_drop": -0.005958179704217281,
+      "sd_across_folds": 0.005293483252361013
+    },
+    {
+      "feature": "fwd_iat_p95",
+      "mean_ap_drop": -0.005976560351595409,
+      "sd_across_folds": 0.006859072038691324
+    },
+    {
+      "feature": "fwd_packet_length_p25",
+      "mean_ap_drop": -0.006030735834817027,
+      "sd_across_folds": 0.0044272342632341736
+    },
+    {
+      "feature": "fwd_iat_p75",
+      "mean_ap_drop": -0.006057911146384698,
+      "sd_across_folds": 0.008028889843637603
+    },
+    {
+      "feature": "iat_median",
+      "mean_ap_drop": -0.0062693122603203755,
+      "sd_across_folds": 0.008154775576656899
+    },
+    {
+      "feature": "fwd_iat_mean",
+      "mean_ap_drop": -0.006340519862710861,
+      "sd_across_folds": 0.005981244604000539
+    },
+    {
+      "feature": "fwd_iat_max",
+      "mean_ap_drop": -0.006469360967760855,
+      "sd_across_folds": 0.006268417052796118
+    },
+    {
+      "feature": "iat_min",
+      "mean_ap_drop": -0.006659604386274544,
+      "sd_across_folds": 0.008022636949913146
+    },
+    {
+      "feature": "packets_per_second",
+      "mean_ap_drop": -0.007035564874092892,
+      "sd_across_folds": 0.006622652949214295
+    },
+    {
+      "feature": "iat_max",
+      "mean_ap_drop": -0.007306606238454973,
+      "sd_across_folds": 0.006278111159484136
+    },
+    {
+      "feature": "iat_p90",
+      "mean_ap_drop": -0.007345610652379694,
+      "sd_across_folds": 0.0071771331932167426
+    },
+    {
+      "feature": "bytes_per_second",
+      "mean_ap_drop": -0.007356319892492244,
+      "sd_across_folds": 0.007882294551666483
+    },
+    {
+      "feature": "iat_p95",
+      "mean_ap_drop": -0.007383406173282108,
+      "sd_across_folds": 0.006672120802750703
+    },
+    {
+      "feature": "iat_mean",
+      "mean_ap_drop": -0.008468229750936085,
+      "sd_across_folds": 0.007070015038699433
+    }
+  ],
+  "caveat": "Association within this corpus only; not causal; may reflect capture-environment shortcuts.",
+  "model_internal_importance": {
+    "kind": "impurity (training data, biased)",
+    "top": [
+      {
+        "feature": "packet_length_min",
+        "value": 0.0607804733962322
+      },
+      {
+        "feature": "rev_packet_length_min",
+        "value": 0.05444033395152881
+      },
+      {
+        "feature": "packet_length_p25",
+        "value": 0.04160946286946934
+      },
+      {
+        "feature": "iat_median",
+        "value": 0.04081887235306053
+      },
+      {
+        "feature": "iat_p25",
+        "value": 0.03889625824102395
+      },
+      {
+        "feature": "rev_packet_length_p25",
+        "value": 0.03151203887613902
+      },
+      {
+        "feature": "fwd_iat_p25",
+        "value": 0.030591083444882067
+      },
+      {
+        "feature": "fwd_packet_length_p75",
+        "value": 0.029729958752906505
+      },
+      {
+        "feature": "alpn_value",
+        "value": 0.02883003091236206
+      },
+      {
+        "feature": "fwd_packet_length_p25",
+        "value": 0.028076783638239945
+      },
+      {
+        "feature": "fwd_iat_min",
+        "value": 0.027830563953006905
+      },
+      {
+        "feature": "iat_p75",
+        "value": 0.02043973395959351
+      },
+      {
+        "feature": "forward_bytes",
+        "value": 0.02019816537027586
+      },
+      {
+        "feature": "packet_length_median",
+        "value": 0.02004568212121648
+      },
+      {
+        "feature": "fwd_packet_length_min",
+        "value": 0.018633827689318
+      },
+      {
+        "feature": "fwd_packet_length_median",
+        "value": 0.018253345684986266
+      },
+      {
+        "feature": "fwd_iat_median",
+        "value": 0.017644525019080388
+      },
+      {
+        "feature": "iat_min",
+        "value": 0.017210294774656784
+      },
+      {
+        "feature": "rev_packet_length_p95",
+        "value": 0.01644656546265225
+      },
+      {
+        "feature": "rev_packet_length_p90",
+        "value": 0.015387027144123922
+      },
+      {
+        "feature": "sni_present",
+        "value": 0.014737349677971925
+      },
+      {
+        "feature": "fwd_packet_length_mean",
+        "value": 0.014464366113811961
+      },
+      {
+        "feature": "rev_packet_length_median",
+        "value": 0.014444425743769657
+      },
+      {
+        "feature": "iat_mean",
+        "value": 0.014406798195718117
+      },
+      {
+        "feature": "rev_packet_length_mean",
+        "value": 0.013387083689012142
+      }
+    ]
+  },
+  "source_experiment": "EXP-20261016T164342-f849786e-5707"
+}
