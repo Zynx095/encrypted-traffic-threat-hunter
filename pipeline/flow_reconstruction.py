@@ -63,7 +63,12 @@ class Flow:
         self.tls_record_version = None
         self.sni_present = False
         self.alpn = None
-        
+        # Fingerprint integrity (Phase 8): the parser only sees the first TCP segment of a
+        # ClientHello. If the TLS record is longer than that segment, the extension list may
+        # be incomplete and JA3/JA4 computed from it may not match the true client stack.
+        self.clienthello_record_truncated = None
+        self.clienthello_parse_error = None
+
         # State
         self.closed_by_termination = False
 
@@ -80,7 +85,11 @@ class Flow:
             # Policy: Take the first valid ClientHello
             if handshake_type == 1 and not self.client_hello_present:
                 ch_data = parse_client_hello(payload)
+                if ch_data.get("error"):
+                    self.clienthello_parse_error = ch_data.get("error")
                 if not ch_data.get("error"):
+                    record_len = int.from_bytes(payload[3:5], 'big')
+                    self.clienthello_record_truncated = (5 + record_len) > len(payload)
                     self.client_hello_present = True
                     self.tls_record_version = ch_data["record_version"]
                     self.sni_present = ch_data["sni_present"]
@@ -168,7 +177,9 @@ class Flow:
             "tls_version": self.tls_version,
             "tls_record_version": self.tls_record_version,
             "sni_present": self.sni_present,
-            "alpn": self.alpn
+            "alpn": self.alpn,
+            "clienthello_record_truncated": self.clienthello_record_truncated,
+            "clienthello_parse_error": self.clienthello_parse_error
         }
 
 class FlowReconstructor:
