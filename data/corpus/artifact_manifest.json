@@ -1,0 +1,2093 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-10-16T16:27:02.087899Z",
+  "artifacts": [
+    {
+      "artifact_id": "INTERIM:DS008-C001",
+      "tier": "INTERIM",
+      "dataset_id": "DS-008",
+      "capture_id": "DS008-C001",
+      "path": "data/interim/v3/flows/DS008-C001.parquet",
+      "sha256": "cb2be43c6c253fc919403cdb692ac87e34500324e08713643ce54568b7e3699b",
+      "size_bytes": 527328,
+      "source_url": null,
+      "acquisition": {},
+      "derived_from": [
+        "RAW:DS008-C001"
+      ],
+      "processing": {
+        "script": "pipeline.corpus.builder.features_for_capture",
+        "builder_version": "8.0.0",
+        "config": {
+          "flow_idle_timeout_s": 120.0,
+          "burst_idle_threshold_s": 1.0,
+          "sequence_cap": 1000
+        }
+      },
+      "label": {},
+      "verification": {
+        "status": "PASSED",
+        "flows": 1380
+      },
+      "metadata": {},
+      "recorded_at": "2026-10-16T16:18:20.117554Z"
+    },
+    {
+      "artifact_id": "INTERIM:DS008-C002",
+      "tier": "INTERIM",
+      "dataset_id": "DS-008",
+      "capture_id": "DS008-C002",
+      "path": "data/interim/v3/flows/DS008-C002.parquet",
+      "sha256": "d00fcf57ae3e530c7db1fe545f28222d52361039b5d4e451727dfb0a604b59b9",
+      "size_bytes": 123864,
+      "source_url": null,
+      "acquisition": {},
+      "derived_from": [
+        "RAW:DS008-C002"
+      ],
+      "processing": {
+        "script": "pipeline.corpus.builder.features_for_capture",
+        "builder_version": "8.0.0",
+        "config": {
+          "flow_idle_timeout_s": 120.0,
+          "burst_idle_threshold_s": 1.0,
+          "sequence_cap": 1000
+        }
+      },
+      "label": {},
+      "verification": {
+        "status": "PASSED",
+        "flows": 74
+      },
+      "metadata": {},
+      "recorded_at": "2026-10-16T16:18:20.814532Z"
+    },
+    {
+      "artifact_id": "INTERIM:DS008-C003",
+      "tier": "INTERIM",
+      "dataset_id": "DS-008",
+      "capture_id": "DS008-C003",
+      "path": "data/interim/v3/flows/DS008-C003.parquet",
+      "sha256": "9efdd9b1d15da8db69c9c994bf8e15bebc24c70f8e49c988be1c58fa1e62ffc4",
+      "size_bytes": 222011,
+      "source_url": null,
+      "acquisition": {},
+      "derived_from": [
+        "RAW:DS008-C003"
+      ],
+      "processing": {
+        "script": "pipeline.corpus.builder.features_for_capture",
+        "builder_version": "8.0.0",
+        "config": {
+          "flow_idle_timeout_s": 120.0,
+          "burst_idle_threshold_s": 1.0,
+          "sequence_cap": 1000
+        }
+      },
+      "label": {},
+      "verification": {
+        "status": "PASSED",
+        "flows": 258
+      },
+      "metadata": {},
+      "recorded_at": "2026-10-16T16:18:21.595182Z"
+    },
+    {
+      "artifact_id": "INTERIM:DS008-C004",
+      "tier": "INTERIM",
+      "dataset_id": "DS-008",
+      "capture_id": "DS008-C004",
+      "path": "data/interim/v3/flows/DS008-C004.parquet",
+      "sha256": "c11dc2c2ed68b60d5f890be0c6d555844926fa17acd30775eea777cd25ee2816",
+      "size_bytes": 82416,
+      "source_url": null,
+      "acquisition": {},
+      "derived_from": [
+        "RAW:DS008-C004"
+      ],
+      "processing": {
+        "script": "pipeline.corpus.builder.features_for_capture",
+        "builder_version": "8.0.0",
+        "config": {
+          "flow_idle_timeout_s": 120.0,
+          "burst_idle_threshold_s": 1.0,
+          "sequence_cap": 1000
+        }
+      },
+      "label": {},
+      "verification": {
+        "status": "PASSED",
+        "flows": 9
+      },
+      "metadata": {},
+      "recorded_at": "2026-10-16T16:18:21.771165Z"
+    },
+    {
+      "artifact_id": "INTERIM:DS008-C005",
+      "tier": "INTERIM",
+      "dataset_id": "DS-008",
+      "capture_id": "DS008-C005",
+      "path": "data/interim/v3/flows/DS008-C005.parquet",
+      "sha256": "c6cd8e5c08ed24ca584abe4ce5a56969870015a9020c263c8dd3685b2f0b4b50",
+      "size_bytes": 108279,
+      "source_url": null,
+      "acquisition": {},
+      "derived_from": [
+        "RAW:DS008-C005"
+      ],
+      "processing": {
+        "script": "pipeline.corpus.builder.features_for_capture",
+        "builder_version": "8.0.0",
+        "config": {
+          "flow_idle_timeout_s": 120.0,
+          "burst_idle_threshold_s": 1.0,
+          "sequence_cap": 1000
+        }
+      },
+      "label": {},
+      "verification": {
+        "status": "PASSED",
+        "flows": 20
+      },
+      "metadata": {},
+      "recorded_at": "2026-10-16T16:18:22.045398Z"
+    },
+    {
+      "artifact_id": "INTERIM:DS008-C006",
+      "tier": "INTERIM",
+      "dataset_id": "DS-008",
+      "capture_id": "DS008-C006",
+      "path": "data/interim/v3/flows/DS008-C006.parquet",
+      "sha256": "932772929d64b86980e5bc10da72cd717263ae048e4d9f3cbb3a815a52d8aff7",
+      "size_bytes": 115509,
+      "source_url": null,
+      "acquisition": {},
+      "derived_from": [
+        "RAW:DS008-C006"
+      ],
+      "processing": {
+        "script": "pipeline.corpus.builder.features_for_capture",
+        "builder_version": "8.0.0",
+        "config": {
+          "flow_idle_timeout_s": 120.0,
+          "burst_idle_threshold_s": 1.0,
+          "sequence_cap": 1000
+        }
+      },
+      "label": {},
+      "verification": {
+        "status": "PASSED",
+        "flows": 27
+      },
+      "metadata": {},
+      "recorded_at": "2026-10-16T16:18:22.946849Z"
+    },
+    {
+      "artifact_id": "INTERIM:DS008-C007",
+      "tier": "INTERIM",
+      "dataset_id": "DS-008",
+      "capture_id": "DS008-C007",
+      "path": "data/interim/v3/flows/DS008-C007.parquet",
+      "sha256": "45a97ba1244d63394fbd83b309357c312bae39387109ac35edacf2e87f977f00",
+      "size_bytes": 195904,
+      "source_url": null,
+      "acquisition": {},
+      "derived_from": [
+        "RAW:DS008-C007"
+      ],
+      "processing": {
+        "script": "pipeline.corpus.builder.features_for_capture",
+        "builder_version": "8.0.0",
+        "config": {
+          "flow_idle_timeout_s": 120.0,
+          "burst_idle_threshold_s": 1.0,
+          "sequence_cap": 1000
+        }
+      },
+      "label": {},
+      "verification": {
+        "status": "PASSED",
+        "flows": 423
+      },
+      "metadata": {},
+      "recorded_at": "2026-10-16T16:18:23.521215Z"
+    },
+    {
+      "artifact_id": "INTERIM:DS008-C008",
+      "tier": "INTERIM",
+      "dataset_id": "DS-008",
+      "capture_id": "DS008-C008",
+      "path": "data/interim/v3/flows/DS008-C008.parquet",
+      "sha256": "709b5ac052a965f49dd20bd927c40101443fee23e1e355ea3f497a57e7e08813",
+      "size_bytes": 86544,
+      "source_url": null,
+      "acquisition": {},
+      "derived_from": [
+        "RAW:DS008-C008"
+      ],
+      "processing": {
+        "script": "pipeline.corpus.builder.features_for_capture",
+        "builder_version": "8.0.0",
+        "config": {
+          "flow_idle_timeout_s": 120.0,
+          "burst_idle_threshold_s": 1.0,
+          "sequence_cap": 1000
+        }
+      },
+      "label": {},
+      "verification": {
+        "status": "PASSED",
+        "flows": 16
+      },
+      "metadata": {},
+      "recorded_at": "2026-10-16T16:18:23.636102Z"
+    },
+    {
+      "artifact_id": "INTERIM:DS008-C009",
+      "tier": "INTERIM",
+      "dataset_id": "DS-008",
+      "capture_id": "DS008-C009",
+      "path": "data/interim/v3/flows/DS008-C009.parquet",
+      "sha256": "63783bef6e584dbe78c7296b054bb972ddb382b82a60021a3841160376d269ef",
+      "size_bytes": 134479,
+      "source_url": null,
+      "acquisition": {},
+      "derived_from": [
+        "RAW:DS008-C009"
+      ],
+      "processing": {
+        "script": "pipeline.corpus.builder.features_for_capture",
+        "builder_version": "8.0.0",
+        "config": {
+          "flow_idle_timeout_s": 120.0,
+          "burst_idle_threshold_s": 1.0,
+          "sequence_cap": 1000
+        }
+      },
+      "label": {},
+      "verification": {
+        "status": "PASSED",
+        "flows": 214
+      },
+      "metadata": {},
+      "recorded_at": "2026-10-16T16:18:23.901193Z"
+    },
+    {
+      "artifact_id": "INTERIM:DS008-C010",
+      "tier": "INTERIM",
+      "dataset_id": "DS-008",
+      "capture_id": "DS008-C010",
+      "path": "data/interim/v3/flows/DS008-C010.parquet",
+      "sha256": "f8d3574bb18b076844a222098a0422d9fa99bbbcb0e48d4ed8daedd084c5f7f3",
+      "size_bytes": 104811,
+      "source_url": null,
+      "acquisition": {},
+      "derived_from": [
+        "RAW:DS008-C010"
+      ],
+      "processing": {
+        "script": "pipeline.corpus.builder.features_for_capture",
+        "builder_version": "8.0.0",
+        "config": {
+          "flow_idle_timeout_s": 120.0,
+          "burst_idle_threshold_s": 1.0,
+          "sequence_cap": 1000
+        }
+      },
+      "label": {},
+      "verification": {
+        "status": "PASSED",
+        "flows": 122
+      },
+      "metadata": {},
+      "recorded_at": "2026-10-16T16:18:24.054807Z"
+    },
+    {
+      "artifact_id": "INTERIM:DS009-CTU-MCB-238-1",
+      "tier": "INTERIM",
+      "dataset_id": "DS-009",
+      "capture_id": "DS009-CTU-MCB-238-1",
+      "path": "data/interim/v3/flows/DS009-CTU-MCB-238-1.parquet",
+      "sha256": "6cfa2f155bc5fa78850446caf259065db87c800fad1c7e11a2f1a459779712c6",
+      "size_bytes": 8188650,
+      "source_url": null,
+      "acquisition": {},
+      "derived_from": [
+        "RAW:DS009-CTU-MCB-238-1"
+      ],
+      "processing": {
+        "script": "pipeline.corpus.builder.features_for_capture",
+        "builder_version": "8.0.0",
+        "config": {
+          "flow_idle_timeout_s": 120.0,
+          "burst_idle_threshold_s": 1.0,
+          "sequence_cap": 1000
+        }
+      },
+      "label": {},
+      "verification": {
+        "status": "PASSED",
+        "flows": 27075
+      },
+      "metadata": {},
+      "recorded_at": "2026-10-16T16:20:36.864107Z"
+    },
+    {
+      "artifact_id": "INTERIM:DS009-CTU-MCB-240-1",
+      "tier": "INTERIM",
+      "dataset_id": "DS-009",
+      "capture_id": "DS009-CTU-MCB-240-1",
+      "path": "data/interim/v3/flows/DS009-CTU-MCB-240-1.parquet",
+      "sha256": "b98ba048f2562d02cae408b8dd1a1a732bfe47e6398d220193f588a8a8da13c7",
+      "size_bytes": 7993194,
+      "source_url": null,
+      "acquisition": {},
+      "derived_from": [
+        "RAW:DS009-CTU-MCB-240-1"
+      ],
+      "processing": {
+        "script": "pipeline.corpus.builder.features_for_capture",
+        "builder_version": "8.0.0",
+        "config": {
+          "flow_idle_timeout_s": 120.0,
+          "burst_idle_threshold_s": 1.0,
+          "sequence_cap": 1000
+        }
+      },
+      "label": {},
+      "verification": {
+        "status": "PASSED",
+        "flows": 26542
+      },
+      "metadata": {},
+      "recorded_at": "2026-10-16T16:20:58.214088Z"
+    },
+    {
+      "artifact_id": "INTERIM:DS009-CTU-MCB-246-1",
+      "tier": "INTERIM",
+      "dataset_id": "DS-009",
+      "capture_id": "DS009-CTU-MCB-246-1",
+      "path": "data/interim/v3/flows/DS009-CTU-MCB-246-1.parquet",
+      "sha256": "a4e0afc5dcd982d25445c2bfb8ea9f52c8963d1874686ea85f376056e7570082",
+      "size_bytes": 9379575,
+      "source_url": null,
+      "acquisition": {},
+      "derived_from": [
+        "RAW:DS009-CTU-MCB-246-1"
+      ],
+      "processing": {
+        "script": "pipeline.corpus.builder.features_for_capture",
+        "builder_version": "8.0.0",
+        "config": {
+          "flow_idle_timeout_s": 120.0,
+          "burst_idle_threshold_s": 1.0,
+          "sequence_cap": 1000
+        }
+      },
+      "label": {},
+      "verification": {
+        "status": "PASSED",
+        "flows": 43402
+      },
+      "metadata": {},
+      "recorded_at": "2026-10-16T16:21:33.133219Z"
+    },
+    {
+      "artifact_id": "INTERIM:DS009-CTU-MCB-248-1",
+      "tier": "INTERIM",
+      "dataset_id": "DS-009",
+      "capture_id": "DS009-CTU-MCB-248-1",
+      "path": "data/interim/v3/flows/DS009-CTU-MCB-248-1.parquet",
+      "sha256": "a53f206c4a29629c4ecb23affca09478733cc3f69fda0e9253acea3eb2c4bb9b",
+      "size_bytes": 8261318,
+      "source_url": null,
+      "acquisition": {},
+      "derived_from": [
+        "RAW:DS009-CTU-MCB-248-1"
+      ],
+      "processing": {
+        "script": "pipeline.corpus.builder.features_for_capture",
+        "builder_version": "8.0.0",
+        "config": {
+          "flow_idle_timeout_s": 120.0,
+          "burst_idle_threshold_s": 1.0,
+          "sequence_cap": 1000
+        }
+      },
+      "label": {},
+      "verification": {
+        "status": "PASSED",
+        "flows": 37066
+      },
+      "metadata": {},
+      "recorded_at": "2026-10-16T16:22:02.830909Z"
+    },
+    {
+      "artifact_id": "INTERIM:DS009-CTU-MCB-249-1",
+      "tier": "INTERIM",
+      "dataset_id": "DS-009",
+      "capture_id": "DS009-CTU-MCB-249-1",
+      "path": "data/interim/v3/flows/DS009-CTU-MCB-249-1.parquet",
+      "sha256": "e2bfeea5675943795c74087794d826cd58fb52d7afa4f08b6cc3da25bac774e8",
+      "size_bytes": 6366442,
+      "source_url": null,
+      "acquisition": {},
+      "derived_from": [
+        "RAW:DS009-CTU-MCB-249-1"
+      ],
+      "processing": {
+        "script": "pipeline.corpus.builder.features_for_capture",
+        "builder_version": "8.0.0",
+        "config": {
+          "flow_idle_timeout_s": 120.0,
+          "burst_idle_threshold_s": 1.0,
+          "sequence_cap": 1000
+        }
+      },
+      "label": {},
+      "verification": {
+        "status": "PASSED",
+        "flows": 29687
+      },
+      "metadata": {},
+      "recorded_at": "2026-10-16T16:22:26.121403Z"
+    },
+    {
+      "artifact_id": "INTERIM:DS009-CTU-MCB-259-1",
+      "tier": "INTERIM",
+      "dataset_id": "DS-009",
+      "capture_id": "DS009-CTU-MCB-259-1",
+      "path": "data/interim/v3/flows/DS009-CTU-MCB-259-1.parquet",
+      "sha256": "2e3016a098e6e2f16e1493748c11cec6c0672a005b3621da031b76e5cc116f67",
+      "size_bytes": 4140702,
+      "source_url": null,
+      "acquisition": {},
+      "derived_from": [
+        "RAW:DS009-CTU-MCB-259-1"
+      ],
+      "processing": {
+        "script": "pipeline.corpus.builder.features_for_capture",
+        "builder_version": "8.0.0",
+        "config": {
+          "flow_idle_timeout_s": 120.0,
+          "burst_idle_threshold_s": 1.0,
+          "sequence_cap": 1000
+        }
+      },
+      "label": {},
+      "verification": {
+        "status": "PASSED",
+        "flows": 28785
+      },
+      "metadata": {},
+      "recorded_at": "2026-10-16T16:22:45.811169Z"
+    },
+    {
+      "artifact_id": "INTERIM:DS009-CTU-MCB-260-1",
+      "tier": "INTERIM",
+      "dataset_id": "DS-009",
+      "capture_id": "DS009-CTU-MCB-260-1",
+      "path": "data/interim/v3/flows/DS009-CTU-MCB-260-1.parquet",
+      "sha256": "0a21d4893e7a11a836331bf38f771065bb4b6602e36b4e08c57565fec8c33cb2",
+      "size_bytes": 6038372,
+      "source_url": null,
+      "acquisition": {},
+      "derived_from": [
+        "RAW:DS009-CTU-MCB-260-1"
+      ],
+      "processing": {
+        "script": "pipeline.corpus.builder.features_for_capture",
+        "builder_version": "8.0.0",
+        "config": {
+          "flow_idle_timeout_s": 120.0,
+          "burst_idle_threshold_s": 1.0,
+          "sequence_cap": 1000
+        }
+      },
+      "label": {},
+      "verification": {
+        "status": "PASSED",
+        "flows": 29312
+      },
+      "metadata": {},
+      "recorded_at": "2026-10-16T16:23:07.690008Z"
+    },
+    {
+      "artifact_id": "INTERIM:DS009-CTU-MCB-264-1",
+      "tier": "INTERIM",
+      "dataset_id": "DS-009",
+      "capture_id": "DS009-CTU-MCB-264-1",
+      "path": "data/interim/v3/flows/DS009-CTU-MCB-264-1.parquet",
+      "sha256": "fce47950bb352caf895bfe07493b62237988cfcd1b2d35e1468975637ffacf4e",
+      "size_bytes": 23296077,
+      "source_url": null,
+      "acquisition": {},
+      "derived_from": [
+        "RAW:DS009-CTU-MCB-264-1"
+      ],
+      "processing": {
+        "script": "pipeline.corpus.builder.features_for_capture",
+        "builder_version": "8.0.0",
+        "config": {
+          "flow_idle_timeout_s": 120.0,
+          "burst_idle_threshold_s": 1.0,
+          "sequence_cap": 1000
+        }
+      },
+      "label": {},
+      "verification": {
+        "status": "PASSED",
+        "flows": 123497
+      },
+      "metadata": {},
+      "recorded_at": "2026-10-16T16:24:39.714006Z"
+    },
+    {
+      "artifact_id": "INTERIM:DS009-CTU-MCB-268-1",
+      "tier": "INTERIM",
+      "dataset_id": "DS-009",
+      "capture_id": "DS009-CTU-MCB-268-1",
+      "path": "data/interim/v3/flows/DS009-CTU-MCB-268-1.parquet",
+      "sha256": "318b843439483b49687dd69c575d87fe15305c473b27c7314025a700f45ee62a",
+      "size_bytes": 16784648,
+      "source_url": null,
+      "acquisition": {},
+      "derived_from": [
+        "RAW:DS009-CTU-MCB-268-1"
+      ],
+      "processing": {
+        "script": "pipeline.corpus.builder.features_for_capture",
+        "builder_version": "8.0.0",
+        "config": {
+          "flow_idle_timeout_s": 120.0,
+          "burst_idle_threshold_s": 1.0,
+          "sequence_cap": 1000
+        }
+      },
+      "label": {},
+      "verification": {
+        "status": "PASSED",
+        "flows": 102197
+      },
+      "metadata": {},
+      "recorded_at": "2026-10-16T16:25:50.242982Z"
+    },
+    {
+      "artifact_id": "INTERIM:DS011-CTU-Normal-20",
+      "tier": "INTERIM",
+      "dataset_id": "DS-011",
+      "capture_id": "DS011-CTU-Normal-20",
+      "path": "data/interim/v3/flows/DS011-CTU-Normal-20.parquet",
+      "sha256": "c5780d88bf7960f1bbf77863f8c626985f9966aafe156e39ba3f3a773592f99f",
+      "size_bytes": 9878936,
+      "source_url": null,
+      "acquisition": {},
+      "derived_from": [
+        "RAW:DS011-CTU-Normal-20"
+      ],
+      "processing": {
+        "script": "pipeline.corpus.builder.features_for_capture",
+        "builder_version": "8.0.0",
+        "config": {
+          "flow_idle_timeout_s": 120.0,
+          "burst_idle_threshold_s": 1.0,
+          "sequence_cap": 1000
+        }
+      },
+      "label": {},
+      "verification": {
+        "status": "PASSED",
+        "flows": 27337
+      },
+      "metadata": {},
+      "recorded_at": "2026-10-16T16:18:48.197852Z"
+    },
+    {
+      "artifact_id": "INTERIM:DS011-CTU-Normal-21",
+      "tier": "INTERIM",
+      "dataset_id": "DS-011",
+      "capture_id": "DS011-CTU-Normal-21",
+      "path": "data/interim/v3/flows/DS011-CTU-Normal-21.parquet",
+      "sha256": "6ad87fb340734a9214dddb2b5d32656f47dd59603c03355df795e98f4bcdb02c",
+      "size_bytes": 8403893,
+      "source_url": null,
+      "acquisition": {},
+      "derived_from": [
+        "RAW:DS011-CTU-Normal-21"
+      ],
+      "processing": {
+        "script": "pipeline.corpus.builder.features_for_capture",
+        "builder_version": "8.0.0",
+        "config": {
+          "flow_idle_timeout_s": 120.0,
+          "burst_idle_threshold_s": 1.0,
+          "sequence_cap": 1000
+        }
+      },
+      "label": {},
+      "verification": {
+        "status": "PASSED",
+        "flows": 24730
+      },
+      "metadata": {},
+      "recorded_at": "2026-10-16T16:19:11.612313Z"
+    },
+    {
+      "artifact_id": "INTERIM:DS011-CTU-Normal-23",
+      "tier": "INTERIM",
+      "dataset_id": "DS-011",
+      "capture_id": "DS011-CTU-Normal-23",
+      "path": "data/interim/v3/flows/DS011-CTU-Normal-23.parquet",
+      "sha256": "aceed49e47a47013e58b887bcd7a74fe5ccaaa26509c5a168046855eaac6481b",
+      "size_bytes": 9642554,
+      "source_url": null,
+      "acquisition": {},
+      "derived_from": [
+        "RAW:DS011-CTU-Normal-23"
+      ],
+      "processing": {
+        "script": "pipeline.corpus.builder.features_for_capture",
+        "builder_version": "8.0.0",
+        "config": {
+          "flow_idle_timeout_s": 120.0,
+          "burst_idle_threshold_s": 1.0,
+          "sequence_cap": 1000
+        }
+      },
+      "label": {},
+      "verification": {
+        "status": "PASSED",
+        "flows": 25152
+      },
+      "metadata": {},
+      "recorded_at": "2026-10-16T16:19:33.493177Z"
+    },
+    {
+      "artifact_id": "INTERIM:DS011-CTU-Normal-24",
+      "tier": "INTERIM",
+      "dataset_id": "DS-011",
+      "capture_id": "DS011-CTU-Normal-24",
+      "path": "data/interim/v3/flows/DS011-CTU-Normal-24.parquet",
+      "sha256": "458dff31d0202382f6bcbc19a75b7bd906fc62cc664f4a27afe4e4ee5f16390b",
+      "size_bytes": 4278981,
+      "source_url": null,
+      "acquisition": {},
+      "derived_from": [
+        "RAW:DS011-CTU-Normal-24"
+      ],
+      "processing": {
+        "script": "pipeline.corpus.builder.features_for_capture",
+        "builder_version": "8.0.0",
+        "config": {
+          "flow_idle_timeout_s": 120.0,
+          "burst_idle_threshold_s": 1.0,
+          "sequence_cap": 1000
+        }
+      },
+      "label": {},
+      "verification": {
+        "status": "PASSED",
+        "flows": 10914
+      },
+      "metadata": {},
+      "recorded_at": "2026-10-16T16:19:43.792148Z"
+    },
+    {
+      "artifact_id": "INTERIM:DS011-CTU-Normal-26",
+      "tier": "INTERIM",
+      "dataset_id": "DS-011",
+      "capture_id": "DS011-CTU-Normal-26",
+      "path": "data/interim/v3/flows/DS011-CTU-Normal-26.parquet",
+      "sha256": "643cd661854d09c522f23904a256f9989ff5b2e3b6949bbd45d80d3416676d4b",
+      "size_bytes": 6220943,
+      "source_url": null,
+      "acquisition": {},
+      "derived_from": [
+        "RAW:DS011-CTU-Normal-26"
+      ],
+      "processing": {
+        "script": "pipeline.corpus.builder.features_for_capture",
+        "builder_version": "8.0.0",
+        "config": {
+          "flow_idle_timeout_s": 120.0,
+          "burst_idle_threshold_s": 1.0,
+          "sequence_cap": 1000
+        }
+      },
+      "label": {},
+      "verification": {
+        "status": "PASSED",
+        "flows": 19050
+      },
+      "metadata": {},
+      "recorded_at": "2026-10-16T16:19:58.334615Z"
+    },
+    {
+      "artifact_id": "INTERIM:DS011-CTU-Normal-28",
+      "tier": "INTERIM",
+      "dataset_id": "DS-011",
+      "capture_id": "DS011-CTU-Normal-28",
+      "path": "data/interim/v3/flows/DS011-CTU-Normal-28.parquet",
+      "sha256": "187c5d135580bc9bfa58eb64965a908639d9ab3c0c95fa1997214700bf01657e",
+      "size_bytes": 8051852,
+      "source_url": null,
+      "acquisition": {},
+      "derived_from": [
+        "RAW:DS011-CTU-Normal-28"
+      ],
+      "processing": {
+        "script": "pipeline.corpus.builder.features_for_capture",
+        "builder_version": "8.0.0",
+        "config": {
+          "flow_idle_timeout_s": 120.0,
+          "burst_idle_threshold_s": 1.0,
+          "sequence_cap": 1000
+        }
+      },
+      "label": {},
+      "verification": {
+        "status": "PASSED",
+        "flows": 19949
+      },
+      "metadata": {},
+      "recorded_at": "2026-10-16T16:20:14.953561Z"
+    },
+    {
+      "artifact_id": "PROCESSED:corpus_flows.parquet",
+      "tier": "PROCESSED",
+      "dataset_id": "CORPUS",
+      "capture_id": null,
+      "path": "data/processed/v3/corpus_flows.parquet",
+      "sha256": "84f496ed79eb71a34babf09e2ef1a4e296d4f11ad108c1faa35fe350b034714e",
+      "size_bytes": 91897416,
+      "source_url": null,
+      "acquisition": {},
+      "derived_from": [
+        "INTERIM:DS008-C001",
+        "INTERIM:DS008-C002",
+        "INTERIM:DS008-C003",
+        "INTERIM:DS008-C004",
+        "INTERIM:DS008-C005",
+        "INTERIM:DS008-C006",
+        "INTERIM:DS008-C007",
+        "INTERIM:DS008-C008",
+        "INTERIM:DS008-C009",
+        "INTERIM:DS008-C010",
+        "INTERIM:DS009-CTU-MCB-238-1",
+        "INTERIM:DS009-CTU-MCB-240-1",
+        "INTERIM:DS009-CTU-MCB-246-1",
+        "INTERIM:DS009-CTU-MCB-248-1",
+        "INTERIM:DS009-CTU-MCB-249-1",
+        "INTERIM:DS009-CTU-MCB-259-1",
+        "INTERIM:DS009-CTU-MCB-260-1",
+        "INTERIM:DS009-CTU-MCB-264-1",
+        "INTERIM:DS009-CTU-MCB-268-1",
+        "INTERIM:DS011-CTU-Normal-20",
+        "INTERIM:DS011-CTU-Normal-21",
+        "INTERIM:DS011-CTU-Normal-23",
+        "INTERIM:DS011-CTU-Normal-24",
+        "INTERIM:DS011-CTU-Normal-26",
+        "INTERIM:DS011-CTU-Normal-28"
+      ],
+      "processing": {
+        "script": "pipeline.corpus.builder.build_corpus",
+        "builder_version": "8.0.0"
+      },
+      "label": {},
+      "verification": {
+        "status": "PASSED",
+        "rows": 577238
+      },
+      "metadata": {},
+      "recorded_at": "2026-10-16T16:27:02.077076Z"
+    },
+    {
+      "artifact_id": "PROCESSED:corpus_provenance.parquet",
+      "tier": "PROCESSED",
+      "dataset_id": "CORPUS",
+      "capture_id": null,
+      "path": "data/processed/v3/corpus_provenance.parquet",
+      "sha256": "aff3a854fa2c26f2c78d3e25002025d1105b9f1f941485dbac17af7c7dc8a0a4",
+      "size_bytes": 73022598,
+      "source_url": null,
+      "acquisition": {},
+      "derived_from": [
+        "INTERIM:DS008-C001",
+        "INTERIM:DS008-C002",
+        "INTERIM:DS008-C003",
+        "INTERIM:DS008-C004",
+        "INTERIM:DS008-C005",
+        "INTERIM:DS008-C006",
+        "INTERIM:DS008-C007",
+        "INTERIM:DS008-C008",
+        "INTERIM:DS008-C009",
+        "INTERIM:DS008-C010",
+        "INTERIM:DS009-CTU-MCB-238-1",
+        "INTERIM:DS009-CTU-MCB-240-1",
+        "INTERIM:DS009-CTU-MCB-246-1",
+        "INTERIM:DS009-CTU-MCB-248-1",
+        "INTERIM:DS009-CTU-MCB-249-1",
+        "INTERIM:DS009-CTU-MCB-259-1",
+        "INTERIM:DS009-CTU-MCB-260-1",
+        "INTERIM:DS009-CTU-MCB-264-1",
+        "INTERIM:DS009-CTU-MCB-268-1",
+        "INTERIM:DS011-CTU-Normal-20",
+        "INTERIM:DS011-CTU-Normal-21",
+        "INTERIM:DS011-CTU-Normal-23",
+        "INTERIM:DS011-CTU-Normal-24",
+        "INTERIM:DS011-CTU-Normal-26",
+        "INTERIM:DS011-CTU-Normal-28"
+      ],
+      "processing": {
+        "script": "pipeline.corpus.builder.build_corpus",
+        "builder_version": "8.0.0"
+      },
+      "label": {},
+      "verification": {
+        "status": "PASSED",
+        "rows": 577238
+      },
+      "metadata": {},
+      "recorded_at": "2026-10-16T16:27:02.086330Z"
+    },
+    {
+      "artifact_id": "RAW:DS004-sample1",
+      "tier": "RAW",
+      "dataset_id": "DS-004",
+      "capture_id": "DS004-sample1",
+      "path": "data/samples/ds004/sample1.pcap",
+      "sha256": null,
+      "size_bytes": null,
+      "source_url": "https://cspectrum.web.cse.unsw.edu.au/ (mix.zip member name not recorded in Phase 5)",
+      "acquisition": {
+        "acquired_at": "UNKNOWN",
+        "note": "Acquired on the original E: workstation; not present in this working copy."
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "BENIGN_VALIDATION",
+        "derivation": "Capture-level label BENIGN_VALIDATION from the CipherSpectrum dataset (customised Chromium visiting listed websites), as used in Phase 6.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "MISSING",
+        "detail": "Raw file not present: data/samples/ds004/sample1.pcap",
+        "expected_sha256": "6a742a2870e48b1d7b2c1d774ac1e9af2b0b065bfe425d9d0275f645e0f5cc70",
+        "expected_sha256_source": "data/manifests/dataset_manifest_20260815_092018.csv",
+        "checked_at": "2026-10-16T16:18:17.095974Z"
+      },
+      "metadata": {
+        "malware_family": "BENIGN",
+        "family_group": "BENIGN",
+        "collection_date": "UNKNOWN",
+        "environment": "CIPHERSPECTRUM_CUSTOM_CHROMIUM",
+        "os": "UNKNOWN",
+        "source_candidate_id": "UNKNOWN",
+        "prior_admission_status": "BENIGN_VALIDATION"
+      },
+      "recorded_at": "2026-10-16T16:18:17.095974Z"
+    },
+    {
+      "artifact_id": "RAW:DS004-sample2",
+      "tier": "RAW",
+      "dataset_id": "DS-004",
+      "capture_id": "DS004-sample2",
+      "path": "data/samples/ds004/sample2.pcap",
+      "sha256": null,
+      "size_bytes": null,
+      "source_url": "https://cspectrum.web.cse.unsw.edu.au/ (mix.zip member name not recorded in Phase 5)",
+      "acquisition": {
+        "acquired_at": "UNKNOWN",
+        "note": "Acquired on the original E: workstation; not present in this working copy."
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "BENIGN_VALIDATION",
+        "derivation": "Capture-level label BENIGN_VALIDATION from the CipherSpectrum dataset (customised Chromium visiting listed websites), as used in Phase 6.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "MISSING",
+        "detail": "Raw file not present: data/samples/ds004/sample2.pcap",
+        "expected_sha256": "3894f3753c469e2535461ff39e0de14b606012d1b6875205e3e800bd7bf25850",
+        "expected_sha256_source": "data/manifests/dataset_manifest_20260815_092018.csv",
+        "checked_at": "2026-10-16T16:18:17.096482Z"
+      },
+      "metadata": {
+        "malware_family": "BENIGN",
+        "family_group": "BENIGN",
+        "collection_date": "UNKNOWN",
+        "environment": "CIPHERSPECTRUM_CUSTOM_CHROMIUM",
+        "os": "UNKNOWN",
+        "source_candidate_id": "UNKNOWN",
+        "prior_admission_status": "BENIGN_VALIDATION"
+      },
+      "recorded_at": "2026-10-16T16:18:17.096482Z"
+    },
+    {
+      "artifact_id": "RAW:DS004-sample3",
+      "tier": "RAW",
+      "dataset_id": "DS-004",
+      "capture_id": "DS004-sample3",
+      "path": "data/samples/ds004/sample3.pcap",
+      "sha256": null,
+      "size_bytes": null,
+      "source_url": "https://cspectrum.web.cse.unsw.edu.au/ (mix.zip member name not recorded in Phase 5)",
+      "acquisition": {
+        "acquired_at": "UNKNOWN",
+        "note": "Acquired on the original E: workstation; not present in this working copy."
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "BENIGN_VALIDATION",
+        "derivation": "Capture-level label BENIGN_VALIDATION from the CipherSpectrum dataset (customised Chromium visiting listed websites), as used in Phase 6.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "MISSING",
+        "detail": "Raw file not present: data/samples/ds004/sample3.pcap",
+        "expected_sha256": "dfeb6080c6dd830113d6f63caeaf130eb3efdefe8bc7f1e8cf709ac6f4b3ffbf",
+        "expected_sha256_source": "data/manifests/dataset_manifest_20260815_092018.csv",
+        "checked_at": "2026-10-16T16:18:17.096482Z"
+      },
+      "metadata": {
+        "malware_family": "BENIGN",
+        "family_group": "BENIGN",
+        "collection_date": "UNKNOWN",
+        "environment": "CIPHERSPECTRUM_CUSTOM_CHROMIUM",
+        "os": "UNKNOWN",
+        "source_candidate_id": "UNKNOWN",
+        "prior_admission_status": "BENIGN_VALIDATION"
+      },
+      "recorded_at": "2026-10-16T16:18:17.096482Z"
+    },
+    {
+      "artifact_id": "RAW:DS004-sample4",
+      "tier": "RAW",
+      "dataset_id": "DS-004",
+      "capture_id": "DS004-sample4",
+      "path": "data/samples/ds004/sample4.pcap",
+      "sha256": null,
+      "size_bytes": null,
+      "source_url": "https://cspectrum.web.cse.unsw.edu.au/ (mix.zip member name not recorded in Phase 5)",
+      "acquisition": {
+        "acquired_at": "UNKNOWN",
+        "note": "Acquired on the original E: workstation; not present in this working copy."
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "BENIGN_VALIDATION",
+        "derivation": "Capture-level label BENIGN_VALIDATION from the CipherSpectrum dataset (customised Chromium visiting listed websites), as used in Phase 6.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "MISSING",
+        "detail": "Raw file not present: data/samples/ds004/sample4.pcap",
+        "expected_sha256": "064914e2c3bc37cd48c938c70fe7f98f829a6672f72d8fa493178aa8e019c50d",
+        "expected_sha256_source": "data/manifests/dataset_manifest_20260815_092018.csv",
+        "checked_at": "2026-10-16T16:18:17.096482Z"
+      },
+      "metadata": {
+        "malware_family": "BENIGN",
+        "family_group": "BENIGN",
+        "collection_date": "UNKNOWN",
+        "environment": "CIPHERSPECTRUM_CUSTOM_CHROMIUM",
+        "os": "UNKNOWN",
+        "source_candidate_id": "UNKNOWN",
+        "prior_admission_status": "BENIGN_VALIDATION"
+      },
+      "recorded_at": "2026-10-16T16:18:17.096482Z"
+    },
+    {
+      "artifact_id": "RAW:DS004-sample5",
+      "tier": "RAW",
+      "dataset_id": "DS-004",
+      "capture_id": "DS004-sample5",
+      "path": "data/samples/ds004/sample5.pcap",
+      "sha256": null,
+      "size_bytes": null,
+      "source_url": "https://cspectrum.web.cse.unsw.edu.au/ (mix.zip member name not recorded in Phase 5)",
+      "acquisition": {
+        "acquired_at": "UNKNOWN",
+        "note": "Acquired on the original E: workstation; not present in this working copy."
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "BENIGN_VALIDATION",
+        "derivation": "Capture-level label BENIGN_VALIDATION from the CipherSpectrum dataset (customised Chromium visiting listed websites), as used in Phase 6.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "MISSING",
+        "detail": "Raw file not present: data/samples/ds004/sample5.pcap",
+        "expected_sha256": "fcb24e8664d9d28c7ac1cd1ae4cec3ccf1d2a48789c689f3678e2bcf99e21f8f",
+        "expected_sha256_source": "data/manifests/dataset_manifest_20260815_092018.csv",
+        "checked_at": "2026-10-16T16:18:17.097489Z"
+      },
+      "metadata": {
+        "malware_family": "BENIGN",
+        "family_group": "BENIGN",
+        "collection_date": "UNKNOWN",
+        "environment": "CIPHERSPECTRUM_CUSTOM_CHROMIUM",
+        "os": "UNKNOWN",
+        "source_candidate_id": "UNKNOWN",
+        "prior_admission_status": "BENIGN_VALIDATION"
+      },
+      "recorded_at": "2026-10-16T16:18:17.097489Z"
+    },
+    {
+      "artifact_id": "RAW:DS004-sample6",
+      "tier": "RAW",
+      "dataset_id": "DS-004",
+      "capture_id": "DS004-sample6",
+      "path": "data/samples/ds004/sample6.pcap",
+      "sha256": null,
+      "size_bytes": null,
+      "source_url": "https://cspectrum.web.cse.unsw.edu.au/ (mix.zip member name not recorded in Phase 5)",
+      "acquisition": {
+        "acquired_at": "UNKNOWN",
+        "note": "Acquired on the original E: workstation; not present in this working copy."
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "BENIGN_VALIDATION",
+        "derivation": "Capture-level label BENIGN_VALIDATION from the CipherSpectrum dataset (customised Chromium visiting listed websites), as used in Phase 6.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "MISSING",
+        "detail": "Raw file not present: data/samples/ds004/sample6.pcap",
+        "expected_sha256": "a6a7ee05a2aaa41bf3247681e85ea5d1c6caf96b1b92483fee7aae3351a2d785",
+        "expected_sha256_source": "data/manifests/dataset_manifest_20260815_092018.csv",
+        "checked_at": "2026-10-16T16:18:17.097489Z"
+      },
+      "metadata": {
+        "malware_family": "BENIGN",
+        "family_group": "BENIGN",
+        "collection_date": "UNKNOWN",
+        "environment": "CIPHERSPECTRUM_CUSTOM_CHROMIUM",
+        "os": "UNKNOWN",
+        "source_candidate_id": "UNKNOWN",
+        "prior_admission_status": "BENIGN_VALIDATION"
+      },
+      "recorded_at": "2026-10-16T16:18:17.097489Z"
+    },
+    {
+      "artifact_id": "RAW:DS008-C001",
+      "tier": "RAW",
+      "dataset_id": "DS-008",
+      "capture_id": "DS008-C001",
+      "path": "data/raw/extracted/DS-008/DS008-C001/2025-01-30-XLoader-infection-traffic.pcap",
+      "sha256": "4b079d83abe301a9aee90d68565429b7fc9dd6b9b43c4cb8e2c44b99fcede894",
+      "size_bytes": 13534582,
+      "source_url": "https://www.malware-traffic-analysis.net/2025/01/30/index.html",
+      "acquisition": {
+        "acquired_at": "2026-10-16T15:57:10Z",
+        "url": "https://www.malware-traffic-analysis.net/2025/01/30/2025-01-30-XLoader-infection-traffic.pcap.zip",
+        "http_status": "200",
+        "bytes_downloaded": "10336256",
+        "seconds": "43.800067"
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "MALICIOUS",
+        "derivation": "Capture-level label MALICIOUS taken from the Malware-Traffic-Analysis.net post that publishes the capture as infection traffic, propagated to every reconstructed flow. Flows in such captures can include benign background traffic of the infected host, so flow-level label noise is expected and unquantified.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "VERIFIED_CHECKSUM",
+        "detail": "",
+        "expected_sha256": "4b079d83abe301a9aee90d68565429b7fc9dd6b9b43c4cb8e2c44b99fcede894",
+        "expected_sha256_source": "data/manifests/dataset_manifest_20260815_092018.csv",
+        "checked_at": "2026-10-16T16:13:03.309645Z"
+      },
+      "metadata": {
+        "malware_family": "XLoader",
+        "family_group": "XLoader",
+        "collection_date": "2025-01-30",
+        "environment": "MALWARE_LAB_WINDOWS_HOST (source narrative; not independently verified)",
+        "os": "Windows (source narrative)",
+        "source_candidate_id": "MTA-C037",
+        "prior_admission_status": "CURRENT VERIFIED BASELINE"
+      },
+      "recorded_at": "2026-10-16T16:13:03.309645Z"
+    },
+    {
+      "artifact_id": "RAW:DS008-C002",
+      "tier": "RAW",
+      "dataset_id": "DS-008",
+      "capture_id": "DS008-C002",
+      "path": "data/raw/extracted/DS-008/DS008-C002/2024-03-14-AsyncRAT-and-XWorm-infection-traffic.pcap",
+      "sha256": "ef8b0d488efe3cc7b9f1e2c33b4aea00f0613be60a119fb07d7006add89fafc8",
+      "size_bytes": 44188000,
+      "source_url": "https://www.malware-traffic-analysis.net/2024/03/14/index.html",
+      "acquisition": {
+        "acquired_at": "2026-10-16T15:57:54Z",
+        "url": "https://www.malware-traffic-analysis.net/2024/03/14/2024-03-14-AsyncRAT-and-XWorm-infection-traffic.pcap.zip",
+        "http_status": "200",
+        "bytes_downloaded": "41900578",
+        "seconds": "63.476413"
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "MALICIOUS",
+        "derivation": "Capture-level label MALICIOUS taken from the Malware-Traffic-Analysis.net post that publishes the capture as infection traffic, propagated to every reconstructed flow. Flows in such captures can include benign background traffic of the infected host, so flow-level label noise is expected and unquantified.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "VERIFIED_CHECKSUM",
+        "detail": "",
+        "expected_sha256": "ef8b0d488efe3cc7b9f1e2c33b4aea00f0613be60a119fb07d7006add89fafc8",
+        "expected_sha256_source": "data/manifests/dataset_manifest_20260815_092018.csv",
+        "checked_at": "2026-10-16T16:14:54.882116Z"
+      },
+      "metadata": {
+        "malware_family": "AsyncRAT / XWorm",
+        "family_group": "AsyncRAT_XWorm",
+        "collection_date": "2024-03-14",
+        "environment": "MALWARE_LAB_WINDOWS_HOST (source narrative; not independently verified)",
+        "os": "Windows (source narrative)",
+        "source_candidate_id": "MTA-C046",
+        "prior_admission_status": "CURRENT VERIFIED BASELINE"
+      },
+      "recorded_at": "2026-10-16T16:14:54.882116Z"
+    },
+    {
+      "artifact_id": "RAW:DS008-C003",
+      "tier": "RAW",
+      "dataset_id": "DS-008",
+      "capture_id": "DS008-C003",
+      "path": "data/raw/extracted/DS-008/DS008-C003/2026-04-16-Lumma-Stealer-infection-with-Sectop-RAT.pcap",
+      "sha256": "a430dc87508451dad8e70a7ed9b5d912054482d16745b4eadd93411e44dd41fc",
+      "size_bytes": 42365230,
+      "source_url": "https://www.malware-traffic-analysis.net/2026/04/16/index.html",
+      "acquisition": {
+        "acquired_at": "UNKNOWN",
+        "url": "https://www.malware-traffic-analysis.net/2026/04/16/index.html",
+        "note": "Archive present in repository before Phase 8; original acquisition time not recorded."
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "MALICIOUS",
+        "derivation": "Capture-level label MALICIOUS taken from the Malware-Traffic-Analysis.net post that publishes the capture as infection traffic, propagated to every reconstructed flow. Flows in such captures can include benign background traffic of the infected host, so flow-level label noise is expected and unquantified.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "VERIFIED_CHECKSUM",
+        "detail": "",
+        "expected_sha256": "a430dc87508451dad8e70a7ed9b5d912054482d16745b4eadd93411e44dd41fc",
+        "expected_sha256_source": "data/manifests/ds008_expanded_corpus_manifest.csv",
+        "checked_at": "2026-10-16T16:16:36.934930Z"
+      },
+      "metadata": {
+        "malware_family": "Lumma Stealer / SectopRAT / ArechClient2",
+        "family_group": "Lumma",
+        "collection_date": "2026-04-16",
+        "environment": "MALWARE_LAB_WINDOWS_HOST (source narrative; not independently verified)",
+        "os": "Windows (source narrative)",
+        "source_candidate_id": "MTA-C006",
+        "prior_admission_status": "ADMITTED"
+      },
+      "recorded_at": "2026-10-16T16:16:36.935946Z"
+    },
+    {
+      "artifact_id": "RAW:DS008-C004",
+      "tier": "RAW",
+      "dataset_id": "DS-008",
+      "capture_id": "DS008-C004",
+      "path": "data/raw/extracted/DS-008/DS008-C004/2025-11-19-Xworm-infection-traffic.pcap",
+      "sha256": "c63d9260c5d93b98c51b353f4f6059c52b756ab648cc27c814d3aede41142d23",
+      "size_bytes": 4198726,
+      "source_url": "https://www.malware-traffic-analysis.net/2025/11/19/index.html",
+      "acquisition": {
+        "acquired_at": "UNKNOWN",
+        "url": "https://www.malware-traffic-analysis.net/2025/11/19/index.html",
+        "note": "Archive present in repository before Phase 8; original acquisition time not recorded."
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "MALICIOUS",
+        "derivation": "Capture-level label MALICIOUS taken from the Malware-Traffic-Analysis.net post that publishes the capture as infection traffic, propagated to every reconstructed flow. Flows in such captures can include benign background traffic of the infected host, so flow-level label noise is expected and unquantified.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "VERIFIED_CHECKSUM",
+        "detail": "",
+        "expected_sha256": "c63d9260c5d93b98c51b353f4f6059c52b756ab648cc27c814d3aede41142d23",
+        "expected_sha256_source": "data/manifests/ds008_expanded_corpus_manifest.csv",
+        "checked_at": "2026-10-16T16:16:47.215249Z"
+      },
+      "metadata": {
+        "malware_family": "XWorm",
+        "family_group": "AsyncRAT_XWorm",
+        "collection_date": "2025-11-19",
+        "environment": "MALWARE_LAB_WINDOWS_HOST (source narrative; not independently verified)",
+        "os": "Windows (source narrative)",
+        "source_candidate_id": "MTA-C015",
+        "prior_admission_status": "ADMITTED"
+      },
+      "recorded_at": "2026-10-16T16:16:47.215249Z"
+    },
+    {
+      "artifact_id": "RAW:DS008-C005",
+      "tier": "RAW",
+      "dataset_id": "DS-008",
+      "capture_id": "DS008-C005",
+      "path": "data/raw/extracted/DS-008/DS008-C005/2025-09-24-traffic-from-running-Setup.exe.pcap",
+      "sha256": "805fc5b533f990ae63beeacdee52b656bfddfd21145089dfbb54a82c6ea17aba",
+      "size_bytes": 17405634,
+      "source_url": "https://www.malware-traffic-analysis.net/2025/09/24/index.html",
+      "acquisition": {
+        "acquired_at": "UNKNOWN",
+        "url": "https://www.malware-traffic-analysis.net/2025/09/24/index.html",
+        "note": "Archive present in repository before Phase 8; original acquisition time not recorded."
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "MALICIOUS",
+        "derivation": "Capture-level label MALICIOUS taken from the Malware-Traffic-Analysis.net post that publishes the capture as infection traffic, propagated to every reconstructed flow. Flows in such captures can include benign background traffic of the infected host, so flow-level label noise is expected and unquantified.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "VERIFIED_CHECKSUM",
+        "detail": "",
+        "expected_sha256": "805fc5b533f990ae63beeacdee52b656bfddfd21145089dfbb54a82c6ea17aba",
+        "expected_sha256_source": "data/manifests/ds008_expanded_corpus_manifest.csv",
+        "checked_at": "2026-10-16T16:17:19.103687Z"
+      },
+      "metadata": {
+        "malware_family": "Lumma Stealer / Ghostsocks",
+        "family_group": "Lumma",
+        "collection_date": "2025-09-24",
+        "environment": "MALWARE_LAB_WINDOWS_HOST (source narrative; not independently verified)",
+        "os": "Windows (source narrative)",
+        "source_candidate_id": "MTA-C018",
+        "prior_admission_status": "ADMITTED"
+      },
+      "recorded_at": "2026-10-16T16:17:19.103687Z"
+    },
+    {
+      "artifact_id": "RAW:DS008-C006",
+      "tier": "RAW",
+      "dataset_id": "DS-008",
+      "capture_id": "DS008-C006",
+      "path": "data/raw/extracted/DS-008/DS008-C006/2025-08-20-SmartAgeSG-Netsupport-RAT-with-StealCv2.pcap",
+      "sha256": "24de7b31a2248763c4fd3e92acfc6b6fa9462b129c7b4ff8024932407ebeae4b",
+      "size_bytes": 68385338,
+      "source_url": "https://www.malware-traffic-analysis.net/2025/08/20/index.html",
+      "acquisition": {
+        "acquired_at": "2026-10-16T15:58:58Z",
+        "url": "https://www.malware-traffic-analysis.net/2025/08/20/2025-08-20-SmartAgeSG-Netsupport-RAT-with-StealCv2.pcap.zip",
+        "http_status": "200",
+        "bytes_downloaded": "63129119",
+        "seconds": "11.886479"
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "MALICIOUS",
+        "derivation": "Capture-level label MALICIOUS taken from the Malware-Traffic-Analysis.net post that publishes the capture as infection traffic, propagated to every reconstructed flow. Flows in such captures can include benign background traffic of the infected host, so flow-level label noise is expected and unquantified.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "VERIFIED_CHECKSUM",
+        "detail": "",
+        "expected_sha256": "24de7b31a2248763c4fd3e92acfc6b6fa9462b129c7b4ff8024932407ebeae4b",
+        "expected_sha256_source": "data/manifests/ds008_expanded_corpus_manifest.csv",
+        "checked_at": "2026-10-16T16:18:00.255231Z"
+      },
+      "metadata": {
+        "malware_family": "SmartApeSG / NetSupport RAT / StealC v2",
+        "family_group": "NetSupport_StealC",
+        "collection_date": "2025-08-20",
+        "environment": "MALWARE_LAB_WINDOWS_HOST (source narrative; not independently verified)",
+        "os": "Windows (source narrative)",
+        "source_candidate_id": "MTA-C021",
+        "prior_admission_status": "ADMITTED"
+      },
+      "recorded_at": "2026-10-16T16:18:00.255231Z"
+    },
+    {
+      "artifact_id": "RAW:DS008-C007",
+      "tier": "RAW",
+      "dataset_id": "DS-008",
+      "capture_id": "DS008-C007",
+      "path": "data/raw/extracted/DS-008/DS008-C007/2025-08-15-Lumma-Stealer-infection-with-Sectop-RAT.pcap",
+      "sha256": "903844e8c40fde617c3636a69ba902a668d740e67c79d9624998b4ab6df09ccd",
+      "size_bytes": 23163559,
+      "source_url": "https://www.malware-traffic-analysis.net/2025/08/15/index.html",
+      "acquisition": {
+        "acquired_at": "UNKNOWN",
+        "url": "https://www.malware-traffic-analysis.net/2025/08/15/index.html",
+        "note": "Archive present in repository before Phase 8; original acquisition time not recorded."
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "MALICIOUS",
+        "derivation": "Capture-level label MALICIOUS taken from the Malware-Traffic-Analysis.net post that publishes the capture as infection traffic, propagated to every reconstructed flow. Flows in such captures can include benign background traffic of the infected host, so flow-level label noise is expected and unquantified.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "VERIFIED_CHECKSUM",
+        "detail": "",
+        "expected_sha256": "903844e8c40fde617c3636a69ba902a668d740e67c79d9624998b4ab6df09ccd",
+        "expected_sha256_source": "data/manifests/ds008_expanded_corpus_manifest.csv",
+        "checked_at": "2026-10-16T16:18:14.042563Z"
+      },
+      "metadata": {
+        "malware_family": "Lumma Stealer / SectopRAT",
+        "family_group": "Lumma",
+        "collection_date": "2025-08-15",
+        "environment": "MALWARE_LAB_WINDOWS_HOST (source narrative; not independently verified)",
+        "os": "Windows (source narrative)",
+        "source_candidate_id": "MTA-C022",
+        "prior_admission_status": "ADMITTED"
+      },
+      "recorded_at": "2026-10-16T16:18:14.042563Z"
+    },
+    {
+      "artifact_id": "RAW:DS008-C008",
+      "tier": "RAW",
+      "dataset_id": "DS-008",
+      "capture_id": "DS008-C008",
+      "path": "data/raw/extracted/DS-008/DS008-C008/2024-08-26-GuLoader-for-Remcos-RAT.pcap",
+      "sha256": "47b1cc4c0148245878a1a2f2eadb37323d80d20a5dbc196b872b3780b8108095",
+      "size_bytes": 1670896,
+      "source_url": "https://www.malware-traffic-analysis.net/2024/08/26/index.html",
+      "acquisition": {
+        "acquired_at": "UNKNOWN",
+        "url": "https://www.malware-traffic-analysis.net/2024/08/26/index.html",
+        "note": "Archive present in repository before Phase 8; original acquisition time not recorded."
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "MALICIOUS",
+        "derivation": "Capture-level label MALICIOUS taken from the Malware-Traffic-Analysis.net post that publishes the capture as infection traffic, propagated to every reconstructed flow. Flows in such captures can include benign background traffic of the infected host, so flow-level label noise is expected and unquantified.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "VERIFIED_CHECKSUM",
+        "detail": "",
+        "expected_sha256": "47b1cc4c0148245878a1a2f2eadb37323d80d20a5dbc196b872b3780b8108095",
+        "expected_sha256_source": "data/manifests/ds008_expanded_corpus_manifest.csv",
+        "checked_at": "2026-10-16T16:18:14.919484Z"
+      },
+      "metadata": {
+        "malware_family": "GuLoader / Remcos RAT",
+        "family_group": "Remcos",
+        "collection_date": "2024-08-26",
+        "environment": "MALWARE_LAB_WINDOWS_HOST (source narrative; not independently verified)",
+        "os": "Windows (source narrative)",
+        "source_candidate_id": "MTA-C040",
+        "prior_admission_status": "ADMITTED"
+      },
+      "recorded_at": "2026-10-16T16:18:14.919484Z"
+    },
+    {
+      "artifact_id": "RAW:DS008-C009",
+      "tier": "RAW",
+      "dataset_id": "DS-008",
+      "capture_id": "DS008-C009",
+      "path": "data/raw/extracted/DS-008/DS008-C009/2024-03-06-traffic-from-Piakbot-infection-with-Meduza-Stealer.pcap",
+      "sha256": "f1bfadc000a21dae71a1d1d71613b169a6e01bedb7d9829822d111987ed4caeb",
+      "size_bytes": 1775002,
+      "source_url": "https://www.malware-traffic-analysis.net/2024/03/06/index.html",
+      "acquisition": {
+        "acquired_at": "UNKNOWN",
+        "url": "https://www.malware-traffic-analysis.net/2024/03/06/index.html",
+        "note": "Archive present in repository before Phase 8; original acquisition time not recorded."
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "MALICIOUS",
+        "derivation": "Capture-level label MALICIOUS taken from the Malware-Traffic-Analysis.net post that publishes the capture as infection traffic, propagated to every reconstructed flow. Flows in such captures can include benign background traffic of the infected host, so flow-level label noise is expected and unquantified.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "VERIFIED_CHECKSUM",
+        "detail": "",
+        "expected_sha256": "f1bfadc000a21dae71a1d1d71613b169a6e01bedb7d9829822d111987ed4caeb",
+        "expected_sha256_source": "data/manifests/ds008_expanded_corpus_manifest.csv",
+        "checked_at": "2026-10-16T16:18:15.821243Z"
+      },
+      "metadata": {
+        "malware_family": "Pikabot / Meduza Stealer",
+        "family_group": "Pikabot",
+        "collection_date": "2024-03-06",
+        "environment": "MALWARE_LAB_WINDOWS_HOST (source narrative; not independently verified)",
+        "os": "Windows (source narrative)",
+        "source_candidate_id": "MTA-C045",
+        "prior_admission_status": "ADMITTED"
+      },
+      "recorded_at": "2026-10-16T16:18:15.821243Z"
+    },
+    {
+      "artifact_id": "RAW:DS008-C010",
+      "tier": "RAW",
+      "dataset_id": "DS-008",
+      "capture_id": "DS008-C010",
+      "path": "data/raw/extracted/DS-008/DS008-C010/2024-01-30-DarkGate-infection-traffic.pcap",
+      "sha256": "5f74ed42f609284180f70d104dacdb82cde86dda86020994464b416cd1bbb17f",
+      "size_bytes": 2356569,
+      "source_url": "https://www.malware-traffic-analysis.net/2024/01/30/index.html",
+      "acquisition": {
+        "acquired_at": "UNKNOWN",
+        "url": "https://www.malware-traffic-analysis.net/2024/01/30/index.html",
+        "note": "Archive present in repository before Phase 8; original acquisition time not recorded."
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "MALICIOUS",
+        "derivation": "Capture-level label MALICIOUS taken from the Malware-Traffic-Analysis.net post that publishes the capture as infection traffic, propagated to every reconstructed flow. Flows in such captures can include benign background traffic of the infected host, so flow-level label noise is expected and unquantified.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "VERIFIED_CHECKSUM",
+        "detail": "",
+        "expected_sha256": "5f74ed42f609284180f70d104dacdb82cde86dda86020994464b416cd1bbb17f",
+        "expected_sha256_source": "data/manifests/ds008_expanded_corpus_manifest.csv",
+        "checked_at": "2026-10-16T16:18:17.094973Z"
+      },
+      "metadata": {
+        "malware_family": "DarkGate",
+        "family_group": "DarkGate",
+        "collection_date": "2024-01-30",
+        "environment": "MALWARE_LAB_WINDOWS_HOST (source narrative; not independently verified)",
+        "os": "Windows (source narrative)",
+        "source_candidate_id": "MTA-C049",
+        "prior_admission_status": "ADMITTED"
+      },
+      "recorded_at": "2026-10-16T16:18:17.094973Z"
+    },
+    {
+      "artifact_id": "RAW:DS009-CTU-MCB-238-1",
+      "tier": "RAW",
+      "dataset_id": "DS-009",
+      "capture_id": "DS009-CTU-MCB-238-1",
+      "path": "data/raw/acquisition_staging/stratosphere_malware/CTU-Malware-Capture-Botnet-238-1/2017-3-30_win6.pcap",
+      "sha256": "b03bf9bca9d2cb217e0ff96506314afddbe791fc7c6abaf80a41c256da2bd27f",
+      "size_bytes": 93099178,
+      "source_url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-238-1/2017-3-30_win6.pcap",
+      "acquisition": {
+        "acquired_at": "2026-10-16T16:11:02Z",
+        "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-238-1/2017-3-30_win6.pcap",
+        "http_status": "200",
+        "bytes_downloaded": "93099178",
+        "seconds": "19.172418"
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "MALICIOUS",
+        "derivation": "Capture-level label MALICIOUS: Stratosphere Malware Capture Facility Project recording of a Windows VM executing the sample named in the README ('Probable Name'). Every flow of the VM is labelled MALICIOUS, including the minutes before infection and benign background Windows traffic, so flow-level label noise is expected and unquantified.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "OBSERVED_AT_ACQUISITION",
+        "detail": "No published checksum; SHA-256 recorded at first verification (trust-on-first-download).",
+        "expected_sha256": null,
+        "expected_sha256_source": "No PCAP checksum is published by the source (README lists only the malware sample hash); SHA-256 observed at acquisition is recorded.",
+        "checked_at": "2026-10-16T16:18:18.155124Z"
+      },
+      "metadata": {
+        "malware_family": "TrickBot (probable, per README)",
+        "family_group": "Trickbot",
+        "collection_date": "2017-03-07",
+        "environment": "STRATOSPHERE_LAB_CAPTURE; infected host 192.168.1.116; README lists a MITM proxy interception log; interception point not stated (JA3S may reflect a proxy)",
+        "os": "Windows (filename 'winN')",
+        "source_candidate_id": "CTU-Malware-Capture-Botnet-238-1",
+        "prior_admission_status": "NEW_IN_PHASE_8"
+      },
+      "recorded_at": "2026-10-16T16:18:18.155124Z"
+    },
+    {
+      "artifact_id": "RAW:DS009-CTU-MCB-240-1",
+      "tier": "RAW",
+      "dataset_id": "DS-009",
+      "capture_id": "DS009-CTU-MCB-240-1",
+      "path": "data/raw/acquisition_staging/stratosphere_malware/CTU-Malware-Capture-Botnet-240-1/2017-3-29_win8.pcap",
+      "sha256": "9369b771130396f349ca74a24c9f5a2a7c0ebff90a9aec635e99fb97b39472a9",
+      "size_bytes": 86537967,
+      "source_url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-240-1/2017-3-29_win8.pcap",
+      "acquisition": {
+        "acquired_at": "2026-10-16T16:10:31Z",
+        "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-240-1/2017-3-29_win8.pcap",
+        "http_status": "200",
+        "bytes_downloaded": "86537967",
+        "seconds": "29.847825"
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "MALICIOUS",
+        "derivation": "Capture-level label MALICIOUS: Stratosphere Malware Capture Facility Project recording of a Windows VM executing the sample named in the README ('Probable Name'). Every flow of the VM is labelled MALICIOUS, including the minutes before infection and benign background Windows traffic, so flow-level label noise is expected and unquantified.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "OBSERVED_AT_ACQUISITION",
+        "detail": "No published checksum; SHA-256 recorded at first verification (trust-on-first-download).",
+        "expected_sha256": null,
+        "expected_sha256_source": "No PCAP checksum is published by the source (README lists only the malware sample hash); SHA-256 observed at acquisition is recorded.",
+        "checked_at": "2026-10-16T16:18:18.219960Z"
+      },
+      "metadata": {
+        "malware_family": "TrickBot (probable, per README)",
+        "family_group": "Trickbot",
+        "collection_date": "2017-03-07",
+        "environment": "STRATOSPHERE_LAB_CAPTURE; infected host 192.168.1.118; README lists a MITM proxy interception log; interception point not stated (JA3S may reflect a proxy)",
+        "os": "Windows (filename 'winN')",
+        "source_candidate_id": "CTU-Malware-Capture-Botnet-240-1",
+        "prior_admission_status": "NEW_IN_PHASE_8"
+      },
+      "recorded_at": "2026-10-16T16:18:18.219960Z"
+    },
+    {
+      "artifact_id": "RAW:DS009-CTU-MCB-246-1",
+      "tier": "RAW",
+      "dataset_id": "DS-009",
+      "capture_id": "DS009-CTU-MCB-246-1",
+      "path": "data/raw/acquisition_staging/stratosphere_malware/CTU-Malware-Capture-Botnet-246-1/2017-04-17_win1.pcap",
+      "sha256": "2425bf206592b0dc24c71b449a85df451bfaf493ffcd3daddcbfbbc0eb31cb37",
+      "size_bytes": 71789963,
+      "source_url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-246-1/2017-04-17_win1.pcap",
+      "acquisition": {
+        "acquired_at": "2026-10-16T16:09:34Z",
+        "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-246-1/2017-04-17_win1.pcap",
+        "http_status": "200",
+        "bytes_downloaded": "71789963",
+        "seconds": "24.365643"
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "MALICIOUS",
+        "derivation": "Capture-level label MALICIOUS: Stratosphere Malware Capture Facility Project recording of a Windows VM executing the sample named in the README ('Probable Name'). Every flow of the VM is labelled MALICIOUS, including the minutes before infection and benign background Windows traffic, so flow-level label noise is expected and unquantified.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "OBSERVED_AT_ACQUISITION",
+        "detail": "No published checksum; SHA-256 recorded at first verification (trust-on-first-download).",
+        "expected_sha256": null,
+        "expected_sha256_source": "No PCAP checksum is published by the source (README lists only the malware sample hash); SHA-256 observed at acquisition is recorded.",
+        "checked_at": "2026-10-16T16:18:18.275327Z"
+      },
+      "metadata": {
+        "malware_family": "Dridex (probable, per README)",
+        "family_group": "Dridex",
+        "collection_date": "2017-03-15",
+        "environment": "STRATOSPHERE_LAB_CAPTURE; infected host 192.168.1.110; README lists a MITM proxy interception log; interception point not stated (JA3S may reflect a proxy)",
+        "os": "Windows (filename 'winN')",
+        "source_candidate_id": "CTU-Malware-Capture-Botnet-246-1",
+        "prior_admission_status": "NEW_IN_PHASE_8"
+      },
+      "recorded_at": "2026-10-16T16:18:18.275327Z"
+    },
+    {
+      "artifact_id": "RAW:DS009-CTU-MCB-248-1",
+      "tier": "RAW",
+      "dataset_id": "DS-009",
+      "capture_id": "DS009-CTU-MCB-248-1",
+      "path": "data/raw/acquisition_staging/stratosphere_malware/CTU-Malware-Capture-Botnet-248-1/2017-04-18_win18.pcap",
+      "sha256": "76b88b66b3a0eb6041c459ecd549b21aa53681f3e0e141281c9fd924237096d8",
+      "size_bytes": 69379751,
+      "source_url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-248-1/2017-04-18_win18.pcap",
+      "acquisition": {
+        "acquired_at": "2026-10-16T16:09:24Z",
+        "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-248-1/2017-04-18_win18.pcap",
+        "http_status": "200",
+        "bytes_downloaded": "69379751",
+        "seconds": "9.831995"
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "MALICIOUS",
+        "derivation": "Capture-level label MALICIOUS: Stratosphere Malware Capture Facility Project recording of a Windows VM executing the sample named in the README ('Probable Name'). Every flow of the VM is labelled MALICIOUS, including the minutes before infection and benign background Windows traffic, so flow-level label noise is expected and unquantified.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "OBSERVED_AT_ACQUISITION",
+        "detail": "No published checksum; SHA-256 recorded at first verification (trust-on-first-download).",
+        "expected_sha256": null,
+        "expected_sha256_source": "No PCAP checksum is published by the source (README lists only the malware sample hash); SHA-256 observed at acquisition is recorded.",
+        "checked_at": "2026-10-16T16:18:18.329179Z"
+      },
+      "metadata": {
+        "malware_family": "Dridex (probable, per README)",
+        "family_group": "Dridex",
+        "collection_date": "2017-03-16",
+        "environment": "STRATOSPHERE_LAB_CAPTURE; infected host 192.168.1.128; README lists a MITM proxy interception log; interception point not stated (JA3S may reflect a proxy)",
+        "os": "Windows (filename 'winN')",
+        "source_candidate_id": "CTU-Malware-Capture-Botnet-248-1",
+        "prior_admission_status": "NEW_IN_PHASE_8"
+      },
+      "recorded_at": "2026-10-16T16:18:18.329179Z"
+    },
+    {
+      "artifact_id": "RAW:DS009-CTU-MCB-249-1",
+      "tier": "RAW",
+      "dataset_id": "DS-009",
+      "capture_id": "DS009-CTU-MCB-249-1",
+      "path": "data/raw/acquisition_staging/stratosphere_malware/CTU-Malware-Capture-Botnet-249-1/2017-04-18_win20.pcap",
+      "sha256": "49f0b2c1d7ae270a048a6cccfc9f85cc23992d20ea068e59f0a39f03c396c97b",
+      "size_bytes": 49384470,
+      "source_url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-249-1/2017-04-18_win20.pcap",
+      "acquisition": {
+        "acquired_at": "2026-10-16T16:09:09Z",
+        "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-249-1/2017-04-18_win20.pcap",
+        "http_status": "200",
+        "bytes_downloaded": "49384470",
+        "seconds": "13.440630"
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "MALICIOUS",
+        "derivation": "Capture-level label MALICIOUS: Stratosphere Malware Capture Facility Project recording of a Windows VM executing the sample named in the README ('Probable Name'). Every flow of the VM is labelled MALICIOUS, including the minutes before infection and benign background Windows traffic, so flow-level label noise is expected and unquantified.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "OBSERVED_AT_ACQUISITION",
+        "detail": "No published checksum; SHA-256 recorded at first verification (trust-on-first-download).",
+        "expected_sha256": null,
+        "expected_sha256_source": "No PCAP checksum is published by the source (README lists only the malware sample hash); SHA-256 observed at acquisition is recorded.",
+        "checked_at": "2026-10-16T16:18:18.365753Z"
+      },
+      "metadata": {
+        "malware_family": "Dridex (probable, per README)",
+        "family_group": "Dridex",
+        "collection_date": "2017-03-26",
+        "environment": "STRATOSPHERE_LAB_CAPTURE; infected host 192.168.1.130; README lists a MITM proxy interception log; interception point not stated (JA3S may reflect a proxy)",
+        "os": "Windows (filename 'winN')",
+        "source_candidate_id": "CTU-Malware-Capture-Botnet-249-1",
+        "prior_admission_status": "NEW_IN_PHASE_8"
+      },
+      "recorded_at": "2026-10-16T16:18:18.365753Z"
+    },
+    {
+      "artifact_id": "RAW:DS009-CTU-MCB-259-1",
+      "tier": "RAW",
+      "dataset_id": "DS-009",
+      "capture_id": "DS009-CTU-MCB-259-1",
+      "path": "data/raw/acquisition_staging/stratosphere_malware/CTU-Malware-Capture-Botnet-259-1/2017-05-15_win8.pcap",
+      "sha256": "f4bc1edb5b926e22e4080dc011be7826862b4b683b2c780355848fc4aacd28d7",
+      "size_bytes": 7710341,
+      "source_url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-259-1/2017-05-15_win8.pcap",
+      "acquisition": {
+        "acquired_at": "2026-10-16T16:08:58Z",
+        "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-259-1/2017-05-15_win8.pcap",
+        "http_status": "200",
+        "bytes_downloaded": "7710341",
+        "seconds": "2.232028"
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "MALICIOUS",
+        "derivation": "Capture-level label MALICIOUS: Stratosphere Malware Capture Facility Project recording of a Windows VM executing the sample named in the README ('Probable Name'). Every flow of the VM is labelled MALICIOUS, including the minutes before infection and benign background Windows traffic, so flow-level label noise is expected and unquantified.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "OBSERVED_AT_ACQUISITION",
+        "detail": "No published checksum; SHA-256 recorded at first verification (trust-on-first-download).",
+        "expected_sha256": null,
+        "expected_sha256_source": "No PCAP checksum is published by the source (README lists only the malware sample hash); SHA-256 observed at acquisition is recorded.",
+        "checked_at": "2026-10-16T16:18:18.373379Z"
+      },
+      "metadata": {
+        "malware_family": "Dridex (probable, per README)",
+        "family_group": "Dridex",
+        "collection_date": "2017-04-25",
+        "environment": "STRATOSPHERE_LAB_CAPTURE; infected host 192.168.1.118; README lists a MITM proxy interception log; interception point not stated (JA3S may reflect a proxy)",
+        "os": "Windows (filename 'winN')",
+        "source_candidate_id": "CTU-Malware-Capture-Botnet-259-1",
+        "prior_admission_status": "NEW_IN_PHASE_8"
+      },
+      "recorded_at": "2026-10-16T16:18:18.373379Z"
+    },
+    {
+      "artifact_id": "RAW:DS009-CTU-MCB-260-1",
+      "tier": "RAW",
+      "dataset_id": "DS-009",
+      "capture_id": "DS009-CTU-MCB-260-1",
+      "path": "data/raw/acquisition_staging/stratosphere_malware/CTU-Malware-Capture-Botnet-260-1/2017-15-05_win11.pcap",
+      "sha256": "3135369b8556071018154652ddc78a5828dc6bd1241aadfaada8414db1635dea",
+      "size_bytes": 35105540,
+      "source_url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-260-1/2017-15-05_win11.pcap",
+      "acquisition": {
+        "acquired_at": "2026-10-16T16:09:01Z",
+        "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-260-1/2017-15-05_win11.pcap",
+        "http_status": "200",
+        "bytes_downloaded": "35105540",
+        "seconds": "7.536286"
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "MALICIOUS",
+        "derivation": "Capture-level label MALICIOUS: Stratosphere Malware Capture Facility Project recording of a Windows VM executing the sample named in the README ('Probable Name'). Every flow of the VM is labelled MALICIOUS, including the minutes before infection and benign background Windows traffic, so flow-level label noise is expected and unquantified.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "OBSERVED_AT_ACQUISITION",
+        "detail": "No published checksum; SHA-256 recorded at first verification (trust-on-first-download).",
+        "expected_sha256": null,
+        "expected_sha256_source": "No PCAP checksum is published by the source (README lists only the malware sample hash); SHA-256 observed at acquisition is recorded.",
+        "checked_at": "2026-10-16T16:18:18.400813Z"
+      },
+      "metadata": {
+        "malware_family": "Dridex (probable, per README)",
+        "family_group": "Dridex",
+        "collection_date": "2017-04-18",
+        "environment": "STRATOSPHERE_LAB_CAPTURE; infected host 192.168.1.121; README lists a MITM proxy interception log; interception point not stated (JA3S may reflect a proxy)",
+        "os": "Windows (filename 'winN')",
+        "source_candidate_id": "CTU-Malware-Capture-Botnet-260-1",
+        "prior_admission_status": "NEW_IN_PHASE_8"
+      },
+      "recorded_at": "2026-10-16T16:18:18.400813Z"
+    },
+    {
+      "artifact_id": "RAW:DS009-CTU-MCB-264-1",
+      "tier": "RAW",
+      "dataset_id": "DS-009",
+      "capture_id": "DS009-CTU-MCB-264-1",
+      "path": "data/raw/acquisition_staging/stratosphere_malware/CTU-Malware-Capture-Botnet-264-1/2017-06-24_win3.pcap",
+      "sha256": "a92b52e5fb9eae4983713434909f5954c8beb12876320d4b7f3f15c36ec46bcb",
+      "size_bytes": 87242214,
+      "source_url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-264-1/2017-06-24_win3.pcap",
+      "acquisition": {
+        "acquired_at": "2026-10-16T16:10:17Z",
+        "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-264-1/2017-06-24_win3.pcap",
+        "http_status": "200",
+        "bytes_downloaded": "87242214",
+        "seconds": "13.117223"
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "MALICIOUS",
+        "derivation": "Capture-level label MALICIOUS: Stratosphere Malware Capture Facility Project recording of a Windows VM executing the sample named in the README ('Probable Name'). Every flow of the VM is labelled MALICIOUS, including the minutes before infection and benign background Windows traffic, so flow-level label noise is expected and unquantified.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "OBSERVED_AT_ACQUISITION",
+        "detail": "No published checksum; SHA-256 recorded at first verification (trust-on-first-download).",
+        "expected_sha256": null,
+        "expected_sha256_source": "No PCAP checksum is published by the source (README lists only the malware sample hash); SHA-256 observed at acquisition is recorded.",
+        "checked_at": "2026-10-16T16:18:18.465082Z"
+      },
+      "metadata": {
+        "malware_family": "Trojan Bank Emotet (probable, per README)",
+        "family_group": "Emotet",
+        "collection_date": "2017-06-05",
+        "environment": "STRATOSPHERE_LAB_CAPTURE; infected host 192.168.1.113; This capture did not use an intermediate proxy.",
+        "os": "Windows (filename 'winN')",
+        "source_candidate_id": "CTU-Malware-Capture-Botnet-264-1",
+        "prior_admission_status": "NEW_IN_PHASE_8"
+      },
+      "recorded_at": "2026-10-16T16:18:18.465082Z"
+    },
+    {
+      "artifact_id": "RAW:DS009-CTU-MCB-268-1",
+      "tier": "RAW",
+      "dataset_id": "DS-009",
+      "capture_id": "DS009-CTU-MCB-268-1",
+      "path": "data/raw/acquisition_staging/stratosphere_malware/CTU-Malware-Capture-Botnet-268-1/2017-06-24_win7.pcap",
+      "sha256": "c2f1edf1ffd78afe45e3a958e217692e9f6afb907763e1073779806fbbc449ea",
+      "size_bytes": 62985020,
+      "source_url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-268-1/2017-06-24_win7.pcap",
+      "acquisition": {
+        "acquired_at": "2026-10-16T16:09:59Z",
+        "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-268-1/2017-06-24_win7.pcap",
+        "http_status": "200",
+        "bytes_downloaded": "62985020",
+        "seconds": "16.964254"
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "MALICIOUS",
+        "derivation": "Capture-level label MALICIOUS: Stratosphere Malware Capture Facility Project recording of a Windows VM executing the sample named in the README ('Probable Name'). Every flow of the VM is labelled MALICIOUS, including the minutes before infection and benign background Windows traffic, so flow-level label noise is expected and unquantified.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "OBSERVED_AT_ACQUISITION",
+        "detail": "No published checksum; SHA-256 recorded at first verification (trust-on-first-download).",
+        "expected_sha256": null,
+        "expected_sha256_source": "No PCAP checksum is published by the source (README lists only the malware sample hash); SHA-256 observed at acquisition is recorded.",
+        "checked_at": "2026-10-16T16:18:18.528779Z"
+      },
+      "metadata": {
+        "malware_family": "Emotet (probable, per README)",
+        "family_group": "Emotet",
+        "collection_date": "2017-06-08",
+        "environment": "STRATOSPHERE_LAB_CAPTURE; infected host 192.168.1.117; This capture did not use an intermediate proxy.",
+        "os": "Windows (filename 'winN')",
+        "source_candidate_id": "CTU-Malware-Capture-Botnet-268-1",
+        "prior_admission_status": "NEW_IN_PHASE_8"
+      },
+      "recorded_at": "2026-10-16T16:18:18.528779Z"
+    },
+    {
+      "artifact_id": "RAW:DS011-CTU-Normal-20",
+      "tier": "RAW",
+      "dataset_id": "DS-011",
+      "capture_id": "DS011-CTU-Normal-20",
+      "path": "data/raw/acquisition_staging/ctu_normal/CTU-Normal-20/2017-04-30_win-normal.pcap",
+      "sha256": "c78a00728f115ab8fc495fd395894c43fd90cb61054eb9ef4f2d024658d5ffc5",
+      "size_bytes": 282415864,
+      "source_url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Normal-20/2017-04-30_win-normal.pcap",
+      "acquisition": {
+        "acquired_at": "2026-10-16T16:00:58Z",
+        "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Normal-20/2017-04-30_win-normal.pcap",
+        "http_status": "200",
+        "bytes_downloaded": "282415864",
+        "seconds": "97.816455"
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "BENIGN",
+        "derivation": "Capture-level label BENIGN taken from the Stratosphere Laboratory 'normal capture' description (no malware executed), propagated to every reconstructed flow.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "OBSERVED_AT_ACQUISITION",
+        "detail": "No published checksum; SHA-256 recorded at first verification (trust-on-first-download).",
+        "expected_sha256": null,
+        "expected_sha256_source": "No checksum is published by the source; SHA-256 observed at acquisition is recorded in the artifact manifest.",
+        "checked_at": "2026-10-16T16:18:17.303243Z"
+      },
+      "metadata": {
+        "malware_family": "BENIGN",
+        "family_group": "BENIGN",
+        "collection_date": "2017-04-30",
+        "environment": "STRATOSPHERE_LAB_CAPTURE; browser=UNKNOWN; no intermediate proxy (README)",
+        "os": "Windows (filename only)",
+        "source_candidate_id": "CTU-Normal-20",
+        "prior_admission_status": "NEW_IN_PHASE_8"
+      },
+      "recorded_at": "2026-10-16T16:18:17.303243Z"
+    },
+    {
+      "artifact_id": "RAW:DS011-CTU-Normal-21",
+      "tier": "RAW",
+      "dataset_id": "DS-011",
+      "capture_id": "DS011-CTU-Normal-21",
+      "path": "data/raw/acquisition_staging/ctu_normal/CTU-Normal-21/2017-05-02_kali-normal.pcap",
+      "sha256": "53acb10b26ca6446b5bba2efd9d957a9faa15209029d58c10a8c1d1bd299c42b",
+      "size_bytes": 311638284,
+      "source_url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Normal-21/2017-05-02_kali-normal.pcap",
+      "acquisition": {
+        "acquired_at": "2026-10-16T16:04:23Z",
+        "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Normal-21/2017-05-02_kali-normal.pcap",
+        "http_status": "200",
+        "bytes_downloaded": "311638284",
+        "seconds": "66.652302"
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "BENIGN",
+        "derivation": "Capture-level label BENIGN taken from the Stratosphere Laboratory 'normal capture' description (no malware executed), propagated to every reconstructed flow.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "OBSERVED_AT_ACQUISITION",
+        "detail": "No published checksum; SHA-256 recorded at first verification (trust-on-first-download).",
+        "expected_sha256": null,
+        "expected_sha256_source": "No checksum is published by the source; SHA-256 observed at acquisition is recorded in the artifact manifest.",
+        "checked_at": "2026-10-16T16:18:17.528948Z"
+      },
+      "metadata": {
+        "malware_family": "BENIGN",
+        "family_group": "BENIGN",
+        "collection_date": "2017-05-02",
+        "environment": "STRATOSPHERE_LAB_CAPTURE; browser=UNKNOWN; no intermediate proxy (README)",
+        "os": "Kali Linux (README)",
+        "source_candidate_id": "CTU-Normal-21",
+        "prior_admission_status": "NEW_IN_PHASE_8"
+      },
+      "recorded_at": "2026-10-16T16:18:17.528948Z"
+    },
+    {
+      "artifact_id": "RAW:DS011-CTU-Normal-23",
+      "tier": "RAW",
+      "dataset_id": "DS-011",
+      "capture_id": "DS011-CTU-Normal-23",
+      "path": "data/raw/acquisition_staging/ctu_normal/CTU-Normal-23/2017-04-18_win-normal.pcap",
+      "sha256": "50ccaa483200a73c87be73ce3cae95c16afe0941021ff6d5e8e1cacf5a90807b",
+      "size_bytes": 294700097,
+      "source_url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Normal-23/2017-04-18_win-normal.pcap",
+      "acquisition": {
+        "acquired_at": "2026-10-16T16:02:37Z",
+        "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Normal-23/2017-04-18_win-normal.pcap",
+        "http_status": "200",
+        "bytes_downloaded": "294700097",
+        "seconds": "105.182167"
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "BENIGN",
+        "derivation": "Capture-level label BENIGN taken from the Stratosphere Laboratory 'normal capture' description (no malware executed), propagated to every reconstructed flow.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "OBSERVED_AT_ACQUISITION",
+        "detail": "No published checksum; SHA-256 recorded at first verification (trust-on-first-download).",
+        "expected_sha256": null,
+        "expected_sha256_source": "No checksum is published by the source; SHA-256 observed at acquisition is recorded in the artifact manifest.",
+        "checked_at": "2026-10-16T16:18:17.739220Z"
+      },
+      "metadata": {
+        "malware_family": "BENIGN",
+        "family_group": "BENIGN",
+        "collection_date": "2017-04-18",
+        "environment": "STRATOSPHERE_LAB_CAPTURE; browser=iceweasel 43.0.4; no intermediate proxy (README)",
+        "os": "UNKNOWN (CONFLICT: filename says Windows, README says Kali Linux)",
+        "source_candidate_id": "CTU-Normal-23",
+        "prior_admission_status": "NEW_IN_PHASE_8"
+      },
+      "recorded_at": "2026-10-16T16:18:17.739220Z"
+    },
+    {
+      "artifact_id": "RAW:DS011-CTU-Normal-24",
+      "tier": "RAW",
+      "dataset_id": "DS-011",
+      "capture_id": "DS011-CTU-Normal-24",
+      "path": "data/raw/acquisition_staging/ctu_normal/CTU-Normal-24/2017-04-19_win-normal.pcap",
+      "sha256": "31a9a2a88b0d24283288058f7c2dbad057e3d7d7bb2ad2427302dc954c7e1471",
+      "size_bytes": 211351915,
+      "source_url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Normal-24/2017-04-19_win-normal.pcap",
+      "acquisition": {
+        "acquired_at": "2026-10-16T15:59:57Z",
+        "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Normal-24/2017-04-19_win-normal.pcap",
+        "http_status": "200",
+        "bytes_downloaded": "211351915",
+        "seconds": "60.266441"
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "BENIGN",
+        "derivation": "Capture-level label BENIGN taken from the Stratosphere Laboratory 'normal capture' description (no malware executed), propagated to every reconstructed flow.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "OBSERVED_AT_ACQUISITION",
+        "detail": "No published checksum; SHA-256 recorded at first verification (trust-on-first-download).",
+        "expected_sha256": null,
+        "expected_sha256_source": "No checksum is published by the source; SHA-256 observed at acquisition is recorded in the artifact manifest.",
+        "checked_at": "2026-10-16T16:18:17.888057Z"
+      },
+      "metadata": {
+        "malware_family": "BENIGN",
+        "family_group": "BENIGN",
+        "collection_date": "2017-04-19",
+        "environment": "STRATOSPHERE_LAB_CAPTURE; browser=iceweasel 43.0.4; no intermediate proxy (README)",
+        "os": "UNKNOWN (CONFLICT: filename says Windows, README says Kali Linux)",
+        "source_candidate_id": "CTU-Normal-24",
+        "prior_admission_status": "NEW_IN_PHASE_8"
+      },
+      "recorded_at": "2026-10-16T16:18:17.888057Z"
+    },
+    {
+      "artifact_id": "RAW:DS011-CTU-Normal-26",
+      "tier": "RAW",
+      "dataset_id": "DS-011",
+      "capture_id": "DS011-CTU-Normal-26",
+      "path": "data/raw/acquisition_staging/ctu_normal/CTU-Normal-26/2017-04-28_normal.pcap",
+      "sha256": "b66103fd89c8f0fc53b76e718f53320f3af27edd302c58695fc1870ede3663c5",
+      "size_bytes": 118444523,
+      "source_url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Normal-26/2017-04-28_normal.pcap",
+      "acquisition": {
+        "acquired_at": "2026-10-16T15:59:10Z",
+        "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Normal-26/2017-04-28_normal.pcap",
+        "http_status": "200",
+        "bytes_downloaded": "118444523",
+        "seconds": "20.821747"
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "BENIGN",
+        "derivation": "Capture-level label BENIGN taken from the Stratosphere Laboratory 'normal capture' description (no malware executed), propagated to every reconstructed flow.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "OBSERVED_AT_ACQUISITION",
+        "detail": "No published checksum; SHA-256 recorded at first verification (trust-on-first-download).",
+        "expected_sha256": null,
+        "expected_sha256_source": "No checksum is published by the source; SHA-256 observed at acquisition is recorded in the artifact manifest.",
+        "checked_at": "2026-10-16T16:18:17.973493Z"
+      },
+      "metadata": {
+        "malware_family": "BENIGN",
+        "family_group": "BENIGN",
+        "collection_date": "2017-04-28",
+        "environment": "STRATOSPHERE_LAB_CAPTURE; browser=iceweasel 43.0.4; no intermediate proxy (README)",
+        "os": "Kali Linux (README)",
+        "source_candidate_id": "CTU-Normal-26",
+        "prior_admission_status": "NEW_IN_PHASE_8"
+      },
+      "recorded_at": "2026-10-16T16:18:17.973493Z"
+    },
+    {
+      "artifact_id": "RAW:DS011-CTU-Normal-28",
+      "tier": "RAW",
+      "dataset_id": "DS-011",
+      "capture_id": "DS011-CTU-Normal-28",
+      "path": "data/raw/acquisition_staging/ctu_normal/CTU-Normal-28/2017-05-01_normal.pcap",
+      "sha256": "a2f3e60fa0eb2a924a3795644ac09a0f1ea48c45c30ebcc663af9641580b9a5c",
+      "size_bytes": 143630116,
+      "source_url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Normal-28/2017-05-01_normal.pcap",
+      "acquisition": {
+        "acquired_at": "2026-10-16T15:59:32Z",
+        "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Normal-28/2017-05-01_normal.pcap",
+        "http_status": "200",
+        "bytes_downloaded": "143630116",
+        "seconds": "24.238391"
+      },
+      "derived_from": [],
+      "processing": {},
+      "label": {
+        "value": "BENIGN",
+        "derivation": "Capture-level label BENIGN taken from the Stratosphere Laboratory 'normal capture' description (no malware executed), propagated to every reconstructed flow.",
+        "granularity": "CAPTURE_PROPAGATED_TO_FLOWS"
+      },
+      "verification": {
+        "status": "OBSERVED_AT_ACQUISITION",
+        "detail": "No published checksum; SHA-256 recorded at first verification (trust-on-first-download).",
+        "expected_sha256": null,
+        "expected_sha256_source": "No checksum is published by the source; SHA-256 observed at acquisition is recorded in the artifact manifest.",
+        "checked_at": "2026-10-16T16:18:18.082630Z"
+      },
+      "metadata": {
+        "malware_family": "BENIGN",
+        "family_group": "BENIGN",
+        "collection_date": "2017-05-01",
+        "environment": "STRATOSPHERE_LAB_CAPTURE; browser=iceweasel 43.0.4; no intermediate proxy (README)",
+        "os": "Kali Linux (README)",
+        "source_candidate_id": "CTU-Normal-28",
+        "prior_admission_status": "NEW_IN_PHASE_8"
+      },
+      "recorded_at": "2026-10-16T16:18:18.082630Z"
+    }
+  ]
+}
