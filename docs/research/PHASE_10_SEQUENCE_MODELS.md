@@ -72,6 +72,53 @@ python -m ml sequence --epochs 30                              # all admitted da
 python -m ml sequence --epochs 30 --datasets DS-009,DS-011     # same-laboratory subset
 ```
 
-## 8. Results
+## 8. Results (exploratory, executed 2026-10-16, CPU)
 
-See §9 below (filled from `data/experiments/phase10/<suite>/summary.json`) and `data/experiments/reports/latest_report.md`.
+### 8.1 All admitted datasets: `sequence_capture_cv-20261016T185120Z`
+
+62,543 flows, all valid (0 rejected; 913 flows longer than 64 packets were truncated). Five outer capture folds.
+
+| Model | AP [95% CI] (FEW_GROUPS) | Recall / FPR @val-FPR≤1 % | Mean fit s / fold | Latency ms / flow (batch) | Parameters |
+|---|---|---|---|---|---|
+| seqagg_hist_gb (information-matched) | **0.909 [0.759, 0.973]** | 41.9 % / 4.8 % | 1.2 | 0.002 | — |
+| tab_trackA_random_forest (full flow) | 0.904 [0.730, 0.984] | 36.2 % / 6.3 % | 0.8 | 0.006 | — |
+| tab_trackA_hist_gb (full flow) | 0.886 [0.692, 0.983] | 31.7 % / 8.4 % | 7.4 | 0.009 | — |
+| cnn | 0.871 [0.662, 0.979] | 38.9 % / 6.9 % | 7.0 | 0.016 | 15,937 |
+| seqagg_logreg | 0.841 [0.629, 0.954] | 38.3 % / 11.4 % | 0.1 | 0.0004 | — |
+| gru | 0.828 [0.603, 0.972] | 40.9 % / 12.0 % | 24.1 | 0.006 | 8,545 |
+
+Pre-declared contrasts (ΔAP = sequence − tabular; Holm over 4):
+
+| Contrast | ΔAP [95% CI] | Holm p |
+|---|---|---|
+| CNN vs information-matched | −0.039 [−0.118, 0.030] | 1.00 |
+| GRU vs information-matched | −0.082 [−0.171, 0.011] | 0.59 |
+| CNN vs full-flow | −0.015 [−0.060, 0.029] | 1.00 |
+| GRU vs full-flow | **−0.058 [−0.105, −0.006]** | **0.024** |
+
+The GRU is worse than the full-flow tabular baseline. No sequence model beats a tabular baseline.
+
+### 8.2 Same-laboratory subset: `sequence_capture_cv_DS009_DS011-20261016T190417Z`
+
+AP for each model:
+
+* tab_trackA_random_forest 0.942
+* tab_trackA_hist_gb 0.926
+* seqagg_hist_gb 0.896
+* cnn 0.893
+* gru 0.871
+* seqagg_logreg 0.857
+
+No contrast is significant: every Holm p ≥ 0.90, every ΔAP ≤ 0.
+
+### 8.3 Interpretation probes (held-out fold, 6,000 rows; descriptive only)
+
+* **Channel ablation:** the SYN-flag channel matters most (ΔAP −0.14 GRU, −0.08 CNN). Whether a flow starts with a TCP handshake is partly a capture artefact: flows that began before a long malware capture started lack a SYN. This channel therefore carries collection-process signal as well as behaviour.
+* **Temporal occlusion:** nearly all signal sits in the first 8 packets (ΔAP −0.16 GRU, −0.12 CNN). Later windows contribute ≈ 0.
+* **SIMULATED IAT scaling:** ×2 changes AP by −0.062 (GRU) and +0.033 (CNN); ×0.5 by −0.028 and −0.031. The models are sensitive to plausible path-speed changes.
+
+### 8.4 Conclusion
+
+**Phase 10 exit criterion met.** Sequence models were trained and evaluated end to end with group-isolated, capture-held-out folds and compared fairly against tabular baselines on identical rows.
+
+**Scientific outcome:** on this corpus there is **no evidence that sequence models add detection value**. The GRU is significantly worse than the full-flow tabular baseline. This is an acceptable negative result, and it is source-confounded like every other result here. A Transformer (Stage D) was not justified and was not implemented.
