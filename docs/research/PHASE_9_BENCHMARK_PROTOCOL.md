@@ -18,7 +18,7 @@ The five canonical tracks keep the meaning they had in `pipeline/experimental_da
 
 Non-canonical feature sets, never reported as A-E: `A_FLOW@JA3POP` and `A_FLOW@JA4POP` (track A inputs on the D/E population, for paired contrasts), `A0_FLOW_STRICT` (flow statistics without TLS structural fields), and `P_AVAILABILITY_PROBE` (handshake presence flags only, a shortcut probe).
 
-* **Allow-list.** A column reaches a model matrix only if it is registered with a model-eligible family. Unknown columns are rejected (`assert_model_safe`), as are 40+ explicitly forbidden provenance columns (38 entries: IP, port, MAC, endpoints, timestamps, dataset/capture/file IDs, family annotations, `behavioral_hash`, label) and the sequence/JA3S/raw-string families.
+* **Allow-list.** A column reaches a model matrix only if it is registered with a model-eligible family. Unknown columns are rejected (`assert_model_safe`), as are 38 explicitly forbidden provenance columns ( IP, port, MAC, endpoints, timestamps, dataset/capture/file IDs, family annotations, `behavioral_hash`, label) and the sequence/JA3S/raw-string families.
 * **Registry metadata.** Each feature records type, family, extraction, availability, leakage risk, justification, preprocessing and track membership (`GET /api/research/features/governance`).
 * **Missing fingerprints.** A fingerprint track scores only flows that carry its fingerprint; every other flow counts as coverage loss and is reported, never imputed. Inside fusion tracks, `tls_version` and `alpn_value` carry an explicit `__MISSING__` level.
 * **Fingerprint encodings** (`ml/estimators/preprocessing.py`), all fitted on the training fold:
