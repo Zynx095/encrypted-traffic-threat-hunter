@@ -2,7 +2,6 @@ import asyncio
 import logging
 import time
 import uuid
-import hashlib
 import threading
 from typing import Dict, Any, Optional, List, Callable, Tuple
 from backend.event_sources.base import EventSource
@@ -89,10 +88,17 @@ def get_available_interfaces() -> List[Dict[str, Any]]:
     return interfaces
 
 
+LIVE_FEATURE_WINDOW = 5000   # packets kept per flow for feature computation (bounded memory)
+
+
 class LiveFlowTracker:
     """
     Stateful 5-Tuple Flow Aggregator for Live Traffic.
-    Tracks bidirectional flow packet/byte stats and derives TLS handshake metadata.
+    Keeps per-packet sizes, relative times, directions and TCP flags (header metadata only, no
+    payload bytes) for up to LIVE_FEATURE_WINDOW packets and computes features with the SAME
+    functions as the offline pipeline (pipeline.feature_extraction), so live and training
+    features share one definition. Flows longer than the window are flagged
+    (live_feature_window_truncated) instead of being silently approximated.
     Enforces ZERO payload retention and ZERO payload decryption.
     """
     def __init__(self, key: Tuple, src_ep: str, dst_ep: str, proto: str, start_time: float):
@@ -103,22 +109,33 @@ class LiveFlowTracker:
         self.protocol = proto
         self.start_time = start_time
         self.last_seen = start_time
-        
+
         self.forward_packets = 0
         self.reverse_packets = 0
         self.forward_bytes = 0
         self.reverse_bytes = 0
-        
+
+        self.packet_lengths: List[int] = []
+        self.relative_times: List[float] = []
+        self.directions: List[int] = []
+        self.tcp_flags: List[int] = []
+        self.window_truncated = False
+
         self.clienthello_present = False
         self.serverhello_present = False
         self.sni_present = False
         self.alpn_value: Optional[str] = None
         self.ja3_hash: Optional[str] = None
+        self.ja3_string: Optional[str] = None
         self.ja3s_hash: Optional[str] = None
+        self.ja3s_string: Optional[str] = None
         self.ja4: Optional[str] = None
+        self.tls_version: Optional[float] = None
+        self.clienthello_record_truncated: Optional[bool] = None
         self.has_fin_rst = False
 
-    def update(self, is_forward: bool, pkt_len: int, timestamp: float, fin_or_rst: bool = False, tls_meta: Optional[Dict[str, Any]] = None):
+    def update(self, is_forward: bool, pkt_len: int, timestamp: float, fin_or_rst: bool = False,
+               tls_meta: Optional[Dict[str, Any]] = None, tcp_flags: int = -1):
         self.last_seen = timestamp
         if is_forward:
             self.forward_packets += 1
@@ -127,25 +144,32 @@ class LiveFlowTracker:
             self.reverse_packets += 1
             self.reverse_bytes += pkt_len
 
+        if len(self.packet_lengths) < LIVE_FEATURE_WINDOW:
+            self.packet_lengths.append(int(pkt_len))
+            self.relative_times.append(max(0.0, float(timestamp - self.start_time)))
+            self.directions.append(1 if is_forward else -1)
+            self.tcp_flags.append(int(tcp_flags))
+        else:
+            self.window_truncated = True
+
         if fin_or_rst:
             self.has_fin_rst = True
 
         if tls_meta:
-            if tls_meta.get("clienthello_present"):
+            # First valid ClientHello / ServerHello only, mirroring the offline policy.
+            if tls_meta.get("clienthello_present") and not self.clienthello_present and tls_meta.get("ja3_hash"):
                 self.clienthello_present = True
-                if tls_meta.get("sni"):
-                    self.sni_present = True
-                if tls_meta.get("alpn"):
-                    self.alpn_value = tls_meta.get("alpn")
-                if tls_meta.get("ja3_hash"):
-                    self.ja3_hash = tls_meta.get("ja3_hash")
-                if tls_meta.get("ja4"):
-                    self.ja4 = tls_meta.get("ja4")
-
-            if tls_meta.get("serverhello_present"):
+                self.sni_present = bool(tls_meta.get("sni"))
+                self.alpn_value = tls_meta.get("alpn") or None
+                self.ja3_hash = tls_meta.get("ja3_hash")
+                self.ja3_string = tls_meta.get("ja3_string")
+                self.ja4 = tls_meta.get("ja4")
+                self.tls_version = tls_meta.get("tls_version")
+                self.clienthello_record_truncated = tls_meta.get("clienthello_record_truncated")
+            if tls_meta.get("serverhello_present") and not self.serverhello_present and tls_meta.get("ja3s_hash"):
                 self.serverhello_present = True
-                if tls_meta.get("ja3s_hash"):
-                    self.ja3s_hash = tls_meta.get("ja3s_hash")
+                self.ja3s_hash = tls_meta.get("ja3s_hash")
+                self.ja3s_string = tls_meta.get("ja3s_string")
 
     def is_finalized(self, now: float, idle_timeout: float = 15.0, max_duration: float = 60.0) -> bool:
         if self.has_fin_rst:
@@ -157,45 +181,47 @@ class LiveFlowTracker:
         return False
 
     def to_flow_dict(self) -> Dict[str, Any]:
+        from pipeline.feature_extraction import (extract_burst_features, extract_flow_level_features,
+                                                 extract_iat_features, extract_packet_length_features)
         total_pkts = self.forward_packets + self.reverse_packets
         total_bytes = self.forward_bytes + self.reverse_bytes
-        duration = max(0.001, round(self.last_seen - self.start_time, 4))
-        
-        pps = round(total_pkts / duration, 2)
-        bps = round(total_bytes / duration, 2)
-        
-        avg_pkt_len = round(total_bytes / total_pkts, 2) if total_pkts > 0 else 0.0
-
-        return {
+        duration = round(self.last_seen - self.start_time, 6)
+        base = {
+            "duration": duration, "packet_count": total_pkts, "forward_packet_count": self.forward_packets,
+            "reverse_packet_count": self.reverse_packets, "byte_count": total_bytes,
+            "forward_byte_count": self.forward_bytes, "reverse_byte_count": self.reverse_bytes,
+            "packet_lengths": self.packet_lengths, "relative_times": self.relative_times,
+            "direction_sequence": self.directions,
+        }
+        record: Dict[str, Any] = {
             "flow_id": self.flow_id,
             "dataset_id": "LIVE_CAPTURE",
             "source_file": "live_interface",
             "forward_endpoint": self.forward_endpoint,
             "reverse_endpoint": self.reverse_endpoint,
             "protocol": self.protocol,
-            "flow_duration": duration,
-            "total_packets": total_pkts,
-            "total_bytes": total_bytes,
-            "forward_packets": self.forward_packets,
-            "reverse_packets": self.reverse_packets,
-            "forward_bytes": self.forward_bytes,
-            "reverse_bytes": self.reverse_bytes,
-            "packets_per_second": pps,
-            "bytes_per_second": bps,
-            "packet_length_mean": avg_pkt_len,
-            "packet_length_std": 0.0,
-            "iat_mean": round(duration / max(1, total_pkts - 1), 4),
-            "iat_std": 0.0,
+        }
+        record.update(extract_flow_level_features(base))
+        record.update(extract_packet_length_features(base))
+        record.update(extract_iat_features(base))
+        record.update(extract_burst_features(base))
+        record.update({
             "clienthello_present": self.clienthello_present,
             "serverhello_present": self.serverhello_present,
             "sni_present": self.sni_present,
             "alpn_value": self.alpn_value,
             "ja3_hash": self.ja3_hash,
+            "ja3_string": self.ja3_string,
             "ja3s_hash": self.ja3s_hash,
+            "ja3s_string": self.ja3s_string,
             "ja4": self.ja4,
-            "tls_version": 771 if (self.clienthello_present or self.serverhello_present) else None,
-            "label": "UNKNOWN"
-        }
+            "tls_version": self.tls_version,
+            "clienthello_record_truncated": self.clienthello_record_truncated,
+            "live_feature_window_truncated": self.window_truncated,
+            "live_feature_window": LIVE_FEATURE_WINDOW,
+            "label": "UNKNOWN",
+        })
+        return record
 
 
 class LiveCaptureSource(EventSource):
@@ -222,39 +248,38 @@ class LiveCaptureSource(EventSource):
 
     def parse_tls_metadata(self, raw_payload: bytes) -> Optional[Dict[str, Any]]:
         """
-        Parses observable TLS ClientHello / ServerHello metadata from unencrypted handshake bytes.
-        ZERO payload decryption or retention.
+        Parses an unencrypted TLS ClientHello / ServerHello in a single TCP segment with the SAME
+        parser and fingerprint functions as the offline pipeline (pipeline.tls_fingerprinting).
+        Returns None for non-handshake payloads. If a handshake record cannot be parsed, the
+        fingerprint fields are None and `fingerprint_error` explains why; no fingerprint is
+        ever synthesised. ZERO payload decryption or retention.
         """
-        if not raw_payload or len(raw_payload) < 5:
+        from pipeline.tls_fingerprinting import (generate_ja3, generate_ja3s, generate_ja4,
+                                                 parse_client_hello, parse_server_hello)
+        if not raw_payload or len(raw_payload) < 6 or raw_payload[0] != 0x16:
             return None
-        
-        # Check TLS Record Header: ContentType == 0x16 (Handshake)
-        if raw_payload[0] != 0x16:
-            return None
-
+        handshake_type = raw_payload[5]
         meta: Dict[str, Any] = {}
-        try:
-            # TLS Record Version & Handshake Type
-            if len(raw_payload) >= 6:
-                handshake_type = raw_payload[5]
-                if handshake_type == 0x01:  # ClientHello
-                    meta["clienthello_present"] = True
-                    # Basic JA3 string derivation from raw bytes if sufficient length
-                    ja3_str = f"771,4865-4866-4867,0-23-65281,29-23-24,0"
-                    meta["ja3_hash"] = hashlib.md5(ja3_str.encode()).hexdigest()
-                    meta["ja4"] = f"t13d150900_{meta['ja3_hash'][:12]}_000000000000"
-                    
-                    # Quick check for SNI byte pattern (extension type 0x0000)
-                    if b"\x00\x00" in raw_payload[38:]:
-                        meta["sni"] = True
-                elif handshake_type == 0x02:  # ServerHello
-                    meta["serverhello_present"] = True
-                    ja3s_str = f"771,4865,0-23"
-                    meta["ja3s_hash"] = hashlib.md5(ja3s_str.encode()).hexdigest()
-        except Exception:
-            pass
-
-        return meta if meta else None
+        if handshake_type == 0x01:
+            meta["clienthello_present"] = True
+            ch = parse_client_hello(raw_payload)
+            if ch.get("error"):
+                meta.update(ja3_hash=None, ja3_string=None, ja4=None, fingerprint_error=ch["error"])
+            else:
+                ja3_string, ja3_hash = generate_ja3(ch)
+                record_len = int.from_bytes(raw_payload[3:5], "big")
+                meta.update(ja3_hash=ja3_hash, ja3_string=ja3_string, ja4=generate_ja4(ch), sni=ch["sni_present"],
+                            alpn=ch["alpn_str"] or None, tls_version=1.3 if ch["has_supported_versions"] else 1.2,
+                            clienthello_record_truncated=(5 + record_len) > len(raw_payload))
+        elif handshake_type == 0x02:
+            meta["serverhello_present"] = True
+            sh = parse_server_hello(raw_payload)
+            if sh.get("error"):
+                meta.update(ja3s_hash=None, ja3s_string=None, fingerprint_error=sh["error"])
+            else:
+                ja3s_string, ja3s_hash = generate_ja3s(sh)
+                meta.update(ja3s_hash=ja3s_hash, ja3s_string=ja3s_string)
+        return meta or None
 
     def _process_packet(self, pkt: Any):
         """
@@ -263,7 +288,7 @@ class LiveCaptureSource(EventSource):
         Immediately discards payload (zero payload storage).
         """
         self.packets_observed += 1
-        now = time.time()
+        now = float(getattr(pkt, "time", None) or time.time())  # capture timestamp when available
 
         try:
             if not SCAPY_AVAILABLE:
@@ -280,13 +305,15 @@ class LiveCaptureSource(EventSource):
             src_port = 0
             dst_port = 0
             fin_or_rst = False
+            tcp_flag_value = -1
             proto_str = "TCP" if proto_num == 6 else ("UDP" if proto_num == 17 else str(proto_num))
 
             if pkt.haslayer(TCP):
                 tcp_layer = pkt[TCP]
                 src_port = tcp_layer.sport
                 dst_port = tcp_layer.dport
-                flags = getattr(tcp_layer, "flags", 0)
+                flags = int(getattr(tcp_layer, "flags", 0))
+                tcp_flag_value = flags
                 # Check FIN (0x01) or RST (0x04)
                 if flags and (flags & 0x01 or flags & 0x04):
                     fin_or_rst = True
@@ -295,7 +322,8 @@ class LiveCaptureSource(EventSource):
                 src_port = udp_layer.sport
                 dst_port = udp_layer.dport
 
-            pkt_len = len(pkt)
+            # IP packet length, matching the offline pipeline (dpkt len(ip)); not the link-layer frame length.
+            pkt_len = len(ip_layer)
 
             # Canonical 5-Tuple Key
             endpoint_a = (src_ip, src_port)
@@ -333,7 +361,8 @@ class LiveCaptureSource(EventSource):
                 pkt_len=pkt_len,
                 timestamp=now,
                 fin_or_rst=fin_or_rst,
-                tls_meta=tls_meta
+                tls_meta=tls_meta,
+                tcp_flags=tcp_flag_value
             )
 
         except Exception as e:
