@@ -63,18 +63,13 @@ class ReplayEngine:
         self._load_dataset()
 
     def _load_dataset(self):
-        try:
-            parquet_path = BASE_DIR / "data" / "processed" / "features" / "flows_behavioral_features.parquet"
-            if not parquet_path.exists():
-                parquet_path = BASE_DIR / "data" / "processed" / "v2" / "model_safe" / "model_safe_dataset.parquet"
-                
-            if parquet_path.exists():
-                self.df = pd.read_parquet(parquet_path)
-                logger.info(f"ReplayEngine loaded {len(self.df)} flow records from {parquet_path.name}")
-            else:
-                logger.warning(f"ReplayEngine: Parquet dataset file not found at {parquet_path}")
-        except Exception as e:
-            logger.error(f"Failed to load dataset for ReplayEngine: {e}")
+        from backend.data_access import replay_frame
+        df, source_path = replay_frame()
+        # Engines share one read-only table; each engine keeps its own reference (tests may truncate it).
+        self.df = df
+        self.dataset_path = source_path
+        if df is None:
+            logger.warning("ReplayEngine: no replay dataset available (build one with `python -m pipeline.corpus replay-set`).")
 
     def _next_sequence(self) -> int:
         self.sequence += 1
@@ -467,8 +462,24 @@ class ReplayEngine:
         logger.info(f"ReplayEngine stream loop started for stream_id={self.stream_id}")
         while self.state == "PLAYING" and self.mode == "REPLAY":
             if self.df is None or len(self.df) == 0:
-                await asyncio.sleep(1.0)
-                continue
+                # No dataset: report an explicit error instead of idling in PLAYING forever.
+                self.state = "ERROR"
+                logger.error(f"Replay dataset unavailable (stream_id={self.stream_id}); state -> ERROR")
+                await manager.broadcast(ETTHStreamEvent(
+                    event_id=f"evt_{self.stream_id}_nodata",
+                    sequence=self._next_sequence(),
+                    timestamp=datetime.datetime.utcnow().isoformat() + "Z",
+                    stream_id=self.stream_id,
+                    source=self.source,
+                    mode="REPLAY",
+                    event_type="stream.error",
+                    metadata=StreamLifecycleMetadata(
+                        state="ERROR",
+                        error_message="No replay dataset is available. Build it with `python -m pipeline.corpus replay-set`."
+                    )
+                ))
+                await self.emit_telemetry_event()
+                break
 
             if self.current_index >= len(self.df):
                 if self.loop_replay:

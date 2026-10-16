@@ -24,22 +24,14 @@ class ReplayEventSource(EventSource):
         self._load_dataset()
 
     def _load_dataset(self):
-        try:
-            parquet_path = BASE_DIR / "data" / "processed" / "features" / "flows_behavioral_features.parquet"
-            if not parquet_path.exists():
-                parquet_path = BASE_DIR / "data" / "processed" / "v2" / "model_safe" / "model_safe_dataset.parquet"
-                
-            if parquet_path.exists():
-                self.df = pd.read_parquet(parquet_path)
-                logger.info(f"ReplayEventSource loaded {len(self.df)} flow records from {parquet_path.name}")
-                if "dataset_id" in self.df.columns and not self.df.empty:
-                    first_ds = str(self.df.iloc[0]["dataset_id"])
-                    if first_ds and first_ds.lower() != "nan":
-                        self.source_id = first_ds
-            else:
-                logger.warning(f"ReplayEventSource: Parquet dataset file not found at {parquet_path}")
-        except Exception as e:
-            logger.error(f"Failed to load dataset for ReplayEventSource: {e}")
+        from backend.data_access import replay_frame
+        self.df, self.dataset_path = replay_frame()
+        if self.df is not None and "dataset_id" in self.df.columns and not self.df.empty:
+            first_ds = str(self.df.iloc[0]["dataset_id"])
+            if first_ds and first_ds.lower() != "nan":
+                self.source_id = first_ds
+        elif self.df is None:
+            logger.warning("ReplayEventSource: no replay dataset available")
 
     async def start(self, **kwargs) -> None:
         self.state = "PLAYING"
