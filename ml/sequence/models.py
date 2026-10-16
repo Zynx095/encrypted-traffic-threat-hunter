@@ -17,15 +17,19 @@ from torch.nn.utils.rnn import pack_padded_sequence
 class CNN1D(nn.Module):
     def __init__(self, in_channels: int, hidden: int = 32, dropout: float = 0.1):
         super().__init__()
-        self.conv = nn.Sequential(
-            nn.Conv1d(in_channels, hidden, kernel_size=5, padding=2), nn.ReLU(),
-            nn.Conv1d(hidden, hidden * 2, kernel_size=5, padding=2), nn.ReLU(),
-        )
+        self.conv1 = nn.Conv1d(in_channels, hidden, kernel_size=5, padding=2)
+        self.conv2 = nn.Conv1d(hidden, hidden * 2, kernel_size=5, padding=2)
+        self.act = nn.ReLU()
         self.head = nn.Sequential(nn.Dropout(dropout), nn.Linear(hidden * 4, 32), nn.ReLU(), nn.Linear(32, 1))
 
     def forward(self, x: torch.Tensor, mask: torch.Tensor, lengths: torch.Tensor) -> torch.Tensor:
-        h = self.conv(x.transpose(1, 2)).transpose(1, 2)          # (n, L, H)
-        m = mask.unsqueeze(-1).float()
+        # Padded steps are zeroed before every convolution so that neither padding values nor
+        # bias-induced activations at padded positions leak into real steps.
+        m = mask.unsqueeze(-1).float()                             # (n, L, 1)
+        h = (x * m).transpose(1, 2)
+        h = self.act(self.conv1(h)) * m.transpose(1, 2)
+        h = self.act(self.conv2(h)) * m.transpose(1, 2)
+        h = h.transpose(1, 2)                                      # (n, L, H)
         mean = (h * m).sum(1) / m.sum(1).clamp(min=1.0)
         mx = h.masked_fill(m == 0, float("-inf")).max(1).values
         mx = torch.where(torch.isfinite(mx), mx, torch.zeros_like(mx))
