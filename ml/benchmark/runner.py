@@ -117,13 +117,19 @@ def nested_select(df_tr: pd.DataFrame, X_tr: pd.DataFrame, model: str, cols, enc
             "thresholds": thresholds, "grid_scores": grid_scores, "inner_validation_rows": int(m.sum())}
 
 
+def experiment_config(track: str, protocol: str, model: str, encoding: str, seed: int, n_boot: int,
+                      extra_cfg: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """The exact configuration that identifies an experiment (its hash drives resumption)."""
+    return {"track": track, "protocol": protocol, "model": model, "encoding": encoding, "seed": seed,
+            "feature_schema": schema_fingerprint(track), "population": TRACKS[track].population,
+            "inner_folds": INNER_FOLDS, "threshold_fprs": list(THRESHOLD_FPRS), "n_boot": n_boot, **(extra_cfg or {})}
+
+
 def run_configuration(suite: Suite, df_all: pd.DataFrame, track: str, protocol: str, model: str,
                       encoding: str = "onehot", seed: int = 42, folds_override: Optional[List[Fold]] = None,
                       capture_assignment: Optional[Dict[str, int]] = None, n_boot: int = 1000,
                       population_note: str = "", extra_cfg: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-    cfg = {"track": track, "protocol": protocol, "model": model, "encoding": encoding, "seed": seed,
-           "feature_schema": schema_fingerprint(track), "population": TRACKS[track].population,
-           "inner_folds": INNER_FOLDS, "threshold_fprs": list(THRESHOLD_FPRS), "n_boot": n_boot, **(extra_cfg or {})}
+    cfg = experiment_config(track, protocol, model, encoding, seed, n_boot, extra_cfg)
     exp = Experiment(suite, cfg)
     try:
         cols = track_columns(track)
