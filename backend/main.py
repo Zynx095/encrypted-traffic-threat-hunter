@@ -64,38 +64,41 @@ def get_statistical_audit():
     with open(manifest_path, "r", encoding="utf-8") as f:
         return json.load(f)
 
+def _replay_table() -> pd.DataFrame:
+    from backend.data_access import replay_frame
+    df, _ = replay_frame()
+    if df is None:
+        raise HTTPException(status_code=404, detail="No flow table available. Build corpus v3 and the replay set (python -m pipeline.corpus replay-set).")
+    return df
+
+
+def _is_malicious(series: pd.Series) -> pd.Series:
+    return series.astype(str).str.upper().str.contains("MALICIOUS")
+
+
 @app.get("/api/flows/model-safe")
 def get_model_safe_flows(limit: int = 100, offset: int = 0):
-    parquet_path = BASE_DIR / "data" / "processed" / "model_safe" / "flows_model_safe.parquet"
-    if not parquet_path.exists():
-        raise HTTPException(status_code=404, detail="Model-safe flows parquet not found")
-    df = pd.read_parquet(parquet_path)
-    total = len(df)
-    subset = df.iloc[offset : offset + limit]
-    flows_list = json.loads(subset.to_json(orient="records"))
-    return {
-        "total": total,
-        "limit": limit,
-        "offset": offset,
-        "flows": flows_list
-    }
+    from ml.features.governance import REGISTRY
+    limit = max(1, min(limit, 1000))
+    df = _replay_table()
+    cols = ["corpus_index", "label"] + [c for c in df.columns if c in REGISTRY and REGISTRY[c].family not in ("SEQUENCE",)]
+    subset = df[[c for c in cols if c in df.columns]].iloc[offset: offset + limit]
+    return {"total": len(df), "limit": limit, "offset": offset, "flows": json.loads(subset.to_json(orient="records"))}
+
 
 from typing import Optional
 
 @app.get("/api/flows/behavioral")
 def get_behavioral_features(
-    limit: int = 100, 
+    limit: int = 100,
     offset: int = 0,
     label: Optional[str] = None,
     dataset: Optional[str] = None,
     ja3: Optional[str] = None,
     ja4: Optional[str] = None
 ):
-    parquet_path = BASE_DIR / "data" / "processed" / "features" / "flows_behavioral_features.parquet"
-    if not parquet_path.exists():
-        raise HTTPException(status_code=404, detail="Behavioral features parquet not found")
-    df = pd.read_parquet(parquet_path)
-    
+    limit = max(1, min(limit, 1000))
+    df = _replay_table()
     if label:
         df = df[df["label"] == label]
     if dataset:
@@ -104,81 +107,64 @@ def get_behavioral_features(
         df = df[df["ja3_hash"] == ja3]
     if ja4:
         df = df[df["ja4"] == ja4]
-        
     total = len(df)
-    subset = df.iloc[offset : offset + limit]
-    features_list = json.loads(subset.to_json(orient="records"))
-    return {
-        "total": total,
-        "limit": limit,
-        "offset": offset,
-        "features": features_list
-    }
+    subset = df.iloc[offset: offset + limit]
+    return {"total": total, "limit": limit, "offset": offset, "features": json.loads(subset.to_json(orient="records"))}
+
 
 @app.get("/api/flows/behavioral/{flow_id}")
 def get_behavioral_flow(flow_id: str):
-    parquet_path = BASE_DIR / "data" / "processed" / "features" / "flows_behavioral_features.parquet"
-    if not parquet_path.exists():
-        raise HTTPException(status_code=404, detail="Behavioral features parquet not found")
-    df = pd.read_parquet(parquet_path)
+    df = _replay_table()
+    if "flow_id" not in df.columns:
+        raise HTTPException(status_code=404, detail="Flow identifiers are not available in the current flow table")
     flow = df[df["flow_id"] == flow_id]
     if flow.empty:
         raise HTTPException(status_code=404, detail="Flow not found")
     return json.loads(flow.iloc[0].to_json())
 
+
+def _fingerprint_table() -> pd.DataFrame:
+    from backend.data_access import fingerprint_frame
+    df = fingerprint_frame()
+    if df is None:
+        raise HTTPException(status_code=404, detail="Features parquet not found")
+    return df
+
+
 @app.get("/api/fingerprints/stats")
 def get_all_fingerprints_stats(fp_type: str = "ja3"):
     if fp_type not in ["ja3", "ja3s", "ja4"]:
         raise HTTPException(status_code=400, detail="Invalid fingerprint type")
-    
-    parquet_path = BASE_DIR / "data" / "processed" / "features" / "flows_behavioral_features.parquet"
-    if not parquet_path.exists():
-        raise HTTPException(status_code=404, detail="Features parquet not found")
-    df = pd.read_parquet(parquet_path)
-    
-    col_map = {"ja3": "ja3_hash", "ja3s": "ja3s_hash", "ja4": "ja4"}
-    col_name = col_map[fp_type]
-    
+    df = _fingerprint_table()
+    col_name = {"ja3": "ja3_hash", "ja3s": "ja3s_hash", "ja4": "ja4"}[fp_type]
     valid_fps = df.dropna(subset=[col_name])
     if valid_fps.empty:
         return []
-        
-    stats = valid_fps.groupby(col_name).agg(
-        total_flows=('flow_id', 'count'),
-        malicious_flows=('label', lambda x: (x == 'MALICIOUS').sum()),
-        benign_flows=('label', lambda x: (x == 'BENIGN').sum()),
-    ).reset_index()
-    
-    stats = stats.rename(columns={col_name: 'hash'})
-    stats['type'] = fp_type
-    
-    stats = stats.sort_values('total_flows', ascending=False)
-    
+    mal = _is_malicious(valid_fps["label"])
+    stats = valid_fps.assign(_mal=mal.astype(int), _ben=(~mal).astype(int)).groupby(col_name).agg(
+        total_flows=("label", "size"), malicious_flows=("_mal", "sum"), benign_flows=("_ben", "sum")).reset_index()
+    stats = stats.rename(columns={col_name: "hash"})
+    stats["type"] = fp_type
+    stats = stats.sort_values("total_flows", ascending=False)
     return json.loads(stats.to_json(orient="records"))
+
 
 @app.get("/api/fingerprints/{fp_type}/{hash_val}")
 def get_fingerprint_stats(fp_type: str, hash_val: str):
     if fp_type not in ["ja3", "ja3s", "ja4"]:
         raise HTTPException(status_code=400, detail="Invalid fingerprint type")
-    
-    parquet_path = BASE_DIR / "data" / "processed" / "features" / "flows_behavioral_features.parquet"
-    if not parquet_path.exists():
-        raise HTTPException(status_code=404, detail="Features parquet not found")
-    df = pd.read_parquet(parquet_path)
-    
-    col_map = {"ja3": "ja3_hash", "ja3s": "ja3s_hash", "ja4": "ja4"}
-    col_name = col_map[fp_type]
-    
+    df = _fingerprint_table()
+    col_name = {"ja3": "ja3_hash", "ja3s": "ja3s_hash", "ja4": "ja4"}[fp_type]
     subset = df[df[col_name] == hash_val]
     if subset.empty:
         raise HTTPException(status_code=404, detail="Fingerprint not found")
-        
+    mal = _is_malicious(subset["label"])
     return {
         "hash": hash_val,
         "type": fp_type,
         "total_flows": len(subset),
-        "malicious_flows": int((subset["label"] == "MALICIOUS").sum()),
-        "benign_flows": int((subset["label"] == "BENIGN").sum()),
+        "malicious_flows": int(mal.sum()),
+        "benign_flows": int((~mal).sum()),
         "datasets": subset["dataset_id"].unique().tolist()
     }
 
