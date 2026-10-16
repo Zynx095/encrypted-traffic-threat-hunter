@@ -136,17 +136,67 @@ def test_10_missing_tls_metadata_handling():
     assert flow_dict["sni_present"] is False
     assert flow_dict["alpn_value"] is None
 
+def _client_hello(sni: bytes = b"example.org") -> bytes:
+    """Minimal well-formed TLS 1.2-record ClientHello with SNI, groups, point formats, sig algs, ALPN, supported_versions."""
+    def ext(t, body):
+        return t.to_bytes(2, "big") + len(body).to_bytes(2, "big") + body
+    name = b"\x00" + len(sni).to_bytes(2, "big") + sni
+    exts = (ext(0x0000, len(name).to_bytes(2, "big") + name)
+            + ext(0x000a, b"\x00\x04\x00\x1d\x00\x17")
+            + ext(0x000b, b"\x01\x00")
+            + ext(0x000d, b"\x00\x04\x04\x03\x08\x04")
+            + ext(0x0010, b"\x00\x03\x02h2")
+            + ext(0x002b, b"\x04\x03\x04\x03\x03"))
+    ciphers = b"\x13\x01\x13\x02\xc0\x2b"
+    body = (b"\x03\x03" + b"\x11" * 32 + b"\x00" + len(ciphers).to_bytes(2, "big") + ciphers + b"\x01\x00"
+            + len(exts).to_bytes(2, "big") + exts)
+    hs = b"\x01" + len(body).to_bytes(3, "big") + body
+    return b"\x16\x03\x01" + len(hs).to_bytes(2, "big") + hs
+
 def test_11_observable_tls_handshake_parsing():
+    # Contract change (Phase 9): live fingerprints come from the offline parser; a real
+    # ClientHello is required. The previous synthetic 43-byte record now yields no JA3 (test_11b).
+    from pipeline.tls_fingerprinting import parse_client_hello, generate_ja3, generate_ja4
     source = LiveCaptureSource()
-    # Fake raw ClientHello record (ContentType 0x16, Version 0x0301, HandshakeType 0x01)
-    fake_clienthello = b"\x16\x03\x01\x00\x30\x01\x00\x00\x2c\x03\x03" + (b"\x00" * 32)
-    meta = source.parse_tls_metadata(fake_clienthello)
-    
+    raw = _client_hello()
+    meta = source.parse_tls_metadata(raw)
+
     assert meta is not None
     assert meta["clienthello_present"] is True
     assert "ja3_hash" in meta
     assert meta["ja3_hash"] is not None
     assert "ja4" in meta
+    ch = parse_client_hello(raw)
+    assert meta["ja3_hash"] == generate_ja3(ch)[1]
+    assert meta["ja4"] == generate_ja4(ch)
+    assert meta["tls_version"] == 1.3 and meta["clienthello_record_truncated"] is False
+
+def test_11b_unparseable_handshake_yields_no_fingerprint():
+    source = LiveCaptureSource()
+    fake_clienthello = b"\x16\x03\x01\x00\x30\x01\x00\x00\x2c\x03\x03" + (b"\x00" * 32)
+    meta = source.parse_tls_metadata(fake_clienthello)
+    assert meta["clienthello_present"] is True
+    assert meta["ja3_hash"] is None and meta["ja4"] is None
+    assert meta["fingerprint_error"]
+    # JA3 is derived from the parsed client stack: the SNI value is not part of it, so identical
+    # stacks match, while a non-handshake record produces no metadata at all.
+    a = source.parse_tls_metadata(_client_hello(b"a.example"))["ja3_hash"]
+    b = source.parse_tls_metadata(_client_hello(b"b.example"))["ja3_hash"]
+    assert a == b
+    assert source.parse_tls_metadata(b"\x17\x03\x03\x00\x10" + b"\x00" * 16) is None
+
+def test_11c_live_features_match_offline_pipeline():
+    from pipeline.feature_extraction import extract_iat_features, extract_packet_length_features
+    tracker = LiveFlowTracker(key=("a", 1, "b", 443, 6), src_ep="a:1", dst_ep="b:443", proto="TCP", start_time=100.0)
+    packets = [(True, 74, 100.0), (False, 74, 100.05), (True, 583, 100.06), (False, 1500, 100.30), (False, 900, 100.31)]
+    for fwd, ln, ts in packets:
+        tracker.update(is_forward=fwd, pkt_len=ln, timestamp=ts)
+    d = tracker.to_flow_dict()
+    row = {"packet_lengths": [p[1] for p in packets], "relative_times": [p[2] - 100.0 for p in packets],
+           "direction_sequence": [1 if p[0] else -1 for p in packets]}
+    for k, v in {**extract_packet_length_features(row), **extract_iat_features(row)}.items():
+        assert d[k] == pytest.approx(v, nan_ok=True)
+    assert d["packet_length_std"] > 0 and d["live_feature_window_truncated"] is False
 
 def test_12_privacy_zero_payload_retention():
     now = time.time()
