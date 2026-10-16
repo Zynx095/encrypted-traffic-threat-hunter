@@ -33,4 +33,5 @@ export const NAVIGATION: RouteConfig[] = [
   { path: '/explainability', label: 'Explainability',   icon: 'Lightbulb',      group: 'research' },
   { path: '/datasets',       label: 'Datasets',         icon: 'Database',       group: 'research' },
   { path: '/research',       label: 'Research',         icon: 'FileText',       group: 'research' },
+  { path: '/workbench',      label: 'Workbench',        icon: 'FlaskConical',   group: 'research' },
 ] as const

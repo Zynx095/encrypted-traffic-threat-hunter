@@ -9,6 +9,7 @@ import Models from './pages/Models'
 import Explainability from './pages/Explainability'
 import DatasetExplorer from './pages/DatasetExplorer'
 import ResearchView from './pages/ResearchView'
+import ResearchWorkbench from './pages/ResearchWorkbench'
 import LiveStream from './pages/LiveStream'
 import Sessions from './pages/Sessions'
 import TargetManagement from './pages/TargetManagement'
@@ -40,6 +41,7 @@ export default function App() {
             <Route path="datasets" element={<DatasetExplorer />} />
             <Route path="datasets/:datasetId" element={<DatasetExplorer />} />
             <Route path="research" element={<ResearchView />} />
+            <Route path="workbench" element={<ResearchWorkbench />} />
           </Route>
         </Routes>
       </BrowserRouter>
