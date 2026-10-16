@@ -191,7 +191,7 @@ def run_sequence_suite(epochs: int = 30, archs: Optional[List[str]] = None, seed
             exps[m].save_artifact("predictions.parquet", P)
             exps[m].save_artifact("folds.json", fold_info[m])
             summary = summarize_predictions(P, n_boot=n_boot, seed=seed)
-            summary["cost"] = {"fit_seconds_mean": float(np.mean([x["fit_seconds"] for x in fold_info[m]])),
+            summary["cost"] = {"fit_seconds_mean": {"mean": float(np.mean([x["fit_seconds"] for x in fold_info[m]]))},
                                "latency_ms_per_flow_mean": {"mean": float(np.mean([x["latency_ms_per_flow"] for x in fold_info[m]]))},
                                "parameters": fold_info[m][0].get("parameters")}
             if m in interpret:

@@ -286,7 +286,7 @@ function BenchmarksTab() {
                   <tr key={m} className="text-xs font-mono"><td className={td}>{m}</td><td className={td}>{v.status}</td><td className={td}>{fmt(v.average_precision)}</td>
                     <td className={td}>[{fmt(v.ap_bootstrap?.ci_low)}, {fmt(v.ap_bootstrap?.ci_high)}] {v.ap_bootstrap?.status}</td>
                     <td className={td}>{pct(v['recall_at_val_fpr_0.01'])}</td><td className={td}>{pct(v['test_fpr_at_val_fpr_0.01'])}</td>
-                    <td className={td}>{fmt(v.cost?.fit_seconds_mean, 1)}</td><td className={td}>{v.cost?.parameters ?? '—'}</td></tr>
+                    <td className={td}>{fmt(v.cost?.fit_seconds_mean?.mean, 1)}</td><td className={td}>{v.cost?.parameters ?? '—'}</td></tr>
                 ))}
               </tbody>
             </table>

@@ -200,7 +200,7 @@ def render_markdown(r: Dict[str, Any]) -> str:
                 b = v.get("ap_bootstrap") or {}
                 L.append(f"| {m} | {_f(v.get('average_precision'))} | [{_f(b.get('ci_low'))}, {_f(b.get('ci_high'))}] {b.get('status')} | "
                          f"{_pct(v.get('recall_at_val_fpr_0.01'))} | {_pct(v.get('test_fpr_at_val_fpr_0.01'))} | "
-                         f"{_f((v.get('cost') or {}).get('fit_seconds_mean'), 1)} | {(v.get('cost') or {}).get('parameters')} |")
+                         f"{_f(((v.get('cost') or {}).get('fit_seconds_mean') or {}).get('mean'), 1)} | {(v.get('cost') or {}).get('parameters')} |")
         if summ.get("contrasts"):
             L += ["", "Sequence vs tabular contrasts:", ""] + _contrast_table(summ["contrasts"])
         pc = s.get("per_capture_primary") or {}
