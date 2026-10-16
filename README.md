@@ -6,11 +6,11 @@
 
 [![Research Status](https://img.shields.io/badge/Research-Active-success?style=for-the-badge)](#-research-status)
 [![Phase 6](https://img.shields.io/badge/Phase%206-Complete-brightgreen?style=for-the-badge)](#-phase-progress)
-[![Phase 7](https://img.shields.io/badge/Phase%207-Next-yellow?style=for-the-badge)](#-phase-7--machine-learning--experimental-evaluation)
+[![Phases 8-10](https://img.shields.io/badge/Phases%208--10-Exploratory-orange?style=for-the-badge)](#-phases-810--research-platform-exploratory)
 [![Focus](https://img.shields.io/badge/Focus-TLS%20%7C%20JA3%20%7C%20JA4%20%7C%20Flow%20Analysis-blue?style=for-the-badge)](#-research-objective)
 [![Leakage Controls](https://img.shields.io/badge/Data%20Safety-Leakage%20Controlled-red?style=for-the-badge)](#-leakage-controls--model-safe-data)
 [![Python](https://img.shields.io/badge/Python-3.x-blue?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![Tests](https://img.shields.io/badge/Tests-46%20Passed-brightgreen?style=for-the-badge)](#-test-suite)
+[![Tests](https://img.shields.io/badge/Tests-233%20Passed-brightgreen?style=for-the-badge)](#-test-suite)
 
 **Investigating whether combining TLS fingerprint features with encrypted-flow behavioral features can improve malicious encrypted-traffic detection — without decrypting network payloads.**
 
@@ -30,6 +30,7 @@
 - [Leakage Controls & Model-Safe Data](#-leakage-controls--model-safe-data)
 - [Critical Scientific Limitations](#-critical-scientific-limitations)
 - [Phase 7 — Machine Learning / Experimental Evaluation](#-phase-7--machine-learning--experimental-evaluation)
+- [Phases 8–10 — Research Platform (Exploratory)](#-phases-810--research-platform-exploratory)
 - [Repository Structure](#-repository-structure)
 - [Test Suite](#-test-suite)
 - [Roadmap](#-roadmap)
@@ -72,12 +73,15 @@ ETTH does **not** decrypt TLS payload contents. The research operates exclusivel
 | Research | **ACTIVE** |
 | Phase 5 — Dataset Strategy | **CLOSED** |
 | Phase 6 — Data Ingestion & Preprocessing | **CLOSED** |
-| Phase 7 — ML / Experimental Evaluation | **NEXT** |
+| Phase 7 — ML / Experimental Evaluation | **PILOT COMPLETE** (historical, source-confounded) |
+| Phase 8 — Benign Corpus Acquisition | **PARTIAL** — 1 independent benign source admitted; generalisation sufficiency NOT MET |
+| Phase 9 — Multi-Track Benchmark | **EXECUTED (EXPLORATORY)** — confirmatory evaluation BLOCKED |
+| Phase 10 — Sequence Models | **EXECUTED (EXPLORATORY, CPU)** |
 | Engineering Pipeline | **READY** |
 | Scientific Evaluation | **READY WITH CONDITIONS** |
-| ML Models | **NOT YET IMPLEMENTED** |
-| Final Research Results | **NOT YET AVAILABLE** |
-| Real-Time Detection | **NOT YET IMPLEMENTED** |
+| ML Models | **RESEARCH PILOTS** (registered, checksum-pinned, source-confounded) |
+| Final Research Results | **NOT AVAILABLE** — central claim BLOCKED on independent data |
+| Real-Time Detection | **IMPLEMENTED** (registry-backed, schema-enforcing, research-pilot models) |
 
 ---
 
@@ -313,11 +317,24 @@ Obtaining academic access to **DS-006 (Beyond JA4+)** or **DS-007 (Annotated Enc
 
 ---
 
+## 🧪 Phases 8–10 — Research Platform (Exploratory)
+
+| Area | What exists | Documentation |
+|:-----|:------------|:--------------|
+| Phase 8 corpus | Evidence-guarded dataset registry; capture plan; PCAP-only checksum-verified extraction; provenance manifest; validation; admission and sufficiency reports. Corpus v3: **577,238 flows from 25 captures** (DS-008 MTA, DS-009 Stratosphere malware, DS-011 Stratosphere CTU-Normal benign) | [PHASE_8_BENIGN_CORPUS.md](docs/research/PHASE_8_BENIGN_CORPUS.md) |
+| Phase 9 benchmark | Allow-list feature governance; capture-grouped nested CV with duplicate purging; validation-only calibration and thresholds; capture-level bootstrap; pre-declared paired contrasts with Holm correction; immutable experiment registry | [PHASE_9_BENCHMARK_PROTOCOL.md](docs/research/PHASE_9_BENCHMARK_PROTOCOL.md) |
+| Phase 10 sequences | One-per-flow packet sequences (first 64 packets, header metadata only); masked CNN and GRU on CPU; information-matched and full-flow tabular baselines on identical folds | [PHASE_10_SEQUENCE_MODELS.md](docs/research/PHASE_10_SEQUENCE_MODELS.md) |
+| Real time | Pickle-free, checksum-pinned model registry with activation and rollback; schema-enforcing inference (no zero-filling, no label echo); real JA3/JA4 parsing in live capture | Phase 9 §9-10 |
+| Workbench | `/workbench` page and `/api/research/*`: corpus, coverage, benchmarks, models, background jobs, claims | — |
+| Evidence | Generated claim ledger and report (`python -m ml report`) | [RESEARCH_CLAIM_LEDGER.md](docs/research/RESEARCH_CLAIM_LEDGER.md), [PAPER_READINESS_AUDIT.md](docs/research/PAPER_READINESS_AUDIT.md), [REPRODUCIBILITY_GUIDE.md](docs/research/REPRODUCIBILITY_GUIDE.md) |
+
+> ⚠️ **Every dataset contributes a single class** (benign: 2017 Linux/iceweasel browsing; malicious: Windows malware hosts). All Phase 9/10 results are therefore **exploratory and source-confounded**, and the central research question remains **open**.
+
+---
+
 ## 🧬 Phase 7 — Machine Learning / Experimental Evaluation
 
-**Status: NOT STARTED**
-
-Phase 7 will evaluate experimental configurations A–E under strict cross-validation and leakage controls.
+**Status: PILOT COMPLETE (historical).** The Phase 7 Step 5 pilot (`data/experiments/phase7_step5_pilot/`) is source-confounded (2,543 malicious vs 6 benign flows) and its "PR-AUC" treats the 99.7 %-prevalent malicious class as positive, so it is uninformative. It is superseded by the Phase 9 capture-grouped benchmark below.
 
 ### Scientific Requirements (from Phase 6 Audit)
 
@@ -330,7 +347,7 @@ Phase 7 will evaluate experimental configurations A–E under strict cross-valid
 7. **Dataset-source confounding** must be reported and investigated as part of experimental results.
 8. **DS-006 / DS-007 access** should continue to be pursued — additional unified data could materially strengthen the scientific evaluation.
 
-> No ML model has been trained. No accuracy, F1, ROC-AUC, or other performance metric currently exists for this project.
+> Phase 9/10 metrics exist but are **exploratory and source-confounded**; see the Phases 8–10 section and the claim ledger.
 
 ---
 
@@ -355,7 +372,9 @@ encrypted-traffic-threat-hunter/
 │   ├── feature_extraction.py        # Behavioral feature derivation
 │   ├── model_safe_generator.py      # Leakage-controlled filtering
 │   └── experimental_dataset_constructor.py  # A–E experiment splits
-├── tests/                           # Test suite (46 tests)
+├── ml/                              # Phases 9-10: governance, evaluation, benchmark, sequence models, reporting
+├── backend/research/                # Research API, job manager, real-time check
+├── tests/                           # Test suite (233 tests)
 │   ├── test_ingestion.py
 │   ├── test_flow_reconstruction.py
 │   ├── test_tls_fingerprinting.py
@@ -385,8 +404,8 @@ python -m pytest -q
 
 | Metric | Value |
 |:-------|------:|
-| Total tests | 46 |
-| Passed | 46 |
+| Total tests | 233 |
+| Passed | 233 |
 | Failed | 0 |
 | Skipped | 0 |
 
@@ -404,7 +423,10 @@ Tests cover: PCAP ingestion, flow reconstruction, TLS fingerprint extraction, be
 | 4 | Dataset Research & Selection Preparation | ✅ Complete |
 | 5 | Dataset Evaluation & Final Strategy | ✅ Closed |
 | 6 | Data Ingestion & Preprocessing Pipeline | ✅ Closed |
-| 7 | Machine Learning & Experimental Evaluation | 🔜 Next |
+| 7 | Machine Learning & Experimental Evaluation | ✅ Pilot (historical) |
+| 8 | Unconfounded Benign Corpus Acquisition | 🟠 Partial (blocked on independent benign data) |
+| 9 | Generalised Multi-Track Benchmarking | 🟠 Exploratory results; confirmatory blocked |
+| 10 | Sequence Models | 🟠 Exploratory results |
 | — | DS-006/DS-007 Academic Access & Re-evaluation | 📋 Future |
 | — | System Integration & Deployment | 📋 Future |
 
@@ -429,6 +451,6 @@ This project follows strict research methodology standards:
 
 **ETTH** — Rigorous academic research into encrypted traffic threat detection through TLS fingerprint and behavioral feature fusion.
 
-*Phase 6 Complete · Phase 7 Next · No ML results yet · Dataset limitations documented*
+*Phases 8–10 implemented and executed · All results exploratory and source-confounded · Central claim blocked on independent data*
 
 </div>
