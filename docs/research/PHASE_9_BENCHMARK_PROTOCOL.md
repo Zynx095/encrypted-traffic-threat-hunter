@@ -125,6 +125,85 @@ The positive class is MALICIOUS.
 | Replay with no dataset transitions to `ERROR` with a `stream.error` event instead of idling in `PLAYING` | honest state | new behaviour; `test_13` passes with the replay set present |
 | `/api/flows/*` and `/api/fingerprints/*` read corpus v3 (replay set / fingerprint projection); benign counts include every non-MALICIOUS label | endpoints returned 404 after the move | — |
 
-## 11. Results
+## 11. Exploratory results (executed 2026-10-16)
 
-See `PHASE_9_RESULTS` in the final report (`data/experiments/reports/latest_report.md`) and the summary appended below.
+Every number below comes from the suite summaries named in each heading; full tables are in `data/experiments/reports/latest_report.md`. AP is pooled out-of-fold average precision with a capture-bootstrap 95 % CI. Every interval is FEW_GROUPS (6 benign captures) and is likely too narrow. "Recall / FPR @val" are measured on the test fold at the threshold that gave FPR ≤ 1 % on validation captures.
+
+### 11.1 Pooled capture-grouped CV: `pooled_capture_cv-20261016T164118Z`
+
+Population: 62,543 flows (38,543 malicious, 24,000 benign, 25 captures). The TLS population used by B–E has 11,220 flows (8,591 / 2,629).
+
+| Track | Prevalence AP | LR | RF (primary) | HGB | RF recall / FPR @val |
+|---|---|---|---|---|---|
+| A_FLOW (all flows) | 0.600 | 0.875 [0.762, 0.954] | **0.931 [0.797, 0.986]** | 0.898 [0.686, 0.987] | 49.5 % / 5.8 % |
+| A0_FLOW_STRICT | 0.600 | 0.861 | 0.929 | 0.876 | 42.5 % / 6.1 % |
+| P_AVAILABILITY_PROBE | 0.600 | 0.765 | 0.765 [0.628, 0.898] | 0.765 | 24.2 % / 0.1 % |
+| B_JA3 | 0.767 | 0.970 | 0.971 [0.868, 1.000] | 0.999 | 99.8 % / **18.6 %** |
+| C_JA4 | 0.767 | 0.999 | 0.994 [0.953, 1.000] | 0.999 | 99.4 % / **18.4 %** |
+| D_JA3_FLOW | 0.767 | 0.9998 (FPR 1.9 %) | 0.988 [0.931, 1.000] | 0.995 | 99.5 % / 17.4 % |
+| E_JA4_FLOW | 0.767 | 0.9999 (FPR 1.2 %) | 0.991 [0.944, 1.000] | 0.995 | 99.6 % / 12.1 % |
+| A_FLOW on the TLS population | 0.767 | 0.9994 (FPR 1.5 %) | 0.990 [0.946, 1.000] | 0.983 | 99.6 % / 12.3 % |
+
+**Paired contrasts, primary model RF (Holm over 4):**
+
+* A@JA3POP→D ΔAP −0.002 [−0.015, 0.000]
+* A@JA4POP→E +0.0001 [−0.003, 0.001]
+* B→D +0.017 [0.000, 0.072]
+* C→E −0.003 [−0.033, 0.014]
+
+All Holm p ≥ 0.52: **no evidence of a difference**. For LR, adding JA3 or JA4 to flow gives ΔAP +0.0004 / +0.0005 (Holm p 0.032 / 0.042). That is statistically detectable under FEW_GROUPS but practically negligible, and HGB and RF do not reproduce it.
+
+**Unseen fingerprints explain the fingerprint-only false positives** (`unseen_*.json`):
+
+* 18.8 % of held-out benign TLS flows carry a fingerprint absent from the training fold.
+* Fingerprint-only LR flags **98.8 % (JA3) / 98.2 % (JA4)** of those flows, against 0 % of benign flows whose fingerprint was seen.
+* The fusion track E flags 6.3 % of unseen-fingerprint benign flows.
+
+Fingerprint models therefore treat novel client stacks as malicious.
+
+**Per-capture view (A_FLOW, RF):** benign CTU-Normal-21 is flagged at **34.4 %**, while the other five benign captures are at ≤ 0.2 %. It is the only benign capture recorded on a different LAN (192.168.1.191 instead of a 10.0.2.15 VM), which suggests capture-environment sensitivity. DS-008 (2024–2026) flows are detected at 6.7 %, DS-009 (2017) flows at 52.5 %.
+
+**Explanations** (permutation importance on held-out folds): every AP drop is ≤ 0.005 for A_FLOW and ≤ 0.04 for E_JA4_FLOW. `alpn_value` ranks first in both. Most flow statistics are redundant: permuting any single one costs almost nothing.
+
+### 11.2 Same-laboratory subset: `matched_lab_capture_cv-20261016T172459Z`
+
+DS-009 (malicious, 9 captures) against DS-011 (benign, 6 captures); 60,000 flows; TLS population 11,026.
+
+* **A_FLOW:** RF AP 0.934 [0.846, 0.984] (prevalence 0.535); LR 0.780; HGB 0.885.
+* **B_JA3 and C_JA4:** AP **1.000** with FPR 0 % (LR, RF). JA3/JA4 separate the classes perfectly inside the same laboratory and period. The READMEs describe benign captures as Kali/iceweasel and malware hosts as Windows VMs, so the fingerprints identify operating system and client stack.
+* **D, E and A on TLS:** AP 0.999–1.000. Every paired contrast is at the ceiling (ΔAP ≈ 0, **no evidence of a difference**).
+* **Operating-point transfer is unstable even with perfect ranking.** Thresholds chosen on validation captures give a test FPR of 13–15 % (RF) and 30 % (HGB) on the TLS population.
+
+### 11.3 Leave-one-source-out: `leave_one_source_out-20261016T180916Z`
+
+Holding out the only benign source is INFEASIBLE, so only detection rates on a held-out malicious source are measurable.
+
+| Held-out source | A_FLOW (LR / RF / HGB) | B_JA3, C_JA4 (all models) | D_JA3_FLOW (LR / RF / HGB) | E_JA4_FLOW (LR / RF / HGB) |
+|---|---|---|---|---|
+| DS-008 (trained on DS-009 + DS-011) | 0.0 / 3.8 / 2.4 % | **0 %** | 61.9 / 28.9 / 23.7 % | 61.9 / 35.1 / 23.7 % |
+| DS-009 (trained on DS-008 + DS-011) | 0.3 / 15.3 / 0.0 % | **100 %** | 99.9 / 3.4 / 22.9 % | 99.9 / 26.2 / 22.9 % |
+
+Fingerprint-only detection of a held-out source is all-or-nothing: 0 % or 100 %. The outcome depends on how the model scores never-seen fingerprints relative to the validation threshold, not on learned malicious behaviour. Flow-only models barely transfer across sources. This is the central exploratory evidence that **neither family has been shown to generalise**.
+
+### 11.4 Source identifiability (diagnostic): `source_identifiability-*`
+
+Task: distinguish DS-008 from DS-009 (both malicious); chance AP = 0.066 for flows and 0.023 for TLS flows.
+
+| Track | RF AP |
+|---|---|
+| A_FLOW | 0.141 [0.090, 0.298] (weak) |
+| C_JA4 | **1.000** |
+| E_JA4_FLOW | 0.828 [0.581, 1.000] |
+
+JA4 encodes the collection era and client stack completely.
+
+### 11.5 Encoding ablation: `encoding_ablation-20261016T163936Z`
+
+LR, pooled folds.
+
+| Track | One-hot | Train-frequency | Hashing |
+|---|---|---|---|
+| B_JA3 | AP 0.970, FPR @val 18.6 % | AP 0.995, FPR 0.0 % | AP 0.995, FPR 18.4 % |
+| C_JA4 | AP 0.999, FPR 18.4 % | AP 0.995, FPR 0.0 % | AP 0.996, FPR 18.4 % |
+
+Under frequency encoding an unseen fingerprint receives frequency 0, which this LR maps to benign. That removes the false positives at a recall cost (97.7 %). The behaviour is a property of the encoding's novelty handling, not of maliciousness.
