@@ -81,6 +81,21 @@ def compare(rec_a: Dict[str, Any], rec_b: Dict[str, Any], label: str, n_boot: in
     return out
 
 
+def interpret(r: Dict[str, Any]) -> str:
+    """Fixed reading rule for a paired contrast (B minus A) after Holm adjustment."""
+    ap = r.get("average_precision") or {}
+    if r.get("status") != "COMPLETED":
+        return "NOT_RUN"
+    if ap.get("status") == "INSUFFICIENT_GROUPS":
+        return "INSUFFICIENT_EVIDENCE (too few independent captures for an interval)"
+    reject = (r.get("holm") or {}).get("reject")
+    if ap.get("ci_low") is not None and ap["ci_low"] > 0 and reject:
+        return "AP higher for B than A (Holm-adjusted); exploratory, source-confounded data"
+    if ap.get("ci_high") is not None and ap["ci_high"] < 0 and reject:
+        return "AP lower for B than A (Holm-adjusted); exploratory, source-confounded data"
+    return "No evidence of a difference (this is not evidence of equivalence)"
+
+
 def primary_family(records: List[Dict[str, Any]], model: str, protocol: str, n_boot: int = 1000) -> Dict[str, Any]:
     by_track = {r["config"]["track"]: r for r in records
                 if r.get("status") == "COMPLETED" and r["config"]["model"] == model and r["config"]["protocol"] == protocol
@@ -96,16 +111,6 @@ def primary_family(records: List[Dict[str, Any]], model: str, protocol: str, n_b
     adj = holm(pvals)
     for r in results:
         r["holm"] = adj.get(r["contrast"])
-        ap = r.get("average_precision") or {}
-        if r.get("status") != "COMPLETED":
-            r["interpretation"] = "NOT_RUN"
-        elif ap.get("status") == "INSUFFICIENT_GROUPS":
-            r["interpretation"] = "INSUFFICIENT_EVIDENCE (too few independent captures for an interval)"
-        elif ap.get("ci_low") is not None and ap["ci_low"] > 0 and (r["holm"] or {}).get("reject"):
-            r["interpretation"] = "AP higher for B than A (Holm-adjusted); exploratory, source-confounded data"
-        elif ap.get("ci_high") is not None and ap["ci_high"] < 0 and (r["holm"] or {}).get("reject"):
-            r["interpretation"] = "AP lower for B than A (Holm-adjusted); exploratory, source-confounded data"
-        else:
-            r["interpretation"] = "No evidence of a difference (this is not evidence of equivalence)"
+        r["interpretation"] = interpret(r)
     return {"model": model, "protocol": protocol, "contrasts": results, "multiple_comparison": "Holm over 4 primary contrasts",
             "alpha": 0.05}

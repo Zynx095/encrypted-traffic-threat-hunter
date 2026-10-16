@@ -29,7 +29,7 @@ import numpy as np
 import pandas as pd
 import psutil
 
-from ml.benchmark.comparisons import compare
+from ml.benchmark.comparisons import compare, interpret
 from ml.benchmark.registry import PHASE10_ROOT, Experiment, Suite
 from ml.benchmark.runner import DEFAULT_PER_CAPTURE_CAP, _matrix, load_benchmark_frame, summarize_predictions
 from ml.estimators.preprocessing import TabularPreprocessor
@@ -207,6 +207,7 @@ def run_sequence_suite(epochs: int = 30, archs: Optional[List[str]] = None, seed
         adj = holm({c["contrast"]: (c.get("average_precision") or {}).get("p_value_bootstrap") for c in contrasts})
         for c in contrasts:
             c["holm"] = adj.get(c["contrast"])
+            c["interpretation"] = interpret(c)
         summary = {"models": {m: {"status": r.get("status"), "experiment_id": r.get("experiment_id"),
                                   "average_precision": ((r.get("metrics") or {}).get("pooled_calibrated") or {}).get("average_precision"),
                                   "ap_bootstrap": ((r.get("metrics") or {}).get("bootstrap") or {}).get("average_precision"),

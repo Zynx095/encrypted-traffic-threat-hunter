@@ -15,6 +15,7 @@ import json
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+from ml.benchmark.comparisons import interpret
 from ml.benchmark.registry import environment_snapshot, list_suites, sha256_file, suite_dir
 from ml.reporting.claims import build_claims
 from pipeline import config as pipeline_config
@@ -149,7 +150,7 @@ def _contrast_table(contrasts: List[Dict[str, Any]]) -> List[str]:
         ap = c.get("average_precision") or {}
         out.append(f"| {c['contrast']} ({c.get('track_a')}→{c.get('track_b')}) | {c.get('shared_rows', '—')} | {_f(ap.get('metric_a'), 4)} | "
                    f"{_f(ap.get('metric_b'), 4)} | {_f(ap.get('difference'), 4)} [{_f(ap.get('ci_low'), 4)}, {_f(ap.get('ci_high'), 4)}] | "
-                   f"{_f((c.get('holm') or {}).get('p_holm'), 4)} | {c.get('interpretation', c.get('status'))} |")
+                   f"{_f((c.get('holm') or {}).get('p_holm'), 4)} | {c.get('interpretation') or interpret(c)} |")
     return out
 
 
