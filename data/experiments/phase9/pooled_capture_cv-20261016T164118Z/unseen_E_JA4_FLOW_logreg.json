@@ -1,0 +1,43 @@
+{
+  "status": "COMPLETED",
+  "track": "E_JA4_FLOW",
+  "model": "logreg",
+  "experiment_id": "EXP-20261016T165702-f5c98e33-fbc7",
+  "min_frequency": 2,
+  "cells": [
+    {
+      "class": "BENIGN",
+      "fingerprint_seen_in_training": false,
+      "flows": 494,
+      "captures": 5,
+      "mean_score": 0.03288160994267196,
+      "flagged_rate_at_val_fpr_0.01": 0.06275303643724696
+    },
+    {
+      "class": "BENIGN",
+      "fingerprint_seen_in_training": true,
+      "flows": 2135,
+      "captures": 5,
+      "mean_score": 0.01061506236659599,
+      "flagged_rate_at_val_fpr_0.01": 0.000468384074941452
+    },
+    {
+      "class": "MALICIOUS",
+      "fingerprint_seen_in_training": false,
+      "flows": 141,
+      "captures": 7,
+      "mean_score": 0.8421042779901362,
+      "flagged_rate_at_val_fpr_0.01": 0.9148936170212766
+    },
+    {
+      "class": "MALICIOUS",
+      "fingerprint_seen_in_training": true,
+      "flows": 8450,
+      "captures": 12,
+      "mean_score": 0.9959969693640026,
+      "flagged_rate_at_val_fpr_0.01": 0.9976331360946745
+    }
+  ],
+  "benign_unseen_share": 0.18790414606314187,
+  "interpretation": "False positives concentrated in benign flows with unseen fingerprints indicate that the model treats unfamiliar client stacks as malicious, i.e. novelty rather than maliciousness."
+}
