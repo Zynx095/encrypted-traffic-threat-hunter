@@ -16,7 +16,7 @@ import pandas as pd
 
 from ml.benchmark.comparisons import primary_family
 from ml.benchmark.registry import Suite, config_hash, load_experiment
-from ml.benchmark.runner import experiment_config, load_benchmark_frame, run_configuration
+from ml.benchmark.runner import DEFAULT_PER_CAPTURE_CAP, experiment_config, load_benchmark_frame, run_configuration
 from ml.evaluation.splits import capture_fold_assignment
 
 logger = logging.getLogger(__name__)
@@ -65,8 +65,8 @@ CONFIRMATORY_POLICY = {
 }
 
 
-def suite_frame(spec: Dict[str, Any]) -> pd.DataFrame:
-    df = load_benchmark_frame(spec.get("datasets"))
+def suite_frame(spec: Dict[str, Any], seed: int = 42) -> pd.DataFrame:
+    df = load_benchmark_frame(spec.get("datasets"), per_capture_cap=spec.get("per_capture_cap", DEFAULT_PER_CAPTURE_CAP), seed=seed)
     task = spec.get("task")
     if task == "SOURCE_DS-008_VS_DS-009":
         df = df.copy()
@@ -85,7 +85,11 @@ def run_suite(name: str, seed: int = 42, n_boot: int = 1000, models: Optional[Li
         spec["tracks"] = tracks
     cfg = {**spec, "seed": seed, "n_boot": n_boot}
     suite = Suite(name, cfg, stage="EXPLORATORY", suite_id=suite_id)
-    df = suite_frame(spec)
+    df = suite_frame(spec, seed=seed)
+    suite.record["evaluation_population"] = {
+        "per_capture_cap": spec.get("per_capture_cap", DEFAULT_PER_CAPTURE_CAP), "rows": int(len(df)),
+        "rows_by_dataset": {k: int(v) for k, v in df.groupby("dataset_id").size().items()},
+        "positives": int(df["y"].sum()), "negatives": int((df["y"] == 0).sum()), "captures": int(df["capture_id"].nunique())}
     done = suite.completed_hashes()
     capture_assignment = None
     if spec["protocol"] == "CAPTURE_GROUP_KFOLD":
@@ -95,7 +99,8 @@ def run_suite(name: str, seed: int = 42, n_boot: int = 1000, models: Optional[Li
     for track in spec["tracks"]:
         for model in spec["models"]:
             for enc in spec["encodings"]:
-                extra = {"task": spec["task"]} if spec.get("task") else None
+                extra = {"per_capture_cap": spec.get("per_capture_cap", DEFAULT_PER_CAPTURE_CAP),
+                         **({"task": spec["task"]} if spec.get("task") else {})}
                 probe_cfg = experiment_config(track, spec["protocol"], model, enc, seed, n_boot, extra)
                 h = config_hash(probe_cfg)
                 if h in done:

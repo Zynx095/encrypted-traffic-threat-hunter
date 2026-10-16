@@ -91,7 +91,7 @@ def main(argv=None) -> int:
         recs = [load_experiment(args.suite_id, x) for x in suite["experiments"]]
         rec = next(r for r in recs if r["config"]["track"] == args.track and r["config"]["model"] == args.model
                    and r.get("status") == "COMPLETED")
-        df = suite_frame(SUITES[suite["name"]])
+        df = suite_frame(SUITES[suite["name"]], seed=suite["config"]["seed"])
         pop = df.loc[population_mask(df, args.track)].reset_index(drop=True)
         folds = make_folds(pop, suite["config"]["protocol"], seed=suite["config"]["seed"],
                            capture_assignment=suite.get("capture_fold_assignment"))
@@ -100,13 +100,15 @@ def main(argv=None) -> int:
         _write(suite_dir(args.suite_id) / f"explain_{args.track}_{args.model}.json", out)
     elif args.cmd == "train-deployable":
         from ml.benchmark.registry import load_experiment, suite_dir
-        from ml.benchmark.runner import load_benchmark_frame
+        from ml.benchmark.runner import DEFAULT_PER_CAPTURE_CAP, load_benchmark_frame
         from ml.model_registry import most_selected_params, train_deployable
         suite = json.loads((suite_dir(args.suite_id) / "suite.json").read_text(encoding="utf-8"))
         recs = [load_experiment(args.suite_id, x) for x in suite["experiments"]]
         rec = next(r for r in recs if r["config"]["track"] == args.track and r["config"]["model"] == args.model
                    and r.get("status") == "COMPLETED")
-        df = load_benchmark_frame(suite["config"].get("datasets"))
+        df = load_benchmark_frame(suite["config"].get("datasets"),
+                                  per_capture_cap=suite["config"].get("per_capture_cap", DEFAULT_PER_CAPTURE_CAP),
+                                  seed=suite["config"]["seed"])
         entry = train_deployable(args.track, args.model, df, [rec["experiment_id"]], most_selected_params(rec))
         print(json.dumps({k: entry[k] for k in ("model_id", "version", "status", "calibration", "thresholds")}, indent=2, default=str))
     elif args.cmd == "activate":

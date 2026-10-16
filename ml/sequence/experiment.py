@@ -31,7 +31,7 @@ import psutil
 
 from ml.benchmark.comparisons import compare
 from ml.benchmark.registry import PHASE10_ROOT, Experiment, Suite
-from ml.benchmark.runner import _matrix, load_benchmark_frame, summarize_predictions
+from ml.benchmark.runner import DEFAULT_PER_CAPTURE_CAP, _matrix, load_benchmark_frame, summarize_predictions
 from ml.estimators.preprocessing import TabularPreprocessor
 from ml.estimators.zoo import MODEL_SPECS
 from ml.evaluation import metrics as M
@@ -98,13 +98,14 @@ def _fit_tabular(model: str, params: Dict, X: pd.DataFrame, numeric: List[str], 
 
 
 def run_sequence_suite(epochs: int = 30, archs: Optional[List[str]] = None, seed: int = 42, max_len: int = 64,
-                       datasets: Optional[List[str]] = None, n_boot: int = 1000) -> Dict[str, Any]:
+                       datasets: Optional[List[str]] = None, n_boot: int = 1000,
+                       per_capture_cap: int = DEFAULT_PER_CAPTURE_CAP) -> Dict[str, Any]:
     archs = archs or ["cnn", "gru"]
     name = "sequence_capture_cv" + ("_" + "_".join(d.replace("-", "") for d in datasets) if datasets else "")
     cfg = {"epochs": epochs, "archs": archs, "seed": seed, "max_len": max_len, "datasets": datasets,
-           "max_train_rows": MAX_TRAIN_ROWS, "channels": CHANNELS, "tabular": TABULAR_MODELS, "n_boot": n_boot}
+           "max_train_rows": MAX_TRAIN_ROWS, "per_capture_cap": per_capture_cap, "channels": CHANNELS, "tabular": TABULAR_MODELS, "n_boot": n_boot}
     suite = Suite(name, cfg, root=PHASE10_ROOT)
-    df = load_benchmark_frame(datasets)
+    df = load_benchmark_frame(datasets, per_capture_cap=per_capture_cap, seed=seed)
     batch = build_sequences(df, max_len=max_len)
     suite.record["sequence_construction"] = {"rows": int(len(df)), "valid": int(batch.valid.sum()), "rejected": batch.reasons,
                                              "max_len": max_len, "truncated_flows": int((df["sequence_original_length"] > max_len).sum())}
