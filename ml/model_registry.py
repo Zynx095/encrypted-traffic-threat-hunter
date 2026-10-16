@@ -54,13 +54,15 @@ class ModelRegistryError(ValueError):
     pass
 
 
-def load_registry(path: Path = REGISTRY_PATH) -> Dict[str, Any]:
+def load_registry(path: Optional[Path] = None) -> Dict[str, Any]:
+    path = Path(path or REGISTRY_PATH)   # resolved at call time (monkeypatch-safe)
     if not path.exists():
         return {"schema_version": "1.0", "models": [], "activation_history": []}
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def save_registry(reg: Dict[str, Any], path: Path = REGISTRY_PATH) -> None:
+def save_registry(reg: Dict[str, Any], path: Optional[Path] = None) -> None:
+    path = Path(path or REGISTRY_PATH)
     path.parent.mkdir(parents=True, exist_ok=True)
     reg["updated_at"] = _now()
     tmp = path.with_suffix(".tmp")
@@ -78,7 +80,7 @@ def active_models(reg: Optional[Dict[str, Any]] = None) -> Dict[str, Dict[str, A
     return {m["track"]: m for m in reg["models"] if m["status"] == "ACTIVE"}
 
 
-def activate(model_id: str, version: int, reason: str, path: Path = REGISTRY_PATH) -> Dict[str, Any]:
+def activate(model_id: str, version: int, reason: str, path: Optional[Path] = None) -> Dict[str, Any]:
     with _lock:
         reg = load_registry(path)
         entry = find(reg, model_id, version)
@@ -99,7 +101,7 @@ def activate(model_id: str, version: int, reason: str, path: Path = REGISTRY_PAT
         return entry
 
 
-def rollback(track: str, path: Path = REGISTRY_PATH) -> Dict[str, Any]:
+def rollback(track: str, path: Optional[Path] = None) -> Dict[str, Any]:
     """Re-activate the version that was active before the current one for `track`."""
     reg = load_registry(path)
     hist = [h for h in reg["activation_history"] if h["track"] == track]
@@ -135,7 +137,7 @@ def _ood_reference(X: pd.DataFrame, cols: Dict[str, List[str]]) -> Dict[str, Any
 
 def train_deployable(track: str, model: str, df_all: pd.DataFrame, evaluation_experiments: List[str],
                      selected_params: Optional[Dict[str, Any]] = None, seed: int = 42,
-                     limitations: Optional[List[str]] = None, path: Path = REGISTRY_PATH) -> Dict[str, Any]:
+                     limitations: Optional[List[str]] = None, path: Optional[Path] = None) -> Dict[str, Any]:
     """Fit a deployable model on the full track population and register it as a CANDIDATE version."""
     from ml.benchmark.registry import dataset_fingerprint
     from ml.benchmark.runner import _fit_score, _matrix
