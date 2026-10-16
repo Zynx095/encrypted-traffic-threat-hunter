@@ -1,0 +1,611 @@
+{
+  "generated_at": "2026-10-16T19:20:06.803974Z",
+  "claims": [
+    {
+      "claim_id": "C01",
+      "claim": "Corpus v3 reproduces the Stage 6.5 DS-008 flow, JA3 and JA4 counts from checksum-verified inputs.",
+      "status": "SUPPORTED",
+      "evidence_summary": "expected {'flows': 2543, 'ja3': 194, 'ja4': 194} (Stage 6.5 audit minus 6 DS-004 rows), observed {'flows': 2543, 'ja3': 194, 'ja4': 194}; 10/10 DS-008 PCAPs SHA-256 verified.",
+      "supporting_experiments": [],
+      "datasets": [
+        "DS-008"
+      ],
+      "evaluation_protocol": "deterministic rebuild",
+      "metrics": {
+        "expected": {
+          "flows": 2543,
+          "ja3": 194,
+          "ja4": 194
+        },
+        "observed": {
+          "flows": 2543,
+          "ja3": 194,
+          "ja4": 194
+        }
+      },
+      "uncertainty": {},
+      "assumptions": [],
+      "known_confounders": [],
+      "limitations": []
+    },
+    {
+      "claim_id": "C02",
+      "claim": "The admitted benign corpus is sufficient to investigate generalisation (sufficiency level C).",
+      "status": "BLOCKED",
+      "evidence_summary": "Levels met: {'A_pipeline': True, 'B_preliminary': True, 'C_generalization': False, 'D_publication': False}; failing C checks: ['sources_per_class', 'captures_per_class', 'tls13_in_both_classes', 'environments_per_class']",
+      "supporting_experiments": [],
+      "datasets": [
+        "DS-011"
+      ],
+      "evaluation_protocol": null,
+      "metrics": {
+        "BENIGN": {
+          "sources": [
+            "DS-011"
+          ],
+          "captures": 6,
+          "flows": 127132,
+          "fingerprinted_flows": 13845,
+          "behavioral_groups": 97218,
+          "environments": 1,
+          "environment_classes": [
+            "STRATOSPHERE_LAB_CAPTURE"
+          ],
+          "collection_years": [
+            2017
+          ],
+          "tls13_flows": 0
+        },
+        "MALICIOUS": {
+          "sources": [
+            "DS-008",
+            "DS-009"
+          ],
+          "captures": 19,
+          "flows": 450106,
+          "fingerprinted_flows": 66806,
+          "behavioral_groups": 224820,
+          "environments": 2,
+          "environment_classes": [
+            "MALWARE_LAB_WINDOWS_HOST (source narrative",
+            "STRATOSPHERE_LAB_CAPTURE"
+          ],
+          "collection_years": [
+            2017,
+            2024,
+            2025,
+            2026
+          ],
+          "tls13_flows": 83
+        }
+      },
+      "uncertainty": {},
+      "assumptions": [],
+      "known_confounders": [],
+      "limitations": [
+        "Independent benign sources (DS-004 re-acquisition, DS-006, DS-007, CIC datasets) require registration, permission or a request."
+      ]
+    },
+    {
+      "claim_id": "C03",
+      "claim": "JA3 and JA4 values observed in the corpus never occur in both classes.",
+      "status": "SUPPORTED",
+      "evidence_summary": "JA3 shared 0/90, JA4 shared 0/82.",
+      "supporting_experiments": [],
+      "datasets": [],
+      "evaluation_protocol": "descriptive (full corpus v3)",
+      "metrics": {},
+      "uncertainty": {},
+      "assumptions": [],
+      "known_confounders": [
+        "dataset identity equals class at source level (DS-008/DS-009 malicious, DS-011 benign)",
+        "benign captures are 2017 Linux/iceweasel browsing; malicious captures are Windows hosts",
+        "capture-level labels propagated to flows (background traffic in malware captures labelled malicious)"
+      ],
+      "limitations": [
+        "Describes client stacks per source; it is not evidence that fingerprints identify maliciousness."
+      ]
+    },
+    {
+      "claim_id": "C04",
+      "claim": "Adding JA3 to flow features increases average precision on the shared JA3 population (A@JA3POP -> D).",
+      "status": "INSUFFICIENT_EVIDENCE",
+      "evidence_summary": "pooled: dAP=-0.0023 CI[-0.01517338629370188, 5.510382078866004e-06] (FEW_GROUPS) Holm p=1.0; matched_lab: dAP=0.0000 CI[-2.220446049250313e-16, 2.220446049250313e-16] (FEW_GROUPS) Holm p=1.0 (primary model random_forest, capture-grouped 5-fold, capture bootstrap)",
+      "supporting_experiments": [
+        "EXP-20261016T170055-e93bb2a5-60af",
+        "EXP-20261016T174524-e93bb2a5-9a4b",
+        "EXP-20261016T165253-e33ffae4-0dda",
+        "EXP-20261016T173615-e33ffae4-0040"
+      ],
+      "datasets": [],
+      "evaluation_protocol": "CAPTURE_GROUP_KFOLD, nested selection, paired capture bootstrap, Holm (4 contrasts)",
+      "metrics": {},
+      "uncertainty": {
+        "pooled": {
+          "metric_a": 0.9903779559223909,
+          "metric_b": 0.9880905390128967,
+          "difference": -0.0022874169094941887,
+          "groups_per_stratum": {
+            "0": 6,
+            "1": 16
+          },
+          "status": "FEW_GROUPS",
+          "ci_low": -0.01517338629370188,
+          "ci_high": 5.510382078866004e-06,
+          "p_value_bootstrap": 0.624,
+          "n_boot": 1000,
+          "resampling_unit": "capture_id"
+        },
+        "matched_lab": {
+          "metric_a": 1.0,
+          "metric_b": 1.0,
+          "difference": 0.0,
+          "groups_per_stratum": {
+            "0": 6,
+            "1": 6
+          },
+          "status": "FEW_GROUPS",
+          "ci_low": -2.220446049250313e-16,
+          "ci_high": 2.220446049250313e-16,
+          "p_value_bootstrap": 1.0,
+          "n_boot": 1000,
+          "resampling_unit": "capture_id"
+        }
+      },
+      "assumptions": [],
+      "known_confounders": [
+        "dataset identity equals class at source level (DS-008/DS-009 malicious, DS-011 benign)",
+        "benign captures are 2017 Linux/iceweasel browsing; malicious captures are Windows hosts",
+        "capture-level labels propagated to flows (background traffic in malware captures labelled malicious)"
+      ],
+      "limitations": [
+        "Exploratory; at most PRELIMINARY on this corpus.",
+        "No equivalence margin was pre-registered."
+      ]
+    },
+    {
+      "claim_id": "C05",
+      "claim": "Adding JA4 to flow features increases average precision on the shared JA4 population (A@JA4POP -> E).",
+      "status": "INSUFFICIENT_EVIDENCE",
+      "evidence_summary": "pooled: dAP=0.0001 CI[-0.0030099017683952174, 0.0011921853730267658] (FEW_GROUPS) Holm p=1.0; matched_lab: dAP=0.0000 CI[-2.220446049250313e-16, 2.220446049250313e-16] (FEW_GROUPS) Holm p=1.0 (primary model random_forest, capture-grouped 5-fold, capture bootstrap)",
+      "supporting_experiments": [
+        "EXP-20261016T170535-10e5c111-0b0a",
+        "EXP-20261016T175041-10e5c111-5e86",
+        "EXP-20261016T165724-4b88a60d-a29c",
+        "EXP-20261016T174047-4b88a60d-628c"
+      ],
+      "datasets": [],
+      "evaluation_protocol": "CAPTURE_GROUP_KFOLD, nested selection, paired capture bootstrap, Holm (4 contrasts)",
+      "metrics": {},
+      "uncertainty": {
+        "pooled": {
+          "metric_a": 0.9903779559223909,
+          "metric_b": 0.9904952260175043,
+          "difference": 0.00011727009511341979,
+          "groups_per_stratum": {
+            "0": 6,
+            "1": 16
+          },
+          "status": "FEW_GROUPS",
+          "ci_low": -0.0030099017683952174,
+          "ci_high": 0.0011921853730267658,
+          "p_value_bootstrap": 0.87,
+          "n_boot": 1000,
+          "resampling_unit": "capture_id"
+        },
+        "matched_lab": {
+          "metric_a": 1.0,
+          "metric_b": 1.0,
+          "difference": 0.0,
+          "groups_per_stratum": {
+            "0": 6,
+            "1": 6
+          },
+          "status": "FEW_GROUPS",
+          "ci_low": -2.220446049250313e-16,
+          "ci_high": 2.220446049250313e-16,
+          "p_value_bootstrap": 1.0,
+          "n_boot": 1000,
+          "resampling_unit": "capture_id"
+        }
+      },
+      "assumptions": [],
+      "known_confounders": [
+        "dataset identity equals class at source level (DS-008/DS-009 malicious, DS-011 benign)",
+        "benign captures are 2017 Linux/iceweasel browsing; malicious captures are Windows hosts",
+        "capture-level labels propagated to flows (background traffic in malware captures labelled malicious)"
+      ],
+      "limitations": [
+        "Exploratory; at most PRELIMINARY on this corpus.",
+        "No equivalence margin was pre-registered."
+      ]
+    },
+    {
+      "claim_id": "C06",
+      "claim": "Adding flow features to JA3 increases average precision (B -> D).",
+      "status": "INSUFFICIENT_EVIDENCE",
+      "evidence_summary": "pooled: dAP=0.0171 CI[-4.9410618678719356e-05, 0.07177036033099671] (FEW_GROUPS) Holm p=0.52; matched_lab: dAP=0.0000 CI[-2.220446049250313e-16, 2.220446049250313e-16] (FEW_GROUPS) Holm p=1.0 (primary model random_forest, capture-grouped 5-fold, capture bootstrap)",
+      "supporting_experiments": [
+        "EXP-20261016T165046-82f49ed4-8867",
+        "EXP-20261016T173412-82f49ed4-8d5c",
+        "EXP-20261016T165253-e33ffae4-0dda",
+        "EXP-20261016T173615-e33ffae4-0040"
+      ],
+      "datasets": [],
+      "evaluation_protocol": "CAPTURE_GROUP_KFOLD, nested selection, paired capture bootstrap, Holm (4 contrasts)",
+      "metrics": {},
+      "uncertainty": {
+        "pooled": {
+          "metric_a": 0.9710298168540592,
+          "metric_b": 0.9880905390128967,
+          "difference": 0.01706072215883747,
+          "groups_per_stratum": {
+            "0": 6,
+            "1": 16
+          },
+          "status": "FEW_GROUPS",
+          "ci_low": -4.9410618678719356e-05,
+          "ci_high": 0.07177036033099671,
+          "p_value_bootstrap": 0.13,
+          "n_boot": 1000,
+          "resampling_unit": "capture_id"
+        },
+        "matched_lab": {
+          "metric_a": 1.0,
+          "metric_b": 1.0,
+          "difference": 0.0,
+          "groups_per_stratum": {
+            "0": 6,
+            "1": 6
+          },
+          "status": "FEW_GROUPS",
+          "ci_low": -2.220446049250313e-16,
+          "ci_high": 2.220446049250313e-16,
+          "p_value_bootstrap": 1.0,
+          "n_boot": 1000,
+          "resampling_unit": "capture_id"
+        }
+      },
+      "assumptions": [],
+      "known_confounders": [
+        "dataset identity equals class at source level (DS-008/DS-009 malicious, DS-011 benign)",
+        "benign captures are 2017 Linux/iceweasel browsing; malicious captures are Windows hosts",
+        "capture-level labels propagated to flows (background traffic in malware captures labelled malicious)"
+      ],
+      "limitations": [
+        "Exploratory; at most PRELIMINARY on this corpus.",
+        "No equivalence margin was pre-registered."
+      ]
+    },
+    {
+      "claim_id": "C07",
+      "claim": "Adding flow features to JA4 increases average precision (C -> E).",
+      "status": "INSUFFICIENT_EVIDENCE",
+      "evidence_summary": "pooled: dAP=-0.0030 CI[-0.03304864190292077, 0.01409634982502877] (FEW_GROUPS) Holm p=1.0; matched_lab: dAP=0.0000 CI[-2.220446049250313e-16, 2.220446049250313e-16] (FEW_GROUPS) Holm p=1.0 (primary model random_forest, capture-grouped 5-fold, capture bootstrap)",
+      "supporting_experiments": [
+        "EXP-20261016T165145-c043adda-fc48",
+        "EXP-20261016T173510-c043adda-b48f",
+        "EXP-20261016T165724-4b88a60d-a29c",
+        "EXP-20261016T174047-4b88a60d-628c"
+      ],
+      "datasets": [],
+      "evaluation_protocol": "CAPTURE_GROUP_KFOLD, nested selection, paired capture bootstrap, Holm (4 contrasts)",
+      "metrics": {},
+      "uncertainty": {
+        "pooled": {
+          "metric_a": 0.9934934855276557,
+          "metric_b": 0.9904952260175043,
+          "difference": -0.0029982595101514242,
+          "groups_per_stratum": {
+            "0": 6,
+            "1": 16
+          },
+          "status": "FEW_GROUPS",
+          "ci_low": -0.03304864190292077,
+          "ci_high": 0.01409634982502877,
+          "p_value_bootstrap": 0.782,
+          "n_boot": 1000,
+          "resampling_unit": "capture_id"
+        },
+        "matched_lab": {
+          "metric_a": 1.0,
+          "metric_b": 1.0,
+          "difference": 0.0,
+          "groups_per_stratum": {
+            "0": 6,
+            "1": 6
+          },
+          "status": "FEW_GROUPS",
+          "ci_low": -2.220446049250313e-16,
+          "ci_high": 2.220446049250313e-16,
+          "p_value_bootstrap": 1.0,
+          "n_boot": 1000,
+          "resampling_unit": "capture_id"
+        }
+      },
+      "assumptions": [],
+      "known_confounders": [
+        "dataset identity equals class at source level (DS-008/DS-009 malicious, DS-011 benign)",
+        "benign captures are 2017 Linux/iceweasel browsing; malicious captures are Windows hosts",
+        "capture-level labels propagated to flows (background traffic in malware captures labelled malicious)"
+      ],
+      "limitations": [
+        "Exploratory; at most PRELIMINARY on this corpus.",
+        "No equivalence margin was pre-registered."
+      ]
+    },
+    {
+      "claim_id": "C08A",
+      "claim": "Flow-only detectors (A_FLOW) transfer to a held-out malicious source at the validation-selected FPR<=1% threshold.",
+      "status": "CONTRADICTED",
+      "evidence_summary": "Detection rates on the held-out source (random_forest): {'A_FLOW|DS-008': 0.0378, 'A_FLOW|DS-009': 0.1528}. Rule: all >= 0.8 -> PRELIMINARY; all <= 0.5 -> CONTRADICTED; otherwise INSUFFICIENT_EVIDENCE. The benign false-positive rate on a held-out benign source cannot be measured (single benign source).",
+      "supporting_experiments": [
+        "leave_one_source_out-20261016T180916Z"
+      ],
+      "datasets": [],
+      "evaluation_protocol": "LEAVE_ONE_SOURCE_OUT",
+      "metrics": {
+        "A_FLOW|DS-008": 0.037750688163586316,
+        "A_FLOW|DS-009": 0.1527777777777778
+      },
+      "uncertainty": {},
+      "assumptions": [],
+      "known_confounders": [
+        "dataset identity equals class at source level (DS-008/DS-009 malicious, DS-011 benign)",
+        "benign captures are 2017 Linux/iceweasel browsing; malicious captures are Windows hosts",
+        "capture-level labels propagated to flows (background traffic in malware captures labelled malicious)"
+      ],
+      "limitations": [
+        "Recall only; exploratory; one benign source."
+      ]
+    },
+    {
+      "claim_id": "C08B",
+      "claim": "Fingerprint-only detectors (B_JA3, C_JA4) transfer to a held-out malicious source at the validation-selected FPR<=1% threshold.",
+      "status": "INSUFFICIENT_EVIDENCE",
+      "evidence_summary": "Detection rates on the held-out source (random_forest): {'B_JA3|DS-008': 0.0, 'B_JA3|DS-009': 1.0, 'C_JA4|DS-008': 0.0, 'C_JA4|DS-009': 1.0}. Rule: all >= 0.8 -> PRELIMINARY; all <= 0.5 -> CONTRADICTED; otherwise INSUFFICIENT_EVIDENCE. The benign false-positive rate on a held-out benign source cannot be measured (single benign source).",
+      "supporting_experiments": [
+        "leave_one_source_out-20261016T180916Z"
+      ],
+      "datasets": [],
+      "evaluation_protocol": "LEAVE_ONE_SOURCE_OUT",
+      "metrics": {
+        "B_JA3|DS-008": 0.0,
+        "B_JA3|DS-009": 1.0,
+        "C_JA4|DS-008": 0.0,
+        "C_JA4|DS-009": 1.0
+      },
+      "uncertainty": {},
+      "assumptions": [],
+      "known_confounders": [
+        "dataset identity equals class at source level (DS-008/DS-009 malicious, DS-011 benign)",
+        "benign captures are 2017 Linux/iceweasel browsing; malicious captures are Windows hosts",
+        "capture-level labels propagated to flows (background traffic in malware captures labelled malicious)"
+      ],
+      "limitations": [
+        "Recall only; exploratory; one benign source."
+      ]
+    },
+    {
+      "claim_id": "C08C",
+      "claim": "Fusion detectors (D_JA3_FLOW, E_JA4_FLOW) transfer to a held-out malicious source at the validation-selected FPR<=1% threshold.",
+      "status": "CONTRADICTED",
+      "evidence_summary": "Detection rates on the held-out source (random_forest): {'D_JA3_FLOW|DS-008': 0.2887, 'D_JA3_FLOW|DS-009': 0.0343, 'E_JA4_FLOW|DS-008': 0.3505, 'E_JA4_FLOW|DS-009': 0.2622}. Rule: all >= 0.8 -> PRELIMINARY; all <= 0.5 -> CONTRADICTED; otherwise INSUFFICIENT_EVIDENCE. The benign false-positive rate on a held-out benign source cannot be measured (single benign source).",
+      "supporting_experiments": [
+        "leave_one_source_out-20261016T180916Z"
+      ],
+      "datasets": [],
+      "evaluation_protocol": "LEAVE_ONE_SOURCE_OUT",
+      "metrics": {
+        "D_JA3_FLOW|DS-008": 0.28865979381443296,
+        "D_JA3_FLOW|DS-009": 0.03429796355841372,
+        "E_JA4_FLOW|DS-008": 0.35051546391752575,
+        "E_JA4_FLOW|DS-009": 0.26223651304037154
+      },
+      "uncertainty": {},
+      "assumptions": [],
+      "known_confounders": [
+        "dataset identity equals class at source level (DS-008/DS-009 malicious, DS-011 benign)",
+        "benign captures are 2017 Linux/iceweasel browsing; malicious captures are Windows hosts",
+        "capture-level labels propagated to flows (background traffic in malware captures labelled malicious)"
+      ],
+      "limitations": [
+        "Recall only; exploratory; one benign source."
+      ]
+    },
+    {
+      "claim_id": "C09",
+      "claim": "ETTH detection generalises to independent, unseen benign and malicious environments.",
+      "status": "BLOCKED",
+      "evidence_summary": "Confirmatory evaluation requires an independent benign+malicious source never used in exploration; none is admitted.",
+      "supporting_experiments": [],
+      "datasets": [],
+      "evaluation_protocol": "CONFIRMATORY (not run)",
+      "metrics": {},
+      "uncertainty": {},
+      "assumptions": [],
+      "known_confounders": [
+        "dataset identity equals class at source level (DS-008/DS-009 malicious, DS-011 benign)",
+        "benign captures are 2017 Linux/iceweasel browsing; malicious captures are Windows hosts",
+        "capture-level labels propagated to flows (background traffic in malware captures labelled malicious)"
+      ],
+      "limitations": []
+    },
+    {
+      "claim_id": "C10",
+      "claim": "Handshake-availability flags alone (no flow statistics, no fingerprints) carry label information beyond prevalence.",
+      "status": "PRELIMINARY",
+      "evidence_summary": "Probe AP 0.765 CI[0.6281478572865119, 0.8974957040038879] vs prevalence AP 0.6004526946837638; lift 0.164.",
+      "supporting_experiments": [
+        "EXP-20261016T172108-ea717dd7-e8d5"
+      ],
+      "datasets": [],
+      "evaluation_protocol": "CAPTURE_GROUP_KFOLD",
+      "metrics": {},
+      "uncertainty": {},
+      "assumptions": [],
+      "known_confounders": [
+        "dataset identity equals class at source level (DS-008/DS-009 malicious, DS-011 benign)",
+        "benign captures are 2017 Linux/iceweasel browsing; malicious captures are Windows hosts",
+        "capture-level labels propagated to flows (background traffic in malware captures labelled malicious)"
+      ],
+      "limitations": [
+        "Indicates availability-driven shortcut risk; not a detection result."
+      ]
+    },
+    {
+      "claim_id": "C11",
+      "claim": "Flow features identify which malicious source (DS-008 vs DS-009) a flow came from.",
+      "status": "INSUFFICIENT_EVIDENCE",
+      "evidence_summary": "Source-identification AP 0.14055969331542695 CI[0.09039419459127196, 0.29780365638455647] (FEW_GROUPS); chance level (prevalence of DS-008 rows) 0.066; rule: CI lower bound > 2x prevalence.",
+      "supporting_experiments": [
+        "EXP-20261016T181511-1aa46d59-6e7c"
+      ],
+      "datasets": [],
+      "evaluation_protocol": "CAPTURE_GROUP_KFOLD (task: DS-008 vs DS-009)",
+      "metrics": {},
+      "uncertainty": {},
+      "assumptions": [],
+      "known_confounders": [],
+      "limitations": [
+        "Diagnostic of collection-environment signal; it is not a detection task."
+      ]
+    },
+    {
+      "claim_id": "C11B",
+      "claim": "JA4 alone identifies which malicious source (DS-008 vs DS-009) a TLS flow came from.",
+      "status": "PRELIMINARY",
+      "evidence_summary": "Source-identification AP 1.0 CI[1.0, 1.0]; chance 0.023.",
+      "supporting_experiments": [
+        "EXP-20261016T181607-fec69c9c-382c"
+      ],
+      "datasets": [],
+      "evaluation_protocol": "CAPTURE_GROUP_KFOLD (task: DS-008 vs DS-009)",
+      "metrics": {},
+      "uncertainty": {},
+      "assumptions": [],
+      "known_confounders": [],
+      "limitations": [
+        "Shows that fingerprints encode collection era / client stack; diagnostic only."
+      ]
+    },
+    {
+      "claim_id": "C16",
+      "claim": "Fingerprint-only models flag most benign flows whose fingerprint was absent from the training fold.",
+      "status": "PRELIMINARY",
+      "evidence_summary": "Benign unseen-fingerprint share 0.188; flagged at val-FPR<=1%: JA3 unseen 0.9878542510121457, JA3 seen 0.0, JA4 unseen 0.9817813765182186 (logreg, pooled capture-grouped CV).",
+      "supporting_experiments": [
+        "EXP-20261016T165033-257aa938-e7d0",
+        "EXP-20261016T165133-5ece147d-b1c6"
+      ],
+      "datasets": [],
+      "evaluation_protocol": "CAPTURE_GROUP_KFOLD",
+      "metrics": {},
+      "uncertainty": {},
+      "assumptions": [],
+      "known_confounders": [
+        "dataset identity equals class at source level (DS-008/DS-009 malicious, DS-011 benign)",
+        "benign captures are 2017 Linux/iceweasel browsing; malicious captures are Windows hosts",
+        "capture-level labels propagated to flows (background traffic in malware captures labelled malicious)"
+      ],
+      "limitations": [
+        "Novelty, not maliciousness, drives these alerts."
+      ]
+    },
+    {
+      "claim_id": "C17",
+      "claim": "Flow-only (A_FLOW) ranking quality drops when whole malware families are held out.",
+      "status": "PRELIMINARY",
+      "evidence_summary": "family-holdout AP 0.7104 CI[0.4561341726113884, 0.9621963561747593] vs capture-grouped AP 0.9308 (random_forest).",
+      "supporting_experiments": [
+        "EXP-20261016T181653-06918ca3-cacd",
+        "EXP-20261016T164342-f849786e-5707"
+      ],
+      "datasets": [],
+      "evaluation_protocol": "LEAVE_ONE_FAMILY_OUT vs CAPTURE_GROUP_KFOLD",
+      "metrics": {},
+      "uncertainty": {},
+      "assumptions": [],
+      "known_confounders": [],
+      "limitations": [
+        "Different fold structures; no paired test between protocols."
+      ]
+    },
+    {
+      "claim_id": "C12",
+      "claim": "The legacy behavioural-hash holdout gives a higher A_FLOW estimate than capture-grouped CV.",
+      "status": "PRELIMINARY",
+      "evidence_summary": "legacy AP 0.9915 vs capture-grouped AP 0.9308 (random_forest).",
+      "supporting_experiments": [
+        "EXP-20261016T184911-393a3422-be9d",
+        "EXP-20261016T164342-f849786e-5707"
+      ],
+      "datasets": [],
+      "evaluation_protocol": null,
+      "metrics": {},
+      "uncertainty": {},
+      "assumptions": [],
+      "known_confounders": [],
+      "limitations": [
+        "Single legacy split; the comparison has no paired uncertainty estimate."
+      ]
+    },
+    {
+      "claim_id": "C13",
+      "claim": "Sequence models (CNN/GRU on the first 64 packets) add detection value over information-matched tabular baselines.",
+      "status": "INSUFFICIENT_EVIDENCE",
+      "evidence_summary": "CNN vs information-matched tabular: dAP=-0.03874886260086374 CI[-0.11807196497400115, 0.02963821398066941] Holm p=1.0; GRU vs information-matched tabular: dAP=-0.08175806216013604 CI[-0.17120298769547032, 0.0114348453216355] Holm p=0.5880000000000001; CNN vs full-flow tabular: dAP=-0.01535365930849275 CI[-0.059678621744575715, 0.029155460987728136] Holm p=1.0; GRU vs full-flow tabular: dAP=-0.058362858867765044 CI[-0.10453033573535651, -0.005980278419421004] Holm p=0.024",
+      "supporting_experiments": [
+        "sequence_capture_cv-20261016T185120Z"
+      ],
+      "datasets": [],
+      "evaluation_protocol": "CAPTURE_GROUP_KFOLD with validation captures",
+      "metrics": {},
+      "uncertainty": {},
+      "assumptions": [],
+      "known_confounders": [
+        "dataset identity equals class at source level (DS-008/DS-009 malicious, DS-011 benign)",
+        "benign captures are 2017 Linux/iceweasel browsing; malicious captures are Windows hosts",
+        "capture-level labels propagated to flows (background traffic in malware captures labelled malicious)"
+      ],
+      "limitations": [
+        "Exploratory; CPU-scale models; one seed."
+      ]
+    },
+    {
+      "claim_id": "C14",
+      "claim": "Real-time inference only uses registered, checksum-verified models and never derives a score from ground-truth labels.",
+      "status": "SUPPORTED",
+      "evidence_summary": "Enforced in backend/inference_engine.py; verified by tests/test_model_registry_inference.py (test_no_model_means_skipped_never_label_echo, test_label_field_never_influences_score, test_incompatible_schema_rejected_without_invention).",
+      "supporting_experiments": [],
+      "datasets": [],
+      "evaluation_protocol": "unit tests",
+      "metrics": {},
+      "uncertainty": {},
+      "assumptions": [],
+      "known_confounders": [],
+      "limitations": []
+    },
+    {
+      "claim_id": "C15",
+      "claim": "The system does not decrypt TLS application payloads.",
+      "status": "SUPPORTED",
+      "evidence_summary": "Only TLS handshake records (ClientHello/ServerHello) in the first segment are parsed; packet payloads are otherwise reduced to sizes, timings, directions and TCP flags. No key material, interception or decryption code exists (pipeline/tls_fingerprinting.py, backend/event_sources/live_capture.py).",
+      "supporting_experiments": [],
+      "datasets": [],
+      "evaluation_protocol": "code inspection + tests",
+      "metrics": {},
+      "uncertainty": {},
+      "assumptions": [],
+      "known_confounders": [],
+      "limitations": []
+    }
+  ],
+  "statuses": [
+    "BLOCKED",
+    "CONTRADICTED",
+    "INSUFFICIENT_EVIDENCE",
+    "PRELIMINARY",
+    "SUPPORTED"
+  ]
+}
