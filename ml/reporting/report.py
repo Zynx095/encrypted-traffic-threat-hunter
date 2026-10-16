@@ -42,6 +42,18 @@ def latest_suites() -> Dict[str, Dict[str, Any]]:
     return out
 
 
+def _per_capture(entry: Dict[str, Any], model: str = "random_forest",
+                 tracks=("A_FLOW", "C_JA4", "E_JA4_FLOW", "D_JA3_FLOW")) -> Dict[str, Any]:
+    """Per-capture flagged rates of the primary model, read from experiment records."""
+    out: Dict[str, Any] = {}
+    sid = entry["suite"]["suite_id"]
+    for row in (entry.get("summary") or {}).get("experiments", []):
+        if row.get("model") == model and row.get("track") in tracks and row.get("encoding", "onehot") == "onehot"                 and row.get("status") == "COMPLETED":
+            rec = _load(suite_dir(sid) / row["experiment_id"] / "record.json") or {}
+            out[row["track"]] = (rec.get("metrics") or {}).get("per_capture") or {}
+    return out
+
+
 def _f(v, d=3):
     return "—" if v is None else (f"{v:.{d}f}" if isinstance(v, (int, float)) else str(v))
 
@@ -85,7 +97,7 @@ def generate_report() -> Dict[str, str]:
         "suites": {n: {"suite_id": e["suite"]["suite_id"], "status": e["suite"]["status"], "created_at": e["suite"]["created_at"],
                        "seed": e["suite"]["config"].get("seed"), "evaluation_population": e["suite"].get("evaluation_population"),
                        "dataset": e["suite"].get("dataset"), "environment": e["suite"].get("environment"),
-                       "summary": e["summary"]} for n, e in latest.items()},
+                       "summary": e["summary"], "per_capture_primary": _per_capture(e)} for n, e in latest.items()},
         "suites_not_run": sorted(set(SUITES) - set(latest)),
         "model_registry": {"models": [{k: m.get(k) for k in ("model_id", "version", "track", "estimator", "status", "research_status",
                                                              "calibration", "thresholds", "evaluation", "artifact")}
@@ -191,6 +203,17 @@ def render_markdown(r: Dict[str, Any]) -> str:
                          f"{_f((v.get('cost') or {}).get('fit_seconds_mean'), 1)} | {(v.get('cost') or {}).get('parameters')} |")
         if summ.get("contrasts"):
             L += ["", "Sequence vs tabular contrasts:", ""] + _contrast_table(summ["contrasts"])
+        pc = s.get("per_capture_primary") or {}
+        if pc:
+            tracks = sorted(pc)
+            caps = sorted({c for t in tracks for c in pc[t]})
+            L += ["", f"Per-capture flagged rate at the validation-selected FPR≤1% threshold (primary model random_forest; "
+                      f"benign rows = false-positive rate, malicious rows = detection rate):", "",
+                  "| Capture | Class | " + " | ".join(tracks) + " |", "|---|---|" + "---|" * len(tracks)]
+            for c in caps:
+                y = next((pc[t][c]["y"] for t in tracks if c in pc[t]), None)
+                cells = [(_pct(pc[t][c].get("pred@fpr<=0.01")) + f" (n={pc[t][c]['n']})") if c in pc[t] else "—" for t in tracks]
+                L.append(f"| {c} | {'MAL' if y == 1 else 'BEN'} | " + " | ".join(cells) + " |")
         L.append("")
     if r["suites_not_run"]:
         L += ["Suites NOT_RUN: " + ", ".join(r["suites_not_run"]), ""]
