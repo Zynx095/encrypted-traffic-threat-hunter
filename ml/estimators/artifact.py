@@ -124,24 +124,29 @@ class SafeTabularModel:
             s = 1.0 / (1.0 + np.exp(-z))
         return s
 
-    def _forest_proba(self, Z: np.ndarray) -> np.ndarray:
+    def _forest_proba(self, Z: np.ndarray, chunk: int = 2048) -> np.ndarray:
+        """All trees advanced simultaneously (rows x trees), in row chunks; one iteration per tree level."""
         # sklearn trees compare float32-cast inputs against float64 thresholds.
         Zc = Z.astype(np.float32).astype(np.float64)
         a = self.arrays
-        off = a["offsets"]
-        n_trees = len(off) - 1
-        total = np.zeros(Zc.shape[0])
-        for t in range(n_trees):
-            base = off[t]
-            node = np.zeros(Zc.shape[0], dtype=np.int64)
+        roots = a["offsets"][:-1]                      # global index of each tree's root
+        left, right, feat, thr, prob = a["children_left"], a["children_right"], a["feature"], a["threshold"], a["prob1"]
+        base = roots[None, :]
+        out = np.empty(Zc.shape[0])
+        for s0 in range(0, Zc.shape[0], chunk):
+            Zb = Zc[s0:s0 + chunk]
+            n = Zb.shape[0]
+            local = np.zeros((n, roots.size), dtype=np.int64)       # node index local to each tree
+            rows = np.arange(n)[:, None]
             while True:
-                left = a["children_left"][base + node]
-                active = left != -1
+                g = base + local
+                lc = left[g]
+                active = lc != -1
                 if not active.any():
                     break
-                idx = np.nonzero(active)[0]
-                gnode = base + node[idx]
-                go_left = Zc[idx, a["feature"][gnode]] <= a["threshold"][gnode]
-                node[idx] = np.where(go_left, a["children_left"][gnode], a["children_right"][gnode])
-            total += a["prob1"][base + node]
-        return total / n_trees
+                f = np.where(active, feat[g], 0)
+                go_left = Zb[rows, f] <= thr[g]
+                nxt = np.where(go_left, lc, right[g])
+                local = np.where(active, nxt, local)
+            out[s0:s0 + n] = prob[base + local].mean(axis=1)
+        return out
