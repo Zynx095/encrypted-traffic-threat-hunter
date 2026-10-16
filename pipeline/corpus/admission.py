@@ -21,7 +21,7 @@ from pipeline.corpus.artifacts import ArtifactManifest
 from pipeline.corpus.builder import USABLE_RAW_STATUS, load_corpus
 from pipeline.corpus.capture_plan import load_plan
 from pipeline.corpus.registry import UNKNOWN, DatasetRegistry, transition
-from pipeline.corpus.validation import (duplicate_diagnostics, fingerprint_overlap, label_conflicts,
+from pipeline.corpus.validation import (duplicate_diagnostics, duplicate_files, fingerprint_overlap, label_conflicts,
                                          missingness_table, tls_coverage)
 
 KEY_FEATURES = ["flow_duration", "packet_length_mean", "iat_mean", "iat_std", "fwd_iat_mean", "rev_iat_mean",
@@ -103,12 +103,28 @@ def build_admission_report() -> Dict[str, Any]:
                                    "reason": "; ".join(pcap_checks.get(c["capture_id"], {}).get("issues", []))})
 
     integrity_issues = {cid: chk["issues"] for cid, chk in pcap_checks.items() if chk.get("issues")}
+    provenance_flags = []
+    for c in plan["captures"]:
+        if c["planned_use"] != "INCLUDE":
+            continue
+        if c.get("expected_sha256") == UNKNOWN:
+            provenance_flags.append({"capture_id": c["capture_id"], "flag": "NO_PUBLISHED_CHECKSUM",
+                                     "detail": "SHA-256 recorded at first verification (trust-on-first-download)"})
+        if "CONFLICT" in str(c.get("os")):
+            provenance_flags.append({"capture_id": c["capture_id"], "flag": "METADATA_CONFLICT", "detail": c["os"]})
+        if c.get("collection_date") in (None, UNKNOWN):
+            provenance_flags.append({"capture_id": c["capture_id"], "flag": "UNKNOWN_COLLECTION_DATE", "detail": ""})
+        if str(c.get("acquisition", {}).get("acquired_at")) == UNKNOWN:
+            provenance_flags.append({"capture_id": c["capture_id"], "flag": "ACQUISITION_TIME_NOT_RECORDED",
+                                     "detail": c.get("acquisition", {}).get("note", "")})
     report = {
         "generated_at": _now(),
         "corpus_rows": int(len(df)),
         "funnel_by_dataset": funnel,
         "exclusions": exclusions,
         "pcap_integrity_notes": integrity_issues,
+        "duplicate_raw_files": duplicate_files(manifest.by_tier("RAW")),
+        "provenance_flags": provenance_flags,
         "label_distribution": {
             "by_label": {k: int(v) for k, v in df["label"].value_counts().items()},
             "by_dataset_label": {f"{d}|{l}": int(v) for (d, l), v in df.groupby(["dataset_id", "label"]).size().items()},
@@ -147,6 +163,10 @@ def render_admission_markdown(r: Dict[str, Any]) -> str:
         lines.append(f"| {ds} | {f['captures_listed']} | {f['captures_included_in_plan']} | {f['captures_present']} | "
                      f"{f['captures_checksum_verified_or_observed']} | {f['captures_pcap_valid']} | {f['captures_in_corpus']} | "
                      f"{f['flows_in_corpus']} | {f['tls_clienthello_flows']} | {f['ja3_flows']} | {f['ja4_flows']} |")
+    lines += ["", f"Duplicate raw files (identical SHA-256): {r.get('duplicate_raw_files') or 'none'}", "",
+              "## Provenance flags", "", "| Capture | Flag | Detail |", "|---|---|---|"]
+    for f in r.get("provenance_flags", []):
+        lines.append(f"| {f['capture_id']} | {f['flag']} | {str(f['detail']).replace('|', '/')} |")
     lines += ["", "## Exclusions", "", "| Capture | Dataset | Stage | Reason |", "|---|---|---|---|"]
     for e in r["exclusions"]:
         lines.append(f"| {e['capture_id']} | {e['dataset_id']} | {e['stage']} | {str(e['reason']).replace('|', '/')} |")
