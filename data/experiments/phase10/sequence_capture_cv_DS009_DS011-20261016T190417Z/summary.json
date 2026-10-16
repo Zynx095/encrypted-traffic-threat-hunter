@@ -1,0 +1,449 @@
+{
+  "models": {
+    "tab_trackA_hist_gb": {
+      "status": "COMPLETED",
+      "experiment_id": "EXP-20261016T190421-e3fc69b3-156f",
+      "average_precision": 0.9256862262825138,
+      "ap_bootstrap": {
+        "estimate": 0.9256862262825138,
+        "groups_per_stratum": {
+          "0": 6,
+          "1": 9
+        },
+        "status": "FEW_GROUPS",
+        "n_boot": 1000,
+        "resampling_unit": "capture_id",
+        "ci_low": 0.8692399997503945,
+        "ci_high": 0.972139858799688,
+        "valid_replicates": 1000
+      },
+      "recall_at_val_fpr_0.01": 0.8070555555555555,
+      "test_fpr_at_val_fpr_0.01": 0.19575,
+      "cost": {
+        "fit_seconds_mean": {
+          "mean": 7.8786000000000005
+        },
+        "latency_ms_per_flow_mean": {
+          "mean": 0.008308
+        },
+        "parameters": null
+      }
+    },
+    "tab_trackA_random_forest": {
+      "status": "COMPLETED",
+      "experiment_id": "EXP-20261016T190421-d43622e6-cfcf",
+      "average_precision": 0.9417692945497427,
+      "ap_bootstrap": {
+        "estimate": 0.9417692945497427,
+        "groups_per_stratum": {
+          "0": 6,
+          "1": 9
+        },
+        "status": "FEW_GROUPS",
+        "n_boot": 1000,
+        "resampling_unit": "capture_id",
+        "ci_low": 0.884843403129947,
+        "ci_high": 0.9776115865274462,
+        "valid_replicates": 1000
+      },
+      "recall_at_val_fpr_0.01": 0.8765277777777778,
+      "test_fpr_at_val_fpr_0.01": 0.2517916666666667,
+      "cost": {
+        "fit_seconds_mean": {
+          "mean": 0.6814
+        },
+        "latency_ms_per_flow_mean": {
+          "mean": 0.006029999999999999
+        },
+        "parameters": null
+      }
+    },
+    "seqagg_logreg": {
+      "status": "COMPLETED",
+      "experiment_id": "EXP-20261016T190421-f370e593-2b01",
+      "average_precision": 0.8567206188661382,
+      "ap_bootstrap": {
+        "estimate": 0.8567206188661382,
+        "groups_per_stratum": {
+          "0": 6,
+          "1": 9
+        },
+        "status": "FEW_GROUPS",
+        "n_boot": 1000,
+        "resampling_unit": "capture_id",
+        "ci_low": 0.7484759664470789,
+        "ci_high": 0.9400006755926394,
+        "valid_replicates": 1000
+      },
+      "recall_at_val_fpr_0.01": 0.66,
+      "test_fpr_at_val_fpr_0.01": 0.1235,
+      "cost": {
+        "fit_seconds_mean": {
+          "mean": 0.1236
+        },
+        "latency_ms_per_flow_mean": {
+          "mean": 0.00047799999999999996
+        },
+        "parameters": null
+      }
+    },
+    "seqagg_hist_gb": {
+      "status": "COMPLETED",
+      "experiment_id": "EXP-20261016T190421-df46e825-bb02",
+      "average_precision": 0.8961359464786071,
+      "ap_bootstrap": {
+        "estimate": 0.8961359464786071,
+        "groups_per_stratum": {
+          "0": 6,
+          "1": 9
+        },
+        "status": "FEW_GROUPS",
+        "n_boot": 1000,
+        "resampling_unit": "capture_id",
+        "ci_low": 0.8058658188529386,
+        "ci_high": 0.9626547176252442,
+        "valid_replicates": 1000
+      },
+      "recall_at_val_fpr_0.01": 0.6407777777777778,
+      "test_fpr_at_val_fpr_0.01": 0.08079166666666666,
+      "cost": {
+        "fit_seconds_mean": {
+          "mean": 0.9540000000000001
+        },
+        "latency_ms_per_flow_mean": {
+          "mean": 0.001944
+        },
+        "parameters": null
+      }
+    },
+    "cnn": {
+      "status": "COMPLETED",
+      "experiment_id": "EXP-20261016T190421-f9cd558d-467b",
+      "average_precision": 0.8930050632382163,
+      "ap_bootstrap": {
+        "estimate": 0.8930050632382163,
+        "groups_per_stratum": {
+          "0": 6,
+          "1": 9
+        },
+        "status": "FEW_GROUPS",
+        "n_boot": 1000,
+        "resampling_unit": "capture_id",
+        "ci_low": 0.779948274155383,
+        "ci_high": 0.9706881653733459,
+        "valid_replicates": 1000
+      },
+      "recall_at_val_fpr_0.01": 0.7046388888888889,
+      "test_fpr_at_val_fpr_0.01": 0.1425,
+      "cost": {
+        "fit_seconds_mean": {
+          "mean": 13.928
+        },
+        "latency_ms_per_flow_mean": {
+          "mean": 0.015612000000000001
+        },
+        "parameters": 15937
+      }
+    },
+    "gru": {
+      "status": "COMPLETED",
+      "experiment_id": "EXP-20261016T190421-4c334d84-f0de",
+      "average_precision": 0.8714190816532692,
+      "ap_bootstrap": {
+        "estimate": 0.8714190816532692,
+        "groups_per_stratum": {
+          "0": 6,
+          "1": 9
+        },
+        "status": "FEW_GROUPS",
+        "n_boot": 1000,
+        "resampling_unit": "capture_id",
+        "ci_low": 0.7358074555757578,
+        "ci_high": 0.9641113693959928,
+        "valid_replicates": 1000
+      },
+      "recall_at_val_fpr_0.01": 0.8488333333333333,
+      "test_fpr_at_val_fpr_0.01": 0.203375,
+      "cost": {
+        "fit_seconds_mean": {
+          "mean": 41.669999999999995
+        },
+        "latency_ms_per_flow_mean": {
+          "mean": 0.005618000000000001
+        },
+        "parameters": 8545
+      }
+    }
+  },
+  "contrasts": [
+    {
+      "contrast": "CNN vs information-matched tabular",
+      "experiment_a": "EXP-20261016T190421-df46e825-bb02",
+      "experiment_b": "EXP-20261016T190421-f9cd558d-467b",
+      "track_a": "seqagg_hist_gb",
+      "track_b": "cnn",
+      "shared_rows": 60000,
+      "rows_a_only": 0,
+      "rows_b_only": 0,
+      "average_precision": {
+        "metric_a": 0.8961359464786071,
+        "metric_b": 0.8930050632382163,
+        "difference": -0.0031308832403907916,
+        "groups_per_stratum": {
+          "0": 6,
+          "1": 9
+        },
+        "status": "FEW_GROUPS",
+        "ci_low": -0.06841935575959499,
+        "ci_high": 0.06400919579584713,
+        "p_value_bootstrap": 0.932,
+        "n_boot": 1000,
+        "resampling_unit": "capture_id"
+      },
+      "recall_at_val_fpr_0.01": {
+        "metric_a": 0.6407777777777778,
+        "metric_b": 0.7046388888888889,
+        "difference": 0.06386111111111115,
+        "groups_per_stratum": {
+          "0": 6,
+          "1": 9
+        },
+        "status": "FEW_GROUPS",
+        "ci_low": -0.021647222222222203,
+        "ci_high": 0.14994652777777775,
+        "p_value_bootstrap": 0.17,
+        "n_boot": 1000,
+        "resampling_unit": "capture_id"
+      },
+      "test_fpr_at_val_fpr_0.01": {
+        "metric_a": 0.08079166666666666,
+        "metric_b": 0.1425,
+        "difference": 0.06170833333333332,
+        "groups_per_stratum": {
+          "0": 6,
+          "1": 9
+        },
+        "status": "FEW_GROUPS",
+        "ci_low": -0.035298958333333325,
+        "ci_high": 0.23375,
+        "p_value_bootstrap": 0.728,
+        "n_boot": 1000,
+        "resampling_unit": "capture_id"
+      },
+      "cost": {
+        "latency_ms_per_flow_a": 0.001944,
+        "latency_ms_per_flow_b": 0.015612000000000001,
+        "fit_seconds_a": 0.9540000000000001,
+        "fit_seconds_b": 13.928
+      },
+      "status": "COMPLETED",
+      "holm": {
+        "p": 0.932,
+        "p_holm": 1.0,
+        "reject": false
+      }
+    },
+    {
+      "contrast": "GRU vs information-matched tabular",
+      "experiment_a": "EXP-20261016T190421-df46e825-bb02",
+      "experiment_b": "EXP-20261016T190421-4c334d84-f0de",
+      "track_a": "seqagg_hist_gb",
+      "track_b": "gru",
+      "shared_rows": 60000,
+      "rows_a_only": 0,
+      "rows_b_only": 0,
+      "average_precision": {
+        "metric_a": 0.8961359464786071,
+        "metric_b": 0.8714190816532692,
+        "difference": -0.02471686482533786,
+        "groups_per_stratum": {
+          "0": 6,
+          "1": 9
+        },
+        "status": "FEW_GROUPS",
+        "ci_low": -0.10356410345429821,
+        "ci_high": 0.04898141886527367,
+        "p_value_bootstrap": 0.654,
+        "n_boot": 1000,
+        "resampling_unit": "capture_id"
+      },
+      "recall_at_val_fpr_0.01": {
+        "metric_a": 0.6407777777777778,
+        "metric_b": 0.8488333333333333,
+        "difference": 0.20805555555555555,
+        "groups_per_stratum": {
+          "0": 6,
+          "1": 9
+        },
+        "status": "FEW_GROUPS",
+        "ci_low": 0.07872708333333334,
+        "ci_high": 0.34963333333333335,
+        "p_value_bootstrap": 0.0,
+        "n_boot": 1000,
+        "resampling_unit": "capture_id"
+      },
+      "test_fpr_at_val_fpr_0.01": {
+        "metric_a": 0.08079166666666666,
+        "metric_b": 0.203375,
+        "difference": 0.12258333333333334,
+        "groups_per_stratum": {
+          "0": 6,
+          "1": 9
+        },
+        "status": "FEW_GROUPS",
+        "ci_low": 0.04229166666666667,
+        "ci_high": 0.20405104166666663,
+        "p_value_bootstrap": 0.006,
+        "n_boot": 1000,
+        "resampling_unit": "capture_id"
+      },
+      "cost": {
+        "latency_ms_per_flow_a": 0.001944,
+        "latency_ms_per_flow_b": 0.005618000000000001,
+        "fit_seconds_a": 0.9540000000000001,
+        "fit_seconds_b": 41.669999999999995
+      },
+      "status": "COMPLETED",
+      "holm": {
+        "p": 0.654,
+        "p_holm": 1.0,
+        "reject": false
+      }
+    },
+    {
+      "contrast": "CNN vs full-flow tabular",
+      "experiment_a": "EXP-20261016T190421-e3fc69b3-156f",
+      "experiment_b": "EXP-20261016T190421-f9cd558d-467b",
+      "track_a": "tab_trackA_hist_gb",
+      "track_b": "cnn",
+      "shared_rows": 60000,
+      "rows_a_only": 0,
+      "rows_b_only": 0,
+      "average_precision": {
+        "metric_a": 0.9256862262825138,
+        "metric_b": 0.8930050632382163,
+        "difference": -0.03268116304429758,
+        "groups_per_stratum": {
+          "0": 6,
+          "1": 9
+        },
+        "status": "FEW_GROUPS",
+        "ci_low": -0.1135562723786284,
+        "ci_high": 0.011360541211187705,
+        "p_value_bootstrap": 0.544,
+        "n_boot": 1000,
+        "resampling_unit": "capture_id"
+      },
+      "recall_at_val_fpr_0.01": {
+        "metric_a": 0.8070555555555555,
+        "metric_b": 0.7046388888888889,
+        "difference": -0.1024166666666666,
+        "groups_per_stratum": {
+          "0": 6,
+          "1": 9
+        },
+        "status": "FEW_GROUPS",
+        "ci_low": -0.21334652777777782,
+        "ci_high": -0.000662500000000039,
+        "p_value_bootstrap": 0.048,
+        "n_boot": 1000,
+        "resampling_unit": "capture_id"
+      },
+      "test_fpr_at_val_fpr_0.01": {
+        "metric_a": 0.19575,
+        "metric_b": 0.1425,
+        "difference": -0.05325000000000002,
+        "groups_per_stratum": {
+          "0": 6,
+          "1": 9
+        },
+        "status": "FEW_GROUPS",
+        "ci_low": -0.12208333333333334,
+        "ci_high": 0.0009166666666666212,
+        "p_value_bootstrap": 0.08,
+        "n_boot": 1000,
+        "resampling_unit": "capture_id"
+      },
+      "cost": {
+        "latency_ms_per_flow_a": 0.008308,
+        "latency_ms_per_flow_b": 0.015612000000000001,
+        "fit_seconds_a": 7.8786000000000005,
+        "fit_seconds_b": 13.928
+      },
+      "status": "COMPLETED",
+      "holm": {
+        "p": 0.544,
+        "p_holm": 1.0,
+        "reject": false
+      }
+    },
+    {
+      "contrast": "GRU vs full-flow tabular",
+      "experiment_a": "EXP-20261016T190421-e3fc69b3-156f",
+      "experiment_b": "EXP-20261016T190421-4c334d84-f0de",
+      "track_a": "tab_trackA_hist_gb",
+      "track_b": "gru",
+      "shared_rows": 60000,
+      "rows_a_only": 0,
+      "rows_b_only": 0,
+      "average_precision": {
+        "metric_a": 0.9256862262825138,
+        "metric_b": 0.8714190816532692,
+        "difference": -0.054267144629244646,
+        "groups_per_stratum": {
+          "0": 6,
+          "1": 9
+        },
+        "status": "FEW_GROUPS",
+        "ci_low": -0.1629593799395605,
+        "ci_high": 0.014115097920618377,
+        "p_value_bootstrap": 0.226,
+        "n_boot": 1000,
+        "resampling_unit": "capture_id"
+      },
+      "recall_at_val_fpr_0.01": {
+        "metric_a": 0.8070555555555555,
+        "metric_b": 0.8488333333333333,
+        "difference": 0.0417777777777778,
+        "groups_per_stratum": {
+          "0": 6,
+          "1": 9
+        },
+        "status": "FEW_GROUPS",
+        "ci_low": -0.09295347222222226,
+        "ci_high": 0.19397291666666666,
+        "p_value_bootstrap": 0.622,
+        "n_boot": 1000,
+        "resampling_unit": "capture_id"
+      },
+      "test_fpr_at_val_fpr_0.01": {
+        "metric_a": 0.19575,
+        "metric_b": 0.203375,
+        "difference": 0.007624999999999993,
+        "groups_per_stratum": {
+          "0": 6,
+          "1": 9
+        },
+        "status": "FEW_GROUPS",
+        "ci_low": -0.09250000000000003,
+        "ci_high": 0.11745833333333333,
+        "p_value_bootstrap": 0.854,
+        "n_boot": 1000,
+        "resampling_unit": "capture_id"
+      },
+      "cost": {
+        "latency_ms_per_flow_a": 0.008308,
+        "latency_ms_per_flow_b": 0.005618000000000001,
+        "fit_seconds_a": 7.8786000000000005,
+        "fit_seconds_b": 41.669999999999995
+      },
+      "status": "COMPLETED",
+      "holm": {
+        "p": 0.226,
+        "p_holm": 0.904,
+        "reject": false
+      }
+    }
+  ],
+  "multiple_comparison": "Holm over 4 pre-declared contrasts"
+}
