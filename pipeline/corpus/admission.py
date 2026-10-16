@@ -186,7 +186,9 @@ def assess_sufficiency() -> Dict[str, Any]:
             "flows": int(len(part)),
             "fingerprinted_flows": int(part["ja4"].notna().sum()),
             "behavioral_groups": int(part["behavioral_hash"].nunique()),
-            "environments": int(part["environment"].nunique()),
+            # environment class = annotation before the first ';' (per-capture host details are not new environments)
+            "environments": int(part["environment"].astype(str).str.split(";").str[0].str.strip().nunique()),
+            "environment_classes": sorted(part["environment"].astype(str).str.split(";").str[0].str.strip().unique().tolist()),
             "collection_years": sorted(set(years.tolist())),
             "tls13_flows": int((part["tls_version"] == 1.3).sum()),
         }
