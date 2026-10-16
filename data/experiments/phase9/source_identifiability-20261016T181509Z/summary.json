@@ -1,0 +1,139 @@
+{
+  "experiments": [
+    {
+      "experiment_id": "EXP-20261016T181511-1aa46d59-6e7c",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "A_FLOW",
+      "model": "random_forest",
+      "encoding": "onehot",
+      "protocol": "CAPTURE_GROUP_KFOLD",
+      "population_rows": 38543,
+      "coverage": 1.0,
+      "n_pos": 2543,
+      "n_neg": 36000,
+      "average_precision": 0.14055969331542695,
+      "ap_ci": [
+        0.09039419459127196,
+        0.29780365638455647
+      ],
+      "ap_ci_status": "FEW_GROUPS",
+      "roc_auc": 0.7035204865207322,
+      "brier": 0.06342100893622707,
+      "ece_15bin": 0.0578700195718246,
+      "recall_at_val_fpr_0.01": 0.04168305151395989,
+      "test_fpr_at_val_fpr_0.01": 0.002416666666666667,
+      "per_source": {
+        "DS-008": {
+          "n": 2543,
+          "n_pos": 2543,
+          "mean_score": 0.09584799855561234,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.04168305151395989,
+            "pred@fpr<=0.05": 0.26504128981517894
+          }
+        },
+        "DS-009": {
+          "n": 36000,
+          "n_pos": 0,
+          "mean_score": 0.06075302190084974,
+          "false_positive_rate": {
+            "pred@fpr<=0.01": 0.002416666666666667,
+            "pred@fpr<=0.05": 0.06261111111111112
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.008433999999999999
+    },
+    {
+      "experiment_id": "EXP-20261016T181607-fec69c9c-382c",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "C_JA4",
+      "model": "random_forest",
+      "encoding": "onehot",
+      "protocol": "CAPTURE_GROUP_KFOLD",
+      "population_rows": 8591,
+      "coverage": 0.222894,
+      "n_pos": 194,
+      "n_neg": 8397,
+      "average_precision": 1.0,
+      "ap_ci": [
+        1.0,
+        1.0
+      ],
+      "ap_ci_status": "FEW_GROUPS",
+      "roc_auc": 1.0,
+      "brier": 7.272962924364788e-08,
+      "ece_15bin": 0.00016264018197730996,
+      "recall_at_val_fpr_0.01": 1.0,
+      "test_fpr_at_val_fpr_0.01": 0.0,
+      "per_source": {
+        "DS-008": {
+          "n": 194,
+          "n_pos": 194,
+          "mean_score": 0.998547771138185,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        },
+        "DS-009": {
+          "n": 8397,
+          "n_pos": 0,
+          "mean_score": 0.00013284618365785032,
+          "false_positive_rate": {
+            "pred@fpr<=0.01": 0.0,
+            "pred@fpr<=0.05": 0.0
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.016696
+    },
+    {
+      "experiment_id": "EXP-20261016T181625-dd6fb152-50c6",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "E_JA4_FLOW",
+      "model": "random_forest",
+      "encoding": "onehot",
+      "protocol": "CAPTURE_GROUP_KFOLD",
+      "population_rows": 8591,
+      "coverage": 0.222894,
+      "n_pos": 194,
+      "n_neg": 8397,
+      "average_precision": 0.8279523931075412,
+      "ap_ci": [
+        0.580770011140504,
+        1.0
+      ],
+      "ap_ci_status": "FEW_GROUPS",
+      "roc_auc": 0.8950327743462626,
+      "brier": 0.007327707677704568,
+      "ece_15bin": 0.007368712820842927,
+      "recall_at_val_fpr_0.01": 0.7061855670103093,
+      "test_fpr_at_val_fpr_0.01": 0.0003572704537334762,
+      "per_source": {
+        "DS-008": {
+          "n": 194,
+          "n_pos": 194,
+          "mean_score": 0.5920747964589919,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.7061855670103093,
+            "pred@fpr<=0.05": 0.8298969072164949
+          }
+        },
+        "DS-009": {
+          "n": 8397,
+          "n_pos": 0,
+          "mean_score": 0.0019978649859241355,
+          "false_positive_rate": {
+            "pred@fpr<=0.01": 0.0003572704537334762,
+            "pred@fpr<=0.05": 0.0008336310587114446
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.022798000000000002
+    }
+  ]
+}
