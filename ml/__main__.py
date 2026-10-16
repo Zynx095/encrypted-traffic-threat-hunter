@@ -81,13 +81,13 @@ def main(argv=None) -> int:
         for su in list_suites():
             print(su["suite_id"], su["status"], len(su.get("experiments", [])))
     elif args.cmd == "explain":
-        from ml.benchmark.registry import PHASE9_ROOT, load_experiment
+        from ml.benchmark.registry import load_experiment, suite_dir
         from ml.benchmark.suites import SUITES, suite_frame
         from ml.diagnostics.explain import explain_track
         from ml.evaluation.splits import make_folds
         from ml.features.governance import population_mask
         from ml.model_registry import most_selected_params
-        suite = json.loads((PHASE9_ROOT / args.suite_id / "suite.json").read_text(encoding="utf-8"))
+        suite = json.loads((suite_dir(args.suite_id) / "suite.json").read_text(encoding="utf-8"))
         recs = [load_experiment(args.suite_id, x) for x in suite["experiments"]]
         rec = next(r for r in recs if r["config"]["track"] == args.track and r["config"]["model"] == args.model
                    and r.get("status") == "COMPLETED")
@@ -97,12 +97,12 @@ def main(argv=None) -> int:
                            capture_assignment=suite.get("capture_fold_assignment"))
         out = explain_track(df, args.track, args.model, most_selected_params(rec) or {}, folds)
         out["source_experiment"] = rec["experiment_id"]
-        _write(PHASE9_ROOT / args.suite_id / f"explain_{args.track}_{args.model}.json", out)
+        _write(suite_dir(args.suite_id) / f"explain_{args.track}_{args.model}.json", out)
     elif args.cmd == "train-deployable":
-        from ml.benchmark.registry import PHASE9_ROOT, load_experiment
+        from ml.benchmark.registry import load_experiment, suite_dir
         from ml.benchmark.runner import load_benchmark_frame
         from ml.model_registry import most_selected_params, train_deployable
-        suite = json.loads((PHASE9_ROOT / args.suite_id / "suite.json").read_text(encoding="utf-8"))
+        suite = json.loads((suite_dir(args.suite_id) / "suite.json").read_text(encoding="utf-8"))
         recs = [load_experiment(args.suite_id, x) for x in suite["experiments"]]
         rec = next(r for r in recs if r["config"]["track"] == args.track and r["config"]["model"] == args.model
                    and r.get("status") == "COMPLETED")
