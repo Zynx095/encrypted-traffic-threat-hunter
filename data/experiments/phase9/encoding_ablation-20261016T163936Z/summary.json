@@ -1,0 +1,391 @@
+{
+  "experiments": [
+    {
+      "experiment_id": "EXP-20261016T163939-257aa938-0cbc",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "B_JA3",
+      "model": "logreg",
+      "encoding": "onehot",
+      "protocol": "CAPTURE_GROUP_KFOLD",
+      "population_rows": 11220,
+      "coverage": 0.179397,
+      "n_pos": 8591,
+      "n_neg": 2629,
+      "average_precision": 0.9702849894481289,
+      "ap_ci": [
+        0.863309688092948,
+        0.9999982232738018
+      ],
+      "ap_ci_status": "FEW_GROUPS",
+      "roc_auc": 0.9124414746845343,
+      "brier": 0.04605737867189593,
+      "ece_15bin": 0.041781737029745726,
+      "recall_at_val_fpr_0.01": 0.997904784076359,
+      "test_fpr_at_val_fpr_0.01": 0.18562190947128185,
+      "per_source": {
+        "DS-008": {
+          "n": 194,
+          "n_pos": 194,
+          "mean_score": 0.7208403469785919,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.9072164948453608,
+            "pred@fpr<=0.05": 0.9072164948453608
+          }
+        },
+        "DS-009": {
+          "n": 8397,
+          "n_pos": 8397,
+          "mean_score": 0.9929771434395965,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        },
+        "DS-011": {
+          "n": 2629,
+          "n_pos": 0,
+          "mean_score": 0.182948841663104,
+          "false_positive_rate": {
+            "pred@fpr<=0.01": 0.18562190947128185,
+            "pred@fpr<=0.05": 0.18562190947128185
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.000594
+    },
+    {
+      "experiment_id": "EXP-20261016T163951-5c0c4edb-c96e",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "B_JA3",
+      "model": "logreg",
+      "encoding": "frequency",
+      "protocol": "CAPTURE_GROUP_KFOLD",
+      "population_rows": 11220,
+      "coverage": 0.179397,
+      "n_pos": 8591,
+      "n_neg": 2629,
+      "average_precision": 0.9949632568324038,
+      "ap_ci": [
+        0.9650190406061552,
+        0.9991775152817409
+      ],
+      "ap_ci_status": "FEW_GROUPS",
+      "roc_auc": 0.9794951584271826,
+      "brier": 0.01784736732902586,
+      "ece_15bin": 0.022211123562982625,
+      "recall_at_val_fpr_0.01": 0.9774182283785356,
+      "test_fpr_at_val_fpr_0.01": 0.0,
+      "per_source": {
+        "DS-008": {
+          "n": 194,
+          "n_pos": 194,
+          "mean_score": 0.020272671155146964,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.0,
+            "pred@fpr<=0.05": 0.0
+          }
+        },
+        "DS-009": {
+          "n": 8397,
+          "n_pos": 8397,
+          "mean_score": 0.999791429201674,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        },
+        "DS-011": {
+          "n": 2629,
+          "n_pos": 0,
+          "mean_score": 0.062037173017399645,
+          "false_positive_rate": {
+            "pred@fpr<=0.01": 0.0,
+            "pred@fpr<=0.05": 0.0
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.0006100000000000001
+    },
+    {
+      "experiment_id": "EXP-20261016T164003-b52eaaaa-c4a2",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "B_JA3",
+      "model": "logreg",
+      "encoding": "hashing",
+      "protocol": "CAPTURE_GROUP_KFOLD",
+      "population_rows": 11220,
+      "coverage": 0.179397,
+      "n_pos": 8591,
+      "n_neg": 2629,
+      "average_precision": 0.9951384100179558,
+      "ap_ci": [
+        0.9680667239188278,
+        0.9999750809192746
+      ],
+      "ap_ci_status": "FEW_GROUPS",
+      "roc_auc": 0.9835514569614038,
+      "brier": 0.05190328867011429,
+      "ece_15bin": 0.0485104411971809,
+      "recall_at_val_fpr_0.01": 0.9849842858805727,
+      "test_fpr_at_val_fpr_0.01": 0.18410041841004185,
+      "per_source": {
+        "DS-008": {
+          "n": 194,
+          "n_pos": 194,
+          "mean_score": 0.3245069943999142,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.33505154639175255,
+            "pred@fpr<=0.05": 0.33505154639175255
+          }
+        },
+        "DS-009": {
+          "n": 8397,
+          "n_pos": 8397,
+          "mean_score": 0.9941211265408905,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        },
+        "DS-011": {
+          "n": 2629,
+          "n_pos": 0,
+          "mean_score": 0.18167355271191127,
+          "false_positive_rate": {
+            "pred@fpr<=0.01": 0.18410041841004185,
+            "pred@fpr<=0.05": 0.18410041841004185
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.00141
+    },
+    {
+      "experiment_id": "EXP-20261016T164015-5ece147d-4d33",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "C_JA4",
+      "model": "logreg",
+      "encoding": "onehot",
+      "protocol": "CAPTURE_GROUP_KFOLD",
+      "population_rows": 11220,
+      "coverage": 0.179397,
+      "n_pos": 8591,
+      "n_neg": 2629,
+      "average_precision": 0.9989084624293042,
+      "ap_ci": [
+        0.9898481639395944,
+        0.9999993966810395
+      ],
+      "ap_ci_status": "FEW_GROUPS",
+      "roc_auc": 0.9968107087397051,
+      "brier": 0.047051726154201175,
+      "ece_15bin": 0.04537869237320134,
+      "recall_at_val_fpr_0.01": 0.9927831451519031,
+      "test_fpr_at_val_fpr_0.01": 0.18448079117535185,
+      "per_source": {
+        "DS-008": {
+          "n": 194,
+          "n_pos": 194,
+          "mean_score": 0.548080234511568,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.6804123711340206,
+            "pred@fpr<=0.05": 0.6804123711340206
+          }
+        },
+        "DS-009": {
+          "n": 8397,
+          "n_pos": 8397,
+          "mean_score": 0.9942530891954348,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        },
+        "DS-011": {
+          "n": 2629,
+          "n_pos": 0,
+          "mean_score": 0.18105733184486,
+          "false_positive_rate": {
+            "pred@fpr<=0.01": 0.18448079117535185,
+            "pred@fpr<=0.05": 0.18448079117535185
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.0005859999999999999
+    },
+    {
+      "experiment_id": "EXP-20261016T164027-cf640142-32c2",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "C_JA4",
+      "model": "logreg",
+      "encoding": "frequency",
+      "protocol": "CAPTURE_GROUP_KFOLD",
+      "population_rows": 11220,
+      "coverage": 0.179397,
+      "n_pos": 8591,
+      "n_neg": 2629,
+      "average_precision": 0.9949628383417639,
+      "ap_ci": [
+        0.9650074888103026,
+        0.9991774402039583
+      ],
+      "ap_ci_status": "FEW_GROUPS",
+      "roc_auc": 0.9794955347708569,
+      "brier": 0.017847192594227165,
+      "ece_15bin": 0.02221109844957375,
+      "recall_at_val_fpr_0.01": 0.9774182283785356,
+      "test_fpr_at_val_fpr_0.01": 0.0,
+      "per_source": {
+        "DS-008": {
+          "n": 194,
+          "n_pos": 194,
+          "mean_score": 0.02027735260092006,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.0,
+            "pred@fpr<=0.05": 0.0
+          }
+        },
+        "DS-009": {
+          "n": 8397,
+          "n_pos": 8397,
+          "mean_score": 0.9997914967396498,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        },
+        "DS-011": {
+          "n": 2629,
+          "n_pos": 0,
+          "mean_score": 0.062036711804407056,
+          "false_positive_rate": {
+            "pred@fpr<=0.01": 0.0,
+            "pred@fpr<=0.05": 0.0
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.00095
+    },
+    {
+      "experiment_id": "EXP-20261016T164039-a7c04d9c-6da9",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "C_JA4",
+      "model": "logreg",
+      "encoding": "hashing",
+      "protocol": "CAPTURE_GROUP_KFOLD",
+      "population_rows": 11220,
+      "coverage": 0.179397,
+      "n_pos": 8591,
+      "n_neg": 2629,
+      "average_precision": 0.9964407602119063,
+      "ap_ci": [
+        0.9727113031246123,
+        0.9999958457894019
+      ],
+      "ap_ci_status": "FEW_GROUPS",
+      "roc_auc": 0.9880387796919108,
+      "brier": 0.049456439870882905,
+      "ece_15bin": 0.04615378701709898,
+      "recall_at_val_fpr_0.01": 0.9887091141892679,
+      "test_fpr_at_val_fpr_0.01": 0.18448079117535185,
+      "per_source": {
+        "DS-008": {
+          "n": 194,
+          "n_pos": 194,
+          "mean_score": 0.42245076556899713,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.5,
+            "pred@fpr<=0.05": 0.5
+          }
+        },
+        "DS-009": {
+          "n": 8397,
+          "n_pos": 8397,
+          "mean_score": 0.9931137962158474,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        },
+        "DS-011": {
+          "n": 2629,
+          "n_pos": 0,
+          "mean_score": 0.17952960219696193,
+          "false_positive_rate": {
+            "pred@fpr<=0.01": 0.18448079117535185,
+            "pred@fpr<=0.05": 0.18448079117535185
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.001464
+    }
+  ],
+  "paired_contrasts": {
+    "logreg": {
+      "model": "logreg",
+      "protocol": "CAPTURE_GROUP_KFOLD",
+      "contrasts": [
+        {
+          "contrast": "JA3 added to flow",
+          "track_a": "A_FLOW@JA3POP",
+          "track_b": "D_JA3_FLOW",
+          "status": "NOT_RUN",
+          "reason": "one of the experiments is missing or did not complete",
+          "holm": {
+            "p": null,
+            "p_holm": null,
+            "reject": null
+          },
+          "interpretation": "NOT_RUN"
+        },
+        {
+          "contrast": "JA4 added to flow",
+          "track_a": "A_FLOW@JA4POP",
+          "track_b": "E_JA4_FLOW",
+          "status": "NOT_RUN",
+          "reason": "one of the experiments is missing or did not complete",
+          "holm": {
+            "p": null,
+            "p_holm": null,
+            "reject": null
+          },
+          "interpretation": "NOT_RUN"
+        },
+        {
+          "contrast": "flow added to JA3",
+          "track_a": "B_JA3",
+          "track_b": "D_JA3_FLOW",
+          "status": "NOT_RUN",
+          "reason": "one of the experiments is missing or did not complete",
+          "holm": {
+            "p": null,
+            "p_holm": null,
+            "reject": null
+          },
+          "interpretation": "NOT_RUN"
+        },
+        {
+          "contrast": "flow added to JA4",
+          "track_a": "C_JA4",
+          "track_b": "E_JA4_FLOW",
+          "status": "NOT_RUN",
+          "reason": "one of the experiments is missing or did not complete",
+          "holm": {
+            "p": null,
+            "p_holm": null,
+            "reject": null
+          },
+          "interpretation": "NOT_RUN"
+        }
+      ],
+      "multiple_comparison": "Holm over 4 primary contrasts",
+      "alpha": 0.05
+    }
+  },
+  "primary_model": "random_forest"
+}
