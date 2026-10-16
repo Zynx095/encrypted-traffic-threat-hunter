@@ -44,6 +44,10 @@ def _row(summary: Dict[str, Any], track: str, model: str, encoding: str = "oneho
     return None
 
 
+def pc_row(summary: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    return _row(summary, "A_FLOW", "random_forest")
+
+
 def _contrast(summary: Dict[str, Any], model: str, label: str) -> Optional[Dict[str, Any]]:
     fam = ((summary or {}).get("paired_contrasts") or {}).get(model) or {}
     for c in fam.get("contrasts", []):
@@ -134,20 +138,33 @@ def build_claims(latest: Dict[str, Dict[str, Any]]) -> List[Dict[str, Any]]:
                              uncertainty={n: (c or {}).get("average_precision") for n, c in zip(("pooled", "matched_lab"), cs)},
                              confounders=CONFOUNDERS,
                              limitations=["Exploratory; at most PRELIMINARY on this corpus.", "No equivalence margin was pre-registered."]))
-    # C08 cross-source generalisation
+    # C08 cross-source transfer, one claim per feature family (primary model random_forest)
     lo = S("leave_one_source_out")
-    if lo:
+    families = (("C08A", "Flow-only detectors (A_FLOW) transfer to a held-out malicious source", ["A_FLOW"]),
+                ("C08B", "Fingerprint-only detectors (B_JA3, C_JA4) transfer to a held-out malicious source", ["B_JA3", "C_JA4"]),
+                ("C08C", "Fusion detectors (D_JA3_FLOW, E_JA4_FLOW) transfer to a held-out malicious source", ["D_JA3_FLOW", "E_JA4_FLOW"]))
+    for cid, text, tracks in families:
         rates = {}
-        for r in lo.get("experiments", []):
-            if r["model"] == "random_forest" and r.get("per_source"):
+        for r in (lo or {}).get("experiments", []):
+            if r["model"] == "random_forest" and r["track"] in tracks and r.get("per_source"):
                 for src, blk in r["per_source"].items():
                     if "detection_rate" in blk:
                         rates[f"{r['track']}|{src}"] = blk["detection_rate"].get("pred@fpr<=0.01")
-        claims.append(_claim("C08", "A detector trained without a malicious source detects that held-out source at the validation-selected FPR<=1% threshold.",
-                             "PRELIMINARY" if rates else "UNTESTED",
-                             f"Held-out-source detection rates (random_forest): {rates}. Benign false-positive rate on a held-out benign source cannot be measured (only one benign source).",
+        vals = [v for v in rates.values() if v is not None]
+        if not vals:
+            status = "UNTESTED"
+        elif all(v >= 0.8 for v in vals):
+            status = "PRELIMINARY"
+        elif all(v <= 0.5 for v in vals):
+            status = "CONTRADICTED"
+        else:
+            status = "INSUFFICIENT_EVIDENCE"
+        claims.append(_claim(cid, text + " at the validation-selected FPR<=1% threshold.", status,
+                             f"Detection rates on the held-out source (random_forest): { {k: round(v, 4) for k, v in rates.items()} }. "
+                             "Rule: all >= 0.8 -> PRELIMINARY; all <= 0.5 -> CONTRADICTED; otherwise INSUFFICIENT_EVIDENCE. "
+                             "The benign false-positive rate on a held-out benign source cannot be measured (single benign source).",
                              experiments=[sid("leave_one_source_out")], protocol="LEAVE_ONE_SOURCE_OUT", metrics=rates,
-                             confounders=CONFOUNDERS, limitations=["Recall only; holding out the single benign source leaves no benign training data."]))
+                             confounders=CONFOUNDERS, limitations=["Recall only; exploratory; one benign source."]))
     claims.append(_claim("C09", "ETTH detection generalises to independent, unseen benign and malicious environments.", "BLOCKED",
                          "Confirmatory evaluation requires an independent benign+malicious source never used in exploration; none is admitted.",
                          protocol="CONFIRMATORY (not run)", confounders=CONFOUNDERS))
@@ -172,6 +189,39 @@ def build_claims(latest: Dict[str, Dict[str, Any]]) -> List[Dict[str, Any]]:
                              f"chance level (prevalence of DS-008 rows) {prevalence:.3f}; rule: CI lower bound > 2x prevalence.",
                              experiments=[r["experiment_id"]], protocol="CAPTURE_GROUP_KFOLD (task: DS-008 vs DS-009)",
                              limitations=["Diagnostic of collection-environment signal; it is not a detection task."]))
+    r4 = _row(si, "C_JA4", "random_forest")
+    if r4 and r4.get("n_pos"):
+        prev4 = r4["n_pos"] / (r4["n_pos"] + r4["n_neg"])
+        claims.append(_claim("C11B", "JA4 alone identifies which malicious source (DS-008 vs DS-009) a TLS flow came from.",
+                             "PRELIMINARY" if (r4["ap_ci"][0] or 0) > 2 * prev4 else "INSUFFICIENT_EVIDENCE",
+                             f"Source-identification AP {r4['average_precision']} CI{r4['ap_ci']}; chance {prev4:.3f}.",
+                             experiments=[r4["experiment_id"]], protocol="CAPTURE_GROUP_KFOLD (task: DS-008 vs DS-009)",
+                             limitations=["Shows that fingerprints encode collection era / client stack; diagnostic only."]))
+    pooled_dir = (latest.get("pooled_capture_cv") or {}).get("suite", {}).get("suite_id")
+    if pooled_dir:
+        from ml.benchmark.registry import suite_dir
+        un = _load(suite_dir(pooled_dir) / "unseen_B_JA3_logreg.json")
+        un4 = _load(suite_dir(pooled_dir) / "unseen_C_JA4_logreg.json")
+        if un and un4:
+            def rate(u, cls, seen):
+                return next((c.get("flagged_rate_at_val_fpr_0.01") for c in u["cells"]
+                             if c["class"] == cls and c["fingerprint_seen_in_training"] is seen), None)
+            r_unseen, r_seen = rate(un, "BENIGN", False), rate(un, "BENIGN", True)
+            r4_unseen = rate(un4, "BENIGN", False)
+            claims.append(_claim("C16", "Fingerprint-only models flag most benign flows whose fingerprint was absent from the training fold.",
+                                 "PRELIMINARY" if (r_unseen or 0) > 0.5 and (r_seen or 0) < 0.05 else "INSUFFICIENT_EVIDENCE",
+                                 f"Benign unseen-fingerprint share {un['benign_unseen_share']:.3f}; flagged at val-FPR<=1%: JA3 unseen {r_unseen}, "
+                                 f"JA3 seen {r_seen}, JA4 unseen {r4_unseen} (logreg, pooled capture-grouped CV).",
+                                 experiments=[un["experiment_id"], un4["experiment_id"]], protocol="CAPTURE_GROUP_KFOLD",
+                                 confounders=CONFOUNDERS, limitations=["Novelty, not maliciousness, drives these alerts."]))
+    fam = _row(S("leave_one_family_out"), "A_FLOW", "random_forest")
+    if fam and pc_row(S("pooled_capture_cv")):
+        base = pc_row(S("pooled_capture_cv"))
+        claims.append(_claim("C17", "Flow-only (A_FLOW) ranking quality drops when whole malware families are held out.",
+                             "PRELIMINARY" if fam["average_precision"] < base["average_precision"] else "CONTRADICTED",
+                             f"family-holdout AP {fam['average_precision']:.4f} CI{fam['ap_ci']} vs capture-grouped AP {base['average_precision']:.4f} (random_forest).",
+                             experiments=[fam["experiment_id"], base["experiment_id"]], protocol="LEAVE_ONE_FAMILY_OUT vs CAPTURE_GROUP_KFOLD",
+                             limitations=["Different fold structures; no paired test between protocols."]))
     # C12 legacy protocol optimism
     lg, pc = _row(S("legacy_behavioral_holdout"), "A_FLOW", "random_forest"), _row(S("pooled_capture_cv"), "A_FLOW", "random_forest")
     if lg and pc and lg.get("average_precision") is not None and pc.get("average_precision") is not None:
