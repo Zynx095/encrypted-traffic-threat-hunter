@@ -20,6 +20,10 @@ app.add_middleware(
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+from backend.research.router import router as research_router
+
+app.include_router(research_router)
+
 @app.get("/api/health")
 def health_check():
     return {"status": "healthy", "service": "etth-backend"}
