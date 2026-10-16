@@ -1,0 +1,159 @@
+[
+  {
+    "name": "holdout",
+    "train_rows": 8976,
+    "test_rows": 2244,
+    "train_pos": 6855,
+    "train_neg": 2121,
+    "test_pos": 1736,
+    "test_neg": 508,
+    "train_captures": 22,
+    "test_captures": 17,
+    "purged_train_rows": 0,
+    "held_out": {},
+    "status": "COMPLETED",
+    "selected_params": {
+      "C": 0.1
+    },
+    "inner_status": "OK",
+    "inner_reason": null,
+    "grid_scores": [
+      {
+        "params": {
+          "C": 0.1
+        },
+        "inner_mean_ap": 0.9998865697902373,
+        "inner_fold_ap": [
+          0.9999882720532657,
+          0.9999885291906763,
+          0.9996829081267696
+        ]
+      },
+      {
+        "params": {
+          "C": 1.0
+        },
+        "inner_mean_ap": 0.9998676744164469,
+        "inner_fold_ap": [
+          0.9999994257571769,
+          0.9999131348962063,
+          0.9996904625959575
+        ]
+      },
+      {
+        "params": {
+          "C": 10.0
+        },
+        "inner_mean_ap": 0.9998328229072438,
+        "inner_fold_ap": [
+          0.9999996172831119,
+          0.9998008870406256,
+          0.999697964397994
+        ]
+      }
+    ],
+    "calibration": {
+      "a": 26.455415946420082,
+      "b": -4.993791250783247
+    },
+    "thresholds": {
+      "fpr<=0.01": 0.036621845426092044,
+      "fpr<=0.05": 0.013661203391036082
+    },
+    "fit_seconds": 0.035,
+    "predict_seconds": 0.0104,
+    "latency_ms_per_flow": 0.00464,
+    "throughput_flows_per_s": 215632.4,
+    "n_features_out": 130,
+    "ranking_raw": {
+      "n": 2244,
+      "n_pos": 1736,
+      "n_neg": 508,
+      "prevalence": 0.7736185383244206,
+      "average_precision": 0.9999946903168151,
+      "pr_auc_trapezoid": 0.9999946887864735,
+      "roc_auc": 0.9999818571065714,
+      "brier": 0.0044277606831296945,
+      "ece_15bin": 0.00891486472877747,
+      "tpr@fpr=0.001": 0.9953917050691244,
+      "tpr@fpr=0.01": 1.0,
+      "tpr@fpr=0.05": 1.0
+    },
+    "ranking_calibrated": {
+      "n": 2244,
+      "n_pos": 1736,
+      "n_neg": 508,
+      "prevalence": 0.7736185383244206,
+      "average_precision": 0.9999946903168151,
+      "pr_auc_trapezoid": 0.9999946887864735,
+      "roc_auc": 0.9999818571065714,
+      "brier": 0.002593586784215033,
+      "ece_15bin": 0.002268574516395355,
+      "tpr@fpr=0.001": 0.9953917050691244,
+      "tpr@fpr=0.01": 1.0,
+      "tpr@fpr=0.05": 1.0
+    },
+    "at_validation_thresholds": {
+      "fpr<=0.01": {
+        "threshold": 0.036621845426092044,
+        "n": 2244,
+        "n_pos": 1736,
+        "n_neg": 508,
+        "confusion_matrix": {
+          "tn": 502,
+          "fp": 6,
+          "fn": 0,
+          "tp": 1736
+        },
+        "recall": 1.0,
+        "fnr": 0.0,
+        "specificity": 0.9881889763779528,
+        "fpr": 0.011811023622047244,
+        "precision": 0.9965556831228473,
+        "f1": 0.9982748706152962,
+        "balanced_accuracy": 0.9940944881889764,
+        "mcc": 0.9923635122316811
+      },
+      "fpr<=0.05": {
+        "threshold": 0.013661203391036082,
+        "n": 2244,
+        "n_pos": 1736,
+        "n_neg": 508,
+        "confusion_matrix": {
+          "tn": 487,
+          "fp": 21,
+          "fn": 0,
+          "tp": 1736
+        },
+        "recall": 1.0,
+        "fnr": 0.0,
+        "specificity": 0.9586614173228346,
+        "fpr": 0.04133858267716536,
+        "precision": 0.9880478087649402,
+        "f1": 0.9939879759519038,
+        "balanced_accuracy": 0.9793307086614174,
+        "mcc": 0.973243706752486
+      }
+    },
+    "at_0.5_uncalibrated": {
+      "threshold": 0.5,
+      "n": 2244,
+      "n_pos": 1736,
+      "n_neg": 508,
+      "confusion_matrix": {
+        "tn": 508,
+        "fp": 0,
+        "fn": 14,
+        "tp": 1722
+      },
+      "recall": 0.9919354838709677,
+      "fnr": 0.008064516129032258,
+      "specificity": 1.0,
+      "fpr": 0.0,
+      "precision": 1.0,
+      "f1": 0.9959514170040485,
+      "balanced_accuracy": 0.9959677419354839,
+      "mcc": 0.9825130280072272
+    }
+  }
+]

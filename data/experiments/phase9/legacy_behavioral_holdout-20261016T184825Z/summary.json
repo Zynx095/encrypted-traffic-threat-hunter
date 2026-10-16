@@ -1,0 +1,887 @@
+{
+  "experiments": [
+    {
+      "experiment_id": "EXP-20261016T184827-30588b90-713a",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "A_FLOW",
+      "model": "logreg",
+      "encoding": "onehot",
+      "protocol": "BEHAVIORAL_HOLDOUT",
+      "population_rows": 62543,
+      "coverage": 1.0,
+      "n_pos": 6042,
+      "n_neg": 3798,
+      "average_precision": 0.959897644409579,
+      "ap_ci": [
+        0.9245178106499211,
+        0.9779805967446189
+      ],
+      "ap_ci_status": "FEW_GROUPS",
+      "roc_auc": 0.9305661885146957,
+      "brier": 0.11828028116133024,
+      "ece_15bin": 0.12608731859366304,
+      "recall_at_val_fpr_0.01": 0.39920556107249255,
+      "test_fpr_at_val_fpr_0.01": 0.010795155344918378,
+      "per_source": {
+        "DS-008": {
+          "n": 374,
+          "n_pos": 374,
+          "mean_score": 0.7923689770992544,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.4037433155080214,
+            "pred@fpr<=0.05": 0.713903743315508
+          }
+        },
+        "DS-009": {
+          "n": 5668,
+          "n_pos": 5668,
+          "mean_score": 0.8585614424986606,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.3989061397318278,
+            "pred@fpr<=0.05": 0.9114326040931545
+          }
+        },
+        "DS-011": {
+          "n": 3798,
+          "n_pos": 0,
+          "mean_score": 0.44464828258255434,
+          "false_positive_rate": {
+            "pred@fpr<=0.01": 0.010795155344918378,
+            "pred@fpr<=0.05": 0.15824117956819378
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.0027
+    },
+    {
+      "experiment_id": "EXP-20261016T184911-393a3422-be9d",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "A_FLOW",
+      "model": "random_forest",
+      "encoding": "onehot",
+      "protocol": "BEHAVIORAL_HOLDOUT",
+      "population_rows": 62543,
+      "coverage": 1.0,
+      "n_pos": 6042,
+      "n_neg": 3798,
+      "average_precision": 0.9914678842689677,
+      "ap_ci": [
+        0.9758661756324566,
+        0.9988066392806946
+      ],
+      "ap_ci_status": "FEW_GROUPS",
+      "roc_auc": 0.9830318453640037,
+      "brier": 0.03177811386745618,
+      "ece_15bin": 0.021865773649390026,
+      "recall_at_val_fpr_0.01": 0.9498510427010923,
+      "test_fpr_at_val_fpr_0.01": 0.011058451816745656,
+      "per_source": {
+        "DS-008": {
+          "n": 374,
+          "n_pos": 374,
+          "mean_score": 0.8311431133501328,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.7754010695187166,
+            "pred@fpr<=0.05": 0.7887700534759359
+          }
+        },
+        "DS-009": {
+          "n": 5668,
+          "n_pos": 5668,
+          "mean_score": 0.9626139674483947,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.9613620324629499,
+            "pred@fpr<=0.05": 0.9618913196894848
+          }
+        },
+        "DS-011": {
+          "n": 3798,
+          "n_pos": 0,
+          "mean_score": 0.04469323936480867,
+          "false_positive_rate": {
+            "pred@fpr<=0.01": 0.011058451816745656,
+            "pred@fpr<=0.05": 0.016587677725118485
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.00759
+    },
+    {
+      "experiment_id": "EXP-20261016T184934-18eefb2e-24e5",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "B_JA3",
+      "model": "logreg",
+      "encoding": "onehot",
+      "protocol": "BEHAVIORAL_HOLDOUT",
+      "population_rows": 11220,
+      "coverage": 0.179397,
+      "n_pos": 1736,
+      "n_neg": 508,
+      "average_precision": 0.9999973469804658,
+      "ap_ci": [
+        0.999976050966208,
+        1.0
+      ],
+      "ap_ci_status": "FEW_GROUPS",
+      "roc_auc": 0.9999954642766428,
+      "brier": 0.0004246447487417979,
+      "ece_15bin": 0.0006506626725048956,
+      "recall_at_val_fpr_0.01": 1.0,
+      "test_fpr_at_val_fpr_0.01": 0.003937007874015748,
+      "per_source": {
+        "DS-008": {
+          "n": 43,
+          "n_pos": 43,
+          "mean_score": 0.9618949496090015,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        },
+        "DS-009": {
+          "n": 1693,
+          "n_pos": 1693,
+          "mean_score": 0.9999747868785305,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        },
+        "DS-011": {
+          "n": 508,
+          "n_pos": 0,
+          "mean_score": 0.002736993636683589,
+          "false_positive_rate": {
+            "pred@fpr<=0.01": 0.003937007874015748,
+            "pred@fpr<=0.05": 0.003937007874015748
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.00066
+    },
+    {
+      "experiment_id": "EXP-20261016T184942-55691e9a-2855",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "B_JA3",
+      "model": "random_forest",
+      "encoding": "onehot",
+      "protocol": "BEHAVIORAL_HOLDOUT",
+      "population_rows": 11220,
+      "coverage": 0.179397,
+      "n_pos": 1736,
+      "n_neg": 508,
+      "average_precision": 0.9999973469804658,
+      "ap_ci": [
+        0.999976050966208,
+        1.0
+      ],
+      "ap_ci_status": "FEW_GROUPS",
+      "roc_auc": 0.9999954642766429,
+      "brier": 0.0004954380429131575,
+      "ece_15bin": 0.000924819796089213,
+      "recall_at_val_fpr_0.01": 1.0,
+      "test_fpr_at_val_fpr_0.01": 0.003937007874015748,
+      "per_source": {
+        "DS-008": {
+          "n": 43,
+          "n_pos": 43,
+          "mean_score": 0.9500143161123894,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        },
+        "DS-009": {
+          "n": 1693,
+          "n_pos": 1693,
+          "mean_score": 0.9999139333691338,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        },
+        "DS-011": {
+          "n": 508,
+          "n_pos": 0,
+          "mean_score": 0.0024480768659662874,
+          "false_positive_rate": {
+            "pred@fpr<=0.01": 0.003937007874015748,
+            "pred@fpr<=0.05": 0.003937007874015748
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.01194
+    },
+    {
+      "experiment_id": "EXP-20261016T184950-1a371e62-cd76",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "C_JA4",
+      "model": "logreg",
+      "encoding": "onehot",
+      "protocol": "BEHAVIORAL_HOLDOUT",
+      "population_rows": 11220,
+      "coverage": 0.179397,
+      "n_pos": 1736,
+      "n_neg": 508,
+      "average_precision": 0.9999980102353494,
+      "ap_ci": [
+        0.9999803539755792,
+        1.0
+      ],
+      "ap_ci_status": "FEW_GROUPS",
+      "roc_auc": 0.9999965982074821,
+      "brier": 0.0004202297782847633,
+      "ece_15bin": 0.0005492845675142222,
+      "recall_at_val_fpr_0.01": 1.0,
+      "test_fpr_at_val_fpr_0.01": 0.003937007874015748,
+      "per_source": {
+        "DS-008": {
+          "n": 43,
+          "n_pos": 43,
+          "mean_score": 0.9645819519860805,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        },
+        "DS-009": {
+          "n": 1693,
+          "n_pos": 1693,
+          "mean_score": 0.9999991877854479,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        },
+        "DS-011": {
+          "n": 508,
+          "n_pos": 0,
+          "mean_score": 0.002368563275423967,
+          "false_positive_rate": {
+            "pred@fpr<=0.01": 0.003937007874015748,
+            "pred@fpr<=0.05": 0.003937007874015748
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.00063
+    },
+    {
+      "experiment_id": "EXP-20261016T184958-d006f222-6f65",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "C_JA4",
+      "model": "random_forest",
+      "encoding": "onehot",
+      "protocol": "BEHAVIORAL_HOLDOUT",
+      "population_rows": 11220,
+      "coverage": 0.179397,
+      "n_pos": 1736,
+      "n_neg": 508,
+      "average_precision": 0.9999980102353494,
+      "ap_ci": [
+        0.9999803539755792,
+        1.0
+      ],
+      "ap_ci_status": "FEW_GROUPS",
+      "roc_auc": 0.9999965982074821,
+      "brier": 0.0006318122968524499,
+      "ece_15bin": 0.0013060159999097219,
+      "recall_at_val_fpr_0.01": 1.0,
+      "test_fpr_at_val_fpr_0.01": 0.003937007874015748,
+      "per_source": {
+        "DS-008": {
+          "n": 43,
+          "n_pos": 43,
+          "mean_score": 0.9406188823261356,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        },
+        "DS-009": {
+          "n": 1693,
+          "n_pos": 1693,
+          "mean_score": 0.9999803582318039,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        },
+        "DS-011": {
+          "n": 508,
+          "n_pos": 0,
+          "mean_score": 0.0029393272959786494,
+          "false_positive_rate": {
+            "pred@fpr<=0.01": 0.003937007874015748,
+            "pred@fpr<=0.05": 0.003937007874015748
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.01217
+    },
+    {
+      "experiment_id": "EXP-20261016T185006-3433e0f4-b9db",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "D_JA3_FLOW",
+      "model": "logreg",
+      "encoding": "onehot",
+      "protocol": "BEHAVIORAL_HOLDOUT",
+      "population_rows": 11220,
+      "coverage": 0.179397,
+      "n_pos": 1736,
+      "n_neg": 508,
+      "average_precision": 0.999995023286102,
+      "ap_ci": [
+        0.999959952435789,
+        1.0
+      ],
+      "ap_ci_status": "FEW_GROUPS",
+      "roc_auc": 0.9999829910374106,
+      "brier": 0.002574956504015509,
+      "ece_15bin": 0.002086777360263377,
+      "recall_at_val_fpr_0.01": 1.0,
+      "test_fpr_at_val_fpr_0.01": 0.00984251968503937,
+      "per_source": {
+        "DS-008": {
+          "n": 43,
+          "n_pos": 43,
+          "mean_score": 0.8364741539651344,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        },
+        "DS-009": {
+          "n": 1693,
+          "n_pos": 1693,
+          "mean_score": 0.9999999995117639,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        },
+        "DS-011": {
+          "n": 508,
+          "n_pos": 0,
+          "mean_score": 0.009044146477231287,
+          "false_positive_rate": {
+            "pred@fpr<=0.01": 0.00984251968503937,
+            "pred@fpr<=0.05": 0.04330708661417323
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.00545
+    },
+    {
+      "experiment_id": "EXP-20261016T185015-6d48ab90-e7c4",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "D_JA3_FLOW",
+      "model": "random_forest",
+      "encoding": "onehot",
+      "protocol": "BEHAVIORAL_HOLDOUT",
+      "population_rows": 11220,
+      "coverage": 0.179397,
+      "n_pos": 1736,
+      "n_neg": 508,
+      "average_precision": 0.9999990045443656,
+      "ap_ci": [
+        0.9999877534118226,
+        1.0
+      ],
+      "ap_ci_status": "FEW_GROUPS",
+      "roc_auc": 0.9999965982074821,
+      "brier": 0.00043692059870227004,
+      "ece_15bin": 0.0006367802630520432,
+      "recall_at_val_fpr_0.01": 1.0,
+      "test_fpr_at_val_fpr_0.01": 0.005905511811023622,
+      "per_source": {
+        "DS-008": {
+          "n": 43,
+          "n_pos": 43,
+          "mean_score": 0.9892450331367247,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        },
+        "DS-009": {
+          "n": 1693,
+          "n_pos": 1693,
+          "mean_score": 0.9998658745167613,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        },
+        "DS-011": {
+          "n": 508,
+          "n_pos": 0,
+          "mean_score": 0.0027223355841329926,
+          "false_positive_rate": {
+            "pred@fpr<=0.01": 0.005905511811023622,
+            "pred@fpr<=0.05": 0.031496062992125984
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.01705
+    },
+    {
+      "experiment_id": "EXP-20261016T185026-d972e532-70e5",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "E_JA4_FLOW",
+      "model": "logreg",
+      "encoding": "onehot",
+      "protocol": "BEHAVIORAL_HOLDOUT",
+      "population_rows": 11220,
+      "coverage": 0.179397,
+      "n_pos": 1736,
+      "n_neg": 508,
+      "average_precision": 0.9999946903168151,
+      "ap_ci": [
+        0.9999569768642823,
+        1.0
+      ],
+      "ap_ci_status": "FEW_GROUPS",
+      "roc_auc": 0.9999818571065714,
+      "brier": 0.002593586784215033,
+      "ece_15bin": 0.002268574516395355,
+      "recall_at_val_fpr_0.01": 1.0,
+      "test_fpr_at_val_fpr_0.01": 0.011811023622047244,
+      "per_source": {
+        "DS-008": {
+          "n": 43,
+          "n_pos": 43,
+          "mean_score": 0.8322160501768296,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        },
+        "DS-009": {
+          "n": 1693,
+          "n_pos": 1693,
+          "mean_score": 0.9999999994925353,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        },
+        "DS-011": {
+          "n": 508,
+          "n_pos": 0,
+          "mean_score": 0.009639846407821062,
+          "false_positive_rate": {
+            "pred@fpr<=0.01": 0.011811023622047244,
+            "pred@fpr<=0.05": 0.04133858267716536
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.00464
+    },
+    {
+      "experiment_id": "EXP-20261016T185034-47939ca5-2f12",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "E_JA4_FLOW",
+      "model": "random_forest",
+      "encoding": "onehot",
+      "protocol": "BEHAVIORAL_HOLDOUT",
+      "population_rows": 11220,
+      "coverage": 0.179397,
+      "n_pos": 1736,
+      "n_neg": 508,
+      "average_precision": 0.9999986723431739,
+      "ap_ci": [
+        0.9999852059777227,
+        1.0
+      ],
+      "ap_ci_status": "FEW_GROUPS",
+      "roc_auc": 0.9999954642766428,
+      "brier": 0.0004518332801331039,
+      "ece_15bin": 0.0006926701409435188,
+      "recall_at_val_fpr_0.01": 1.0,
+      "test_fpr_at_val_fpr_0.01": 0.005905511811023622,
+      "per_source": {
+        "DS-008": {
+          "n": 43,
+          "n_pos": 43,
+          "mean_score": 0.9868987989317326,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        },
+        "DS-009": {
+          "n": 1693,
+          "n_pos": 1693,
+          "mean_score": 0.9998562176981864,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        },
+        "DS-011": {
+          "n": 508,
+          "n_pos": 0,
+          "mean_score": 0.0027421136597825706,
+          "false_positive_rate": {
+            "pred@fpr<=0.01": 0.005905511811023622,
+            "pred@fpr<=0.05": 0.025590551181102362
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.01818
+    }
+  ],
+  "paired_contrasts": {
+    "logreg": {
+      "model": "logreg",
+      "protocol": "BEHAVIORAL_HOLDOUT",
+      "contrasts": [
+        {
+          "contrast": "JA3 added to flow",
+          "track_a": "A_FLOW@JA3POP",
+          "track_b": "D_JA3_FLOW",
+          "status": "NOT_RUN",
+          "reason": "one of the experiments is missing or did not complete",
+          "holm": {
+            "p": null,
+            "p_holm": null,
+            "reject": null
+          },
+          "interpretation": "NOT_RUN"
+        },
+        {
+          "contrast": "JA4 added to flow",
+          "track_a": "A_FLOW@JA4POP",
+          "track_b": "E_JA4_FLOW",
+          "status": "NOT_RUN",
+          "reason": "one of the experiments is missing or did not complete",
+          "holm": {
+            "p": null,
+            "p_holm": null,
+            "reject": null
+          },
+          "interpretation": "NOT_RUN"
+        },
+        {
+          "contrast": "flow added to JA3",
+          "experiment_a": "EXP-20261016T184934-18eefb2e-24e5",
+          "experiment_b": "EXP-20261016T185006-3433e0f4-b9db",
+          "track_a": "B_JA3",
+          "track_b": "D_JA3_FLOW",
+          "shared_rows": 2244,
+          "rows_a_only": 0,
+          "rows_b_only": 0,
+          "average_precision": {
+            "metric_a": 0.9999973469804658,
+            "metric_b": 0.999995023286102,
+            "difference": -2.3236943638149654e-06,
+            "groups_per_stratum": {
+              "0": 6,
+              "1": 11
+            },
+            "status": "FEW_GROUPS",
+            "ci_low": -3.0307352468983406e-05,
+            "ci_high": 1.2083339314822304e-05,
+            "p_value_bootstrap": 0.636,
+            "n_boot": 1000,
+            "resampling_unit": "capture_id"
+          },
+          "recall_at_val_fpr_0.01": {
+            "metric_a": 1.0,
+            "metric_b": 1.0,
+            "difference": 0.0,
+            "groups_per_stratum": {
+              "0": 6,
+              "1": 11
+            },
+            "status": "FEW_GROUPS",
+            "ci_low": 0.0,
+            "ci_high": 0.0,
+            "p_value_bootstrap": 1.0,
+            "n_boot": 1000,
+            "resampling_unit": "capture_id"
+          },
+          "test_fpr_at_val_fpr_0.01": {
+            "metric_a": 0.003937007874015748,
+            "metric_b": 0.00984251968503937,
+            "difference": 0.005905511811023622,
+            "groups_per_stratum": {
+              "0": 6,
+              "1": 11
+            },
+            "status": "FEW_GROUPS",
+            "ci_low": 0.0,
+            "ci_high": 0.01836734693877551,
+            "p_value_bootstrap": 0.656,
+            "n_boot": 1000,
+            "resampling_unit": "capture_id"
+          },
+          "cost": {
+            "latency_ms_per_flow_a": 0.00066,
+            "latency_ms_per_flow_b": 0.00545,
+            "fit_seconds_a": 0.0058,
+            "fit_seconds_b": 0.0473
+          },
+          "status": "COMPLETED",
+          "holm": {
+            "p": 0.636,
+            "p_holm": 1.0,
+            "reject": false
+          },
+          "interpretation": "No evidence of a difference (this is not evidence of equivalence)"
+        },
+        {
+          "contrast": "flow added to JA4",
+          "experiment_a": "EXP-20261016T184950-1a371e62-cd76",
+          "experiment_b": "EXP-20261016T185026-d972e532-70e5",
+          "track_a": "C_JA4",
+          "track_b": "E_JA4_FLOW",
+          "shared_rows": 2244,
+          "rows_a_only": 0,
+          "rows_b_only": 0,
+          "average_precision": {
+            "metric_a": 0.9999980102353494,
+            "metric_b": 0.9999946903168151,
+            "difference": -3.319918534305799e-06,
+            "groups_per_stratum": {
+              "0": 6,
+              "1": 11
+            },
+            "status": "FEW_GROUPS",
+            "ci_low": -3.516713888302714e-05,
+            "ci_high": 8.286008138114192e-06,
+            "p_value_bootstrap": 0.506,
+            "n_boot": 1000,
+            "resampling_unit": "capture_id"
+          },
+          "recall_at_val_fpr_0.01": {
+            "metric_a": 1.0,
+            "metric_b": 1.0,
+            "difference": 0.0,
+            "groups_per_stratum": {
+              "0": 6,
+              "1": 11
+            },
+            "status": "FEW_GROUPS",
+            "ci_low": 0.0,
+            "ci_high": 0.0,
+            "p_value_bootstrap": 1.0,
+            "n_boot": 1000,
+            "resampling_unit": "capture_id"
+          },
+          "test_fpr_at_val_fpr_0.01": {
+            "metric_a": 0.003937007874015748,
+            "metric_b": 0.011811023622047244,
+            "difference": 0.007874015748031496,
+            "groups_per_stratum": {
+              "0": 6,
+              "1": 11
+            },
+            "status": "FEW_GROUPS",
+            "ci_low": 0.0,
+            "ci_high": 0.01976656231417678,
+            "p_value_bootstrap": 0.17,
+            "n_boot": 1000,
+            "resampling_unit": "capture_id"
+          },
+          "cost": {
+            "latency_ms_per_flow_a": 0.00063,
+            "latency_ms_per_flow_b": 0.00464,
+            "fit_seconds_a": 0.0068,
+            "fit_seconds_b": 0.035
+          },
+          "status": "COMPLETED",
+          "holm": {
+            "p": 0.506,
+            "p_holm": 1.0,
+            "reject": false
+          },
+          "interpretation": "No evidence of a difference (this is not evidence of equivalence)"
+        }
+      ],
+      "multiple_comparison": "Holm over 4 primary contrasts",
+      "alpha": 0.05
+    },
+    "random_forest": {
+      "model": "random_forest",
+      "protocol": "BEHAVIORAL_HOLDOUT",
+      "contrasts": [
+        {
+          "contrast": "JA3 added to flow",
+          "track_a": "A_FLOW@JA3POP",
+          "track_b": "D_JA3_FLOW",
+          "status": "NOT_RUN",
+          "reason": "one of the experiments is missing or did not complete",
+          "holm": {
+            "p": null,
+            "p_holm": null,
+            "reject": null
+          },
+          "interpretation": "NOT_RUN"
+        },
+        {
+          "contrast": "JA4 added to flow",
+          "track_a": "A_FLOW@JA4POP",
+          "track_b": "E_JA4_FLOW",
+          "status": "NOT_RUN",
+          "reason": "one of the experiments is missing or did not complete",
+          "holm": {
+            "p": null,
+            "p_holm": null,
+            "reject": null
+          },
+          "interpretation": "NOT_RUN"
+        },
+        {
+          "contrast": "flow added to JA3",
+          "experiment_a": "EXP-20261016T184942-55691e9a-2855",
+          "experiment_b": "EXP-20261016T185015-6d48ab90-e7c4",
+          "track_a": "B_JA3",
+          "track_b": "D_JA3_FLOW",
+          "shared_rows": 2244,
+          "rows_a_only": 0,
+          "rows_b_only": 0,
+          "average_precision": {
+            "metric_a": 0.9999973469804658,
+            "metric_b": 0.9999990045443656,
+            "difference": 1.6575638998039821e-06,
+            "groups_per_stratum": {
+              "0": 6,
+              "1": 11
+            },
+            "status": "FEW_GROUPS",
+            "ci_low": -6.935301776789249e-06,
+            "ci_high": 2.3024663315662768e-05,
+            "p_value_bootstrap": 0.888,
+            "n_boot": 1000,
+            "resampling_unit": "capture_id"
+          },
+          "recall_at_val_fpr_0.01": {
+            "metric_a": 1.0,
+            "metric_b": 1.0,
+            "difference": 0.0,
+            "groups_per_stratum": {
+              "0": 6,
+              "1": 11
+            },
+            "status": "FEW_GROUPS",
+            "ci_low": 0.0,
+            "ci_high": 0.0,
+            "p_value_bootstrap": 1.0,
+            "n_boot": 1000,
+            "resampling_unit": "capture_id"
+          },
+          "test_fpr_at_val_fpr_0.01": {
+            "metric_a": 0.003937007874015748,
+            "metric_b": 0.005905511811023622,
+            "difference": 0.001968503937007874,
+            "groups_per_stratum": {
+              "0": 6,
+              "1": 11
+            },
+            "status": "FEW_GROUPS",
+            "ci_low": -0.004608294930875576,
+            "ci_high": 0.007693798449612402,
+            "p_value_bootstrap": 0.774,
+            "n_boot": 1000,
+            "resampling_unit": "capture_id"
+          },
+          "cost": {
+            "latency_ms_per_flow_a": 0.01194,
+            "latency_ms_per_flow_b": 0.01705,
+            "fit_seconds_a": 0.2269,
+            "fit_seconds_b": 0.4439
+          },
+          "status": "COMPLETED",
+          "holm": {
+            "p": 0.888,
+            "p_holm": 1.0,
+            "reject": false
+          },
+          "interpretation": "No evidence of a difference (this is not evidence of equivalence)"
+        },
+        {
+          "contrast": "flow added to JA4",
+          "experiment_a": "EXP-20261016T184958-d006f222-6f65",
+          "experiment_b": "EXP-20261016T185034-47939ca5-2f12",
+          "track_a": "C_JA4",
+          "track_b": "E_JA4_FLOW",
+          "shared_rows": 2244,
+          "rows_a_only": 0,
+          "rows_b_only": 0,
+          "average_precision": {
+            "metric_a": 0.9999980102353494,
+            "metric_b": 0.9999986723431739,
+            "difference": 6.621078244561929e-07,
+            "groups_per_stratum": {
+              "0": 6,
+              "1": 11
+            },
+            "status": "FEW_GROUPS",
+            "ci_low": -9.680586659291385e-06,
+            "ci_high": 1.4374875331854544e-05,
+            "p_value_bootstrap": 1.0,
+            "n_boot": 1000,
+            "resampling_unit": "capture_id"
+          },
+          "recall_at_val_fpr_0.01": {
+            "metric_a": 1.0,
+            "metric_b": 1.0,
+            "difference": 0.0,
+            "groups_per_stratum": {
+              "0": 6,
+              "1": 11
+            },
+            "status": "FEW_GROUPS",
+            "ci_low": 0.0,
+            "ci_high": 0.0,
+            "p_value_bootstrap": 1.0,
+            "n_boot": 1000,
+            "resampling_unit": "capture_id"
+          },
+          "test_fpr_at_val_fpr_0.01": {
+            "metric_a": 0.003937007874015748,
+            "metric_b": 0.005905511811023622,
+            "difference": 0.001968503937007874,
+            "groups_per_stratum": {
+              "0": 6,
+              "1": 11
+            },
+            "status": "FEW_GROUPS",
+            "ci_low": -0.004608294930875576,
+            "ci_high": 0.007693798449612402,
+            "p_value_bootstrap": 0.774,
+            "n_boot": 1000,
+            "resampling_unit": "capture_id"
+          },
+          "cost": {
+            "latency_ms_per_flow_a": 0.01217,
+            "latency_ms_per_flow_b": 0.01818,
+            "fit_seconds_a": 0.2382,
+            "fit_seconds_b": 0.3659
+          },
+          "status": "COMPLETED",
+          "holm": {
+            "p": 1.0,
+            "p_holm": 1.0,
+            "reject": false
+          },
+          "interpretation": "No evidence of a difference (this is not evidence of equivalence)"
+        }
+      ],
+      "multiple_comparison": "Holm over 4 primary contrasts",
+      "alpha": 0.05
+    }
+  },
+  "primary_model": "random_forest"
+}
