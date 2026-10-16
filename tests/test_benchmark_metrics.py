@@ -157,3 +157,17 @@ def test_all_five_tracks_run_end_to_end(scratch_registry):
         assert rec["status"] == "COMPLETED", rec.get("error")
         assert rec["coverage"]["population_rows"] <= len(df)
         assert rec["metrics"]["pooled_calibrated"]["n"] == rec["coverage"]["population_rows"]
+
+
+def test_unseen_fingerprint_analysis_partitions_predictions(scratch_registry):
+    from ml.benchmark.runner import run_configuration
+    from ml.diagnostics.unseen import unseen_analysis
+    from ml.evaluation.splits import capture_fold_assignment
+    df = synthetic_corpus(captures_per_class=5, flows_per_capture=24)
+    assign = capture_fold_assignment(df[["capture_id", "y"]].drop_duplicates(), 3, 0)
+    suite = R.Suite("unit5", {"t": 5}, root=R.PHASE9_ROOT)
+    rec = run_configuration(suite, df, "C_JA4", "CAPTURE_GROUP_KFOLD", "logreg", capture_assignment=assign, n_boot=30)
+    out = unseen_analysis(df, rec, {"config": {"protocol": "CAPTURE_GROUP_KFOLD", "seed": 42}, "capture_fold_assignment": assign})
+    assert out["status"] == "COMPLETED"
+    assert sum(c["flows"] for c in out["cells"]) == rec["coverage"]["population_rows"]
+    assert unseen_analysis(df, {**rec, "config": {**rec["config"], "track": "A_FLOW"}}, {})["status"] == "NOT_APPLICABLE"
