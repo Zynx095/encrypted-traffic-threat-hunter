@@ -207,3 +207,31 @@ LR, pooled folds.
 | C_JA4 | AP 0.999, FPR 18.4 % | AP 0.995, FPR 0.0 % | AP 0.996, FPR 18.4 % |
 
 Under frequency encoding an unseen fingerprint receives frequency 0, which this LR maps to benign. That removes the false positives at a recall cost (97.7 %). The behaviour is a property of the encoding's novelty handling, not of maliciousness.
+
+### 11.6 Leave-one-family-out: `leave_one_family_out-20261016T181651Z`
+
+Each of 10 family groups is held out, together with one rotating benign capture.
+
+| Track | RF AP (pooled) | RF recall / FPR @val | Per-family RF detection @val (selection) |
+|---|---|---|---|
+| A_FLOW | **0.710 [0.456, 0.962]** | 37.1 % / 8.0 % | AsyncRAT_XWorm 0 %, Lumma 5 %, NetSupport_StealC 0 %, Pikabot 0 %, Trickbot 0 %, XLoader 1 %, Remcos 38 %, DarkGate 43 %, Dridex 60 % |
+| D_JA3_FLOW | 0.992 [0.937, 1.000] | 98.5 % / 20.0 % | NetSupport_StealC 0 %, Pikabot 0 %, XLoader 11 %, AsyncRAT_XWorm 37 %, Lumma 65 %, Dridex/Trickbot/Remcos/DarkGate 100 % |
+| E_JA4_FLOW | 0.982 [0.918, 1.000] | 99.0 % / 17.8 % | NetSupport_StealC 0 %, XLoader 20 %, AsyncRAT_XWorm 53 %, Pikabot 65 %, Lumma 79 %, others 100 % |
+
+* The flow-only AP falls from 0.931 (capture-grouped) to 0.710 when whole families are unseen.
+* The fusion tracks keep a high AP, but their validation-selected thresholds produce 18–20 % test FPR.
+* The fold that pairs a family with benign capture CTU-Normal-21 shows about 40 % FPR (A_FLOW), consistent with §11.1.
+* HGB results (AP 0.630 for A; 0.982 for D and E) are in the suite summary.
+
+### 11.7 Legacy behavioural-hash holdout: `legacy_behavioral_holdout-20261016T184825Z`
+
+This is the Phase 7 protocol: one 80/20 `GroupShuffleSplit` on `behavioral_hash`, so captures appear on both sides.
+
+| Track (RF) | Legacy AP | Recall / FPR @val (legacy) | Capture-grouped AP (§11.1) | Recall / FPR @val (capture-grouped) |
+|---|---|---|---|---|
+| A_FLOW | 0.992 [0.976, 0.999] | 95.0 % / 1.1 % | 0.931 | 49.5 % / 5.8 % |
+| B_JA3 / C_JA4 | 1.000 | 100 % / 0.4 % | 0.971 / 0.994 | 99.8 % / 18.6 % |
+| D_JA3_FLOW / E_JA4_FLOW | 1.000 | 100 % / 0.6 % | 0.988 / 0.991 | 99.5 % / 17.4 %, 99.6 % / 12.1 % |
+
+The legacy protocol overstates both ranking quality and, above all, the achievable operating point. It hides the unseen-fingerprint false positives entirely. Capture-level evaluation is required.
+
