@@ -1,0 +1,679 @@
+{
+  "experiments": [
+    {
+      "experiment_id": "EXP-20261016T180920-0bc928df-2510",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "A_FLOW",
+      "model": "logreg",
+      "encoding": "onehot",
+      "protocol": "LEAVE_ONE_SOURCE_OUT",
+      "population_rows": 62543,
+      "coverage": 1.0,
+      "n_pos": 38543,
+      "n_neg": 0,
+      "average_precision": null,
+      "ap_ci": [
+        null,
+        null
+      ],
+      "ap_ci_status": "INSUFFICIENT_GROUPS",
+      "roc_auc": null,
+      "brier": null,
+      "ece_15bin": null,
+      "recall_at_val_fpr_0.01": 0.002750175129076616,
+      "test_fpr_at_val_fpr_0.01": null,
+      "per_source": {
+        "DS-008": {
+          "n": 2543,
+          "n_pos": 2543,
+          "mean_score": 0.6813437777970727,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.0,
+            "pred@fpr<=0.05": 0.4486826582776249
+          }
+        },
+        "DS-009": {
+          "n": 36000,
+          "n_pos": 36000,
+          "mean_score": 0.17665862481573122,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.0029444444444444444,
+            "pred@fpr<=0.05": 0.28191666666666665
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.00395
+    },
+    {
+      "experiment_id": "EXP-20261016T180940-23be954d-d464",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "A_FLOW",
+      "model": "random_forest",
+      "encoding": "onehot",
+      "protocol": "LEAVE_ONE_SOURCE_OUT",
+      "population_rows": 62543,
+      "coverage": 1.0,
+      "n_pos": 38543,
+      "n_neg": 0,
+      "average_precision": null,
+      "ap_ci": [
+        null,
+        null
+      ],
+      "ap_ci_status": "INSUFFICIENT_GROUPS",
+      "roc_auc": null,
+      "brier": null,
+      "ece_15bin": null,
+      "recall_at_val_fpr_0.01": 0.1451884907765353,
+      "test_fpr_at_val_fpr_0.01": null,
+      "per_source": {
+        "DS-008": {
+          "n": 2543,
+          "n_pos": 2543,
+          "mean_score": 0.30279473081180497,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.037750688163586316,
+            "pred@fpr<=0.05": 0.11403853716083366
+          }
+        },
+        "DS-009": {
+          "n": 36000,
+          "n_pos": 36000,
+          "mean_score": 0.16809255529014358,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.1527777777777778,
+            "pred@fpr<=0.05": 0.16452777777777777
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.010034999999999999
+    },
+    {
+      "experiment_id": "EXP-20261016T180953-b6a3909b-09a3",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "A_FLOW",
+      "model": "hist_gb",
+      "encoding": "onehot",
+      "protocol": "LEAVE_ONE_SOURCE_OUT",
+      "population_rows": 62543,
+      "coverage": 1.0,
+      "n_pos": 38543,
+      "n_neg": 0,
+      "average_precision": null,
+      "ap_ci": [
+        null,
+        null
+      ],
+      "ap_ci_status": "INSUFFICIENT_GROUPS",
+      "roc_auc": null,
+      "brier": null,
+      "ece_15bin": null,
+      "recall_at_val_fpr_0.01": 0.001712373193576006,
+      "test_fpr_at_val_fpr_0.01": null,
+      "per_source": {
+        "DS-008": {
+          "n": 2543,
+          "n_pos": 2543,
+          "mean_score": 0.2958954487864126,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.02438065277231616,
+            "pred@fpr<=0.05": 0.19661816751867872
+          }
+        },
+        "DS-009": {
+          "n": 36000,
+          "n_pos": 36000,
+          "mean_score": 0.16345125579805178,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.00011111111111111112,
+            "pred@fpr<=0.05": 0.03361111111111111
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.01
+    },
+    {
+      "experiment_id": "EXP-20261016T181146-3adc8f09-c23a",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "B_JA3",
+      "model": "logreg",
+      "encoding": "onehot",
+      "protocol": "LEAVE_ONE_SOURCE_OUT",
+      "population_rows": 11220,
+      "coverage": 0.179397,
+      "n_pos": 8591,
+      "n_neg": 0,
+      "average_precision": null,
+      "ap_ci": [
+        null,
+        null
+      ],
+      "ap_ci_status": "INSUFFICIENT_GROUPS",
+      "roc_auc": null,
+      "brier": null,
+      "ece_15bin": null,
+      "recall_at_val_fpr_0.01": 0.9774182283785356,
+      "test_fpr_at_val_fpr_0.01": null,
+      "per_source": {
+        "DS-008": {
+          "n": 194,
+          "n_pos": 194,
+          "mean_score": 0.0004180133737297535,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.0,
+            "pred@fpr<=0.05": 0.0
+          }
+        },
+        "DS-009": {
+          "n": 8397,
+          "n_pos": 8397,
+          "mean_score": 0.5653375053451714,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.001905
+    },
+    {
+      "experiment_id": "EXP-20261016T181147-0bc984bc-3ed2",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "B_JA3",
+      "model": "random_forest",
+      "encoding": "onehot",
+      "protocol": "LEAVE_ONE_SOURCE_OUT",
+      "population_rows": 11220,
+      "coverage": 0.179397,
+      "n_pos": 8591,
+      "n_neg": 0,
+      "average_precision": null,
+      "ap_ci": [
+        null,
+        null
+      ],
+      "ap_ci_status": "INSUFFICIENT_GROUPS",
+      "roc_auc": null,
+      "brier": null,
+      "ece_15bin": null,
+      "recall_at_val_fpr_0.01": 0.9774182283785356,
+      "test_fpr_at_val_fpr_0.01": null,
+      "per_source": {
+        "DS-008": {
+          "n": 194,
+          "n_pos": 194,
+          "mean_score": 0.0005999360255484351,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.0,
+            "pred@fpr<=0.05": 0.0
+          }
+        },
+        "DS-009": {
+          "n": 8397,
+          "n_pos": 8397,
+          "mean_score": 0.598176924792714,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.07198500000000001
+    },
+    {
+      "experiment_id": "EXP-20261016T181151-adcadfc5-8f6c",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "B_JA3",
+      "model": "hist_gb",
+      "encoding": "onehot",
+      "protocol": "LEAVE_ONE_SOURCE_OUT",
+      "population_rows": 11220,
+      "coverage": 0.179397,
+      "n_pos": 8591,
+      "n_neg": 0,
+      "average_precision": null,
+      "ap_ci": [
+        null,
+        null
+      ],
+      "ap_ci_status": "INSUFFICIENT_GROUPS",
+      "roc_auc": null,
+      "brier": null,
+      "ece_15bin": null,
+      "recall_at_val_fpr_0.01": 0.9774182283785356,
+      "test_fpr_at_val_fpr_0.01": null,
+      "per_source": {
+        "DS-008": {
+          "n": 194,
+          "n_pos": 194,
+          "mean_score": 0.0006166838673119427,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.0,
+            "pred@fpr<=0.05": 0.0
+          }
+        },
+        "DS-009": {
+          "n": 8397,
+          "n_pos": 8397,
+          "mean_score": 0.349385844009233,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.00751
+    },
+    {
+      "experiment_id": "EXP-20261016T181153-ed1b8659-40e4",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "C_JA4",
+      "model": "logreg",
+      "encoding": "onehot",
+      "protocol": "LEAVE_ONE_SOURCE_OUT",
+      "population_rows": 11220,
+      "coverage": 0.179397,
+      "n_pos": 8591,
+      "n_neg": 0,
+      "average_precision": null,
+      "ap_ci": [
+        null,
+        null
+      ],
+      "ap_ci_status": "INSUFFICIENT_GROUPS",
+      "roc_auc": null,
+      "brier": null,
+      "ece_15bin": null,
+      "recall_at_val_fpr_0.01": 0.9774182283785356,
+      "test_fpr_at_val_fpr_0.01": null,
+      "per_source": {
+        "DS-008": {
+          "n": 194,
+          "n_pos": 194,
+          "mean_score": 0.00041801337372975614,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.0,
+            "pred@fpr<=0.05": 0.0
+          }
+        },
+        "DS-009": {
+          "n": 8397,
+          "n_pos": 8397,
+          "mean_score": 0.272500920961142,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.0014850000000000002
+    },
+    {
+      "experiment_id": "EXP-20261016T181153-8e071341-9513",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "C_JA4",
+      "model": "random_forest",
+      "encoding": "onehot",
+      "protocol": "LEAVE_ONE_SOURCE_OUT",
+      "population_rows": 11220,
+      "coverage": 0.179397,
+      "n_pos": 8591,
+      "n_neg": 0,
+      "average_precision": null,
+      "ap_ci": [
+        null,
+        null
+      ],
+      "ap_ci_status": "INSUFFICIENT_GROUPS",
+      "roc_auc": null,
+      "brier": null,
+      "ece_15bin": null,
+      "recall_at_val_fpr_0.01": 0.9774182283785356,
+      "test_fpr_at_val_fpr_0.01": null,
+      "per_source": {
+        "DS-008": {
+          "n": 194,
+          "n_pos": 194,
+          "mean_score": 0.0006111123545649544,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.0,
+            "pred@fpr<=0.05": 0.0
+          }
+        },
+        "DS-009": {
+          "n": 8397,
+          "n_pos": 8397,
+          "mean_score": 0.2832282339039405,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.07279
+    },
+    {
+      "experiment_id": "EXP-20261016T181158-cfd06542-2877",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "C_JA4",
+      "model": "hist_gb",
+      "encoding": "onehot",
+      "protocol": "LEAVE_ONE_SOURCE_OUT",
+      "population_rows": 11220,
+      "coverage": 0.179397,
+      "n_pos": 8591,
+      "n_neg": 0,
+      "average_precision": null,
+      "ap_ci": [
+        null,
+        null
+      ],
+      "ap_ci_status": "INSUFFICIENT_GROUPS",
+      "roc_auc": null,
+      "brier": null,
+      "ece_15bin": null,
+      "recall_at_val_fpr_0.01": 0.9774182283785356,
+      "test_fpr_at_val_fpr_0.01": null,
+      "per_source": {
+        "DS-008": {
+          "n": 194,
+          "n_pos": 194,
+          "mean_score": 0.0006166838673119427,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.0,
+            "pred@fpr<=0.05": 0.0
+          }
+        },
+        "DS-009": {
+          "n": 8397,
+          "n_pos": 8397,
+          "mean_score": 0.13508398319676287,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.006655
+    },
+    {
+      "experiment_id": "EXP-20261016T181200-6fc5ca19-b342",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "D_JA3_FLOW",
+      "model": "logreg",
+      "encoding": "onehot",
+      "protocol": "LEAVE_ONE_SOURCE_OUT",
+      "population_rows": 11220,
+      "coverage": 0.179397,
+      "n_pos": 8591,
+      "n_neg": 0,
+      "average_precision": null,
+      "ap_ci": [
+        null,
+        null
+      ],
+      "ap_ci_status": "INSUFFICIENT_GROUPS",
+      "roc_auc": null,
+      "brier": null,
+      "ece_15bin": null,
+      "recall_at_val_fpr_0.01": 0.9905715283436154,
+      "test_fpr_at_val_fpr_0.01": null,
+      "per_source": {
+        "DS-008": {
+          "n": 194,
+          "n_pos": 194,
+          "mean_score": 0.3064195430547926,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.6185567010309279,
+            "pred@fpr<=0.05": 0.6958762886597938
+          }
+        },
+        "DS-009": {
+          "n": 8397,
+          "n_pos": 8397,
+          "mean_score": 0.868684452396777,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.9991663689412885,
+            "pred@fpr<=0.05": 0.9994045492437775
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.015415000000000002
+    },
+    {
+      "experiment_id": "EXP-20261016T181202-a4164b52-b5e9",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "D_JA3_FLOW",
+      "model": "random_forest",
+      "encoding": "onehot",
+      "protocol": "LEAVE_ONE_SOURCE_OUT",
+      "population_rows": 11220,
+      "coverage": 0.179397,
+      "n_pos": 8591,
+      "n_neg": 0,
+      "average_precision": null,
+      "ap_ci": [
+        null,
+        null
+      ],
+      "ap_ci_status": "INSUFFICIENT_GROUPS",
+      "roc_auc": null,
+      "brier": null,
+      "ece_15bin": null,
+      "recall_at_val_fpr_0.01": 0.04004190431847282,
+      "test_fpr_at_val_fpr_0.01": null,
+      "per_source": {
+        "DS-008": {
+          "n": 194,
+          "n_pos": 194,
+          "mean_score": 0.20639252946758418,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.28865979381443296,
+            "pred@fpr<=0.05": 0.5670103092783505
+          }
+        },
+        "DS-009": {
+          "n": 8397,
+          "n_pos": 8397,
+          "mean_score": 0.3384300878679617,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.03429796355841372,
+            "pred@fpr<=0.05": 0.8385137549124687
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.09677
+    },
+    {
+      "experiment_id": "EXP-20261016T181207-ac41216b-bc12",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "D_JA3_FLOW",
+      "model": "hist_gb",
+      "encoding": "onehot",
+      "protocol": "LEAVE_ONE_SOURCE_OUT",
+      "population_rows": 11220,
+      "coverage": 0.179397,
+      "n_pos": 8591,
+      "n_neg": 0,
+      "average_precision": null,
+      "ap_ci": [
+        null,
+        null
+      ],
+      "ap_ci_status": "INSUFFICIENT_GROUPS",
+      "roc_auc": null,
+      "brier": null,
+      "ece_15bin": null,
+      "recall_at_val_fpr_0.01": 0.22896054010010475,
+      "test_fpr_at_val_fpr_0.01": null,
+      "per_source": {
+        "DS-008": {
+          "n": 194,
+          "n_pos": 194,
+          "mean_score": 0.2371093728301846,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.23711340206185566,
+            "pred@fpr<=0.05": 0.23711340206185566
+          }
+        },
+        "DS-009": {
+          "n": 8397,
+          "n_pos": 8397,
+          "mean_score": 0.22904877167384435,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.22877218054066928,
+            "pred@fpr<=0.05": 0.5245921162319876
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.046645
+    },
+    {
+      "experiment_id": "EXP-20261016T181331-faed56fb-3cb7",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "E_JA4_FLOW",
+      "model": "logreg",
+      "encoding": "onehot",
+      "protocol": "LEAVE_ONE_SOURCE_OUT",
+      "population_rows": 11220,
+      "coverage": 0.179397,
+      "n_pos": 8591,
+      "n_neg": 0,
+      "average_precision": null,
+      "ap_ci": [
+        null,
+        null
+      ],
+      "ap_ci_status": "INSUFFICIENT_GROUPS",
+      "roc_auc": null,
+      "brier": null,
+      "ece_15bin": null,
+      "recall_at_val_fpr_0.01": 0.990338726574322,
+      "test_fpr_at_val_fpr_0.01": null,
+      "per_source": {
+        "DS-008": {
+          "n": 194,
+          "n_pos": 194,
+          "mean_score": 0.3064195430547926,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.6185567010309279,
+            "pred@fpr<=0.05": 0.6958762886597938
+          }
+        },
+        "DS-009": {
+          "n": 8397,
+          "n_pos": 8397,
+          "mean_score": 0.8414653450278896,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.9989281886387996,
+            "pred@fpr<=0.05": 0.9994045492437775
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.014995
+    },
+    {
+      "experiment_id": "EXP-20261016T181332-e46f153a-cdde",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "E_JA4_FLOW",
+      "model": "random_forest",
+      "encoding": "onehot",
+      "protocol": "LEAVE_ONE_SOURCE_OUT",
+      "population_rows": 11220,
+      "coverage": 0.179397,
+      "n_pos": 8591,
+      "n_neg": 0,
+      "average_precision": null,
+      "ap_ci": [
+        null,
+        null
+      ],
+      "ap_ci_status": "INSUFFICIENT_GROUPS",
+      "roc_auc": null,
+      "brier": null,
+      "ece_15bin": null,
+      "recall_at_val_fpr_0.01": 0.2642300081480619,
+      "test_fpr_at_val_fpr_0.01": null,
+      "per_source": {
+        "DS-008": {
+          "n": 194,
+          "n_pos": 194,
+          "mean_score": 0.22231354872100226,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.35051546391752575,
+            "pred@fpr<=0.05": 0.5721649484536082
+          }
+        },
+        "DS-009": {
+          "n": 8397,
+          "n_pos": 8397,
+          "mean_score": 0.38153774575315,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.26223651304037154,
+            "pred@fpr<=0.05": 0.9255686554721925
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.135685
+    },
+    {
+      "experiment_id": "EXP-20261016T181337-8620a68e-1126",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "E_JA4_FLOW",
+      "model": "hist_gb",
+      "encoding": "onehot",
+      "protocol": "LEAVE_ONE_SOURCE_OUT",
+      "population_rows": 11220,
+      "coverage": 0.179397,
+      "n_pos": 8591,
+      "n_neg": 0,
+      "average_precision": null,
+      "ap_ci": [
+        null,
+        null
+      ],
+      "ap_ci_status": "INSUFFICIENT_GROUPS",
+      "roc_auc": null,
+      "brier": null,
+      "ece_15bin": null,
+      "recall_at_val_fpr_0.01": 0.22896054010010475,
+      "test_fpr_at_val_fpr_0.01": null,
+      "per_source": {
+        "DS-008": {
+          "n": 194,
+          "n_pos": 194,
+          "mean_score": 0.2371093728301846,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.23711340206185566,
+            "pred@fpr<=0.05": 0.23711340206185566
+          }
+        },
+        "DS-009": {
+          "n": 8397,
+          "n_pos": 8397,
+          "mean_score": 0.22904877167384435,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.22877218054066928,
+            "pred@fpr<=0.05": 0.5245921162319876
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.02929
+    }
+  ]
+}

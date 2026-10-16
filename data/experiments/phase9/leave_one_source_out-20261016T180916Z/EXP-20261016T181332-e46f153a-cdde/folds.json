@@ -1,0 +1,330 @@
+[
+  {
+    "name": "holdout_DS-008",
+    "train_rows": 11026,
+    "test_rows": 194,
+    "train_pos": 8397,
+    "train_neg": 2629,
+    "test_pos": 194,
+    "test_neg": 0,
+    "train_captures": 12,
+    "test_captures": 10,
+    "purged_train_rows": 0,
+    "held_out": {
+      "source": "DS-008"
+    },
+    "status": "COMPLETED",
+    "selected_params": {
+      "min_samples_leaf": 1
+    },
+    "inner_status": "OK",
+    "inner_reason": null,
+    "grid_scores": [
+      {
+        "params": {
+          "min_samples_leaf": 1
+        },
+        "inner_mean_ap": 1.0,
+        "inner_fold_ap": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "params": {
+          "min_samples_leaf": 5
+        },
+        "inner_mean_ap": 1.0,
+        "inner_fold_ap": [
+          1.0,
+          1.0,
+          0.9999999999999998
+        ]
+      }
+    ],
+    "calibration": {
+      "a": 20.73739205853592,
+      "b": -12.147586756313816
+    },
+    "thresholds": {
+      "fpr<=0.01": 0.018148017980341415,
+      "fpr<=0.05": 0.0010127080256594743
+    },
+    "fit_seconds": 0.3368,
+    "predict_seconds": 0.0514,
+    "latency_ms_per_flow": 0.26512,
+    "throughput_flows_per_s": 3771.8,
+    "n_features_out": 113,
+    "ranking_raw": {
+      "n": 194,
+      "n_pos": 194,
+      "n_neg": 0,
+      "prevalence": 1.0,
+      "average_precision": null,
+      "pr_auc_trapezoid": null,
+      "roc_auc": null,
+      "brier": null,
+      "ece_15bin": null,
+      "tpr@fpr=0.001": null,
+      "tpr@fpr=0.01": null,
+      "tpr@fpr=0.05": null,
+      "undefined_reason": "ranking metrics need both classes",
+      "mean_score": 0.321340206185567
+    },
+    "ranking_calibrated": {
+      "n": 194,
+      "n_pos": 194,
+      "n_neg": 0,
+      "prevalence": 1.0,
+      "average_precision": null,
+      "pr_auc_trapezoid": null,
+      "roc_auc": null,
+      "brier": null,
+      "ece_15bin": null,
+      "tpr@fpr=0.001": null,
+      "tpr@fpr=0.01": null,
+      "tpr@fpr=0.05": null,
+      "undefined_reason": "ranking metrics need both classes",
+      "mean_score": 0.22231354872100226
+    },
+    "at_validation_thresholds": {
+      "fpr<=0.01": {
+        "threshold": 0.018148017980341415,
+        "n": 194,
+        "n_pos": 194,
+        "n_neg": 0,
+        "confusion_matrix": {
+          "tn": 0,
+          "fp": 0,
+          "fn": 126,
+          "tp": 68
+        },
+        "recall": 0.35051546391752575,
+        "fnr": 0.6494845360824743,
+        "specificity": null,
+        "fpr": null,
+        "precision": 1.0,
+        "f1": null,
+        "balanced_accuracy": null,
+        "mcc": null,
+        "undefined_reason": "single-class population: only class-conditional rates are defined"
+      },
+      "fpr<=0.05": {
+        "threshold": 0.0010127080256594743,
+        "n": 194,
+        "n_pos": 194,
+        "n_neg": 0,
+        "confusion_matrix": {
+          "tn": 0,
+          "fp": 0,
+          "fn": 83,
+          "tp": 111
+        },
+        "recall": 0.5721649484536082,
+        "fnr": 0.42783505154639173,
+        "specificity": null,
+        "fpr": null,
+        "precision": 1.0,
+        "f1": null,
+        "balanced_accuracy": null,
+        "mcc": null,
+        "undefined_reason": "single-class population: only class-conditional rates are defined"
+      }
+    },
+    "at_0.5_uncalibrated": {
+      "threshold": 0.5,
+      "n": 194,
+      "n_pos": 194,
+      "n_neg": 0,
+      "confusion_matrix": {
+        "tn": 0,
+        "fp": 0,
+        "fn": 148,
+        "tp": 46
+      },
+      "recall": 0.23711340206185566,
+      "fnr": 0.7628865979381443,
+      "specificity": null,
+      "fpr": null,
+      "precision": 1.0,
+      "f1": null,
+      "balanced_accuracy": null,
+      "mcc": null,
+      "undefined_reason": "single-class population: only class-conditional rates are defined"
+    }
+  },
+  {
+    "name": "holdout_DS-009",
+    "train_rows": 2823,
+    "test_rows": 8397,
+    "train_pos": 194,
+    "train_neg": 2629,
+    "test_pos": 8397,
+    "test_neg": 0,
+    "train_captures": 16,
+    "test_captures": 6,
+    "purged_train_rows": 0,
+    "held_out": {
+      "source": "DS-009"
+    },
+    "status": "COMPLETED",
+    "selected_params": {
+      "min_samples_leaf": 1
+    },
+    "inner_status": "OK",
+    "inner_reason": null,
+    "grid_scores": [
+      {
+        "params": {
+          "min_samples_leaf": 1
+        },
+        "inner_mean_ap": 0.692589058572883,
+        "inner_fold_ap": [
+          0.8262717570414062,
+          0.28328126259197267,
+          0.96821415608527
+        ]
+      },
+      {
+        "params": {
+          "min_samples_leaf": 5
+        },
+        "inner_mean_ap": 0.6684463629710701,
+        "inner_fold_ap": [
+          0.7204747136207614,
+          0.3256618650685159,
+          0.9592025102239331
+        ]
+      }
+    ],
+    "calibration": {
+      "a": 5.577774299972068,
+      "b": -3.709797692514251
+    },
+    "thresholds": {
+      "fpr<=0.01": 0.4743133886549198,
+      "fpr<=0.05": 0.22821958093580794
+    },
+    "fit_seconds": 0.2261,
+    "predict_seconds": 0.0525,
+    "latency_ms_per_flow": 0.00625,
+    "throughput_flows_per_s": 159884.1,
+    "n_features_out": 129,
+    "ranking_raw": {
+      "n": 8397,
+      "n_pos": 8397,
+      "n_neg": 0,
+      "prevalence": 1.0,
+      "average_precision": null,
+      "pr_auc_trapezoid": null,
+      "roc_auc": null,
+      "brier": null,
+      "ece_15bin": null,
+      "tpr@fpr=0.001": null,
+      "tpr@fpr=0.01": null,
+      "tpr@fpr=0.05": null,
+      "undefined_reason": "ranking metrics need both classes",
+      "mean_score": 0.5710023421063077
+    },
+    "ranking_calibrated": {
+      "n": 8397,
+      "n_pos": 8397,
+      "n_neg": 0,
+      "prevalence": 1.0,
+      "average_precision": null,
+      "pr_auc_trapezoid": null,
+      "roc_auc": null,
+      "brier": null,
+      "ece_15bin": null,
+      "tpr@fpr=0.001": null,
+      "tpr@fpr=0.01": null,
+      "tpr@fpr=0.05": null,
+      "undefined_reason": "ranking metrics need both classes",
+      "mean_score": 0.38153774575315
+    },
+    "at_validation_thresholds": {
+      "fpr<=0.01": {
+        "threshold": 0.4743133886549198,
+        "n": 8397,
+        "n_pos": 8397,
+        "n_neg": 0,
+        "confusion_matrix": {
+          "tn": 0,
+          "fp": 0,
+          "fn": 6195,
+          "tp": 2202
+        },
+        "recall": 0.26223651304037154,
+        "fnr": 0.7377634869596285,
+        "specificity": null,
+        "fpr": null,
+        "precision": 1.0,
+        "f1": null,
+        "balanced_accuracy": null,
+        "mcc": null,
+        "undefined_reason": "single-class population: only class-conditional rates are defined"
+      },
+      "fpr<=0.05": {
+        "threshold": 0.22821958093580794,
+        "n": 8397,
+        "n_pos": 8397,
+        "n_neg": 0,
+        "confusion_matrix": {
+          "tn": 0,
+          "fp": 0,
+          "fn": 625,
+          "tp": 7772
+        },
+        "recall": 0.9255686554721925,
+        "fnr": 0.07443134452780754,
+        "specificity": null,
+        "fpr": null,
+        "precision": 1.0,
+        "f1": null,
+        "balanced_accuracy": null,
+        "mcc": null,
+        "undefined_reason": "single-class population: only class-conditional rates are defined"
+      }
+    },
+    "at_0.5_uncalibrated": {
+      "threshold": 0.5,
+      "n": 8397,
+      "n_pos": 8397,
+      "n_neg": 0,
+      "confusion_matrix": {
+        "tn": 0,
+        "fp": 0,
+        "fn": 1767,
+        "tp": 6630
+      },
+      "recall": 0.7895677027509825,
+      "fnr": 0.21043229724901752,
+      "specificity": null,
+      "fpr": null,
+      "precision": 1.0,
+      "f1": null,
+      "balanced_accuracy": null,
+      "mcc": null,
+      "undefined_reason": "single-class population: only class-conditional rates are defined"
+    }
+  },
+  {
+    "name": "holdout_DS-011",
+    "train_rows": 0,
+    "test_rows": 2629,
+    "train_pos": 0,
+    "train_neg": 0,
+    "test_pos": 0,
+    "test_neg": 2629,
+    "train_captures": 0,
+    "test_captures": 6,
+    "purged_train_rows": 0,
+    "held_out": {
+      "source": "DS-011",
+      "infeasible": "training side would contain a single class"
+    },
+    "status": "INFEASIBLE",
+    "reason": "training side would contain a single class"
+  }
+]

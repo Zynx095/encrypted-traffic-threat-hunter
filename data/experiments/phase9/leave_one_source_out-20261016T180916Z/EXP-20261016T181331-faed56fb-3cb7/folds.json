@@ -1,0 +1,352 @@
+[
+  {
+    "name": "holdout_DS-008",
+    "train_rows": 11026,
+    "test_rows": 194,
+    "train_pos": 8397,
+    "train_neg": 2629,
+    "test_pos": 194,
+    "test_neg": 0,
+    "train_captures": 12,
+    "test_captures": 10,
+    "purged_train_rows": 0,
+    "held_out": {
+      "source": "DS-008"
+    },
+    "status": "COMPLETED",
+    "selected_params": {
+      "C": 10.0
+    },
+    "inner_status": "OK",
+    "inner_reason": null,
+    "grid_scores": [
+      {
+        "params": {
+          "C": 0.1
+        },
+        "inner_mean_ap": 0.999977544922185,
+        "inner_fold_ap": [
+          1.0,
+          0.9999326347665554,
+          1.0
+        ]
+      },
+      {
+        "params": {
+          "C": 1.0
+        },
+        "inner_mean_ap": 0.9999894378262443,
+        "inner_fold_ap": [
+          1.0,
+          0.9999683134787328,
+          1.0
+        ]
+      },
+      {
+        "params": {
+          "C": 10.0
+        },
+        "inner_mean_ap": 0.999999553295695,
+        "inner_fold_ap": [
+          1.0,
+          0.9999986598870851,
+          1.0
+        ]
+      }
+    ],
+    "calibration": {
+      "a": 15.929064937842368,
+      "b": -7.150404601633304
+    },
+    "thresholds": {
+      "fpr<=0.01": 0.0007978996995247461,
+      "fpr<=0.05": 0.0007880038282365801
+    },
+    "fit_seconds": 0.0148,
+    "predict_seconds": 0.0053,
+    "latency_ms_per_flow": 0.02715,
+    "throughput_flows_per_s": 36833.1,
+    "n_features_out": 113,
+    "ranking_raw": {
+      "n": 194,
+      "n_pos": 194,
+      "n_neg": 0,
+      "prevalence": 1.0,
+      "average_precision": null,
+      "pr_auc_trapezoid": null,
+      "roc_auc": null,
+      "brier": null,
+      "ece_15bin": null,
+      "tpr@fpr=0.001": null,
+      "tpr@fpr=0.01": null,
+      "tpr@fpr=0.05": null,
+      "undefined_reason": "ranking metrics need both classes",
+      "mean_score": 0.30525626875559325
+    },
+    "ranking_calibrated": {
+      "n": 194,
+      "n_pos": 194,
+      "n_neg": 0,
+      "prevalence": 1.0,
+      "average_precision": null,
+      "pr_auc_trapezoid": null,
+      "roc_auc": null,
+      "brier": null,
+      "ece_15bin": null,
+      "tpr@fpr=0.001": null,
+      "tpr@fpr=0.01": null,
+      "tpr@fpr=0.05": null,
+      "undefined_reason": "ranking metrics need both classes",
+      "mean_score": 0.3064195430547926
+    },
+    "at_validation_thresholds": {
+      "fpr<=0.01": {
+        "threshold": 0.0007978996995247461,
+        "n": 194,
+        "n_pos": 194,
+        "n_neg": 0,
+        "confusion_matrix": {
+          "tn": 0,
+          "fp": 0,
+          "fn": 74,
+          "tp": 120
+        },
+        "recall": 0.6185567010309279,
+        "fnr": 0.38144329896907214,
+        "specificity": null,
+        "fpr": null,
+        "precision": 1.0,
+        "f1": null,
+        "balanced_accuracy": null,
+        "mcc": null,
+        "undefined_reason": "single-class population: only class-conditional rates are defined"
+      },
+      "fpr<=0.05": {
+        "threshold": 0.0007880038282365801,
+        "n": 194,
+        "n_pos": 194,
+        "n_neg": 0,
+        "confusion_matrix": {
+          "tn": 0,
+          "fp": 0,
+          "fn": 59,
+          "tp": 135
+        },
+        "recall": 0.6958762886597938,
+        "fnr": 0.30412371134020616,
+        "specificity": null,
+        "fpr": null,
+        "precision": 1.0,
+        "f1": null,
+        "balanced_accuracy": null,
+        "mcc": null,
+        "undefined_reason": "single-class population: only class-conditional rates are defined"
+      }
+    },
+    "at_0.5_uncalibrated": {
+      "threshold": 0.5,
+      "n": 194,
+      "n_pos": 194,
+      "n_neg": 0,
+      "confusion_matrix": {
+        "tn": 0,
+        "fp": 0,
+        "fn": 135,
+        "tp": 59
+      },
+      "recall": 0.30412371134020616,
+      "fnr": 0.6958762886597938,
+      "specificity": null,
+      "fpr": null,
+      "precision": 1.0,
+      "f1": null,
+      "balanced_accuracy": null,
+      "mcc": null,
+      "undefined_reason": "single-class population: only class-conditional rates are defined"
+    }
+  },
+  {
+    "name": "holdout_DS-009",
+    "train_rows": 2823,
+    "test_rows": 8397,
+    "train_pos": 194,
+    "train_neg": 2629,
+    "test_pos": 8397,
+    "test_neg": 0,
+    "train_captures": 16,
+    "test_captures": 6,
+    "purged_train_rows": 0,
+    "held_out": {
+      "source": "DS-009"
+    },
+    "status": "COMPLETED",
+    "selected_params": {
+      "C": 10.0
+    },
+    "inner_status": "OK",
+    "inner_reason": null,
+    "grid_scores": [
+      {
+        "params": {
+          "C": 0.1
+        },
+        "inner_mean_ap": 0.9371141444429715,
+        "inner_fold_ap": [
+          0.9182281883139983,
+          0.9547504265982214,
+          0.9383638184166948
+        ]
+      },
+      {
+        "params": {
+          "C": 1.0
+        },
+        "inner_mean_ap": 0.9573864148900232,
+        "inner_fold_ap": [
+          0.9609018627306753,
+          0.9587606403069305,
+          0.9524967416324635
+        ]
+      },
+      {
+        "params": {
+          "C": 10.0
+        },
+        "inner_mean_ap": 0.9618328999888727,
+        "inner_fold_ap": [
+          0.9784769892791114,
+          0.952615497371772,
+          0.9544062133157346
+        ]
+      }
+    ],
+    "calibration": {
+      "a": 7.605808430448842,
+      "b": -5.930747540299334
+    },
+    "thresholds": {
+      "fpr<=0.01": 0.7173787271404647,
+      "fpr<=0.05": 0.004349448518787196
+    },
+    "fit_seconds": 0.0121,
+    "predict_seconds": 0.0238,
+    "latency_ms_per_flow": 0.00284,
+    "throughput_flows_per_s": 352115.3,
+    "n_features_out": 129,
+    "ranking_raw": {
+      "n": 8397,
+      "n_pos": 8397,
+      "n_neg": 0,
+      "prevalence": 1.0,
+      "average_precision": null,
+      "pr_auc_trapezoid": null,
+      "roc_auc": null,
+      "brier": null,
+      "ece_15bin": null,
+      "tpr@fpr=0.001": null,
+      "tpr@fpr=0.01": null,
+      "tpr@fpr=0.05": null,
+      "undefined_reason": "ranking metrics need both classes",
+      "mean_score": 0.9991681162638397
+    },
+    "ranking_calibrated": {
+      "n": 8397,
+      "n_pos": 8397,
+      "n_neg": 0,
+      "prevalence": 1.0,
+      "average_precision": null,
+      "pr_auc_trapezoid": null,
+      "roc_auc": null,
+      "brier": null,
+      "ece_15bin": null,
+      "tpr@fpr=0.001": null,
+      "tpr@fpr=0.01": null,
+      "tpr@fpr=0.05": null,
+      "undefined_reason": "ranking metrics need both classes",
+      "mean_score": 0.8414653450278896
+    },
+    "at_validation_thresholds": {
+      "fpr<=0.01": {
+        "threshold": 0.7173787271404647,
+        "n": 8397,
+        "n_pos": 8397,
+        "n_neg": 0,
+        "confusion_matrix": {
+          "tn": 0,
+          "fp": 0,
+          "fn": 9,
+          "tp": 8388
+        },
+        "recall": 0.9989281886387996,
+        "fnr": 0.0010718113612004287,
+        "specificity": null,
+        "fpr": null,
+        "precision": 1.0,
+        "f1": null,
+        "balanced_accuracy": null,
+        "mcc": null,
+        "undefined_reason": "single-class population: only class-conditional rates are defined"
+      },
+      "fpr<=0.05": {
+        "threshold": 0.004349448518787196,
+        "n": 8397,
+        "n_pos": 8397,
+        "n_neg": 0,
+        "confusion_matrix": {
+          "tn": 0,
+          "fp": 0,
+          "fn": 5,
+          "tp": 8392
+        },
+        "recall": 0.9994045492437775,
+        "fnr": 0.0005954507562224604,
+        "specificity": null,
+        "fpr": null,
+        "precision": 1.0,
+        "f1": null,
+        "balanced_accuracy": null,
+        "mcc": null,
+        "undefined_reason": "single-class population: only class-conditional rates are defined"
+      }
+    },
+    "at_0.5_uncalibrated": {
+      "threshold": 0.5,
+      "n": 8397,
+      "n_pos": 8397,
+      "n_neg": 0,
+      "confusion_matrix": {
+        "tn": 0,
+        "fp": 0,
+        "fn": 7,
+        "tp": 8390
+      },
+      "recall": 0.9991663689412885,
+      "fnr": 0.0008336310587114446,
+      "specificity": null,
+      "fpr": null,
+      "precision": 1.0,
+      "f1": null,
+      "balanced_accuracy": null,
+      "mcc": null,
+      "undefined_reason": "single-class population: only class-conditional rates are defined"
+    }
+  },
+  {
+    "name": "holdout_DS-011",
+    "train_rows": 0,
+    "test_rows": 2629,
+    "train_pos": 0,
+    "train_neg": 0,
+    "test_pos": 0,
+    "test_neg": 2629,
+    "train_captures": 0,
+    "test_captures": 6,
+    "purged_train_rows": 0,
+    "held_out": {
+      "source": "DS-011",
+      "infeasible": "training side would contain a single class"
+    },
+    "status": "INFEASIBLE",
+    "reason": "training side would contain a single class"
+  }
+]

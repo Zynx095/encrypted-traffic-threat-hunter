@@ -1,0 +1,124 @@
+{
+  "suite_id": "leave_one_source_out-20261016T180916Z",
+  "name": "leave_one_source_out",
+  "stage": "EXPLORATORY",
+  "config": {
+    "description": "Each dataset held out in turn; single-class test folds report detection rate or false-positive rate.",
+    "datasets": null,
+    "protocol": "LEAVE_ONE_SOURCE_OUT",
+    "tracks": [
+      "A_FLOW",
+      "B_JA3",
+      "C_JA4",
+      "D_JA3_FLOW",
+      "E_JA4_FLOW"
+    ],
+    "models": [
+      "logreg",
+      "random_forest",
+      "hist_gb"
+    ],
+    "encodings": [
+      "onehot"
+    ],
+    "seed": 42,
+    "n_boot": 1000
+  },
+  "config_hash": "ffbce56a7aa19f1e",
+  "created_at": "2026-10-16T18:09:16.955830Z",
+  "status": "COMPLETED",
+  "environment": {
+    "python": "3.12.0",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "machine": "AMD64",
+    "cpu_count": 24,
+    "packages": {
+      "numpy": "2.4.6",
+      "pandas": "3.0.5",
+      "sklearn": "1.9.0",
+      "scipy": "1.18.0",
+      "pyarrow": "25.0.1",
+      "torch": "2.13.0+cpu",
+      "dpkt": "1.9.8"
+    },
+    "source_revision": "1414b62f1d22d95e5f3d400cdf228b1398c58171"
+  },
+  "dataset": {
+    "corpus_manifest": "data/processed/v3/corpus_manifest.json",
+    "corpus_manifest_sha256": "c67f53458f9f0f7dc3590c6bc98683b7d457f6744573ba31863c4db362db1e7c",
+    "corpus_outputs": {
+      "data/processed/v3/corpus_flows.parquet": "84f496ed79eb71a34babf09e2ef1a4e296d4f11ad108c1faa35fe350b034714e",
+      "data/processed/v3/corpus_provenance.parquet": "aff3a854fa2c26f2c78d3e25002025d1105b9f1f941485dbac17af7c7dc8a0a4"
+    },
+    "corpus_version": "v3",
+    "inputs": {
+      "DS008-C001": "4b079d83abe301a9aee90d68565429b7fc9dd6b9b43c4cb8e2c44b99fcede894",
+      "DS008-C002": "ef8b0d488efe3cc7b9f1e2c33b4aea00f0613be60a119fb07d7006add89fafc8",
+      "DS008-C003": "a430dc87508451dad8e70a7ed9b5d912054482d16745b4eadd93411e44dd41fc",
+      "DS008-C004": "c63d9260c5d93b98c51b353f4f6059c52b756ab648cc27c814d3aede41142d23",
+      "DS008-C005": "805fc5b533f990ae63beeacdee52b656bfddfd21145089dfbb54a82c6ea17aba",
+      "DS008-C006": "24de7b31a2248763c4fd3e92acfc6b6fa9462b129c7b4ff8024932407ebeae4b",
+      "DS008-C007": "903844e8c40fde617c3636a69ba902a668d740e67c79d9624998b4ab6df09ccd",
+      "DS008-C008": "47b1cc4c0148245878a1a2f2eadb37323d80d20a5dbc196b872b3780b8108095",
+      "DS008-C009": "f1bfadc000a21dae71a1d1d71613b169a6e01bedb7d9829822d111987ed4caeb",
+      "DS008-C010": "5f74ed42f609284180f70d104dacdb82cde86dda86020994464b416cd1bbb17f",
+      "DS004-sample1": null,
+      "DS004-sample2": null,
+      "DS004-sample3": null,
+      "DS004-sample4": null,
+      "DS004-sample5": null,
+      "DS004-sample6": null,
+      "DS011-CTU-Normal-20": "c78a00728f115ab8fc495fd395894c43fd90cb61054eb9ef4f2d024658d5ffc5",
+      "DS011-CTU-Normal-21": "53acb10b26ca6446b5bba2efd9d957a9faa15209029d58c10a8c1d1bd299c42b",
+      "DS011-CTU-Normal-23": "50ccaa483200a73c87be73ce3cae95c16afe0941021ff6d5e8e1cacf5a90807b",
+      "DS011-CTU-Normal-24": "31a9a2a88b0d24283288058f7c2dbad057e3d7d7bb2ad2427302dc954c7e1471",
+      "DS011-CTU-Normal-26": "b66103fd89c8f0fc53b76e718f53320f3af27edd302c58695fc1870ede3663c5",
+      "DS011-CTU-Normal-28": "a2f3e60fa0eb2a924a3795644ac09a0f1ea48c45c30ebcc663af9641580b9a5c",
+      "DS009-CTU-MCB-238-1": "b03bf9bca9d2cb217e0ff96506314afddbe791fc7c6abaf80a41c256da2bd27f",
+      "DS009-CTU-MCB-240-1": "9369b771130396f349ca74a24c9f5a2a7c0ebff90a9aec635e99fb97b39472a9",
+      "DS009-CTU-MCB-246-1": "2425bf206592b0dc24c71b449a85df451bfaf493ffcd3daddcbfbbc0eb31cb37",
+      "DS009-CTU-MCB-248-1": "76b88b66b3a0eb6041c459ecd549b21aa53681f3e0e141281c9fd924237096d8",
+      "DS009-CTU-MCB-249-1": "49f0b2c1d7ae270a048a6cccfc9f85cc23992d20ea068e59f0a39f03c396c97b",
+      "DS009-CTU-MCB-259-1": "f4bc1edb5b926e22e4080dc011be7826862b4b683b2c780355848fc4aacd28d7",
+      "DS009-CTU-MCB-260-1": "3135369b8556071018154652ddc78a5828dc6bd1241aadfaada8414db1635dea",
+      "DS009-CTU-MCB-264-1": "a92b52e5fb9eae4983713434909f5954c8beb12876320d4b7f3f15c36ec46bcb",
+      "DS009-CTU-MCB-268-1": "c2f1edf1ffd78afe45e3a958e217692e9f6afb907763e1073779806fbbc449ea"
+    }
+  },
+  "experiments": [
+    "EXP-20261016T180920-0bc928df-2510",
+    "EXP-20261016T180940-23be954d-d464",
+    "EXP-20261016T180953-b6a3909b-09a3",
+    "EXP-20261016T181146-3adc8f09-c23a",
+    "EXP-20261016T181147-0bc984bc-3ed2",
+    "EXP-20261016T181151-adcadfc5-8f6c",
+    "EXP-20261016T181153-ed1b8659-40e4",
+    "EXP-20261016T181153-8e071341-9513",
+    "EXP-20261016T181158-cfd06542-2877",
+    "EXP-20261016T181200-6fc5ca19-b342",
+    "EXP-20261016T181202-a4164b52-b5e9",
+    "EXP-20261016T181207-ac41216b-bc12",
+    "EXP-20261016T181331-faed56fb-3cb7",
+    "EXP-20261016T181332-e46f153a-cdde",
+    "EXP-20261016T181337-8620a68e-1126"
+  ],
+  "evaluation_population": {
+    "per_capture_cap": 4000,
+    "rows": 62543,
+    "rows_by_dataset": {
+      "DS-008": 2543,
+      "DS-009": 36000,
+      "DS-011": 24000
+    },
+    "positives": 38543,
+    "negatives": 24000,
+    "captures": 25
+  },
+  "finished_at": "2026-10-16T18:15:06.414828Z",
+  "summary": {
+    "n_experiments": 15,
+    "statuses": {
+      "COMPLETED": 15
+    }
+  }
+}

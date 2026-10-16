@@ -1,0 +1,330 @@
+[
+  {
+    "name": "holdout_DS-008",
+    "train_rows": 11026,
+    "test_rows": 194,
+    "train_pos": 8397,
+    "train_neg": 2629,
+    "test_pos": 194,
+    "test_neg": 0,
+    "train_captures": 12,
+    "test_captures": 10,
+    "purged_train_rows": 0,
+    "held_out": {
+      "source": "DS-008"
+    },
+    "status": "COMPLETED",
+    "selected_params": {
+      "min_samples_leaf": 1
+    },
+    "inner_status": "OK",
+    "inner_reason": null,
+    "grid_scores": [
+      {
+        "params": {
+          "min_samples_leaf": 1
+        },
+        "inner_mean_ap": 1.0,
+        "inner_fold_ap": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "params": {
+          "min_samples_leaf": 5
+        },
+        "inner_mean_ap": 1.0,
+        "inner_fold_ap": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    ],
+    "calibration": {
+      "a": 16.63821718099368,
+      "b": -7.418087416459646
+    },
+    "thresholds": {
+      "fpr<=0.01": 0.0006702656316869152,
+      "fpr<=0.05": 0.0006702656316869152
+    },
+    "fit_seconds": 0.2477,
+    "predict_seconds": 0.0272,
+    "latency_ms_per_flow": 0.14011,
+    "throughput_flows_per_s": 7137.2,
+    "n_features_out": 11,
+    "ranking_raw": {
+      "n": 194,
+      "n_pos": 194,
+      "n_neg": 0,
+      "prevalence": 1.0,
+      "average_precision": null,
+      "pr_auc_trapezoid": null,
+      "roc_auc": null,
+      "brier": null,
+      "ece_15bin": null,
+      "tpr@fpr=0.001": null,
+      "tpr@fpr=0.01": null,
+      "tpr@fpr=0.05": null,
+      "undefined_reason": "ranking metrics need both classes",
+      "mean_score": 0.0
+    },
+    "ranking_calibrated": {
+      "n": 194,
+      "n_pos": 194,
+      "n_neg": 0,
+      "prevalence": 1.0,
+      "average_precision": null,
+      "pr_auc_trapezoid": null,
+      "roc_auc": null,
+      "brier": null,
+      "ece_15bin": null,
+      "tpr@fpr=0.001": null,
+      "tpr@fpr=0.01": null,
+      "tpr@fpr=0.05": null,
+      "undefined_reason": "ranking metrics need both classes",
+      "mean_score": 0.0005999360255484351
+    },
+    "at_validation_thresholds": {
+      "fpr<=0.01": {
+        "threshold": 0.0006702656316869152,
+        "n": 194,
+        "n_pos": 194,
+        "n_neg": 0,
+        "confusion_matrix": {
+          "tn": 0,
+          "fp": 0,
+          "fn": 194,
+          "tp": 0
+        },
+        "recall": 0.0,
+        "fnr": 1.0,
+        "specificity": null,
+        "fpr": null,
+        "precision": null,
+        "f1": null,
+        "balanced_accuracy": null,
+        "mcc": null,
+        "undefined_reason": "single-class population: only class-conditional rates are defined"
+      },
+      "fpr<=0.05": {
+        "threshold": 0.0006702656316869152,
+        "n": 194,
+        "n_pos": 194,
+        "n_neg": 0,
+        "confusion_matrix": {
+          "tn": 0,
+          "fp": 0,
+          "fn": 194,
+          "tp": 0
+        },
+        "recall": 0.0,
+        "fnr": 1.0,
+        "specificity": null,
+        "fpr": null,
+        "precision": null,
+        "f1": null,
+        "balanced_accuracy": null,
+        "mcc": null,
+        "undefined_reason": "single-class population: only class-conditional rates are defined"
+      }
+    },
+    "at_0.5_uncalibrated": {
+      "threshold": 0.5,
+      "n": 194,
+      "n_pos": 194,
+      "n_neg": 0,
+      "confusion_matrix": {
+        "tn": 0,
+        "fp": 0,
+        "fn": 194,
+        "tp": 0
+      },
+      "recall": 0.0,
+      "fnr": 1.0,
+      "specificity": null,
+      "fpr": null,
+      "precision": null,
+      "f1": null,
+      "balanced_accuracy": null,
+      "mcc": null,
+      "undefined_reason": "single-class population: only class-conditional rates are defined"
+    }
+  },
+  {
+    "name": "holdout_DS-009",
+    "train_rows": 2823,
+    "test_rows": 8397,
+    "train_pos": 194,
+    "train_neg": 2629,
+    "test_pos": 8397,
+    "test_neg": 0,
+    "train_captures": 16,
+    "test_captures": 6,
+    "purged_train_rows": 0,
+    "held_out": {
+      "source": "DS-009"
+    },
+    "status": "COMPLETED",
+    "selected_params": {
+      "min_samples_leaf": 1
+    },
+    "inner_status": "OK",
+    "inner_reason": null,
+    "grid_scores": [
+      {
+        "params": {
+          "min_samples_leaf": 1
+        },
+        "inner_mean_ap": 0.6987907037390318,
+        "inner_fold_ap": [
+          0.9466495945369184,
+          0.20144665461121158,
+          0.9482758620689655
+        ]
+      },
+      {
+        "params": {
+          "min_samples_leaf": 5
+        },
+        "inner_mean_ap": 0.6395392189449736,
+        "inner_fold_ap": [
+          0.9312321741899207,
+          0.15965872102580964,
+          0.8277267616191903
+        ]
+      }
+    ],
+    "calibration": {
+      "a": 362.7183192570251,
+      "b": -354.3814071780653
+    },
+    "thresholds": {
+      "fpr<=0.01": 0.12104313334167267,
+      "fpr<=0.05": 0.12104313334167267
+    },
+    "fit_seconds": 0.2238,
+    "predict_seconds": 0.0324,
+    "latency_ms_per_flow": 0.00386,
+    "throughput_flows_per_s": 258884.6,
+    "n_features_out": 24,
+    "ranking_raw": {
+      "n": 8397,
+      "n_pos": 8397,
+      "n_neg": 0,
+      "prevalence": 1.0,
+      "average_precision": null,
+      "pr_auc_trapezoid": null,
+      "roc_auc": null,
+      "brier": null,
+      "ece_15bin": null,
+      "tpr@fpr=0.001": null,
+      "tpr@fpr=0.01": null,
+      "tpr@fpr=0.05": null,
+      "undefined_reason": "ranking metrics need both classes",
+      "mean_score": 0.9781123892377733
+    },
+    "ranking_calibrated": {
+      "n": 8397,
+      "n_pos": 8397,
+      "n_neg": 0,
+      "prevalence": 1.0,
+      "average_precision": null,
+      "pr_auc_trapezoid": null,
+      "roc_auc": null,
+      "brier": null,
+      "ece_15bin": null,
+      "tpr@fpr=0.001": null,
+      "tpr@fpr=0.01": null,
+      "tpr@fpr=0.05": null,
+      "undefined_reason": "ranking metrics need both classes",
+      "mean_score": 0.598176924792714
+    },
+    "at_validation_thresholds": {
+      "fpr<=0.01": {
+        "threshold": 0.12104313334167267,
+        "n": 8397,
+        "n_pos": 8397,
+        "n_neg": 0,
+        "confusion_matrix": {
+          "tn": 0,
+          "fp": 0,
+          "fn": 0,
+          "tp": 8397
+        },
+        "recall": 1.0,
+        "fnr": 0.0,
+        "specificity": null,
+        "fpr": null,
+        "precision": 1.0,
+        "f1": null,
+        "balanced_accuracy": null,
+        "mcc": null,
+        "undefined_reason": "single-class population: only class-conditional rates are defined"
+      },
+      "fpr<=0.05": {
+        "threshold": 0.12104313334167267,
+        "n": 8397,
+        "n_pos": 8397,
+        "n_neg": 0,
+        "confusion_matrix": {
+          "tn": 0,
+          "fp": 0,
+          "fn": 0,
+          "tp": 8397
+        },
+        "recall": 1.0,
+        "fnr": 0.0,
+        "specificity": null,
+        "fpr": null,
+        "precision": 1.0,
+        "f1": null,
+        "balanced_accuracy": null,
+        "mcc": null,
+        "undefined_reason": "single-class population: only class-conditional rates are defined"
+      }
+    },
+    "at_0.5_uncalibrated": {
+      "threshold": 0.5,
+      "n": 8397,
+      "n_pos": 8397,
+      "n_neg": 0,
+      "confusion_matrix": {
+        "tn": 0,
+        "fp": 0,
+        "fn": 0,
+        "tp": 8397
+      },
+      "recall": 1.0,
+      "fnr": 0.0,
+      "specificity": null,
+      "fpr": null,
+      "precision": 1.0,
+      "f1": null,
+      "balanced_accuracy": null,
+      "mcc": null,
+      "undefined_reason": "single-class population: only class-conditional rates are defined"
+    }
+  },
+  {
+    "name": "holdout_DS-011",
+    "train_rows": 0,
+    "test_rows": 2629,
+    "train_pos": 0,
+    "train_neg": 0,
+    "test_pos": 0,
+    "test_neg": 2629,
+    "train_captures": 0,
+    "test_captures": 6,
+    "purged_train_rows": 0,
+    "held_out": {
+      "source": "DS-011",
+      "infeasible": "training side would contain a single class"
+    },
+    "status": "INFEASIBLE",
+    "reason": "training side would contain a single class"
+  }
+]
