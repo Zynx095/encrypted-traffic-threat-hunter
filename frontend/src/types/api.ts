@@ -219,6 +219,13 @@ export interface DetectionDetails {
   skip_reason?: string | null
   evidence?: string[]
   inference_type?: string
+  // Phase 9 model-registry provenance (optional; absent in older events)
+  model_id?: string | null
+  model_version?: number | null
+  research_status?: string | null
+  calibration_status?: string | null
+  decision_threshold?: number | null
+  ood_flags?: string[]
 }
 
 export interface ProvenanceDetails {
