@@ -1,0 +1,98 @@
+{
+  "status": "COMPLETED",
+  "fold": "fold0",
+  "rows": 6000,
+  "baseline_ap": 0.8633716624376859,
+  "channel_ablation": {
+    "direction": {
+      "ap": 0.8361054768726054,
+      "delta_ap": -0.027266185565080536
+    },
+    "log_len": {
+      "ap": 0.8407979970230218,
+      "delta_ap": -0.0225736654146641
+    },
+    "log_iat_ms": {
+      "ap": 0.8595737004941684,
+      "delta_ap": -0.0037979619435175582
+    },
+    "syn": {
+      "ap": 0.7232926459929876,
+      "delta_ap": -0.14007901644469833
+    },
+    "fin": {
+      "ap": 0.8647362540816759,
+      "delta_ap": 0.001364591643989943
+    },
+    "rst": {
+      "ap": 0.8345342236432574,
+      "delta_ap": -0.02883743879442857
+    },
+    "psh": {
+      "ap": 0.8979000500192239,
+      "delta_ap": 0.03452838758153798
+    },
+    "ack": {
+      "ap": 0.8676924980251921,
+      "delta_ap": 0.004320835587506178
+    },
+    "is_udp": {
+      "ap": 0.8631449597598377,
+      "delta_ap": -0.00022670267784818954
+    }
+  },
+  "temporal_occlusion": {
+    "steps_0-7": {
+      "ap": 0.7054609147171753,
+      "delta_ap": -0.1579107477205106,
+      "flows_with_steps_in_window": 6000
+    },
+    "steps_8-15": {
+      "ap": 0.8576594465403835,
+      "delta_ap": -0.0057122158973024195,
+      "flows_with_steps_in_window": 1155
+    },
+    "steps_16-23": {
+      "ap": 0.8642217429102743,
+      "delta_ap": 0.0008500804725883881,
+      "flows_with_steps_in_window": 243
+    },
+    "steps_24-31": {
+      "ap": 0.8643245109139838,
+      "delta_ap": 0.0009528484762978406,
+      "flows_with_steps_in_window": 159
+    },
+    "steps_32-39": {
+      "ap": 0.8636474037676387,
+      "delta_ap": 0.00027574132995278333,
+      "flows_with_steps_in_window": 113
+    },
+    "steps_40-47": {
+      "ap": 0.8637496624673769,
+      "delta_ap": 0.00037800002969101687,
+      "flows_with_steps_in_window": 87
+    },
+    "steps_48-55": {
+      "ap": 0.8633170688486235,
+      "delta_ap": -5.459358906245715e-05,
+      "flows_with_steps_in_window": 72
+    },
+    "steps_56-63": {
+      "ap": 0.8627953211909631,
+      "delta_ap": -0.0005763412467227891,
+      "flows_with_steps_in_window": 65
+    }
+  },
+  "simulated_iat_scaling": {
+    "x0.5": {
+      "ap": 0.8355472154249809,
+      "delta_ap": -0.027824447012705034,
+      "label": "SIMULATED_PERTURBATION (log-IAT shift approximation)"
+    },
+    "x2.0": {
+      "ap": 0.801354978474391,
+      "delta_ap": -0.06201668396329496,
+      "label": "SIMULATED_PERTURBATION (log-IAT shift approximation)"
+    }
+  }
+}

@@ -1,0 +1,181 @@
+{
+  "suite_id": "sequence_capture_cv-20261016T185120Z",
+  "name": "sequence_capture_cv",
+  "stage": "EXPLORATORY",
+  "config": {
+    "epochs": 30,
+    "archs": [
+      "cnn",
+      "gru"
+    ],
+    "seed": 42,
+    "max_len": 64,
+    "datasets": null,
+    "max_train_rows": 60000,
+    "per_capture_cap": 4000,
+    "channels": [
+      "direction",
+      "log_len",
+      "log_iat_ms",
+      "syn",
+      "fin",
+      "rst",
+      "psh",
+      "ack",
+      "is_udp"
+    ],
+    "tabular": {
+      "tab_trackA_hist_gb": [
+        "hist_gb",
+        {
+          "learning_rate": 0.1,
+          "max_leaf_nodes": 31
+        },
+        "trackA"
+      ],
+      "tab_trackA_random_forest": [
+        "random_forest",
+        {
+          "min_samples_leaf": 1
+        },
+        "trackA"
+      ],
+      "seqagg_logreg": [
+        "logreg",
+        {
+          "C": 1.0
+        },
+        "seqagg"
+      ],
+      "seqagg_hist_gb": [
+        "hist_gb",
+        {
+          "learning_rate": 0.1,
+          "max_leaf_nodes": 31
+        },
+        "seqagg"
+      ]
+    },
+    "n_boot": 1000
+  },
+  "config_hash": "3194b74d11287f34",
+  "created_at": "2026-10-16T18:51:20.711320Z",
+  "status": "COMPLETED",
+  "environment": {
+    "python": "3.12.0",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "machine": "AMD64",
+    "cpu_count": 24,
+    "packages": {
+      "numpy": "2.4.6",
+      "pandas": "3.0.5",
+      "sklearn": "1.9.0",
+      "scipy": "1.18.0",
+      "pyarrow": "25.0.1",
+      "torch": "2.13.0+cpu",
+      "dpkt": "1.9.8"
+    },
+    "source_revision": "3b430e0109725817ad89fc3f77859c26de8a5f26"
+  },
+  "dataset": {
+    "corpus_manifest": "data/processed/v3/corpus_manifest.json",
+    "corpus_manifest_sha256": "c67f53458f9f0f7dc3590c6bc98683b7d457f6744573ba31863c4db362db1e7c",
+    "corpus_outputs": {
+      "data/processed/v3/corpus_flows.parquet": "84f496ed79eb71a34babf09e2ef1a4e296d4f11ad108c1faa35fe350b034714e",
+      "data/processed/v3/corpus_provenance.parquet": "aff3a854fa2c26f2c78d3e25002025d1105b9f1f941485dbac17af7c7dc8a0a4"
+    },
+    "corpus_version": "v3",
+    "inputs": {
+      "DS008-C001": "4b079d83abe301a9aee90d68565429b7fc9dd6b9b43c4cb8e2c44b99fcede894",
+      "DS008-C002": "ef8b0d488efe3cc7b9f1e2c33b4aea00f0613be60a119fb07d7006add89fafc8",
+      "DS008-C003": "a430dc87508451dad8e70a7ed9b5d912054482d16745b4eadd93411e44dd41fc",
+      "DS008-C004": "c63d9260c5d93b98c51b353f4f6059c52b756ab648cc27c814d3aede41142d23",
+      "DS008-C005": "805fc5b533f990ae63beeacdee52b656bfddfd21145089dfbb54a82c6ea17aba",
+      "DS008-C006": "24de7b31a2248763c4fd3e92acfc6b6fa9462b129c7b4ff8024932407ebeae4b",
+      "DS008-C007": "903844e8c40fde617c3636a69ba902a668d740e67c79d9624998b4ab6df09ccd",
+      "DS008-C008": "47b1cc4c0148245878a1a2f2eadb37323d80d20a5dbc196b872b3780b8108095",
+      "DS008-C009": "f1bfadc000a21dae71a1d1d71613b169a6e01bedb7d9829822d111987ed4caeb",
+      "DS008-C010": "5f74ed42f609284180f70d104dacdb82cde86dda86020994464b416cd1bbb17f",
+      "DS004-sample1": null,
+      "DS004-sample2": null,
+      "DS004-sample3": null,
+      "DS004-sample4": null,
+      "DS004-sample5": null,
+      "DS004-sample6": null,
+      "DS011-CTU-Normal-20": "c78a00728f115ab8fc495fd395894c43fd90cb61054eb9ef4f2d024658d5ffc5",
+      "DS011-CTU-Normal-21": "53acb10b26ca6446b5bba2efd9d957a9faa15209029d58c10a8c1d1bd299c42b",
+      "DS011-CTU-Normal-23": "50ccaa483200a73c87be73ce3cae95c16afe0941021ff6d5e8e1cacf5a90807b",
+      "DS011-CTU-Normal-24": "31a9a2a88b0d24283288058f7c2dbad057e3d7d7bb2ad2427302dc954c7e1471",
+      "DS011-CTU-Normal-26": "b66103fd89c8f0fc53b76e718f53320f3af27edd302c58695fc1870ede3663c5",
+      "DS011-CTU-Normal-28": "a2f3e60fa0eb2a924a3795644ac09a0f1ea48c45c30ebcc663af9641580b9a5c",
+      "DS009-CTU-MCB-238-1": "b03bf9bca9d2cb217e0ff96506314afddbe791fc7c6abaf80a41c256da2bd27f",
+      "DS009-CTU-MCB-240-1": "9369b771130396f349ca74a24c9f5a2a7c0ebff90a9aec635e99fb97b39472a9",
+      "DS009-CTU-MCB-246-1": "2425bf206592b0dc24c71b449a85df451bfaf493ffcd3daddcbfbbc0eb31cb37",
+      "DS009-CTU-MCB-248-1": "76b88b66b3a0eb6041c459ecd549b21aa53681f3e0e141281c9fd924237096d8",
+      "DS009-CTU-MCB-249-1": "49f0b2c1d7ae270a048a6cccfc9f85cc23992d20ea068e59f0a39f03c396c97b",
+      "DS009-CTU-MCB-259-1": "f4bc1edb5b926e22e4080dc011be7826862b4b683b2c780355848fc4aacd28d7",
+      "DS009-CTU-MCB-260-1": "3135369b8556071018154652ddc78a5828dc6bd1241aadfaada8414db1635dea",
+      "DS009-CTU-MCB-264-1": "a92b52e5fb9eae4983713434909f5954c8beb12876320d4b7f3f15c36ec46bcb",
+      "DS009-CTU-MCB-268-1": "c2f1edf1ffd78afe45e3a958e217692e9f6afb907763e1073779806fbbc449ea"
+    }
+  },
+  "experiments": [
+    "EXP-20261016T185125-64caa7f5-10fc",
+    "EXP-20261016T185125-bad02cb7-d7ad",
+    "EXP-20261016T185125-7e789082-8b70",
+    "EXP-20261016T185125-a64f0cd0-5879",
+    "EXP-20261016T185125-257fb06a-69fb",
+    "EXP-20261016T185125-12616291-9859"
+  ],
+  "sequence_construction": {
+    "rows": 62543,
+    "valid": 62543,
+    "rejected": {
+      "length_mismatch": 0,
+      "empty": 0,
+      "non_finite": 0,
+      "negative_length": 0,
+      "time_decreasing": 0
+    },
+    "max_len": 64,
+    "truncated_flows": 913
+  },
+  "capture_fold_assignment": {
+    "DS008-C008": 0,
+    "DS008-C009": 0,
+    "DS009-CTU-MCB-248-1": 0,
+    "DS009-CTU-MCB-259-1": 0,
+    "DS011-CTU-Normal-21": 0,
+    "DS008-C001": 1,
+    "DS008-C002": 1,
+    "DS008-C004": 1,
+    "DS009-CTU-MCB-249-1": 1,
+    "DS011-CTU-Normal-23": 1,
+    "DS008-C003": 2,
+    "DS008-C010": 2,
+    "DS009-CTU-MCB-238-1": 2,
+    "DS009-CTU-MCB-264-1": 2,
+    "DS011-CTU-Normal-26": 2,
+    "DS009-CTU-MCB-240-1": 3,
+    "DS009-CTU-MCB-246-1": 3,
+    "DS009-CTU-MCB-268-1": 3,
+    "DS011-CTU-Normal-20": 3,
+    "DS011-CTU-Normal-24": 3,
+    "DS008-C005": 4,
+    "DS008-C006": 4,
+    "DS008-C007": 4,
+    "DS009-CTU-MCB-260-1": 4,
+    "DS011-CTU-Normal-28": 4
+  },
+  "finished_at": "2026-10-16T19:04:12.535214Z",
+  "summary": {
+    "models": [
+      "tab_trackA_hist_gb",
+      "tab_trackA_random_forest",
+      "seqagg_logreg",
+      "seqagg_hist_gb",
+      "cnn",
+      "gru"
+    ]
+  }
+}
