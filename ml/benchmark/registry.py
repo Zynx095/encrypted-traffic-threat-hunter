@@ -162,7 +162,10 @@ class Experiment:
             obj.to_parquet(path, index=False)
         else:
             _write_json(path, obj)
-        rel = path.relative_to(PROJECT_ROOT).as_posix()
+        try:
+            rel = path.resolve().relative_to(PROJECT_ROOT.resolve()).as_posix()
+        except ValueError:          # suites rooted outside the repository (tests, scratch runs)
+            rel = path.resolve().as_posix()
         self.record["artifacts"][name] = {"path": rel, "sha256": sha256_file(path)}
         return rel
 

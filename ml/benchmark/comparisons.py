@@ -13,6 +13,7 @@ difference", never as equivalence (no equivalence margin was pre-registered).
 """
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import pandas as pd
@@ -37,7 +38,8 @@ def _load_predictions(record: Dict[str, Any]) -> Optional[pd.DataFrame]:
     art = record.get("artifacts", {}).get("predictions.parquet")
     if not art:
         return None
-    return pd.read_parquet(PROJECT_ROOT / art["path"])
+    path = Path(art["path"])
+    return pd.read_parquet(path if path.is_absolute() else PROJECT_ROOT / path)
 
 
 def compare(rec_a: Dict[str, Any], rec_b: Dict[str, Any], label: str, n_boot: int = 1000, seed: int = 42) -> Dict[str, Any]:
