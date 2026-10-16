@@ -10,6 +10,8 @@ ETTH research command line (Phases 9-10).
     python -m ml rollback --track E_JA4_FLOW
     python -m ml sequence [--epochs 30] [--archs cnn,gru] [--datasets DS-009,DS-011]
     python -m ml report
+    python -m ml unseen --suite-id ID --track C_JA4 --model logreg
+    python -m ml repro-package --suite-id ID
 """
 from __future__ import annotations
 
@@ -61,6 +63,12 @@ def main(argv=None) -> int:
     q.add_argument("--seed", type=int, default=42)
     q.add_argument("--max-len", type=int, default=64)
     sub.add_parser("report")
+    u = sub.add_parser("unseen")
+    u.add_argument("--suite-id", required=True)
+    u.add_argument("--track", required=True)
+    u.add_argument("--model", required=True)
+    rp = sub.add_parser("repro-package")
+    rp.add_argument("--suite-id", required=True)
     args = p.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 
@@ -124,6 +132,30 @@ def main(argv=None) -> int:
         res = run_sequence_suite(epochs=args.epochs, archs=args.archs.split(","), seed=args.seed, max_len=args.max_len,
                                  datasets=args.datasets.split(",") if args.datasets else None)
         print(json.dumps({"suite_id": res["suite_id"], "status": res["status"]}, indent=2))
+    elif args.cmd == "unseen":
+        from ml.benchmark.registry import load_experiment, suite_dir
+        from ml.benchmark.suites import SUITES, suite_frame
+        from ml.diagnostics.unseen import unseen_analysis
+        suite = json.loads((suite_dir(args.suite_id) / "suite.json").read_text(encoding="utf-8"))
+        recs = [load_experiment(args.suite_id, x) for x in suite["experiments"]]
+        rec = next(r for r in recs if r["config"]["track"] == args.track and r["config"]["model"] == args.model
+                   and r["config"].get("encoding", "onehot") == "onehot" and r.get("status") == "COMPLETED")
+        out = unseen_analysis(suite_frame(SUITES[suite["name"]], seed=suite["config"]["seed"]), rec, suite)
+        _write(suite_dir(args.suite_id) / f"unseen_{args.track}_{args.model}.json", out)
+    elif args.cmd == "repro-package":
+        from ml.benchmark.registry import environment_snapshot, load_experiment, suite_dir
+        d = suite_dir(args.suite_id)
+        suite = json.loads((d / "suite.json").read_text(encoding="utf-8"))
+        recs = [load_experiment(args.suite_id, x) for x in suite["experiments"]]
+        package = {"suite_id": args.suite_id, "suite_config": suite["config"], "stage": suite["stage"],
+                   "capture_fold_assignment": suite.get("capture_fold_assignment"),
+                   "evaluation_population": suite.get("evaluation_population"), "dataset": suite.get("dataset"),
+                   "environment_at_run": suite.get("environment"), "environment_now": environment_snapshot(),
+                   "experiments": [{"experiment_id": r["experiment_id"], "config": r["config"], "config_hash": r["config_hash"],
+                                    "status": r["status"], "artifacts": r.get("artifacts")} for r in recs],
+                   "reproduce_command": f"python -m ml suite {suite['name']} --seed {suite['config'].get('seed', 42)} "
+                                        f"--n-boot {suite['config'].get('n_boot', 1000)}"}
+        _write(d / "repro_package.json", package)
     elif args.cmd == "report":
         from ml.reporting.report import generate_report
         paths = generate_report()
