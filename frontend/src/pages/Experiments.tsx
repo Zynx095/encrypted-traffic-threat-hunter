@@ -40,7 +40,7 @@ export default function Experiments() {
     }
   })
 
-  const audit = phase6Audit ?? { dataset_counts: { 'DS-004': 0, 'DS-008': 0 }, experiment_counts: { A: 0, B: 0, C: 0, D: 0, E: 0 } }
+  const audit = phase6Audit ?? { dataset_counts: {} as Record<string, number>, experiment_counts: {} as Record<string, number> }
   
   const displayedMetrics = experimentId 
     ? experimentMetrics.filter(e => e.experiment === experimentId)
@@ -57,7 +57,8 @@ export default function Experiments() {
       <div className="border-l-2 border-warning/50 bg-warning/5 px-4 py-3 text-sm text-etth-text/80">
         <span className="font-medium text-warning mr-2">Controlled Pilot — Source-Confounded:</span>
         Results are from a controlled pilot with extreme class imbalance ({Math.round((audit.dataset_counts?.['DS-008'] || 0) / Math.max(audit.dataset_counts?.['DS-004'] || 1, 1))}:1). 
-        Near-perfect PR-AUC scores are expected artifacts. Generalized validation pending independent benign data.
+        Near-perfect PR-AUC scores are expected artifacts (PR-AUC here treats the 99.7%-prevalent malicious class as positive).
+        These are the historical Phase 7 pilot results; Phase 9 capture-grouped benchmarks are in the Research Workbench.
       </div>
 
       <div>
@@ -121,11 +122,11 @@ export default function Experiments() {
             <div>
               <span className="font-medium text-etth-text">Dataset Sizes:</span>
               <ul className="list-disc list-inside mt-2 space-y-1 ml-1">
-                <li>Experiment A (Flow-only): {audit.experiment_counts?.A || 2068} rows</li>
-                <li>Experiment B (JA3-only): {audit.experiment_counts?.B || 160} rows</li>
-                <li>Experiment C (JA4-only): {audit.experiment_counts?.C || 160} rows</li>
-                <li>Experiment D (JA3+Flow): {audit.experiment_counts?.D || 160} rows</li>
-                <li>Experiment E (JA4+Flow): {audit.experiment_counts?.E || 160} rows</li>
+                <li>Experiment A (Flow-only): {audit.experiment_counts?.A ?? '—'} rows</li>
+                <li>Experiment B (JA3-only): {audit.experiment_counts?.B ?? '—'} rows</li>
+                <li>Experiment C (JA4-only): {audit.experiment_counts?.C ?? '—'} rows</li>
+                <li>Experiment D (JA3+Flow): {audit.experiment_counts?.D ?? '—'} rows</li>
+                <li>Experiment E (JA4+Flow): {audit.experiment_counts?.E ?? '—'} rows</li>
               </ul>
             </div>
             <div>
