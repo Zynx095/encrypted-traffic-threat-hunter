@@ -50,7 +50,7 @@ def _et(seed, min_samples_leaf=1, n_estimators=150):
 
 
 def _hgb(seed, learning_rate=0.1, max_leaf_nodes=31):
-    return HistGradientBoostingClassifier(learning_rate=learning_rate, max_leaf_nodes=max_leaf_nodes, max_iter=200,
+    return HistGradientBoostingClassifier(learning_rate=learning_rate, max_leaf_nodes=max_leaf_nodes, max_iter=100,
                                           class_weight="balanced", early_stopping=False, random_state=seed)
 
 
@@ -64,5 +64,5 @@ MODEL_SPECS: Dict[str, ModelSpec] = {
     "extra_trees": ModelSpec("extra_trees", _et, [{"min_samples_leaf": 1}, {"min_samples_leaf": 5}], False, True,
                              "Extremely randomised trees (150 trees), balanced weights."),
     "hist_gb": ModelSpec("hist_gb", _hgb, [{"learning_rate": 0.05, "max_leaf_nodes": 15}, {"learning_rate": 0.1, "max_leaf_nodes": 31}],
-                         False, False, "Histogram gradient boosting (200 iterations), balanced weights. Benchmark only (not exportable)."),
+                         False, False, "Histogram gradient boosting (100 iterations), balanced weights. Benchmark only (not exportable)."),
 }
