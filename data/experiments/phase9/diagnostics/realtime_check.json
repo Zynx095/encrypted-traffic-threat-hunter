@@ -1,0 +1,209 @@
+{
+  "generated_at": "2026-10-16T19:18:47.824335Z",
+  "replay_source": "data/processed/v3/replay_flows.parquet",
+  "rows": 2000,
+  "model_status": {
+    "A_FLOW": {
+      "status": "LOADED",
+      "model_id": "etth-a_flow-random_forest",
+      "version": 1,
+      "research_status": "RESEARCH_PILOT_SOURCE_CONFOUNDED",
+      "calibration": "PLATT_ON_INNER_CAPTURE_OOF"
+    },
+    "B_JA3": {
+      "status": "LOADED",
+      "model_id": "etth-b_ja3-random_forest",
+      "version": 1,
+      "research_status": "RESEARCH_PILOT_SOURCE_CONFOUNDED",
+      "calibration": "PLATT_ON_INNER_CAPTURE_OOF"
+    },
+    "C_JA4": {
+      "status": "LOADED",
+      "model_id": "etth-c_ja4-random_forest",
+      "version": 1,
+      "research_status": "RESEARCH_PILOT_SOURCE_CONFOUNDED",
+      "calibration": "PLATT_ON_INNER_CAPTURE_OOF"
+    },
+    "D_JA3_FLOW": {
+      "status": "LOADED",
+      "model_id": "etth-d_ja3_flow-random_forest",
+      "version": 1,
+      "research_status": "RESEARCH_PILOT_SOURCE_CONFOUNDED",
+      "calibration": "PLATT_ON_INNER_CAPTURE_OOF"
+    },
+    "E_JA4_FLOW": {
+      "status": "LOADED",
+      "model_id": "etth-e_ja4_flow-random_forest",
+      "version": 1,
+      "research_status": "RESEARCH_PILOT_SOURCE_CONFOUNDED",
+      "calibration": "PLATT_ON_INNER_CAPTURE_OOF"
+    }
+  },
+  "tracks": {
+    "A_FLOW": {
+      "status_counts": {
+        "COMPLETED": 2000
+      },
+      "skip_reasons": {},
+      "ood_flag_counts": {
+        "OUT_OF_TRAINING_RANGE": 2191,
+        "IN_SAMPLE_REPLAY": 2000,
+        "UNSEEN_CATEGORY": 1
+      },
+      "in_sample_flows": 2000,
+      "label_to_prediction_counts_IN_SAMPLE": {
+        "MALICIOUS->MALICIOUS": 960,
+        "MALICIOUS->BENIGN": 488,
+        "BENIGN->BENIGN": 552
+      },
+      "inference_ms": {
+        "n": 2000,
+        "p50": 5.1362,
+        "p95": 5.7525,
+        "p99": 6.2908,
+        "mean": 5.1933
+      },
+      "pipeline_ms": {
+        "p50": 5.1775,
+        "p95": 5.796
+      },
+      "throughput_flows_per_s": 188.7
+    },
+    "B_JA3": {
+      "status_counts": {
+        "SKIPPED": 1526,
+        "COMPLETED": 474
+      },
+      "skip_reasons": {
+        "JA3 fingerprint missing for requested track B_JA3": 1526
+      },
+      "ood_flag_counts": {
+        "UNSEEN_CATEGORY": 13,
+        "IN_SAMPLE_REPLAY": 474
+      },
+      "in_sample_flows": 474,
+      "label_to_prediction_counts_IN_SAMPLE": {
+        "MALICIOUS->BENIGN": 13,
+        "MALICIOUS->MALICIOUS": 315,
+        "BENIGN->BENIGN": 146
+      },
+      "inference_ms": {
+        "n": 474,
+        "p50": 0.5438,
+        "p95": 0.6036,
+        "p99": 0.8169,
+        "mean": 0.551
+      },
+      "pipeline_ms": {
+        "p50": 0.0214,
+        "p95": 0.5985
+      },
+      "throughput_flows_per_s": 5156.3
+    },
+    "C_JA4": {
+      "status_counts": {
+        "SKIPPED": 1526,
+        "COMPLETED": 474
+      },
+      "skip_reasons": {
+        "JA4 fingerprint missing for requested track C_JA4": 1526
+      },
+      "ood_flag_counts": {
+        "IN_SAMPLE_REPLAY": 474,
+        "UNSEEN_CATEGORY": 4
+      },
+      "in_sample_flows": 474,
+      "label_to_prediction_counts_IN_SAMPLE": {
+        "MALICIOUS->MALICIOUS": 324,
+        "MALICIOUS->BENIGN": 4,
+        "BENIGN->BENIGN": 146
+      },
+      "inference_ms": {
+        "n": 474,
+        "p50": 0.5526,
+        "p95": 0.6903,
+        "p99": 1.0262,
+        "mean": 0.5679
+      },
+      "pipeline_ms": {
+        "p50": 0.0214,
+        "p95": 0.6162
+      },
+      "throughput_flows_per_s": 5042.2
+    },
+    "D_JA3_FLOW": {
+      "status_counts": {
+        "SKIPPED": 1526,
+        "COMPLETED": 474
+      },
+      "skip_reasons": {
+        "JA3 fingerprint missing for requested track D_JA3_FLOW": 1526
+      },
+      "ood_flag_counts": {
+        "UNSEEN_CATEGORY": 14,
+        "IN_SAMPLE_REPLAY": 474,
+        "OUT_OF_TRAINING_RANGE": 753
+      },
+      "in_sample_flows": 474,
+      "label_to_prediction_counts_IN_SAMPLE": {
+        "MALICIOUS->MALICIOUS": 322,
+        "BENIGN->BENIGN": 146,
+        "MALICIOUS->BENIGN": 6
+      },
+      "inference_ms": {
+        "n": 474,
+        "p50": 5.1977,
+        "p95": 5.9309,
+        "p99": 8.5765,
+        "mean": 5.3072
+      },
+      "pipeline_ms": {
+        "p50": 0.0232,
+        "p95": 5.3829
+      },
+      "throughput_flows_per_s": 752.5
+    },
+    "E_JA4_FLOW": {
+      "status_counts": {
+        "SKIPPED": 1526,
+        "COMPLETED": 474
+      },
+      "skip_reasons": {
+        "JA4 fingerprint missing for requested track E_JA4_FLOW": 1526
+      },
+      "ood_flag_counts": {
+        "IN_SAMPLE_REPLAY": 474,
+        "OUT_OF_TRAINING_RANGE": 753,
+        "UNSEEN_CATEGORY": 5
+      },
+      "in_sample_flows": 474,
+      "label_to_prediction_counts_IN_SAMPLE": {
+        "MALICIOUS->MALICIOUS": 327,
+        "BENIGN->BENIGN": 146,
+        "MALICIOUS->BENIGN": 1
+      },
+      "inference_ms": {
+        "n": 474,
+        "p50": 5.1933,
+        "p95": 5.7094,
+        "p99": 6.1491,
+        "mean": 5.2357
+      },
+      "pipeline_ms": {
+        "p50": 0.0233,
+        "p95": 5.3163
+      },
+      "throughput_flows_per_s": 763.0
+    }
+  },
+  "websocket": {
+    "events_received": 25,
+    "flow_events": 20,
+    "detection_statuses": {
+      "SKIPPED": 8,
+      "COMPLETED": 12
+    },
+    "all_valid_canonical_events": true
+  },
+  "note": "Replayed flows come from captures used to train the active models, so predictions are IN-SAMPLE (flagged IN_SAMPLE_REPLAY) and must not be read as detection performance."
+}
