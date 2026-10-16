@@ -34,12 +34,19 @@ class DetectionDetails(BaseModel):
     skip_reason: Optional[str] = None
     evidence: list[str] = []
     inference_type: str = "REAL_TIME_ENGINEERING_INFERENCE"
+    # Phase 9 model-registry provenance (additive, optional; older clients can ignore them).
+    model_id: Optional[str] = None
+    model_version: Optional[int] = None
+    research_status: Optional[str] = None
+    calibration_status: Optional[str] = None
+    decision_threshold: Optional[float] = None
+    ood_flags: list[str] = []
 
 class ProvenanceDetails(BaseModel):
     dataset_id: str = "UNKNOWN"
     source_file: Optional[str] = None
     label_ground_truth: str = "UNKNOWN"
-    caveat: str = "Source-confounding limitation: DS-008 malicious vs DS-004 benign split."
+    caveat: str = "Research pilot: exploratory, source-confounded training data (one class per dataset)."
 
 StreamState = Literal["IDLE", "PLAYING", "PAUSED", "COMPLETED", "STOPPED", "ERROR"]
 
