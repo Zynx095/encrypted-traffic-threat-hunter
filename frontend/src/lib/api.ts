@@ -14,16 +14,39 @@ import type {
   Session,
   CreateSessionRequest
 } from '../types/api'
+import type {
+  DatasetSummary,
+  InferenceStatus,
+  JobRecord,
+  JobType,
+  LatestBenchmarks,
+  ModelRegistryView,
+  ResearchDocument,
+  SuiteSummary,
+} from '../types/research'
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const response = await fetch(`${API_BASE}${path}`, options)
   if (!response.ok) {
-    throw new Error(`API error: ${response.status} ${response.statusText}`)
+    let detail = ''
+    try {
+      const body = await response.json()
+      detail = typeof body?.detail === 'string' ? `: ${body.detail}` : ''
+    } catch {
+      detail = ''
+    }
+    throw new Error(`API error: ${response.status} ${response.statusText}${detail}`)
   }
   return response.json()
 }
+
+const json = (body: unknown): RequestInit => ({
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(body),
+})
 
 export const etthApi = {
   health: () => request<{ status: string; service: string }>('/api/health'),
@@ -135,5 +158,28 @@ export const etthApi = {
       const fs = await import('../data/datasetRegistry')
       return fs.default
     },
+  },
+
+  research: {
+    datasets: () => request<DatasetSummary[]>('/api/research/datasets'),
+    dataset: (id: string) => request<Record<string, any>>(`/api/research/datasets/${encodeURIComponent(id)}`),
+    admission: () => request<ResearchDocument>('/api/research/corpus/admission'),
+    sufficiency: () => request<ResearchDocument>('/api/research/corpus/sufficiency'),
+    governance: () => request<ResearchDocument>('/api/research/features/governance'),
+    coverage: () => request<ResearchDocument>('/api/research/features/coverage'),
+    suites: () => request<SuiteSummary[]>('/api/research/suites'),
+    suite: (id: string) => request<Record<string, any>>(`/api/research/suites/${encodeURIComponent(id)}`),
+    latestBenchmarks: () => request<LatestBenchmarks>('/api/research/benchmarks/latest'),
+    models: () => request<ModelRegistryView>('/api/research/models'),
+    activate: (modelId: string, version: number, reason: string) =>
+      request<Record<string, any>>(`/api/research/models/${encodeURIComponent(modelId)}/versions/${version}/activate`, json({ reason })),
+    rollback: (track: string) => request<Record<string, any>>(`/api/research/models/rollback/${encodeURIComponent(track)}`, { method: 'POST' }),
+    inference: () => request<InferenceStatus>('/api/research/inference/status'),
+    jobs: () => request<JobRecord[]>('/api/research/jobs'),
+    submitJob: (type: JobType, params: Record<string, unknown> = {}) => request<JobRecord>('/api/research/jobs', json({ type, params })),
+    cancelJob: (jobId: string) => request<JobRecord>(`/api/research/jobs/${encodeURIComponent(jobId)}/cancel`, { method: 'POST' }),
+    jobLogs: (jobId: string, tail = 200) => request<{ job_id: string; lines: string[]; truncated: boolean }>(`/api/research/jobs/${encodeURIComponent(jobId)}/logs?tail=${tail}`),
+    claims: () => request<ResearchDocument>('/api/research/claims'),
+    report: () => request<ResearchDocument>('/api/research/reports/latest'),
   },
 }
