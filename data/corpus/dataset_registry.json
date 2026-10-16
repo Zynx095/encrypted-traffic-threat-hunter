@@ -1,0 +1,1120 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-10-16T16:29:53.011719Z",
+  "states": [
+    "DISCOVERED",
+    "ACCESS_PENDING",
+    "LICENSE_VERIFIED",
+    "ACQUIRED",
+    "CONTENT_VERIFIED",
+    "PROCESSED",
+    "ADMITTED",
+    "REJECTED",
+    "BLOCKED"
+  ],
+  "legal_transitions": {
+    "DISCOVERED": [
+      "ACCESS_PENDING",
+      "BLOCKED",
+      "LICENSE_VERIFIED",
+      "REJECTED"
+    ],
+    "ACCESS_PENDING": [
+      "BLOCKED",
+      "LICENSE_VERIFIED",
+      "REJECTED"
+    ],
+    "LICENSE_VERIFIED": [
+      "ACCESS_PENDING",
+      "ACQUIRED",
+      "BLOCKED",
+      "REJECTED"
+    ],
+    "ACQUIRED": [
+      "BLOCKED",
+      "CONTENT_VERIFIED",
+      "REJECTED"
+    ],
+    "CONTENT_VERIFIED": [
+      "BLOCKED",
+      "PROCESSED",
+      "REJECTED"
+    ],
+    "PROCESSED": [
+      "ADMITTED",
+      "CONTENT_VERIFIED",
+      "REJECTED"
+    ],
+    "ADMITTED": [
+      "PROCESSED",
+      "REJECTED"
+    ],
+    "REJECTED": [
+      "DISCOVERED"
+    ],
+    "BLOCKED": [
+      "ACCESS_PENDING",
+      "DISCOVERED",
+      "REJECTED"
+    ]
+  },
+  "unknown_sentinel": "UNKNOWN",
+  "datasets": [
+    {
+      "dataset_id": "CAND-006",
+      "name": "CIC-IDS-2017",
+      "version": "UNKNOWN",
+      "publisher": "Canadian Institute for Cybersecurity, University of New Brunswick",
+      "canonical_source": "https://www.unb.ca/cic/datasets/ids-2017.html",
+      "access_method": "CIC dataset download form (PII + license acceptance) (REPORTED in Phase 7 Step 4).",
+      "access_category": "ACADEMIC_ACCESS_REQUIRED",
+      "license": "UNKNOWN",
+      "usage_restrictions": "UNKNOWN",
+      "collection_period": "UNKNOWN",
+      "publication_date": "UNKNOWN",
+      "acquisition_date": "UNKNOWN",
+      "raw_capture_available": "UNKNOWN",
+      "pcap_available": "UNKNOWN",
+      "labeling_methodology": "UNKNOWN",
+      "label_confidence": "UNKNOWN",
+      "composition": "UNKNOWN",
+      "malware_families": "UNKNOWN",
+      "network_environment": "UNKNOWN",
+      "os_environment": "UNKNOWN",
+      "protocol_coverage": "UNKNOWN",
+      "tls_version_coverage": "UNKNOWN",
+      "fingerprint_availability": "UNKNOWN",
+      "flow_count": "UNKNOWN",
+      "behavioral_group_count": "UNKNOWN",
+      "duplicate_statistics": "UNKNOWN",
+      "missingness_statistics": "UNKNOWN",
+      "provenance_completeness": "UNKNOWN",
+      "state": "ACCESS_PENDING",
+      "exclusion_reasons": [],
+      "reproducibility": "UNKNOWN",
+      "checksums": {},
+      "processing_status": "UNKNOWN",
+      "research_role": "Candidate benign source.",
+      "notes": "UNKNOWN",
+      "history": [
+        {
+          "from_state": null,
+          "to_state": "DISCOVERED",
+          "timestamp": "2026-10-16T16:11:41.510306Z",
+          "evidence": "Record created.",
+          "evidence_refs": [],
+          "actor": "registry"
+        },
+        {
+          "from_state": "DISCOVERED",
+          "to_state": "ACCESS_PENDING",
+          "timestamp": "2026-10-16T16:11:41.511306Z",
+          "evidence": "Registration form must be completed by the researcher.",
+          "evidence_refs": [
+            "docs/research/phase-7-step-4-benign-dataset-verification.md"
+          ],
+          "actor": "pipeline"
+        }
+      ]
+    },
+    {
+      "dataset_id": "CAND-007",
+      "name": "CIC-Bell-DNS-EXF-2021",
+      "version": "UNKNOWN",
+      "publisher": "Canadian Institute for Cybersecurity, University of New Brunswick",
+      "canonical_source": "https://www.unb.ca/cic/datasets/dns-exf-2021.html",
+      "access_method": "CIC dataset download form (PII + license acceptance) (REPORTED in Phase 7 Step 4).",
+      "access_category": "ACADEMIC_ACCESS_REQUIRED",
+      "license": "UNKNOWN",
+      "usage_restrictions": "UNKNOWN",
+      "collection_period": "UNKNOWN",
+      "publication_date": "UNKNOWN",
+      "acquisition_date": "UNKNOWN",
+      "raw_capture_available": "UNKNOWN",
+      "pcap_available": "UNKNOWN",
+      "labeling_methodology": "UNKNOWN",
+      "label_confidence": "UNKNOWN",
+      "composition": "UNKNOWN",
+      "malware_families": "UNKNOWN",
+      "network_environment": "UNKNOWN",
+      "os_environment": "UNKNOWN",
+      "protocol_coverage": "UNKNOWN",
+      "tls_version_coverage": "UNKNOWN",
+      "fingerprint_availability": "UNKNOWN",
+      "flow_count": "UNKNOWN",
+      "behavioral_group_count": "UNKNOWN",
+      "duplicate_statistics": "UNKNOWN",
+      "missingness_statistics": "UNKNOWN",
+      "provenance_completeness": "UNKNOWN",
+      "state": "ACCESS_PENDING",
+      "exclusion_reasons": [],
+      "reproducibility": "UNKNOWN",
+      "checksums": {},
+      "processing_status": "UNKNOWN",
+      "research_role": "Candidate benign source.",
+      "notes": "UNKNOWN",
+      "history": [
+        {
+          "from_state": null,
+          "to_state": "DISCOVERED",
+          "timestamp": "2026-10-16T16:11:41.511306Z",
+          "evidence": "Record created.",
+          "evidence_refs": [],
+          "actor": "registry"
+        },
+        {
+          "from_state": "DISCOVERED",
+          "to_state": "ACCESS_PENDING",
+          "timestamp": "2026-10-16T16:11:41.511306Z",
+          "evidence": "Registration form must be completed by the researcher.",
+          "evidence_refs": [
+            "docs/research/phase-7-step-4-benign-dataset-verification.md"
+          ],
+          "actor": "pipeline"
+        }
+      ]
+    },
+    {
+      "dataset_id": "CAND-008",
+      "name": "CIRA-CIC-DoHBrw-2020",
+      "version": "UNKNOWN",
+      "publisher": "Canadian Institute for Cybersecurity, University of New Brunswick",
+      "canonical_source": "https://www.unb.ca/cic/datasets/dohbrw-2020.html",
+      "access_method": "CIC dataset download form (PII + license acceptance) (REPORTED in Phase 7 Step 4).",
+      "access_category": "ACADEMIC_ACCESS_REQUIRED",
+      "license": "UNKNOWN",
+      "usage_restrictions": "UNKNOWN",
+      "collection_period": "UNKNOWN",
+      "publication_date": "UNKNOWN",
+      "acquisition_date": "UNKNOWN",
+      "raw_capture_available": "UNKNOWN",
+      "pcap_available": "UNKNOWN",
+      "labeling_methodology": "UNKNOWN",
+      "label_confidence": "UNKNOWN",
+      "composition": "UNKNOWN",
+      "malware_families": "UNKNOWN",
+      "network_environment": "UNKNOWN",
+      "os_environment": "UNKNOWN",
+      "protocol_coverage": "UNKNOWN",
+      "tls_version_coverage": "UNKNOWN",
+      "fingerprint_availability": "UNKNOWN",
+      "flow_count": "UNKNOWN",
+      "behavioral_group_count": "UNKNOWN",
+      "duplicate_statistics": "UNKNOWN",
+      "missingness_statistics": "UNKNOWN",
+      "provenance_completeness": "UNKNOWN",
+      "state": "ACCESS_PENDING",
+      "exclusion_reasons": [],
+      "reproducibility": "UNKNOWN",
+      "checksums": {},
+      "processing_status": "UNKNOWN",
+      "research_role": "Candidate benign source.",
+      "notes": "UNKNOWN",
+      "history": [
+        {
+          "from_state": null,
+          "to_state": "DISCOVERED",
+          "timestamp": "2026-10-16T16:11:41.511306Z",
+          "evidence": "Record created.",
+          "evidence_refs": [],
+          "actor": "registry"
+        },
+        {
+          "from_state": "DISCOVERED",
+          "to_state": "ACCESS_PENDING",
+          "timestamp": "2026-10-16T16:11:41.511306Z",
+          "evidence": "Registration form must be completed by the researcher.",
+          "evidence_refs": [
+            "docs/research/phase-7-step-4-benign-dataset-verification.md"
+          ],
+          "actor": "pipeline"
+        }
+      ]
+    },
+    {
+      "dataset_id": "DS-001",
+      "name": "ISCXVPN2016",
+      "version": "UNKNOWN",
+      "publisher": "University of New Brunswick, Canadian Institute for Cybersecurity (CIC)",
+      "canonical_source": "https://www.unb.ca/cic/datasets/vpn.html",
+      "access_method": "UNKNOWN",
+      "access_category": "INSUFFICIENT_EVIDENCE",
+      "license": "UNKNOWN",
+      "usage_restrictions": "UNKNOWN",
+      "collection_period": "UNKNOWN",
+      "publication_date": "UNKNOWN",
+      "acquisition_date": "UNKNOWN",
+      "raw_capture_available": "UNKNOWN",
+      "pcap_available": "UNKNOWN",
+      "labeling_methodology": "UNKNOWN",
+      "label_confidence": "UNKNOWN",
+      "composition": "UNKNOWN",
+      "malware_families": "UNKNOWN",
+      "network_environment": "UNKNOWN",
+      "os_environment": "UNKNOWN",
+      "protocol_coverage": "UNKNOWN",
+      "tls_version_coverage": "UNKNOWN",
+      "fingerprint_availability": "UNKNOWN",
+      "flow_count": "UNKNOWN",
+      "behavioral_group_count": "UNKNOWN",
+      "duplicate_statistics": "UNKNOWN",
+      "missingness_statistics": "UNKNOWN",
+      "provenance_completeness": "UNKNOWN",
+      "state": "DISCOVERED",
+      "exclusion_reasons": [],
+      "reproducibility": "UNKNOWN",
+      "checksums": {},
+      "processing_status": "UNKNOWN",
+      "research_role": "UNKNOWN",
+      "notes": "Imported from docs/research/dataset-registry.csv; not re-evaluated in Phase 8.",
+      "history": [
+        {
+          "from_state": null,
+          "to_state": "DISCOVERED",
+          "timestamp": "2026-10-16T16:11:41.512305Z",
+          "evidence": "Record created.",
+          "evidence_refs": [],
+          "actor": "registry"
+        }
+      ]
+    },
+    {
+      "dataset_id": "DS-002",
+      "name": "CIC-Darknet2020",
+      "version": "UNKNOWN",
+      "publisher": "Canadian Institute for Cybersecurity (CIC), University of New Brunswick",
+      "canonical_source": "https://www.unb.ca/cic/datasets/darknet2020.html",
+      "access_method": "UNKNOWN",
+      "access_category": "INSUFFICIENT_EVIDENCE",
+      "license": "UNKNOWN",
+      "usage_restrictions": "UNKNOWN",
+      "collection_period": "UNKNOWN",
+      "publication_date": "UNKNOWN",
+      "acquisition_date": "UNKNOWN",
+      "raw_capture_available": "UNKNOWN",
+      "pcap_available": "UNKNOWN",
+      "labeling_methodology": "UNKNOWN",
+      "label_confidence": "UNKNOWN",
+      "composition": "UNKNOWN",
+      "malware_families": "UNKNOWN",
+      "network_environment": "UNKNOWN",
+      "os_environment": "UNKNOWN",
+      "protocol_coverage": "UNKNOWN",
+      "tls_version_coverage": "UNKNOWN",
+      "fingerprint_availability": "UNKNOWN",
+      "flow_count": "UNKNOWN",
+      "behavioral_group_count": "UNKNOWN",
+      "duplicate_statistics": "UNKNOWN",
+      "missingness_statistics": "UNKNOWN",
+      "provenance_completeness": "UNKNOWN",
+      "state": "DISCOVERED",
+      "exclusion_reasons": [],
+      "reproducibility": "UNKNOWN",
+      "checksums": {},
+      "processing_status": "UNKNOWN",
+      "research_role": "UNKNOWN",
+      "notes": "Imported from docs/research/dataset-registry.csv; not re-evaluated in Phase 8.",
+      "history": [
+        {
+          "from_state": null,
+          "to_state": "DISCOVERED",
+          "timestamp": "2026-10-16T16:11:41.512305Z",
+          "evidence": "Record created.",
+          "evidence_refs": [],
+          "actor": "registry"
+        }
+      ]
+    },
+    {
+      "dataset_id": "DS-003",
+      "name": "USTC-TFC2016",
+      "version": "UNKNOWN",
+      "publisher": "University of Science and Technology of China (USTC); Institute of Acoustics, Chinese Academy of Sciences",
+      "canonical_source": "https://github.com/yungshenglu/USTC-TFC2016",
+      "access_method": "UNKNOWN",
+      "access_category": "INSUFFICIENT_EVIDENCE",
+      "license": "UNKNOWN",
+      "usage_restrictions": "UNKNOWN",
+      "collection_period": "UNKNOWN",
+      "publication_date": "UNKNOWN",
+      "acquisition_date": "UNKNOWN",
+      "raw_capture_available": "UNKNOWN",
+      "pcap_available": "UNKNOWN",
+      "labeling_methodology": "UNKNOWN",
+      "label_confidence": "UNKNOWN",
+      "composition": "UNKNOWN",
+      "malware_families": "UNKNOWN",
+      "network_environment": "UNKNOWN",
+      "os_environment": "UNKNOWN",
+      "protocol_coverage": "UNKNOWN",
+      "tls_version_coverage": "UNKNOWN",
+      "fingerprint_availability": "UNKNOWN",
+      "flow_count": "UNKNOWN",
+      "behavioral_group_count": "UNKNOWN",
+      "duplicate_statistics": "UNKNOWN",
+      "missingness_statistics": "UNKNOWN",
+      "provenance_completeness": "UNKNOWN",
+      "state": "DISCOVERED",
+      "exclusion_reasons": [],
+      "reproducibility": "UNKNOWN",
+      "checksums": {},
+      "processing_status": "UNKNOWN",
+      "research_role": "UNKNOWN",
+      "notes": "Imported from docs/research/dataset-registry.csv; not re-evaluated in Phase 8.",
+      "history": [
+        {
+          "from_state": null,
+          "to_state": "DISCOVERED",
+          "timestamp": "2026-10-16T16:11:41.512305Z",
+          "evidence": "Record created.",
+          "evidence_refs": [],
+          "actor": "registry"
+        }
+      ]
+    },
+    {
+      "dataset_id": "DS-004",
+      "name": "CipherSpectrum",
+      "version": "Phase 5/6 sample of 6 PCAPs from mix.zip",
+      "publisher": "Wickramasinghe et al., UNSW (IEEE S&P 2025)",
+      "canonical_source": "https://cspectrum.web.cse.unsw.edu.au/",
+      "access_method": "Short registration form (no approval step); ZIP links shown on the confirmation page.",
+      "access_category": "ACADEMIC_ACCESS_REQUIRED",
+      "license": "CC BY-NC 4.0 (verified on provider site 2026-10-16); citation of DOI 10.1109/SP61157.2025.00165 requested.",
+      "usage_restrictions": "Academic and non-commercial research only; commercial use requires permission.",
+      "collection_period": "UNKNOWN",
+      "publication_date": "UNKNOWN",
+      "acquisition_date": "UNKNOWN",
+      "raw_capture_available": "YES (after form)",
+      "pcap_available": "YES (after form)",
+      "labeling_methodology": "Website-level labels from a customised Chromium crawler (benign web traffic).",
+      "label_confidence": "HIGH (benign) but single application (browser)",
+      "composition": "BENIGN (used as BENIGN_VALIDATION)",
+      "malware_families": "UNKNOWN",
+      "network_environment": "Controlled crawler",
+      "os_environment": "UNKNOWN",
+      "protocol_coverage": "UNKNOWN",
+      "tls_version_coverage": "TLS 1.3 (4 samples) and TLS 1.0 record version (2 samples) per Phase 6 validation",
+      "fingerprint_availability": "UNKNOWN",
+      "flow_count": "UNKNOWN",
+      "behavioral_group_count": "UNKNOWN",
+      "duplicate_statistics": "UNKNOWN",
+      "missingness_statistics": "UNKNOWN",
+      "provenance_completeness": "UNKNOWN",
+      "state": "ACCESS_PENDING",
+      "exclusion_reasons": [],
+      "reproducibility": "UNKNOWN",
+      "checksums": {},
+      "processing_status": "UNKNOWN",
+      "research_role": "Benign validation baseline (Phase 6).",
+      "notes": "Six samples (sha256 recorded in data/manifests/dataset_manifest_20260815_092018.csv) were acquired on the original workstation. They are absent from this working copy. The original archive member names were not recorded. Re-acquisition requires the researcher to complete the provider's form; this automation does not.",
+      "history": [
+        {
+          "from_state": null,
+          "to_state": "DISCOVERED",
+          "timestamp": "2026-10-16T16:11:41.510306Z",
+          "evidence": "Record created.",
+          "evidence_refs": [],
+          "actor": "registry"
+        },
+        {
+          "from_state": "DISCOVERED",
+          "to_state": "LICENSE_VERIFIED",
+          "timestamp": "2026-10-16T16:11:41.510306Z",
+          "evidence": "CC BY-NC 4.0 stated on provider site.",
+          "evidence_refs": [
+            "https://cgi.cse.unsw.edu.au/~cspectrum/"
+          ],
+          "actor": "pipeline"
+        },
+        {
+          "from_state": "LICENSE_VERIFIED",
+          "to_state": "ACCESS_PENDING",
+          "timestamp": "2026-10-16T16:11:41.510306Z",
+          "evidence": "Local copies absent; access requires the provider's registration form (PII), which must be completed by a human.",
+          "evidence_refs": [
+            "docs/research/PHASE_8_9_10_INITIAL_STATE_AUDIT.md"
+          ],
+          "actor": "pipeline"
+        }
+      ]
+    },
+    {
+      "dataset_id": "DS-005",
+      "name": "CSTNET-TLS1.3",
+      "version": "UNKNOWN",
+      "publisher": "NOT_VERIFIED",
+      "canonical_source": "NOT_VERIFIED",
+      "access_method": "UNKNOWN",
+      "access_category": "INSUFFICIENT_EVIDENCE",
+      "license": "UNKNOWN",
+      "usage_restrictions": "UNKNOWN",
+      "collection_period": "UNKNOWN",
+      "publication_date": "UNKNOWN",
+      "acquisition_date": "UNKNOWN",
+      "raw_capture_available": "UNKNOWN",
+      "pcap_available": "UNKNOWN",
+      "labeling_methodology": "UNKNOWN",
+      "label_confidence": "UNKNOWN",
+      "composition": "UNKNOWN",
+      "malware_families": "UNKNOWN",
+      "network_environment": "UNKNOWN",
+      "os_environment": "UNKNOWN",
+      "protocol_coverage": "UNKNOWN",
+      "tls_version_coverage": "UNKNOWN",
+      "fingerprint_availability": "UNKNOWN",
+      "flow_count": "UNKNOWN",
+      "behavioral_group_count": "UNKNOWN",
+      "duplicate_statistics": "UNKNOWN",
+      "missingness_statistics": "UNKNOWN",
+      "provenance_completeness": "UNKNOWN",
+      "state": "DISCOVERED",
+      "exclusion_reasons": [],
+      "reproducibility": "UNKNOWN",
+      "checksums": {},
+      "processing_status": "UNKNOWN",
+      "research_role": "UNKNOWN",
+      "notes": "Imported from docs/research/dataset-registry.csv; not re-evaluated in Phase 8.",
+      "history": [
+        {
+          "from_state": null,
+          "to_state": "DISCOVERED",
+          "timestamp": "2026-10-16T16:11:41.512305Z",
+          "evidence": "Record created.",
+          "evidence_refs": [],
+          "actor": "registry"
+        }
+      ]
+    },
+    {
+      "dataset_id": "DS-006",
+      "name": "Beyond JA4+ / TLS fingerprinting datasets (Brno University of Technology)",
+      "version": "UNKNOWN",
+      "publisher": "NES group, Brno University of Technology (P. Matoušek et al.)",
+      "canonical_source": "https://github.com/matousp/tls-fingerprinting",
+      "access_method": "Public GitHub repository (datasets/desktop, datasets/mobile with PCAP and CSV).",
+      "access_category": "LICENSE_UNCLEAR",
+      "license": "UNKNOWN",
+      "usage_restrictions": "No license file; only '(c) Petr Matousek, 2024'. Default copyright applies until clarified.",
+      "collection_period": "UNKNOWN",
+      "publication_date": "UNKNOWN",
+      "acquisition_date": "UNKNOWN",
+      "raw_capture_available": "UNKNOWN",
+      "pcap_available": "UNKNOWN",
+      "labeling_methodology": "Application labels (77 desktop/mobile applications); not benign/malicious labels.",
+      "label_confidence": "UNKNOWN",
+      "composition": "Application-labelled (presumed benign) traffic",
+      "malware_families": "UNKNOWN",
+      "network_environment": "UNKNOWN",
+      "os_environment": "UNKNOWN",
+      "protocol_coverage": "UNKNOWN",
+      "tls_version_coverage": "UNKNOWN",
+      "fingerprint_availability": "UNKNOWN",
+      "flow_count": "UNKNOWN",
+      "behavioral_group_count": "UNKNOWN",
+      "duplicate_statistics": "UNKNOWN",
+      "missingness_statistics": "UNKNOWN",
+      "provenance_completeness": "UNKNOWN",
+      "state": "BLOCKED",
+      "exclusion_reasons": [],
+      "reproducibility": "UNKNOWN",
+      "checksums": {},
+      "processing_status": "UNKNOWN",
+      "research_role": "Candidate benign application corpus.",
+      "notes": "Reviewed 2026-10-16. Action: request written permission or a license from the authors before acquisition.",
+      "history": [
+        {
+          "from_state": null,
+          "to_state": "DISCOVERED",
+          "timestamp": "2026-10-16T16:11:41.510306Z",
+          "evidence": "Record created.",
+          "evidence_refs": [],
+          "actor": "registry"
+        },
+        {
+          "from_state": "DISCOVERED",
+          "to_state": "BLOCKED",
+          "timestamp": "2026-10-16T16:11:41.510306Z",
+          "evidence": "Repository has no license; acquisition deferred until the authors grant permission.",
+          "evidence_refs": [
+            "https://github.com/matousp/tls-fingerprinting"
+          ],
+          "actor": "pipeline"
+        }
+      ]
+    },
+    {
+      "dataset_id": "DS-007",
+      "name": "Annotated Encrypted Network Traffic (Brno University of Technology)",
+      "version": "UNKNOWN",
+      "publisher": "Brno University of Technology (REPORTED in docs/research/dataset-registry.csv)",
+      "canonical_source": "UNKNOWN",
+      "access_method": "Raw PCAPs reportedly require a justified request (REPORTED).",
+      "access_category": "ACADEMIC_ACCESS_REQUIRED",
+      "license": "UNKNOWN",
+      "usage_restrictions": "UNKNOWN",
+      "collection_period": "UNKNOWN",
+      "publication_date": "UNKNOWN",
+      "acquisition_date": "UNKNOWN",
+      "raw_capture_available": "UNKNOWN",
+      "pcap_available": "UNKNOWN",
+      "labeling_methodology": "UNKNOWN",
+      "label_confidence": "UNKNOWN",
+      "composition": "UNKNOWN",
+      "malware_families": "UNKNOWN",
+      "network_environment": "UNKNOWN",
+      "os_environment": "UNKNOWN",
+      "protocol_coverage": "UNKNOWN",
+      "tls_version_coverage": "UNKNOWN",
+      "fingerprint_availability": "UNKNOWN",
+      "flow_count": "UNKNOWN",
+      "behavioral_group_count": "UNKNOWN",
+      "duplicate_statistics": "UNKNOWN",
+      "missingness_statistics": "UNKNOWN",
+      "provenance_completeness": "UNKNOWN",
+      "state": "ACCESS_PENDING",
+      "exclusion_reasons": [],
+      "reproducibility": "UNKNOWN",
+      "checksums": {},
+      "processing_status": "UNKNOWN",
+      "research_role": "Candidate unified benign+malicious corpus.",
+      "notes": "Canonical URL not verified in Phase 8. Prepared request text: docs/research/dataset-access-request-drafts.md.",
+      "history": [
+        {
+          "from_state": null,
+          "to_state": "DISCOVERED",
+          "timestamp": "2026-10-16T16:11:41.510306Z",
+          "evidence": "Record created.",
+          "evidence_refs": [],
+          "actor": "registry"
+        },
+        {
+          "from_state": "DISCOVERED",
+          "to_state": "ACCESS_PENDING",
+          "timestamp": "2026-10-16T16:11:41.510306Z",
+          "evidence": "Access requires a justified request that must be sent by the researcher.",
+          "evidence_refs": [
+            "docs/research/dataset-access-request-drafts.md"
+          ],
+          "actor": "pipeline"
+        }
+      ]
+    },
+    {
+      "dataset_id": "DS-008",
+      "name": "Malware-Traffic-Analysis.net (selected infection-traffic captures)",
+      "version": "Stage 6.5 selection (10 admitted captures)",
+      "publisher": "Brad Duncan (malware-traffic-analysis.net)",
+      "canonical_source": "https://www.malware-traffic-analysis.net/",
+      "access_method": "Public download of password-protected ZIP archives (password scheme infected_YYYYMMDD).",
+      "access_category": "VERIFIED_AVAILABLE",
+      "license": "No formal license. About page (reviewed 2026-10-16): files are shared 'as a resource for threat researchers and other security professionals'; 'use this website at your own risk'.",
+      "usage_restrictions": "Formal license UNKNOWN; used here for non-commercial security research only.",
+      "collection_period": "2024-01-30 to 2026-04-16 (admitted captures)",
+      "publication_date": "UNKNOWN",
+      "acquisition_date": "UNKNOWN",
+      "raw_capture_available": "YES",
+      "pcap_available": "YES",
+      "labeling_methodology": "Capture-level: each capture is published as infection traffic of a named family.",
+      "label_confidence": "Capture level HIGH; flow level MEDIUM (background host traffic is not separated).",
+      "composition": "MALICIOUS only",
+      "malware_families": "UNKNOWN",
+      "network_environment": "Infected Windows lab hosts as described in each post (not independently verified).",
+      "os_environment": "Windows (source narrative)",
+      "protocol_coverage": "TCP/UDP incl. DNS, HTTP, TLS",
+      "tls_version_coverage": "UNKNOWN",
+      "fingerprint_availability": {
+        "flows": 2543,
+        "tcp_flows": 2328,
+        "clienthello_flows": 194,
+        "serverhello_flows": 196,
+        "ja3_available": 194,
+        "ja4_available": 194,
+        "ja3s_available": 196,
+        "both_ja3_ja4": 194,
+        "neither_ja3_ja4": 2349,
+        "ja3_coverage": 0.076288,
+        "ja4_coverage": 0.076288,
+        "tls_version_counts": {
+          "nan": 2349,
+          "1.2": 111,
+          "1.3": 83
+        },
+        "clienthello_truncated_in_first_segment": 13,
+        "fingerprints_from_truncated_clienthello": 13
+      },
+      "flow_count": 2543,
+      "behavioral_group_count": 1594,
+      "duplicate_statistics": {
+        "flows": 2543,
+        "behavioral_groups": 1594,
+        "singleton_groups": 1528,
+        "duplicate_groups": 66,
+        "flows_in_duplicate_groups": 1015,
+        "largest_group_size": 823,
+        "behavioral_duplicate_rate": 0.399135,
+        "cross_capture_groups": 9,
+        "cross_dataset_groups": 0,
+        "cross_label_groups": 0
+      },
+      "missingness_statistics": {
+        "flow_duration": 0.0,
+        "packet_length_mean": 0.0,
+        "iat_mean": 0.329925,
+        "iat_std": 0.329925,
+        "fwd_iat_mean": 0.418797,
+        "rev_iat_mean": 0.662603,
+        "ja3_hash": 0.923712,
+        "ja4": 0.923712,
+        "ja3s_hash": 0.922926,
+        "tls_version": 0.923712,
+        "alpn_value": 0.923712
+      },
+      "provenance_completeness": "UNKNOWN",
+      "state": "ADMITTED",
+      "exclusion_reasons": [],
+      "reproducibility": "UNKNOWN",
+      "checksums": {
+        "DS008-C001": "4b079d83abe301a9aee90d68565429b7fc9dd6b9b43c4cb8e2c44b99fcede894",
+        "DS008-C002": "ef8b0d488efe3cc7b9f1e2c33b4aea00f0613be60a119fb07d7006add89fafc8",
+        "DS008-C003": "a430dc87508451dad8e70a7ed9b5d912054482d16745b4eadd93411e44dd41fc",
+        "DS008-C004": "c63d9260c5d93b98c51b353f4f6059c52b756ab648cc27c814d3aede41142d23",
+        "DS008-C005": "805fc5b533f990ae63beeacdee52b656bfddfd21145089dfbb54a82c6ea17aba",
+        "DS008-C006": "24de7b31a2248763c4fd3e92acfc6b6fa9462b129c7b4ff8024932407ebeae4b",
+        "DS008-C007": "903844e8c40fde617c3636a69ba902a668d740e67c79d9624998b4ab6df09ccd",
+        "DS008-C008": "47b1cc4c0148245878a1a2f2eadb37323d80d20a5dbc196b872b3780b8108095",
+        "DS008-C009": "f1bfadc000a21dae71a1d1d71613b169a6e01bedb7d9829822d111987ed4caeb",
+        "DS008-C010": "5f74ed42f609284180f70d104dacdb82cde86dda86020994464b416cd1bbb17f"
+      },
+      "processing_status": "10 capture(s) processed into corpus v3",
+      "research_role": "Primary malicious source (Stage 6.5).",
+      "notes": "UNKNOWN",
+      "history": [
+        {
+          "from_state": null,
+          "to_state": "DISCOVERED",
+          "timestamp": "2026-10-16T16:11:41.510306Z",
+          "evidence": "Record created.",
+          "evidence_refs": [],
+          "actor": "registry"
+        },
+        {
+          "from_state": "DISCOVERED",
+          "to_state": "LICENSE_VERIFIED",
+          "timestamp": "2026-10-16T16:29:23.247719Z",
+          "evidence": "Terms of use reviewed and recorded in the license field.",
+          "evidence_refs": [
+            "data/corpus/admission_report.json",
+            "data/corpus/artifact_manifest.json",
+            "data/processed/v3/corpus_manifest.json"
+          ],
+          "actor": "pipeline"
+        },
+        {
+          "from_state": "LICENSE_VERIFIED",
+          "to_state": "ACQUIRED",
+          "timestamp": "2026-10-16T16:29:23.247719Z",
+          "evidence": "10 capture file(s) present locally; acquisition log / archive provenance recorded.",
+          "evidence_refs": [
+            "data/corpus/admission_report.json",
+            "data/corpus/artifact_manifest.json",
+            "data/processed/v3/corpus_manifest.json"
+          ],
+          "actor": "pipeline"
+        },
+        {
+          "from_state": "ACQUIRED",
+          "to_state": "CONTENT_VERIFIED",
+          "timestamp": "2026-10-16T16:29:23.247719Z",
+          "evidence": "10 capture(s) checksum-verified or hashed at acquisition; 10 parse as valid PCAP.",
+          "evidence_refs": [
+            "data/corpus/admission_report.json",
+            "data/corpus/artifact_manifest.json",
+            "data/processed/v3/corpus_manifest.json"
+          ],
+          "actor": "pipeline"
+        },
+        {
+          "from_state": "CONTENT_VERIFIED",
+          "to_state": "PROCESSED",
+          "timestamp": "2026-10-16T16:29:23.247719Z",
+          "evidence": "2543 flows from 10 capture(s) in corpus v3.",
+          "evidence_refs": [
+            "data/corpus/admission_report.json",
+            "data/corpus/artifact_manifest.json",
+            "data/processed/v3/corpus_manifest.json"
+          ],
+          "actor": "pipeline"
+        },
+        {
+          "from_state": "PROCESSED",
+          "to_state": "ADMITTED",
+          "timestamp": "2026-10-16T16:29:23.247719Z",
+          "evidence": "Admitted for EXPLORATORY research use only, subject to the known limitations in the admission report.",
+          "evidence_refs": [
+            "data/corpus/admission_report.json",
+            "data/corpus/artifact_manifest.json",
+            "data/processed/v3/corpus_manifest.json"
+          ],
+          "actor": "pipeline"
+        }
+      ]
+    },
+    {
+      "dataset_id": "DS-009",
+      "name": "Stratosphere Malware Capture Facility Project (MCFP), selected 2017 Windows malware captures",
+      "version": "UNKNOWN",
+      "publisher": "Stratosphere Laboratory, Czech Technical University in Prague",
+      "canonical_source": "https://www.stratosphereips.org/datasets-malware",
+      "access_method": "Direct HTTPS download from https://mcfp.felk.cvut.cz/publicDatasets/ (no registration).",
+      "access_category": "VERIFIED_AVAILABLE",
+      "license": "MCFP disclaimer (verified 2026-10-16 in the project's README.html): 'You are free to use these files as long as you reference this project and the authors' (Garcia, Sebastian. Malware Capture Facility Project). The disclaimer is published with the project's captures; it is not repeated inside every malware directory.",
+      "usage_restrictions": "Attribution required.",
+      "collection_period": "2017 (per capture README timelines and file names)",
+      "publication_date": "UNKNOWN",
+      "acquisition_date": "UNKNOWN",
+      "raw_capture_available": "YES",
+      "pcap_available": "YES",
+      "labeling_methodology": "Capture-level: VM infected with the sample named in the README ('Probable Name').",
+      "label_confidence": "Capture level MEDIUM-HIGH ('probable' family names); flow level MEDIUM (pre-infection and background traffic included).",
+      "composition": "MALICIOUS only",
+      "malware_families": "UNKNOWN",
+      "network_environment": "Stratosphere lab Windows VMs",
+      "os_environment": "Windows (file names 'winN')",
+      "protocol_coverage": "UNKNOWN",
+      "tls_version_coverage": "UNKNOWN",
+      "fingerprint_availability": {
+        "flows": 447563,
+        "tcp_flows": 445057,
+        "clienthello_flows": 66612,
+        "serverhello_flows": 80497,
+        "ja3_available": 66612,
+        "ja4_available": 66612,
+        "ja3s_available": 80497,
+        "both_ja3_ja4": 66612,
+        "neither_ja3_ja4": 380951,
+        "ja3_coverage": 0.148833,
+        "ja4_coverage": 0.148833,
+        "tls_version_counts": {
+          "nan": 380951,
+          "1.2": 66612
+        },
+        "clienthello_truncated_in_first_segment": 1,
+        "fingerprints_from_truncated_clienthello": 1
+      },
+      "flow_count": 447563,
+      "behavioral_group_count": 223228,
+      "duplicate_statistics": {
+        "flows": 447563,
+        "behavioral_groups": 223228,
+        "singleton_groups": 203182,
+        "duplicate_groups": 20046,
+        "flows_in_duplicate_groups": 244381,
+        "largest_group_size": 97645,
+        "behavioral_duplicate_rate": 0.546026,
+        "cross_capture_groups": 2002,
+        "cross_dataset_groups": 0,
+        "cross_label_groups": 0
+      },
+      "missingness_statistics": {
+        "flow_duration": 0.0,
+        "packet_length_mean": 0.0,
+        "iat_mean": 0.225953,
+        "iat_std": 0.225953,
+        "fwd_iat_mean": 0.512929,
+        "rev_iat_mean": 0.757728,
+        "ja3_hash": 0.851167,
+        "ja4": 0.851167,
+        "ja3s_hash": 0.820144,
+        "tls_version": 0.851167,
+        "alpn_value": 0.851167
+      },
+      "provenance_completeness": "UNKNOWN",
+      "state": "ADMITTED",
+      "exclusion_reasons": [],
+      "reproducibility": "UNKNOWN",
+      "checksums": {
+        "DS009-CTU-MCB-238-1": "b03bf9bca9d2cb217e0ff96506314afddbe791fc7c6abaf80a41c256da2bd27f",
+        "DS009-CTU-MCB-240-1": "9369b771130396f349ca74a24c9f5a2a7c0ebff90a9aec635e99fb97b39472a9",
+        "DS009-CTU-MCB-246-1": "2425bf206592b0dc24c71b449a85df451bfaf493ffcd3daddcbfbbc0eb31cb37",
+        "DS009-CTU-MCB-248-1": "76b88b66b3a0eb6041c459ecd549b21aa53681f3e0e141281c9fd924237096d8",
+        "DS009-CTU-MCB-249-1": "49f0b2c1d7ae270a048a6cccfc9f85cc23992d20ea068e59f0a39f03c396c97b",
+        "DS009-CTU-MCB-259-1": "f4bc1edb5b926e22e4080dc011be7826862b4b683b2c780355848fc4aacd28d7",
+        "DS009-CTU-MCB-260-1": "3135369b8556071018154652ddc78a5828dc6bd1241aadfaada8414db1635dea",
+        "DS009-CTU-MCB-264-1": "a92b52e5fb9eae4983713434909f5954c8beb12876320d4b7f3f15c36ec46bcb",
+        "DS009-CTU-MCB-268-1": "c2f1edf1ffd78afe45e3a958e217692e9f6afb907763e1073779806fbbc449ea"
+      },
+      "processing_status": "9 capture(s) processed into corpus v3",
+      "research_role": "Second, independent malicious source, captured in the same laboratory and period as DS-011.",
+      "notes": "UNKNOWN",
+      "history": [
+        {
+          "from_state": null,
+          "to_state": "DISCOVERED",
+          "timestamp": "2026-10-16T16:11:41.510306Z",
+          "evidence": "Record created.",
+          "evidence_refs": [],
+          "actor": "registry"
+        },
+        {
+          "from_state": "DISCOVERED",
+          "to_state": "LICENSE_VERIFIED",
+          "timestamp": "2026-10-16T16:11:41.510306Z",
+          "evidence": "Project-level attribution terms reviewed.",
+          "evidence_refs": [
+            "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Normal-20/README.html"
+          ],
+          "actor": "pipeline"
+        },
+        {
+          "from_state": "LICENSE_VERIFIED",
+          "to_state": "ACQUIRED",
+          "timestamp": "2026-10-16T16:29:23.248735Z",
+          "evidence": "9 capture file(s) present locally; acquisition log / archive provenance recorded.",
+          "evidence_refs": [
+            "data/corpus/admission_report.json",
+            "data/corpus/artifact_manifest.json",
+            "data/processed/v3/corpus_manifest.json"
+          ],
+          "actor": "pipeline"
+        },
+        {
+          "from_state": "ACQUIRED",
+          "to_state": "CONTENT_VERIFIED",
+          "timestamp": "2026-10-16T16:29:23.248735Z",
+          "evidence": "9 capture(s) checksum-verified or hashed at acquisition; 9 parse as valid PCAP.",
+          "evidence_refs": [
+            "data/corpus/admission_report.json",
+            "data/corpus/artifact_manifest.json",
+            "data/processed/v3/corpus_manifest.json"
+          ],
+          "actor": "pipeline"
+        },
+        {
+          "from_state": "CONTENT_VERIFIED",
+          "to_state": "PROCESSED",
+          "timestamp": "2026-10-16T16:29:23.248735Z",
+          "evidence": "447563 flows from 9 capture(s) in corpus v3.",
+          "evidence_refs": [
+            "data/corpus/admission_report.json",
+            "data/corpus/artifact_manifest.json",
+            "data/processed/v3/corpus_manifest.json"
+          ],
+          "actor": "pipeline"
+        },
+        {
+          "from_state": "PROCESSED",
+          "to_state": "ADMITTED",
+          "timestamp": "2026-10-16T16:29:23.248735Z",
+          "evidence": "Admitted for EXPLORATORY research use only, subject to the known limitations in the admission report.",
+          "evidence_refs": [
+            "data/corpus/admission_report.json",
+            "data/corpus/artifact_manifest.json",
+            "data/processed/v3/corpus_manifest.json"
+          ],
+          "actor": "pipeline"
+        }
+      ]
+    },
+    {
+      "dataset_id": "DS-010",
+      "name": "IoT-23",
+      "version": "UNKNOWN",
+      "publisher": "Stratosphere Laboratory",
+      "canonical_source": "https://zenodo.org/",
+      "access_method": "UNKNOWN",
+      "access_category": "INSUFFICIENT_EVIDENCE",
+      "license": "UNKNOWN",
+      "usage_restrictions": "UNKNOWN",
+      "collection_period": "UNKNOWN",
+      "publication_date": "UNKNOWN",
+      "acquisition_date": "UNKNOWN",
+      "raw_capture_available": "UNKNOWN",
+      "pcap_available": "UNKNOWN",
+      "labeling_methodology": "UNKNOWN",
+      "label_confidence": "UNKNOWN",
+      "composition": "UNKNOWN",
+      "malware_families": "UNKNOWN",
+      "network_environment": "UNKNOWN",
+      "os_environment": "UNKNOWN",
+      "protocol_coverage": "UNKNOWN",
+      "tls_version_coverage": "UNKNOWN",
+      "fingerprint_availability": "UNKNOWN",
+      "flow_count": "UNKNOWN",
+      "behavioral_group_count": "UNKNOWN",
+      "duplicate_statistics": "UNKNOWN",
+      "missingness_statistics": "UNKNOWN",
+      "provenance_completeness": "UNKNOWN",
+      "state": "DISCOVERED",
+      "exclusion_reasons": [],
+      "reproducibility": "UNKNOWN",
+      "checksums": {},
+      "processing_status": "UNKNOWN",
+      "research_role": "UNKNOWN",
+      "notes": "Imported from docs/research/dataset-registry.csv; not re-evaluated in Phase 8.",
+      "history": [
+        {
+          "from_state": null,
+          "to_state": "DISCOVERED",
+          "timestamp": "2026-10-16T16:11:41.512305Z",
+          "evidence": "Record created.",
+          "evidence_refs": [],
+          "actor": "registry"
+        }
+      ]
+    },
+    {
+      "dataset_id": "DS-011",
+      "name": "Stratosphere CTU-Normal HTTPS captures (CTU-Normal-20 to -32)",
+      "version": "UNKNOWN",
+      "publisher": "Stratosphere Laboratory, Czech Technical University in Prague (captures by F. Strasak)",
+      "canonical_source": "https://www.stratosphereips.org/datasets-normal",
+      "access_method": "Direct HTTPS download from https://mcfp.felk.cvut.cz/publicDatasets/ (no registration).",
+      "access_category": "VERIFIED_AVAILABLE",
+      "license": "MCFP disclaimer (verified 2026-10-16 in CTU-Normal-20/README.html): 'You are free to use these files as long as you reference this project and the authors'.",
+      "usage_restrictions": "Attribution required.",
+      "collection_period": "2017-04-18 to 2017-05-02 (file names)",
+      "publication_date": "UNKNOWN",
+      "acquisition_date": "UNKNOWN",
+      "raw_capture_available": "YES",
+      "pcap_available": "YES",
+      "labeling_methodology": "Capture-level: 'normal connections to various HTTPS sites in Alexa top 1,000', no malware executed.",
+      "label_confidence": "HIGH (benign) — single activity type (scripted/manual browsing of popular sites).",
+      "composition": "BENIGN only",
+      "malware_families": "UNKNOWN",
+      "network_environment": "Stratosphere lab hosts; READMEs state no intermediate proxy.",
+      "os_environment": "Kali Linux / iceweasel 43.0.4 per most READMEs; some file names say 'win' (recorded as conflicts).",
+      "protocol_coverage": "UNKNOWN",
+      "tls_version_coverage": "UNKNOWN",
+      "fingerprint_availability": {
+        "flows": 127132,
+        "tcp_flows": 70479,
+        "clienthello_flows": 13845,
+        "serverhello_flows": 13685,
+        "ja3_available": 13845,
+        "ja4_available": 13845,
+        "ja3s_available": 13685,
+        "both_ja3_ja4": 13845,
+        "neither_ja3_ja4": 113287,
+        "ja3_coverage": 0.108903,
+        "ja4_coverage": 0.108903,
+        "tls_version_counts": {
+          "nan": 113287,
+          "1.2": 13845
+        },
+        "clienthello_truncated_in_first_segment": 43,
+        "fingerprints_from_truncated_clienthello": 43
+      },
+      "flow_count": 127132,
+      "behavioral_group_count": 97218,
+      "duplicate_statistics": {
+        "flows": 127132,
+        "behavioral_groups": 97218,
+        "singleton_groups": 96248,
+        "duplicate_groups": 970,
+        "flows_in_duplicate_groups": 30884,
+        "largest_group_size": 20605,
+        "behavioral_duplicate_rate": 0.242929,
+        "cross_capture_groups": 292,
+        "cross_dataset_groups": 0,
+        "cross_label_groups": 0
+      },
+      "missingness_statistics": {
+        "flow_duration": 0.0,
+        "packet_length_mean": 0.0,
+        "iat_mean": 0.220826,
+        "iat_std": 0.220826,
+        "fwd_iat_mean": 0.640917,
+        "rev_iat_mean": 0.810189,
+        "ja3_hash": 0.891097,
+        "ja4": 0.891097,
+        "ja3s_hash": 0.892356,
+        "tls_version": 0.891097,
+        "alpn_value": 0.891097
+      },
+      "provenance_completeness": "UNKNOWN",
+      "state": "ADMITTED",
+      "exclusion_reasons": [],
+      "reproducibility": "UNKNOWN",
+      "checksums": {
+        "DS011-CTU-Normal-20": "c78a00728f115ab8fc495fd395894c43fd90cb61054eb9ef4f2d024658d5ffc5",
+        "DS011-CTU-Normal-21": "53acb10b26ca6446b5bba2efd9d957a9faa15209029d58c10a8c1d1bd299c42b",
+        "DS011-CTU-Normal-23": "50ccaa483200a73c87be73ce3cae95c16afe0941021ff6d5e8e1cacf5a90807b",
+        "DS011-CTU-Normal-24": "31a9a2a88b0d24283288058f7c2dbad057e3d7d7bb2ad2427302dc954c7e1471",
+        "DS011-CTU-Normal-26": "b66103fd89c8f0fc53b76e718f53320f3af27edd302c58695fc1870ede3663c5",
+        "DS011-CTU-Normal-28": "a2f3e60fa0eb2a924a3795644ac09a0f1ea48c45c30ebcc663af9641580b9a5c"
+      },
+      "processing_status": "6 capture(s) processed into corpus v3",
+      "research_role": "Independent benign source; same laboratory and period as DS-009.",
+      "notes": "6 of 13 captures acquired in Phase 8 (CTU-Normal-20, 21, 23, 24, 26, 28) to bound download size.",
+      "history": [
+        {
+          "from_state": null,
+          "to_state": "DISCOVERED",
+          "timestamp": "2026-10-16T16:11:41.510306Z",
+          "evidence": "Record created.",
+          "evidence_refs": [],
+          "actor": "registry"
+        },
+        {
+          "from_state": "DISCOVERED",
+          "to_state": "LICENSE_VERIFIED",
+          "timestamp": "2026-10-16T16:11:41.510306Z",
+          "evidence": "Attribution terms reviewed.",
+          "evidence_refs": [
+            "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Normal-20/README.html"
+          ],
+          "actor": "pipeline"
+        },
+        {
+          "from_state": "LICENSE_VERIFIED",
+          "to_state": "ACQUIRED",
+          "timestamp": "2026-10-16T16:29:23.249798Z",
+          "evidence": "6 capture file(s) present locally; acquisition log / archive provenance recorded.",
+          "evidence_refs": [
+            "data/corpus/admission_report.json",
+            "data/corpus/artifact_manifest.json",
+            "data/processed/v3/corpus_manifest.json"
+          ],
+          "actor": "pipeline"
+        },
+        {
+          "from_state": "ACQUIRED",
+          "to_state": "CONTENT_VERIFIED",
+          "timestamp": "2026-10-16T16:29:23.249798Z",
+          "evidence": "6 capture(s) checksum-verified or hashed at acquisition; 6 parse as valid PCAP.",
+          "evidence_refs": [
+            "data/corpus/admission_report.json",
+            "data/corpus/artifact_manifest.json",
+            "data/processed/v3/corpus_manifest.json"
+          ],
+          "actor": "pipeline"
+        },
+        {
+          "from_state": "CONTENT_VERIFIED",
+          "to_state": "PROCESSED",
+          "timestamp": "2026-10-16T16:29:23.249798Z",
+          "evidence": "127132 flows from 6 capture(s) in corpus v3.",
+          "evidence_refs": [
+            "data/corpus/admission_report.json",
+            "data/corpus/artifact_manifest.json",
+            "data/processed/v3/corpus_manifest.json"
+          ],
+          "actor": "pipeline"
+        },
+        {
+          "from_state": "PROCESSED",
+          "to_state": "ADMITTED",
+          "timestamp": "2026-10-16T16:29:23.249798Z",
+          "evidence": "Admitted for EXPLORATORY research use only, subject to the known limitations in the admission report.",
+          "evidence_refs": [
+            "data/corpus/admission_report.json",
+            "data/corpus/artifact_manifest.json",
+            "data/processed/v3/corpus_manifest.json"
+          ],
+          "actor": "pipeline"
+        }
+      ]
+    }
+  ]
+}
