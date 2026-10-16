@@ -301,6 +301,27 @@ def stop_session(session_id: str):
     stopped = session_repository.stop(session_id)
     return stopped
 
+# --- Phase 11 Sensor Endpoints ---
+
+@app.get("/api/sensors/status")
+def get_sensors_status():
+    from backend.event_sources.live_capture import detect_live_capture_capability
+    from backend.event_sources.ebpf_source import detect_ebpf_capability
+    return {
+        "live_capture": detect_live_capture_capability(),
+        "ebpf": detect_ebpf_capability(),
+        "zeek": {
+            "available": True,
+            "parser": "ZeekCorrelator",
+            "supported_logs": ["conn.log", "ssl.log", "x509.log"]
+        },
+        "suricata": {
+            "available": True,
+            "parser": "SuricataCorrelator",
+            "supported_events": ["flow", "tls", "alert"]
+        }
+    }
+
 from fastapi import WebSocket, WebSocketDisconnect
 from backend.ws_manager import manager
 from backend.replay_engine import replay_engine
