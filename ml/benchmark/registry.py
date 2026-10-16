@@ -28,6 +28,7 @@ from pipeline import config as pipeline_config
 PROJECT_ROOT = pipeline_config.PROJECT_ROOT
 EXPERIMENTS_ROOT = PROJECT_ROOT / "data" / "experiments"
 PHASE9_ROOT = EXPERIMENTS_ROOT / "phase9"
+PHASE10_ROOT = EXPERIMENTS_ROOT / "phase10"
 REGISTRY_INDEX = EXPERIMENTS_ROOT / "registry" / "index.jsonl"
 
 STATUSES = ("RUNNING", "COMPLETED", "FAILED", "INFEASIBLE", "SKIPPED")
@@ -96,14 +97,15 @@ def _write_json(path: Path, obj: Any) -> None:
 
 
 class Suite:
-    def __init__(self, name: str, cfg: Dict[str, Any], stage: str = "EXPLORATORY", suite_id: Optional[str] = None):
+    def __init__(self, name: str, cfg: Dict[str, Any], stage: str = "EXPLORATORY", suite_id: Optional[str] = None,
+                 root: Path = PHASE9_ROOT):
         if stage not in STAGES:
             raise ValueError(stage)
         self.name = name
         self.cfg = cfg
         self.stage = stage
         self.suite_id = suite_id or f"{name}-{_dt.datetime.now(_dt.timezone.utc).strftime('%Y%m%dT%H%M%SZ')}"
-        self.dir = PHASE9_ROOT / self.suite_id
+        self.dir = Path(root) / self.suite_id
         self.dir.mkdir(parents=True, exist_ok=True)
         self.path = self.dir / "suite.json"
         if self.path.exists():
@@ -180,16 +182,26 @@ class Experiment:
         return self.record
 
 
-def list_suites() -> List[Dict[str, Any]]:
+def list_suites(roots=(PHASE9_ROOT, PHASE10_ROOT)) -> List[Dict[str, Any]]:
     out = []
-    if PHASE9_ROOT.exists():
-        for d in sorted(PHASE9_ROOT.iterdir()):
-            p = d / "suite.json"
-            if p.exists():
-                out.append(json.loads(p.read_text(encoding="utf-8")))
+    for root in roots:
+        if root.exists():
+            for d in sorted(root.iterdir()):
+                p = d / "suite.json"
+                if p.exists():
+                    rec = json.loads(p.read_text(encoding="utf-8"))
+                    rec["phase"] = "PHASE_10" if root == PHASE10_ROOT else "PHASE_9"
+                    out.append(rec)
     return out
 
 
+def suite_dir(suite_id: str) -> Path:
+    for root in (PHASE9_ROOT, PHASE10_ROOT):
+        if (root / suite_id / "suite.json").exists():
+            return root / suite_id
+    raise FileNotFoundError(f"Unknown suite {suite_id}")
+
+
 def load_experiment(suite_id: str, experiment_id: str) -> Dict[str, Any]:
-    p = PHASE9_ROOT / suite_id / experiment_id / "record.json"
+    p = suite_dir(suite_id) / experiment_id / "record.json"
     return json.loads(p.read_text(encoding="utf-8"))
