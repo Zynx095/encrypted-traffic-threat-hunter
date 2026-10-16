@@ -27,11 +27,15 @@ class InferenceMetrics:
         self.by_status: Counter = Counter()
         self.by_track: Counter = Counter()
         self.skip_reasons: Counter = Counter()
+        self.ood_flags: Counter = Counter()       # feature-drift indicator only; not performance drift
         self.errors = 0
         self.started_at = time.time()
 
-    def observe(self, track: str, status: str, latency_ms: float, skip_code: Optional[str] = None) -> None:
+    def observe(self, track: str, status: str, latency_ms: float, skip_code: Optional[str] = None,
+                ood: Optional[List[str]] = None) -> None:
         with self._lock:
+            for flag in ood or []:
+                self.ood_flags[flag] += 1
             self.by_status[status] += 1
             self.by_track[track] += 1
             if status == "COMPLETED":
@@ -50,10 +54,12 @@ class InferenceMetrics:
             elapsed = max(time.time() - self.started_at, 1e-9)
             return {"total_requests": total, "by_status": dict(self.by_status), "by_track": dict(self.by_track),
                     "skip_reasons": dict(self.skip_reasons), "errors": self.errors,
+                    "ood_flag_counts": dict(self.ood_flags),
                     "latency_ms": {"n": len(lat), "p50": q(0.5), "p95": q(0.95), "p99": q(0.99),
                                    "max": round(lat[-1], 4) if lat else None},
                     "requests_per_second_since_start": round(total / elapsed, 4),
-                    "note": "Latency covers completed model inferences only (feature validation + scoring)."}
+                    "note": ("Latency covers completed model inferences only (feature validation + scoring). OOD flag counts "
+                             "describe input-distribution shift relative to training; they are not evidence of performance drift.")}
 
 
 class InferenceEngine:
@@ -258,7 +264,7 @@ class InferenceEngine:
             if ood:
                 evidence.append(f"Out-of-distribution warnings: {', '.join(ood[:6])}" + (" ..." if len(ood) > 6 else ""))
             latency = (time.perf_counter() - t0) * 1000.0
-            self.metrics.observe(track, "COMPLETED", latency)
+            self.metrics.observe(track, "COMPLETED", latency, ood=ood)
             return self._result(track, "COMPLETED", prediction=prediction, score=round(score, 6),
                                 confidence=round(abs(score - threshold) / max(threshold, 1 - threshold), 4),
                                 evidence=evidence, entry=entry, inference_type=INFERENCE_TYPE_MODEL, threshold=threshold, ood=ood)
