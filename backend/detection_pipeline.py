@@ -22,8 +22,8 @@ class DetectionPipeline:
     """
     def __init__(self):
         self.caveat_text = (
-            "Source-confounding limitation: DS-008 malicious vs DS-004 benign split. "
-            "Pilot classification is an engineering demonstration and not generalized real-world malware detection performance."
+            "Research pilot: models are trained on exploratory, source-confounded captures (one class per dataset: "
+            "DS-008/DS-009 malicious, DS-011 benign). Scores are not generalized real-world malware detection performance."
         )
 
     def _clean_str(self, val: Any) -> Optional[str]:
@@ -46,9 +46,9 @@ class DetectionPipeline:
         Isolates per-flow errors so stream playback is never interrupted by bad records.
         """
         flow_id = str(flow.get("flow_id", f"flow-{sequence}"))
-        dataset_id = str(flow.get("dataset_id", "DS-008"))
+        dataset_id = str(flow.get("dataset_id") or "UNKNOWN")
         if dataset_id.lower() == "nan":
-            dataset_id = "DS-008"
+            dataset_id = "UNKNOWN"
 
         ja3 = self._clean_str(flow.get("ja3_hash"))
         ja4 = self._clean_str(flow.get("ja4"))
@@ -63,8 +63,9 @@ class DetectionPipeline:
             flow_details = FlowDetails(
                 flow_id=flow_id,
                 protocol=str(flow.get("protocol", "TCP")).upper() if str(flow.get("protocol", "TCP")).upper() in ["TCP", "UDP"] else "TCP",
-                forward_endpoint=str(flow.get("forward_endpoint", "192.168.1.100:443")),
-                reverse_endpoint=str(flow.get("reverse_endpoint", "10.0.0.5:52314")),
+                # Endpoints are reported only when observed; no placeholder addresses are invented.
+                forward_endpoint=str(flow.get("forward_endpoint") or "UNKNOWN"),
+                reverse_endpoint=str(flow.get("reverse_endpoint") or "UNKNOWN"),
                 duration=float(flow.get("flow_duration", 0.0)) if pd.notnull(flow.get("flow_duration")) else 0.0,
                 total_packets=int(flow.get("total_packets", 0)) if pd.notnull(flow.get("total_packets")) else 0,
                 total_bytes=int(flow.get("total_bytes", 0)) if pd.notnull(flow.get("total_bytes")) else 0,
@@ -75,8 +76,8 @@ class DetectionPipeline:
             # 2. TLS Details
             sni_val = self._clean_str(flow.get("sni") or flow.get("server_name") or flow.get("sni_value"))
             tls_details = TLSDetails(
-                clienthello_present=bool(flow.get("clienthello_present", True)),
-                serverhello_present=bool(flow.get("serverhello_present", True)),
+                clienthello_present=bool(flow.get("clienthello_present") or False),
+                serverhello_present=bool(flow.get("serverhello_present") or False),
                 ja3_hash=ja3,
                 ja3s_hash=self._clean_str(flow.get("ja3s_hash")),
                 ja4=ja4,
@@ -108,15 +109,7 @@ class DetectionPipeline:
                 logger.info(f"[INFERENCE_COMPLETED] flow_id={flow_id} track={track} prediction={inf_res['prediction']} score={inf_res['threat_score']}")
 
             detection_details = DetectionDetails(
-                prediction=inf_res["prediction"],
-                threat_score=inf_res["threat_score"],
-                model_name=inf_res["model_name"],
-                confidence=inf_res["confidence"],
-                track=inf_res["track"],
-                status=inf_res["status"],
-                skip_reason=inf_res["skip_reason"],
-                evidence=inf_res["evidence"],
-                inference_type=inf_res["inference_type"]
+                **{k: v for k, v in inf_res.items() if k in DetectionDetails.model_fields}
             )
 
             # 5. Provenance Details
