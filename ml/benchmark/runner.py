@@ -14,6 +14,7 @@ The outer test fold is never used for selection, calibration or thresholds.
 """
 from __future__ import annotations
 
+import hashlib
 import logging
 import time
 import traceback
@@ -39,7 +40,28 @@ INNER_FOLDS = 3
 THRESHOLD_FPRS = (0.01, 0.05)
 
 
-def load_benchmark_frame(datasets: Optional[List[str]] = None) -> pd.DataFrame:
+DEFAULT_PER_CAPTURE_CAP = 4000
+
+
+def capture_balanced_sample(df: pd.DataFrame, cap: Optional[int], seed: int = 42) -> pd.DataFrame:
+    """
+    Evaluation-population definition: at most `cap` flows per capture, drawn uniformly at random
+    inside each capture (label-independent, deterministic). Captures range from 9 to 123,497
+    flows; without a cap a handful of long malware captures would dominate every pooled metric
+    and the compute budget. Captures smaller than the cap are kept whole.
+    """
+    if not cap:
+        return df.reset_index(drop=True)
+    parts = []
+    for cid, g in df.groupby("capture_id", sort=True):
+        if len(g) > cap:
+            g = g.sample(n=cap, random_state=seed + (int(hashlib.sha256(cid.encode()).hexdigest(), 16) % 10_000))
+        parts.append(g)
+    return pd.concat(parts).sort_values("corpus_index").reset_index(drop=True)
+
+
+def load_benchmark_frame(datasets: Optional[List[str]] = None, per_capture_cap: Optional[int] = None,
+                         seed: int = 42) -> pd.DataFrame:
     """Corpus rows with binary target y and grouping columns (grouping columns never reach X)."""
     from pipeline.corpus.builder import load_corpus
     flows, prov = load_corpus()
@@ -47,7 +69,7 @@ def load_benchmark_frame(datasets: Optional[List[str]] = None) -> pd.DataFrame:
     df["y"] = df["label"].map(lambda v: 1 if "MALICIOUS" in str(v).upper() else 0).astype(int)
     if datasets:
         df = df[df["dataset_id"].isin(datasets)]
-    return df.reset_index(drop=True)
+    return capture_balanced_sample(df, per_capture_cap, seed)
 
 
 def _matrix(df: pd.DataFrame, cols: Dict[str, List[str]]) -> pd.DataFrame:
