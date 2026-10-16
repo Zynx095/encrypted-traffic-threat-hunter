@@ -1,0 +1,8 @@
+# SYNTHETIC SOFTWARE TEST FIXTURE — DO NOT USE AS EMPIRICAL DETECTION EVIDENCE
+# These records test eBPF ring buffer event schema, nanosecond timestamp conversions, and process context.
+
+{"saddr":"192.168.1.15","daddr":"172.217.16.206","sport":48122,"dport":443,"protocol":6,"start_ns":1000000000,"end_ns":2500000000,"duration_ns":1500000000,"bytes_sent":2140,"bytes_recv":9820,"packets_sent":16,"packets_recv":22,"pid":14820,"comm":"curl","tls_sni":"youtube.com","ja3_hash":"771,4865-4866,0-23","ja4":"t13d1516h2_8daaf6152771_012e83626249","alpn":"h2"}
+# Record with MISSING TLS metadata (non-TLS socket)
+{"saddr":"192.168.1.15","daddr":"8.8.8.8","sport":51200,"dport":53,"protocol":17,"start_ns":3000000000,"end_ns":3050000000,"duration_ns":50000000,"bytes_sent":64,"bytes_recv":128,"packets_sent":1,"packets_recv":1,"pid":921,"comm":"systemd-resolved"}
+# Incomplete / malformed record for error handling
+{"saddr":"","sport":0,"invalid":true}
