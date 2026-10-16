@@ -7,6 +7,7 @@ Phase 8 corpus command line.
     python -m pipeline.corpus admit       # admission report, sufficiency assessment, registry state updates
     python -m pipeline.corpus all         # seed + plan + build + admit
     python -m pipeline.corpus status      # print registry states
+    python -m pipeline.corpus replay-set  # capture-balanced replay table for the real-time stream
 """
 from __future__ import annotations
 
@@ -20,7 +21,7 @@ from pipeline.corpus import paths
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(prog="python -m pipeline.corpus")
-    parser.add_argument("command", choices=["seed", "plan", "build", "admit", "all", "status"])
+    parser.add_argument("command", choices=["seed", "plan", "build", "admit", "all", "status", "replay-set"])
     parser.add_argument("--force", action="store_true", help="rebuild interim flow tables even if cached")
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
@@ -48,6 +49,9 @@ def main(argv=None) -> int:
         update_registry_states(report)
         print(json.dumps({k: v["met"] for k, v in suff["levels"].items()}, indent=2))
         print(f"Admission report -> {paths.rel(paths.ADMISSION_REPORT_MD)}")
+    if args.command == "replay-set":
+        from pipeline.corpus.replay_set import build_replay_set
+        print(json.dumps(build_replay_set(), indent=2))
     if args.command == "status":
         reg = DatasetRegistry(paths.REGISTRY_PATH)
         for rec in reg.all():
