@@ -1,0 +1,117 @@
+{
+  "generated_at": "2026-10-16T16:29:51.108794Z",
+  "thresholds": {
+    "A_pipeline": {
+      "min_captures_per_class": 1,
+      "min_flows_per_class": 1
+    },
+    "B_preliminary": {
+      "min_captures_per_class": 5,
+      "min_flows_per_class": 200,
+      "min_fingerprinted_flows_per_class": 30,
+      "min_behavioral_groups_per_class": 100
+    },
+    "C_generalization": {
+      "min_sources_per_class": 2,
+      "min_captures_per_class": 10,
+      "require_temporal_overlap_between_classes": true,
+      "require_tls13_in_both_classes": true,
+      "min_environments_per_class": 2
+    },
+    "D_publication": {
+      "min_sources_per_class": 3,
+      "min_captures_per_class": 20,
+      "require_independent_confirmatory_source": true,
+      "require_flow_level_labels": true
+    }
+  },
+  "levels": {
+    "A_pipeline": {
+      "met": true,
+      "checks": {
+        "captures_per_class": true,
+        "flows_per_class": true
+      }
+    },
+    "B_preliminary": {
+      "met": true,
+      "checks": {
+        "captures_per_class": true,
+        "flows_per_class": true,
+        "fingerprinted_flows_per_class": true,
+        "behavioral_groups_per_class": true
+      }
+    },
+    "C_generalization": {
+      "met": false,
+      "checks": {
+        "sources_per_class": false,
+        "captures_per_class": false,
+        "temporal_overlap_between_classes": true,
+        "tls13_in_both_classes": false,
+        "environments_per_class": false
+      }
+    },
+    "D_publication": {
+      "met": false,
+      "checks": {
+        "sources_per_class": false,
+        "captures_per_class": false,
+        "independent_confirmatory_source": false,
+        "flow_level_labels": false
+      }
+    }
+  },
+  "per_class": {
+    "BENIGN": {
+      "sources": [
+        "DS-011"
+      ],
+      "captures": 6,
+      "flows": 127132,
+      "fingerprinted_flows": 13845,
+      "behavioral_groups": 97218,
+      "environments": 1,
+      "environment_classes": [
+        "STRATOSPHERE_LAB_CAPTURE"
+      ],
+      "collection_years": [
+        2017
+      ],
+      "tls13_flows": 0
+    },
+    "MALICIOUS": {
+      "sources": [
+        "DS-008",
+        "DS-009"
+      ],
+      "captures": 19,
+      "flows": 450106,
+      "fingerprinted_flows": 66806,
+      "behavioral_groups": 224820,
+      "environments": 2,
+      "environment_classes": [
+        "MALWARE_LAB_WINDOWS_HOST (source narrative",
+        "STRATOSPHERE_LAB_CAPTURE"
+      ],
+      "collection_years": [
+        2017,
+        2024,
+        2025,
+        2026
+      ],
+      "tls13_flows": 83
+    }
+  },
+  "malicious_years_by_source": {
+    "DS-008": [
+      2024,
+      2025,
+      2026
+    ],
+    "DS-009": [
+      2017
+    ]
+  },
+  "interpretation": "Levels are cumulative requirements for increasingly strong claims. Meeting A or B permits executing and reporting preliminary, explicitly confounded results; it does not support generalisation claims (C) or publication claims (D)."
+}

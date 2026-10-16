@@ -1,0 +1,432 @@
+{
+  "generated_at": "2026-10-16T16:29:47.369344Z",
+  "corpus_rows": 577238,
+  "funnel_by_dataset": {
+    "DS-004": {
+      "captures_listed": 6,
+      "captures_included_in_plan": 6,
+      "captures_present": 0,
+      "captures_checksum_verified_or_observed": 0,
+      "captures_pcap_valid": 0,
+      "captures_in_corpus": 0,
+      "flows_in_corpus": 0,
+      "tls_clienthello_flows": 0,
+      "ja3_flows": 0,
+      "ja4_flows": 0
+    },
+    "DS-008": {
+      "captures_listed": 12,
+      "captures_included_in_plan": 10,
+      "captures_present": 10,
+      "captures_checksum_verified_or_observed": 10,
+      "captures_pcap_valid": 10,
+      "captures_in_corpus": 10,
+      "flows_in_corpus": 2543,
+      "tls_clienthello_flows": 194,
+      "ja3_flows": 194,
+      "ja4_flows": 194
+    },
+    "DS-009": {
+      "captures_listed": 9,
+      "captures_included_in_plan": 9,
+      "captures_present": 9,
+      "captures_checksum_verified_or_observed": 9,
+      "captures_pcap_valid": 9,
+      "captures_in_corpus": 9,
+      "flows_in_corpus": 447563,
+      "tls_clienthello_flows": 66612,
+      "ja3_flows": 66612,
+      "ja4_flows": 66612
+    },
+    "DS-011": {
+      "captures_listed": 6,
+      "captures_included_in_plan": 6,
+      "captures_present": 6,
+      "captures_checksum_verified_or_observed": 6,
+      "captures_pcap_valid": 6,
+      "captures_in_corpus": 6,
+      "flows_in_corpus": 127132,
+      "tls_clienthello_flows": 13845,
+      "ja3_flows": 13845,
+      "ja4_flows": 13845
+    }
+  },
+  "exclusions": [
+    {
+      "capture_id": "DS004-sample1",
+      "dataset_id": "DS-004",
+      "stage": "materialize",
+      "reason": "Raw file not present: data/samples/ds004/sample1.pcap"
+    },
+    {
+      "capture_id": "DS004-sample2",
+      "dataset_id": "DS-004",
+      "stage": "materialize",
+      "reason": "Raw file not present: data/samples/ds004/sample2.pcap"
+    },
+    {
+      "capture_id": "DS004-sample3",
+      "dataset_id": "DS-004",
+      "stage": "materialize",
+      "reason": "Raw file not present: data/samples/ds004/sample3.pcap"
+    },
+    {
+      "capture_id": "DS004-sample4",
+      "dataset_id": "DS-004",
+      "stage": "materialize",
+      "reason": "Raw file not present: data/samples/ds004/sample4.pcap"
+    },
+    {
+      "capture_id": "DS004-sample5",
+      "dataset_id": "DS-004",
+      "stage": "materialize",
+      "reason": "Raw file not present: data/samples/ds004/sample5.pcap"
+    },
+    {
+      "capture_id": "DS004-sample6",
+      "dataset_id": "DS-004",
+      "stage": "materialize",
+      "reason": "Raw file not present: data/samples/ds004/sample6.pcap"
+    },
+    {
+      "capture_id": "DS008-MTA-C003",
+      "dataset_id": "DS-008",
+      "stage": "plan",
+      "reason": "Stage 6.5 decision: Empirical testing failed or no useful TLS/JA4 data"
+    },
+    {
+      "capture_id": "DS008-MTA-C039",
+      "dataset_id": "DS-008",
+      "stage": "plan",
+      "reason": "Stage 6.5 decision: Only 1 TLS flow; redundant families (XLoader is in baseline, Remcos is in C040)"
+    }
+  ],
+  "pcap_integrity_notes": {
+    "DS011-CTU-Normal-21": [
+      "10 non-monotonic timestamps"
+    ]
+  },
+  "label_distribution": {
+    "by_label": {
+      "MALICIOUS": 450106,
+      "BENIGN": 127132
+    },
+    "by_dataset_label": {
+      "DS-008|MALICIOUS": 2543,
+      "DS-009|MALICIOUS": 447563,
+      "DS-011|BENIGN": 127132
+    },
+    "captures_by_binary_label": {
+      "BENIGN": 6,
+      "MALICIOUS": 19
+    }
+  },
+  "flows_per_capture": {
+    "DS008-C001": 1380,
+    "DS008-C002": 74,
+    "DS008-C003": 258,
+    "DS008-C004": 9,
+    "DS008-C005": 20,
+    "DS008-C006": 27,
+    "DS008-C007": 423,
+    "DS008-C008": 16,
+    "DS008-C009": 214,
+    "DS008-C010": 122,
+    "DS009-CTU-MCB-238-1": 27075,
+    "DS009-CTU-MCB-240-1": 26542,
+    "DS009-CTU-MCB-246-1": 43402,
+    "DS009-CTU-MCB-248-1": 37066,
+    "DS009-CTU-MCB-249-1": 29687,
+    "DS009-CTU-MCB-259-1": 28785,
+    "DS009-CTU-MCB-260-1": 29312,
+    "DS009-CTU-MCB-264-1": 123497,
+    "DS009-CTU-MCB-268-1": 102197,
+    "DS011-CTU-Normal-20": 27337,
+    "DS011-CTU-Normal-21": 24730,
+    "DS011-CTU-Normal-23": 25152,
+    "DS011-CTU-Normal-24": 10914,
+    "DS011-CTU-Normal-26": 19050,
+    "DS011-CTU-Normal-28": 19949
+  },
+  "missingness_by_dataset": {
+    "DS-008": {
+      "flow_duration": 0.0,
+      "packet_length_mean": 0.0,
+      "iat_mean": 0.329925,
+      "iat_std": 0.329925,
+      "fwd_iat_mean": 0.418797,
+      "rev_iat_mean": 0.662603,
+      "ja3_hash": 0.923712,
+      "ja4": 0.923712,
+      "ja3s_hash": 0.922926,
+      "tls_version": 0.923712,
+      "alpn_value": 0.923712
+    },
+    "DS-009": {
+      "flow_duration": 0.0,
+      "packet_length_mean": 0.0,
+      "iat_mean": 0.225953,
+      "iat_std": 0.225953,
+      "fwd_iat_mean": 0.512929,
+      "rev_iat_mean": 0.757728,
+      "ja3_hash": 0.851167,
+      "ja4": 0.851167,
+      "ja3s_hash": 0.820144,
+      "tls_version": 0.851167,
+      "alpn_value": 0.851167
+    },
+    "DS-011": {
+      "flow_duration": 0.0,
+      "packet_length_mean": 0.0,
+      "iat_mean": 0.220826,
+      "iat_std": 0.220826,
+      "fwd_iat_mean": 0.640917,
+      "rev_iat_mean": 0.810189,
+      "ja3_hash": 0.891097,
+      "ja4": 0.891097,
+      "ja3s_hash": 0.892356,
+      "tls_version": 0.891097,
+      "alpn_value": 0.891097
+    }
+  },
+  "duplicates": {
+    "flows": 577238,
+    "behavioral_groups": 322014,
+    "singleton_groups": 300930,
+    "duplicate_groups": 21084,
+    "flows_in_duplicate_groups": 276308,
+    "largest_group_size": 119073,
+    "behavioral_duplicate_rate": 0.478673,
+    "cross_capture_groups": 2312,
+    "cross_dataset_groups": 24,
+    "cross_label_groups": 24
+  },
+  "duplicates_by_dataset": {
+    "DS-008": {
+      "flows": 2543,
+      "behavioral_groups": 1594,
+      "singleton_groups": 1528,
+      "duplicate_groups": 66,
+      "flows_in_duplicate_groups": 1015,
+      "largest_group_size": 823,
+      "behavioral_duplicate_rate": 0.399135,
+      "cross_capture_groups": 9,
+      "cross_dataset_groups": 0,
+      "cross_label_groups": 0
+    },
+    "DS-009": {
+      "flows": 447563,
+      "behavioral_groups": 223228,
+      "singleton_groups": 203182,
+      "duplicate_groups": 20046,
+      "flows_in_duplicate_groups": 244381,
+      "largest_group_size": 97645,
+      "behavioral_duplicate_rate": 0.546026,
+      "cross_capture_groups": 2002,
+      "cross_dataset_groups": 0,
+      "cross_label_groups": 0
+    },
+    "DS-011": {
+      "flows": 127132,
+      "behavioral_groups": 97218,
+      "singleton_groups": 96248,
+      "duplicate_groups": 970,
+      "flows_in_duplicate_groups": 30884,
+      "largest_group_size": 20605,
+      "behavioral_duplicate_rate": 0.242929,
+      "cross_capture_groups": 292,
+      "cross_dataset_groups": 0,
+      "cross_label_groups": 0
+    }
+  },
+  "label_conflicting_behavioral_groups": 24,
+  "tls_coverage_overall": {
+    "flows": 577238,
+    "tcp_flows": 517864,
+    "clienthello_flows": 80651,
+    "serverhello_flows": 94378,
+    "ja3_available": 80651,
+    "ja4_available": 80651,
+    "ja3s_available": 94378,
+    "both_ja3_ja4": 80651,
+    "neither_ja3_ja4": 496587,
+    "ja3_coverage": 0.139719,
+    "ja4_coverage": 0.139719,
+    "tls_version_counts": {
+      "nan": 496587,
+      "1.2": 80568,
+      "1.3": 83
+    },
+    "clienthello_truncated_in_first_segment": 57,
+    "fingerprints_from_truncated_clienthello": 57
+  },
+  "tls_coverage_by_dataset": {
+    "DS-008": {
+      "flows": 2543,
+      "tcp_flows": 2328,
+      "clienthello_flows": 194,
+      "serverhello_flows": 196,
+      "ja3_available": 194,
+      "ja4_available": 194,
+      "ja3s_available": 196,
+      "both_ja3_ja4": 194,
+      "neither_ja3_ja4": 2349,
+      "ja3_coverage": 0.076288,
+      "ja4_coverage": 0.076288,
+      "tls_version_counts": {
+        "nan": 2349,
+        "1.2": 111,
+        "1.3": 83
+      },
+      "clienthello_truncated_in_first_segment": 13,
+      "fingerprints_from_truncated_clienthello": 13
+    },
+    "DS-009": {
+      "flows": 447563,
+      "tcp_flows": 445057,
+      "clienthello_flows": 66612,
+      "serverhello_flows": 80497,
+      "ja3_available": 66612,
+      "ja4_available": 66612,
+      "ja3s_available": 80497,
+      "both_ja3_ja4": 66612,
+      "neither_ja3_ja4": 380951,
+      "ja3_coverage": 0.148833,
+      "ja4_coverage": 0.148833,
+      "tls_version_counts": {
+        "nan": 380951,
+        "1.2": 66612
+      },
+      "clienthello_truncated_in_first_segment": 1,
+      "fingerprints_from_truncated_clienthello": 1
+    },
+    "DS-011": {
+      "flows": 127132,
+      "tcp_flows": 70479,
+      "clienthello_flows": 13845,
+      "serverhello_flows": 13685,
+      "ja3_available": 13845,
+      "ja4_available": 13845,
+      "ja3s_available": 13685,
+      "both_ja3_ja4": 13845,
+      "neither_ja3_ja4": 113287,
+      "ja3_coverage": 0.108903,
+      "ja4_coverage": 0.108903,
+      "tls_version_counts": {
+        "nan": 113287,
+        "1.2": 13845
+      },
+      "clienthello_truncated_in_first_segment": 43,
+      "fingerprints_from_truncated_clienthello": 43
+    }
+  },
+  "tls_coverage_by_binary_label": {
+    "BENIGN": {
+      "flows": 127132,
+      "tcp_flows": 70479,
+      "clienthello_flows": 13845,
+      "serverhello_flows": 13685,
+      "ja3_available": 13845,
+      "ja4_available": 13845,
+      "ja3s_available": 13685,
+      "both_ja3_ja4": 13845,
+      "neither_ja3_ja4": 113287,
+      "ja3_coverage": 0.108903,
+      "ja4_coverage": 0.108903,
+      "tls_version_counts": {
+        "nan": 113287,
+        "1.2": 13845
+      },
+      "clienthello_truncated_in_first_segment": 43,
+      "fingerprints_from_truncated_clienthello": 43
+    },
+    "MALICIOUS": {
+      "flows": 450106,
+      "tcp_flows": 447385,
+      "clienthello_flows": 66806,
+      "serverhello_flows": 80693,
+      "ja3_available": 66806,
+      "ja4_available": 66806,
+      "ja3s_available": 80693,
+      "both_ja3_ja4": 66806,
+      "neither_ja3_ja4": 383300,
+      "ja3_coverage": 0.148423,
+      "ja4_coverage": 0.148423,
+      "tls_version_counts": {
+        "nan": 383300,
+        "1.2": 66723,
+        "1.3": 83
+      },
+      "clienthello_truncated_in_first_segment": 14,
+      "fingerprints_from_truncated_clienthello": 14
+    }
+  },
+  "fingerprint_overlap_between_classes": {
+    "ja3": {
+      "distinct_values": 90,
+      "distinct_malicious_only": 46,
+      "distinct_benign_only": 44,
+      "distinct_shared": 0,
+      "flows_with_shared_values": 0
+    },
+    "ja4": {
+      "distinct_values": 82,
+      "distinct_malicious_only": 39,
+      "distinct_benign_only": 43,
+      "distinct_shared": 0,
+      "flows_with_shared_values": 0
+    }
+  },
+  "provenance_completeness": {
+    "fields": [
+      "collection_date",
+      "environment",
+      "os",
+      "malware_family",
+      "source_url",
+      "expected_sha256"
+    ],
+    "per_capture": {
+      "DS008-C001": 1.0,
+      "DS008-C002": 1.0,
+      "DS008-C003": 1.0,
+      "DS008-C004": 1.0,
+      "DS008-C005": 1.0,
+      "DS008-C006": 1.0,
+      "DS008-C007": 1.0,
+      "DS008-C008": 1.0,
+      "DS008-C009": 1.0,
+      "DS008-C010": 1.0,
+      "DS004-sample1": 0.6667,
+      "DS004-sample2": 0.6667,
+      "DS004-sample3": 0.6667,
+      "DS004-sample4": 0.6667,
+      "DS004-sample5": 0.6667,
+      "DS004-sample6": 0.6667,
+      "DS011-CTU-Normal-20": 0.8333,
+      "DS011-CTU-Normal-21": 0.8333,
+      "DS011-CTU-Normal-23": 0.6667,
+      "DS011-CTU-Normal-24": 0.6667,
+      "DS011-CTU-Normal-26": 0.8333,
+      "DS011-CTU-Normal-28": 0.8333,
+      "DS009-CTU-MCB-238-1": 0.8333,
+      "DS009-CTU-MCB-240-1": 0.8333,
+      "DS009-CTU-MCB-246-1": 0.8333,
+      "DS009-CTU-MCB-248-1": 0.8333,
+      "DS009-CTU-MCB-249-1": 0.8333,
+      "DS009-CTU-MCB-259-1": 0.8333,
+      "DS009-CTU-MCB-260-1": 0.8333,
+      "DS009-CTU-MCB-264-1": 0.8333,
+      "DS009-CTU-MCB-268-1": 0.8333
+    },
+    "mean": 0.8441
+  },
+  "known_limitations": [
+    "Labels are capture-level and propagated to every flow; benign background traffic inside malware captures is labelled MALICIOUS.",
+    "Each dataset contributes exactly one class (DS-008, DS-009 malicious; DS-011, DS-004 benign), so dataset identity and label are perfectly aligned at the source level.",
+    "DS-011 benign traffic is 2017 browser traffic (iceweasel 43 / Firefox-era stacks) to popular sites; it is not representative of enterprise or modern client traffic.",
+    "DS-008 captures are from 2024-2026 while DS-009/DS-011 are from 2017: TLS versions and client stacks differ systematically by year.",
+    "ClientHello parsing uses the first TCP segment only; fingerprints from truncated records are flagged (clienthello_record_truncated).",
+    "DS-004 (CipherSpectrum) is absent from this working copy and is therefore not part of the corpus."
+  ]
+}
