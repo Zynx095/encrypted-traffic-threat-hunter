@@ -3,7 +3,6 @@
 Each test asserts the outcome and, where one is produced, that the record is byte-identical to
 the original ClientHello and fingerprints to the FoxIO reference value.
 """
-import pytest
 
 from pipeline import tls_reassembly as R
 from pipeline.tls_fingerprinting import generate_ja4_foxio, parse_client_hello
