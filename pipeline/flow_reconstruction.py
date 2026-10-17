@@ -14,6 +14,7 @@ from pipeline.tls_fingerprinting import (
     generate_ja3s,
     generate_ja4
 )
+from backend.event_sources.tcp_reassembly import TcpStreamReassembler
 
 logger = logging.getLogger(__name__)
 
@@ -71,6 +72,8 @@ class Flow:
         # be incomplete and JA3/JA4 computed from it may not match the true client stack.
         self.clienthello_record_truncated = None
         self.clienthello_parse_error = None
+        self.client_reassembler = TcpStreamReassembler()
+        self.server_reassembler = TcpStreamReassembler()
 
         # State
         self.closed_by_termination = False
@@ -86,13 +89,14 @@ class Flow:
             handshake_type = payload[5]
             
             # Policy: Take the first valid ClientHello
-            if handshake_type == 1 and not self.client_hello_present:
+            if handshake_type == 1 and (not self.client_hello_present or self.clienthello_record_truncated):
                 ch_data = parse_client_hello(payload)
                 if ch_data.get("error"):
                     self.clienthello_parse_error = ch_data.get("error")
                 if not ch_data.get("error"):
                     record_len = int.from_bytes(payload[3:5], 'big')
                     self.clienthello_record_truncated = (5 + record_len) > len(payload)
+                    self.clienthello_parse_error = None
                     self.client_hello_present = True
                     self.tls_record_version = ch_data["record_version"]
                     self.sni_present = ch_data["sni_present"]
@@ -113,7 +117,7 @@ class Flow:
                     self.server_hello_present = True
                     self.ja3s_string, self.ja3s_hash = generate_ja3s(sh_data)
 
-    def add_packet(self, ts: float, src_ep: Tuple, ip_len: int, tcp_flags: int, payload: bytes):
+    def add_packet(self, ts: float, src_ep: Tuple, ip_len: int, tcp_flags: int, payload: bytes, tcp_seq: Any = None):
         self.packet_count += 1
         self.byte_count += ip_len
         self.end_time = max(self.end_time, ts)
@@ -130,9 +134,8 @@ class Flow:
             is_tls = True
             self.process_tls_payload(payload)
             
-        self.tls_candidate_sequence.append(1 if is_tls else 0)
-        
-        if src_ep == self.forward_ep:
+        is_forward = (src_ep == self.forward_ep)
+        if is_forward:
             direction = 1 # FORWARD
             self.forward_packet_count += 1
             self.forward_byte_count += ip_len
@@ -151,6 +154,23 @@ class Flow:
         if tcp_flags != -1:
             if tcp_flags & dpkt.tcp.TH_FIN or tcp_flags & dpkt.tcp.TH_RST:
                 self.closed_by_termination = True
+                self.client_reassembler.reset()
+                self.server_reassembler.reset()
+
+        # Multi-segment TCP stream reassembly
+        if payload and tcp_seq is not None:
+            if is_forward and (not self.client_hello_present or self.clienthello_record_truncated):
+                rec = self.client_reassembler.add_segment(tcp_seq, payload)
+                if rec:
+                    is_tls = True
+                    self.process_tls_payload(rec)
+            elif not is_forward and not self.server_hello_present:
+                rec = self.server_reassembler.add_segment(tcp_seq, payload)
+                if rec:
+                    is_tls = True
+                    self.process_tls_payload(rec)
+
+        self.tls_candidate_sequence.append(1 if is_tls else 0)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -241,11 +261,13 @@ class FlowReconstructor:
             transport = ip.data
             tcp_flags = transport.flags
             payload = transport.data
+            tcp_seq = transport.seq
         elif isinstance(ip.data, dpkt.udp.UDP):
             proto = "UDP"
             transport = ip.data
             tcp_flags = -1
             payload = transport.data
+            tcp_seq = None
         else:
             return # Only TCP and UDP reconstructed for now
 
@@ -271,4 +293,4 @@ class FlowReconstructor:
             flow = Flow(self.pcap_sha256, canonical_key, instance, ts, src_ep)
             self.active_flows[canonical_key] = flow
 
-        flow.add_packet(ts, src_ep, ip_len, tcp_flags, payload)
+        flow.add_packet(ts, src_ep, ip_len, tcp_flags, payload, tcp_seq=tcp_seq)
