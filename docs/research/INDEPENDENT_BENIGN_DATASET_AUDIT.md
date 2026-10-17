@@ -1,3 +1,5 @@
+> **Superseded in part (2026-10-17).** Several statements below are wrong or unverified: the Zenodo link, CESNET-TLS22's ClientHello fields and benign status, licences, TLS percentages, and the claim that datasets were approved. Read [BENIGN_DATA_AUDIT_CORRECTIONS.md](BENIGN_DATA_AUDIT_CORRECTIONS.md) first. No dataset was admitted.
+
 # Independent Benign Dataset Audit & Acquisition Strategy
 
 **Document ID:** ETTH-AUD-BENIGN-001  
