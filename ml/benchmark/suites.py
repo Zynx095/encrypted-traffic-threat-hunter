@@ -110,9 +110,9 @@ def _ja4_provenance(spec: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def suite_frame(spec: Dict[str, Any], seed: int = 42) -> pd.DataFrame:
-    df = load_benchmark_frame(spec.get("datasets"), per_capture_cap=spec.get("per_capture_cap", DEFAULT_PER_CAPTURE_CAP), seed=seed)
     if spec.get("invalidated"):
         raise ValueError(f"suite is invalidated: {spec['invalidated']}")
+    df = load_benchmark_frame(spec.get("datasets"), per_capture_cap=spec.get("per_capture_cap", DEFAULT_PER_CAPTURE_CAP), seed=seed)
     if spec.get("ja4_source") == "FOXIO_JA4":
         df = _with_foxio_ja4(df)
     task = spec.get("task")
