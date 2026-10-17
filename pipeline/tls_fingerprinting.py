@@ -56,6 +56,7 @@ def parse_client_hello(payload: bytes) -> Dict[str, Any]:
         supported_versions = []
         sni_present = False
         alpn_str = ""
+        alpn_first_raw = b""
         has_supported_versions = False
 
         if pos + 2 <= len(payload):
@@ -101,7 +102,8 @@ def parse_client_hello(payload: bytes) -> Dict[str, Any]:
                         if alpn_list_len > 0 and pos + 2 < pos + ext_len:
                             first_alpn_len = payload[pos+2]
                             if pos + 3 + first_alpn_len <= pos + ext_len:
-                                alpn_str = payload[pos+3:pos+3+first_alpn_len].decode('utf-8', 'ignore')
+                                alpn_first_raw = bytes(payload[pos+3:pos+3+first_alpn_len])
+                                alpn_str = alpn_first_raw.decode('utf-8', 'ignore')
                 elif ext_type == 43: # Supported Versions
                     has_supported_versions = True
                     if ext_len >= 3:
@@ -127,6 +129,7 @@ def parse_client_hello(payload: bytes) -> Dict[str, Any]:
             "supported_versions": supported_versions,
             "sni_present": sni_present,
             "alpn_str": alpn_str,
+            "alpn_first_raw": alpn_first_raw,
             "has_supported_versions": has_supported_versions,
             "error": None
         }
@@ -271,6 +274,26 @@ def generate_ja4_v1(ch_data: Dict[str, Any]) -> Optional[str]:
     return f"{ja4_a}_{ja4_b}_{ja4_c}"
 
 
+_FOXIO_VERSIONS = {0x0304: "13", 0x0303: "12", 0x0302: "11", 0x0301: "10", 0x0300: "s3", 0x0002: "s2",
+                   0xfeff: "d1", 0xfefd: "d2", 0xfefc: "d3"}
+
+
+def _foxio_alpn(raw: bytes) -> str:
+    """First and last character of the first ALPN value, as the FoxIO reference code computes it.
+
+    FoxIO's written spec (technical_details/JA4.md) says non-alphanumeric endpoints are printed as
+    hex digits, but both FoxIO reference implementations (rust/ja4/src/tls.rs ``first_last`` and
+    python/ja4.py ``first_last_alpn``, commit c6469a7) and their published snapshot
+    (tls-non-ascii-alpn.pcapng -> ``99``) substitute '9' for a non-ASCII character. We follow the
+    reference implementations so values match FoxIO, Zeek and Suricata tooling.
+    """
+    if not raw:
+        return "00"
+    text = raw.decode("utf-8", "replace")
+    fix = lambda c: c if ord(c) < 128 else "9"  # noqa: E731
+    return fix(text[0]) + fix(text[-1])
+
+
 def generate_ja4_foxio(ch_data: Dict[str, Any], protocol: str = "t") -> Optional[str]:
     """
     Generate FoxIO-compliant JA4 (v2) fingerprint from parsed ClientHello data.
@@ -290,55 +313,28 @@ def generate_ja4_foxio(ch_data: Dict[str, Any], protocol: str = "t") -> Optional
     if not ch_data or ch_data.get("error"):
         return None
 
-    # 1. TLS Version determination
-    version_map = {
-        0x0304: "13",
-        0x0303: "12",
-        0x0302: "11",
-        0x0301: "10",
-        0x0300: "s3",
-        0x0200: "s2",
-        0x0100: "s1",
-    }
-
-    tls_ver = None
+    # 1. TLS version: highest non-GREASE supported_versions value, else the ClientHello
+    #    protocol version; the record-layer version is ignored. Unknown -> "00".
     sv_list = [v for v in ch_data.get("supported_versions", []) if not is_grease(v)]
     if sv_list:
-        for candidate in (0x0304, 0x0303, 0x0302, 0x0301, 0x0300, 0x0200, 0x0100):
-            if candidate in sv_list:
-                tls_ver = version_map[candidate]
-                break
-
-    if tls_ver is None:
-        cv = ch_data.get("client_version")
-        if cv and not is_grease(cv) and cv in version_map:
-            tls_ver = version_map[cv]
-        elif ch_data.get("has_supported_versions"):
-            tls_ver = "13"
-        elif cv and cv in version_map:
-            tls_ver = version_map[cv]
-        else:
-            tls_ver = "12"
+        tls_ver = _FOXIO_VERSIONS.get(max(sv_list), "00")
+    else:
+        tls_ver = _FOXIO_VERSIONS.get(ch_data.get("client_version"), "00")
 
     # 2. SNI indicator
     sni = "d" if ch_data.get("sni_present") else "i"
 
-    # 3. Non-GREASE ciphers
+    # 3./4. Non-GREASE cipher and extension counts, capped at 99
     ciphers = [c for c in ch_data.get("ciphers", []) if not is_grease(c)]
-    c_count = min(len(ciphers), 99)
-    c_count_str = f"{c_count:02d}"
-
-    # 4. Non-GREASE extensions
     extensions = [e for e in ch_data.get("extensions", []) if not is_grease(e)]
-    e_count = min(len(extensions), 99)
-    e_count_str = f"{e_count:02d}"
+    c_count_str = f"{min(len(ciphers), 99):02d}"
+    e_count_str = f"{min(len(extensions), 99):02d}"
 
-    # 5. ALPN
-    alpn_str = ch_data.get("alpn_str") or ""
-    if alpn_str:
-        alpn = f"{alpn_str[0]}{alpn_str[-1]}"
-    else:
-        alpn = "00"
+    # 5. ALPN: first and last character of the first value; hex digits if either byte is not
+    #    ASCII alphanumeric; "00" when absent or empty.
+    alpn = _foxio_alpn(ch_data.get("alpn_first_raw")
+                       if ch_data.get("alpn_first_raw") is not None
+                       else (ch_data.get("alpn_str") or "").encode("utf-8"))
 
     ja4_a = f"{protocol}{tls_ver}{sni}{c_count_str}{e_count_str}{alpn}"
 
