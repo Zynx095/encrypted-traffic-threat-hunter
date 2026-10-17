@@ -79,8 +79,17 @@ Re-running a suite creates a **new** suite id. Earlier results are never overwri
 
 ```bash
 python -m pytest -q -p no:cacheprovider          # full backend / pipeline / ML suite
+python -m ml verify                              # re-check every persisted result (see below)
 cd frontend && npm ci && npm run build           # type-check + production build
 ```
+
+* **The test suite does not need any git-ignored data.** The replay lifecycle tests use a labelled synthetic table, and a clean `git archive` export passes. Tests that exercise models use synthetic fixtures.
+* **`python -m ml verify` re-checks the latest suites:**
+  * it compares the SHA-256 of each experiment's `predictions.parquet` with its `record.json`;
+  * it recomputes pooled AP, test FPR and recall at the validation threshold, and class counts, from the predictions (tolerance 1e-9);
+  * it re-derives every claim status and compares it with `claim_ledger.json`.
+* **The predictions are git-ignored.** On a fresh clone `verify` reports them as `MISSING` until the suites are re-run (§2), and a re-run creates new suite ids. On the integration branch, all 124 records were `VERIFIED` using the predictions produced by the original runs.
+* **Model artefacts are git-ignored too.** On a fresh clone the registry lists ACTIVE models whose artefacts are absent. Inference then reports `LOAD_FAILED` and skips every flow (`NO_VALIDATED_MODEL`). Re-create the models with `python -m ml train-deployable` (§2).
 
 ## 6. Environment used for the recorded runs
 
@@ -93,7 +102,8 @@ The Zeek, Suricata and eBPF adapters are tested only against **synthetic fixture
 
 ```bash
 python -m pytest -q -p no:cacheprovider tests/test_sensors_zeek.py tests/test_sensors_suricata.py \
-    tests/test_sensors_ebpf.py tests/test_sensors_pipeline_integration.py
+    tests/test_sensors_ebpf.py tests/test_sensors_pipeline_integration.py tests/test_cross_phase_integration.py \
+    tests/test_inference_contract.py tests/test_live_offline_parity.py tests/test_sensor_status_api.py
 ```
 
 No native eBPF probe, Zeek process or Suricata process was run. See `docs/sensors/` and `docs/integration/CROSS_PHASE_CONTRACTS.md` for what the adapters guarantee.

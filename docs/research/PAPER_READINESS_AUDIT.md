@@ -22,9 +22,11 @@
 1. **Independent benign data from the same kinds of environment as the malicious data.** Examples: Windows hosts with modern browsers and enterprise software (CIC datasets after registration, DS-007 by request, or an authorised and consented local collection).
 2. **At least one held-out source per class** that was never used during exploration, evaluated once with a frozen configuration (the confirmatory policy).
 3. **Flow-level labels**, or at least removal of benign background traffic from malware captures. Example: allow-listing well-known OS telemetry by SNI or destination, documented as a labelling rule and evaluated for sensitivity.
-4. **JA4 conformance:** replace or annotate the ETTH JA4 implementation to match the FoxIO specification, so results can be compared with the literature.
+4. **JA4 conformance:** replace or annotate the ETTH JA4 implementation to match the FoxIO specification, so results can be compared with the literature. The integration audit found six deviations; the most important is that signature algorithms are sorted. On the FoxIO reference ClientHello, ETTH produces a different third component (`docs/integration/CROSS_PHASE_CONTRACTS.md` §4). Every "JA4" result so far refers to the ETTH variant.
 5. **ClientHello reassembly across TCP segments.** Modern post-quantum key shares exceed one segment.
 6. **Multiple seeds and more benign captures**, so intervals stop being FEW_GROUPS.
+7. **An IOC (hash-lookup) baseline**, to show how much of the B/C performance is plain memorisation.
+8. **Sensor evidence, if sensors are claimed:** a model trained on sensor-observable features with sensor provenance, evaluated on authorised, labelled sensor data. Today the sensor adapters are engineering-only (C18–C20 SUPPORTED on synthetic fixtures; C21 BLOCKED).
 
 ## 2. What the current evidence can support
 
