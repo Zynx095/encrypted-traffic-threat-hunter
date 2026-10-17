@@ -7,9 +7,14 @@ from typing import Any, Deque, Dict, List, Optional, Tuple
 
 import pandas as pd
 
-from ml.features.governance import CANONICAL_TRACKS, FLOW_FEATURES
+from ml.features.governance import CANONICAL_TRACKS, FLOW_FEATURES, REGISTRY
+from pipeline.canonical_flow import FEATURE_PROVENANCE_ETTH, JA4_IMPLEMENTATION_ETTH
 
 logger = logging.getLogger(__name__)
+
+# Feature families whose values are only defined when computed by the ETTH packet pipeline
+# (pipeline.feature_extraction / flow_reconstruction semantics).
+PACKET_PIPELINE_FAMILIES = ("FLOW", "TLS_STRUCTURAL")
 
 SUPPORTED_TRACKS = list(CANONICAL_TRACKS)
 FINGERPRINT_REQUIREMENT = {"B_JA3": "ja3_hash", "D_JA3_FLOW": "ja3_hash", "C_JA4": "ja4", "E_JA4_FLOW": "ja4"}
@@ -176,7 +181,19 @@ class InferenceEngine:
                 problems.append(f"{col}: absent")
         if flow.get("live_feature_window_truncated") and any(c in state["numeric"] for c in FLOW_FEATURES):
             problems.append("live feature window truncated: flow statistics would differ from training semantics")
-        return problems
+        # Contract problems are listed first: they explain the skip even when columns are also absent.
+        contract = []
+        inputs = list(state["numeric"]) + list(state["categorical"])
+        provenance = flow.get("feature_provenance")
+        if provenance not in (None, FEATURE_PROVENANCE_ETTH) and any(
+                c in REGISTRY and REGISTRY[c].family in PACKET_PIPELINE_FAMILIES for c in inputs):
+            contract.append(f"flow/TLS-structural inputs have provenance {provenance}; the model requires values "
+                            f"computed by the ETTH packet pipeline ({FEATURE_PROVENANCE_ETTH})")
+        ja4_impl = flow.get("ja4_implementation")
+        if "ja4" in inputs and ja4_impl not in (None, JA4_IMPLEMENTATION_ETTH):
+            contract.append(f"ja4 was computed by {ja4_impl}; the model was trained on {JA4_IMPLEMENTATION_ETTH} values, "
+                            "which differ for the same ClientHello")
+        return contract + problems
 
     def _ood_flags(self, flow: Dict[str, Any], entry: Dict[str, Any]) -> List[str]:
         flags = []
