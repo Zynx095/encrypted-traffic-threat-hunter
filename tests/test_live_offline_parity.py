@@ -16,6 +16,7 @@ from scapy.all import Ether, ICMP, IP, IPv6, Padding, Raw, TCP, UDP, wrpcap  # n
 
 from backend.event_sources.live_capture import LiveCaptureSource  # noqa: E402
 from ml.features.governance import FLOW_FEATURES  # noqa: E402
+from pipeline.canonical_flow import JA4_VERSION_ETTH_V1  # noqa: E402
 from pipeline.feature_extraction import build_feature_record  # noqa: E402
 from pipeline.flow_reconstruction import FlowReconstructor  # noqa: E402
 from tests.test_live_capture import _client_hello  # noqa: E402
@@ -46,19 +47,27 @@ def _tcp(src, dst, flags, t, payload=b"", seq=0, ack=0):
     return _frame(l3, t)
 
 
+CH, SH = _client_hello(), _server_hello()
+CI, SI = 1000, 5000
+C1, S1 = CI + 1 + len(CH), SI + 1 + len(SH)
+
+
 def _packets():
     c, s = CLIENT, SERVER
     return [
-        _tcp(c, s, "S", 0.000), _tcp(s, c, "SA", 0.020), _tcp(c, s, "A", 0.021),
-        _tcp(c, s, "PA", 0.030, _client_hello()), _tcp(s, c, "PA", 0.060, _server_hello()),
-        _tcp(c, s, "A", 0.061), _tcp(c, s, "PA", 1.500, b"\x17\x03\x03" + b"\x01" * 297),
-        _tcp(s, c, "PA", 1.520, b"\x17\x03\x03" + b"\x02" * 1197), _tcp(c, s, "PA", 1.530, b"\x17\x03\x03" + b"\x03" * 50),
-        _tcp(c, s, "FA", 3.000), _tcp(s, c, "FA", 3.010), _tcp(c, s, "A", 3.011),     # offline splits at FIN
+        # Realistic sequence numbers: data starts at ISN+1 (the Hello reassembler anchors on the SYN).
+        _tcp(c, s, "S", 0.000, seq=CI), _tcp(s, c, "SA", 0.020, seq=SI), _tcp(c, s, "A", 0.021, seq=CI + 1),
+        _tcp(c, s, "PA", 0.030, CH, seq=CI + 1), _tcp(s, c, "PA", 0.060, SH, seq=SI + 1),
+        _tcp(c, s, "A", 0.061, seq=C1), _tcp(c, s, "PA", 1.500, b"\x17\x03\x03" + b"\x01" * 297, seq=C1),
+        _tcp(s, c, "PA", 1.520, b"\x17\x03\x03" + b"\x02" * 1197, seq=S1),
+        _tcp(c, s, "PA", 1.530, b"\x17\x03\x03" + b"\x03" * 50, seq=C1 + 300),
+        _tcp(c, s, "FA", 3.000, seq=C1 + 353), _tcp(s, c, "FA", 3.010, seq=S1 + 1200),
+        _tcp(c, s, "A", 3.011, seq=C1 + 354),     # offline splits at FIN
         _frame(IP(src="192.168.1.50", dst="8.8.8.8") / UDP(sport=53000, dport=53) / Raw(b"\x00" * 30), 0.500),
         _frame(IP(src="8.8.8.8", dst="192.168.1.50") / UDP(sport=53, dport=53000) / Raw(b"\x00" * 90), 0.550),
         _frame(IP(src="192.168.1.50", dst="8.8.8.8") / ICMP(), 0.700),                  # ignored by both
         _frame(IPv6(src="2001:db8::2", dst="2001:db8::1") / UDP(sport=5353, dport=5353) / Raw(b"\x00" * 2) / Padding(b"\x00" * 4), 0.800),
-        _tcp(c, s, "S", 200.000), _tcp(s, c, "SA", 200.020),                           # same 5-tuple after > 120 s idle
+        _tcp(c, s, "S", 200.000, seq=9000), _tcp(s, c, "SA", 200.020, seq=9500),        # same 5-tuple after > 120 s idle
     ]
 
 
@@ -205,8 +214,8 @@ def test_differential_clean_tls_handshake_parity(tmp_path):
     assert main_live["tls_version"] == main_feats["tls_version"]
     assert main_live["ja4_implementation"] == "ETTH_JA4_V1"
     assert main_feats["ja4_implementation"] == "ETTH_JA4_V1"
-    assert main_live["ja4_version"] == "v1_legacy"
-    assert main_feats["ja4_version"] == "v1_legacy"
+    assert main_live["ja4_version"] == JA4_VERSION_ETTH_V1
+    assert main_feats["ja4_version"] == JA4_VERSION_ETTH_V1
     assert main_live["feature_provenance"] == "ETTH_PACKET_FEATURES"
 
 
@@ -380,14 +389,14 @@ def test_differential_ja4_v2_and_version_metadata_parity(tmp_path):
     from ml.features.governance import REGISTRY, FORBIDDEN
     c, s = CLIENT, SERVER
     pkts = [
-        _tcp(c, s, "S", 0.000),
-        _tcp(s, c, "SA", 0.020),
-        _tcp(c, s, "A", 0.021),
-        _tcp(c, s, "PA", 0.030, _client_hello()),
-        _tcp(s, c, "PA", 0.060, _server_hello()),
-        _tcp(c, s, "FA", 0.100),
-        _tcp(s, c, "FA", 0.110),
-        _tcp(c, s, "A", 0.111),
+        _tcp(c, s, "S", 0.000, seq=CI),
+        _tcp(s, c, "SA", 0.020, seq=SI),
+        _tcp(c, s, "A", 0.021, seq=CI + 1),
+        _tcp(c, s, "PA", 0.030, CH, seq=CI + 1),
+        _tcp(s, c, "PA", 0.060, SH, seq=SI + 1),
+        _tcp(c, s, "FA", 0.100, seq=C1),
+        _tcp(s, c, "FA", 0.110, seq=S1),
+        _tcp(c, s, "A", 0.111, seq=C1 + 1),
     ]
     offline = {_key(row["forward_endpoint"], row["start_time"]): (row, feats) for row, feats in _offline(tmp_path, pkts)}
     live = {_key(d["forward_endpoint"], d["start_time"]): d for d in _live(pkts)}
@@ -403,8 +412,8 @@ def test_differential_ja4_v2_and_version_metadata_parity(tmp_path):
     assert live_flow["ja4_v2"] == feats["ja4_v2"]
     assert live_flow["ja4_implementation"] == "ETTH_JA4_V1"
     assert feats["ja4_implementation"] == "ETTH_JA4_V1"
-    assert live_flow["ja4_version"] == "v1_legacy"
-    assert feats["ja4_version"] == "v1_legacy"
+    assert live_flow["ja4_version"] == JA4_VERSION_ETTH_V1
+    assert feats["ja4_version"] == JA4_VERSION_ETTH_V1
 
     # FoxIO structure check: begins with transport/version indicator
     assert live_flow["ja4_v2"].startswith("t13")
