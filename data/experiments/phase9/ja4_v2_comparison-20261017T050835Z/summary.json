@@ -1,0 +1,284 @@
+{
+  "experiments": [
+    {
+      "experiment_id": "EXP-20261017T050838-9ef7df22-9bbb",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "A_FLOW",
+      "model": "random_forest",
+      "encoding": "onehot",
+      "protocol": "CAPTURE_GROUP_KFOLD",
+      "population_rows": 62543,
+      "coverage": 1.0,
+      "n_pos": 38543,
+      "n_neg": 24000,
+      "average_precision": 0.9307771671010644,
+      "ap_ci": [
+        0.8182383383717142,
+        0.985490026397265
+      ],
+      "ap_ci_status": "FEW_GROUPS",
+      "roc_auc": 0.9088947566138253,
+      "brier": 0.12065690243324223,
+      "ece_15bin": 0.10429523999865427,
+      "recall_at_val_fpr_0.01": 0.4947720727499157,
+      "test_fpr_at_val_fpr_0.01": 0.057916666666666665,
+      "per_source": {
+        "DS-008": {
+          "n": 2543,
+          "n_pos": 2543,
+          "mean_score": 0.48029717876967587,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.06724341329138812,
+            "pred@fpr<=0.05": 0.26582776248525364
+          }
+        },
+        "DS-009": {
+          "n": 36000,
+          "n_pos": 36000,
+          "mean_score": 0.8207925419876222,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.5249722222222222,
+            "pred@fpr<=0.05": 0.7406666666666667
+          }
+        },
+        "DS-011": {
+          "n": 24000,
+          "n_pos": 0,
+          "mean_score": 0.23269291024515243,
+          "false_positive_rate": {
+            "pred@fpr<=0.01": 0.057916666666666665,
+            "pred@fpr<=0.05": 0.16433333333333333
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.006595999999999999
+    },
+    {
+      "experiment_id": "EXP-20261017T050921-afdcfb61-cabf",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "C_JA4",
+      "model": "random_forest",
+      "encoding": "onehot",
+      "protocol": "CAPTURE_GROUP_KFOLD",
+      "population_rows": 11220,
+      "coverage": 0.179397,
+      "n_pos": 8591,
+      "n_neg": 2629,
+      "average_precision": 0.9934934855276557,
+      "ap_ci": [
+        0.9347000286575697,
+        0.9999988985210233
+      ],
+      "ap_ci_status": "FEW_GROUPS",
+      "roc_auc": 0.9784217598547472,
+      "brier": 0.04533539492155534,
+      "ece_15bin": 0.041391013114003394,
+      "recall_at_val_fpr_0.01": 0.9944127575369572,
+      "test_fpr_at_val_fpr_0.01": 0.18448079117535185,
+      "per_source": {
+        "DS-008": {
+          "n": 194,
+          "n_pos": 194,
+          "mean_score": 0.7092128759842691,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.7525773195876289,
+            "pred@fpr<=0.05": 0.7525773195876289
+          }
+        },
+        "DS-009": {
+          "n": 8397,
+          "n_pos": 8397,
+          "mean_score": 0.9922062999922533,
+          "detection_rate": {
+            "pred@fpr<=0.01": 1.0,
+            "pred@fpr<=0.05": 1.0
+          }
+        },
+        "DS-011": {
+          "n": 2629,
+          "n_pos": 0,
+          "mean_score": 0.18261354009591657,
+          "false_positive_rate": {
+            "pred@fpr<=0.01": 0.18448079117535185,
+            "pred@fpr<=0.05": 0.18448079117535185
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.017942
+    },
+    {
+      "experiment_id": "EXP-20261017T050933-2dadd618-aa77",
+      "status": "COMPLETED",
+      "error": null,
+      "track": "E_JA4_FLOW",
+      "model": "random_forest",
+      "encoding": "onehot",
+      "protocol": "CAPTURE_GROUP_KFOLD",
+      "population_rows": 11220,
+      "coverage": 0.179397,
+      "n_pos": 8591,
+      "n_neg": 2629,
+      "average_precision": 0.9904952260175043,
+      "ap_ci": [
+        0.9227192157503129,
+        0.9999995435781601
+      ],
+      "ap_ci_status": "FEW_GROUPS",
+      "roc_auc": 0.9761234954499387,
+      "brier": 0.021857887001743702,
+      "ece_15bin": 0.01821925067205319,
+      "recall_at_val_fpr_0.01": 0.9956931672680712,
+      "test_fpr_at_val_fpr_0.01": 0.12095853936858121,
+      "per_source": {
+        "DS-008": {
+          "n": 194,
+          "n_pos": 194,
+          "mean_score": 0.847500592235032,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.8144329896907216,
+            "pred@fpr<=0.05": 0.9432989690721649
+          }
+        },
+        "DS-009": {
+          "n": 8397,
+          "n_pos": 8397,
+          "mean_score": 0.995750263956694,
+          "detection_rate": {
+            "pred@fpr<=0.01": 0.9998809098487556,
+            "pred@fpr<=0.05": 1.0
+          }
+        },
+        "DS-011": {
+          "n": 2629,
+          "n_pos": 0,
+          "mean_score": 0.09478504925258842,
+          "false_positive_rate": {
+            "pred@fpr<=0.01": 0.12095853936858121,
+            "pred@fpr<=0.05": 0.1802966907569418
+          }
+        }
+      },
+      "latency_ms_per_flow": 0.02085
+    }
+  ],
+  "paired_contrasts": {
+    "random_forest": {
+      "model": "random_forest",
+      "protocol": "CAPTURE_GROUP_KFOLD",
+      "contrasts": [
+        {
+          "contrast": "JA3 added to flow",
+          "track_a": "A_FLOW@JA3POP",
+          "track_b": "D_JA3_FLOW",
+          "status": "NOT_RUN",
+          "reason": "one of the experiments is missing or did not complete",
+          "holm": {
+            "p": null,
+            "p_holm": null,
+            "reject": null
+          },
+          "interpretation": "NOT_RUN"
+        },
+        {
+          "contrast": "JA4 added to flow",
+          "track_a": "A_FLOW@JA4POP",
+          "track_b": "E_JA4_FLOW",
+          "status": "NOT_RUN",
+          "reason": "one of the experiments is missing or did not complete",
+          "holm": {
+            "p": null,
+            "p_holm": null,
+            "reject": null
+          },
+          "interpretation": "NOT_RUN"
+        },
+        {
+          "contrast": "flow added to JA3",
+          "track_a": "B_JA3",
+          "track_b": "D_JA3_FLOW",
+          "status": "NOT_RUN",
+          "reason": "one of the experiments is missing or did not complete",
+          "holm": {
+            "p": null,
+            "p_holm": null,
+            "reject": null
+          },
+          "interpretation": "NOT_RUN"
+        },
+        {
+          "contrast": "flow added to JA4",
+          "experiment_a": "EXP-20261017T050921-afdcfb61-cabf",
+          "experiment_b": "EXP-20261017T050933-2dadd618-aa77",
+          "track_a": "C_JA4",
+          "track_b": "E_JA4_FLOW",
+          "shared_rows": 11220,
+          "rows_a_only": 0,
+          "rows_b_only": 0,
+          "average_precision": {
+            "metric_a": 0.9934934855276557,
+            "metric_b": 0.9904952260175043,
+            "difference": -0.0029982595101514242,
+            "groups_per_stratum": {
+              "0": 6,
+              "1": 16
+            },
+            "status": "FEW_GROUPS",
+            "ci_low": -0.035430718588047506,
+            "ci_high": 0.02611256868545747,
+            "p_value_bootstrap": 0.72,
+            "n_boot": 100,
+            "resampling_unit": "capture_id"
+          },
+          "recall_at_val_fpr_0.01": {
+            "metric_a": 0.9944127575369572,
+            "metric_b": 0.9956931672680712,
+            "difference": 0.001280409731113985,
+            "groups_per_stratum": {
+              "0": 6,
+              "1": 16
+            },
+            "status": "FEW_GROUPS",
+            "ci_low": -0.0041713044457856955,
+            "ci_high": 0.013388389234422215,
+            "p_value_bootstrap": 0.68,
+            "n_boot": 100,
+            "resampling_unit": "capture_id"
+          },
+          "test_fpr_at_val_fpr_0.01": {
+            "metric_a": 0.18448079117535185,
+            "metric_b": 0.12095853936858121,
+            "difference": -0.06352225180677064,
+            "groups_per_stratum": {
+              "0": 6,
+              "1": 16
+            },
+            "status": "FEW_GROUPS",
+            "ci_low": -0.1795234455580782,
+            "ci_high": 0.0,
+            "p_value_bootstrap": 0.1,
+            "n_boot": 100,
+            "resampling_unit": "capture_id"
+          },
+          "cost": {
+            "latency_ms_per_flow_a": 0.017942,
+            "latency_ms_per_flow_b": 0.02085,
+            "fit_seconds_a": 0.24257999999999996,
+            "fit_seconds_b": 0.32208
+          },
+          "status": "COMPLETED",
+          "holm": {
+            "p": 0.72,
+            "p_holm": 0.72,
+            "reject": false
+          },
+          "interpretation": "No evidence of a difference (this is not evidence of equivalence)"
+        }
+      ],
+      "multiple_comparison": "Holm over 4 primary contrasts",
+      "alpha": 0.05
+    }
+  },
+  "primary_model": "random_forest"
+}

@@ -55,6 +55,10 @@ SUITES: Dict[str, Dict[str, Any]] = {
         "description": "Diagnostic, not detection: can features tell the two MALICIOUS sources (DS-008 vs DS-009) apart?",
         "datasets": ["DS-008", "DS-009"], "task": "SOURCE_DS-008_VS_DS-009", "protocol": "CAPTURE_GROUP_KFOLD",
         "tracks": ["A_FLOW", "C_JA4", "E_JA4_FLOW"], "models": ["random_forest"], "encodings": ["onehot"]},
+    "ja4_v2_comparison": {
+        "description": "5 canonical feature tracks (A-E) under capture-grouped CV evaluated with FoxIO-compliant JA4 v2.",
+        "datasets": None, "protocol": "CAPTURE_GROUP_KFOLD", "tracks": CANONICAL + PAIRED,
+        "models": ["random_forest", "logreg"], "encodings": ["onehot"], "ja4_source": "v2_foxio"},
 }
 
 CONFIRMATORY_POLICY = {
@@ -67,6 +71,15 @@ CONFIRMATORY_POLICY = {
 
 def suite_frame(spec: Dict[str, Any], seed: int = 42) -> pd.DataFrame:
     df = load_benchmark_frame(spec.get("datasets"), per_capture_cap=spec.get("per_capture_cap", DEFAULT_PER_CAPTURE_CAP), seed=seed)
+    if spec.get("ja4_source") in ("v2_foxio", "v2", "FOXIO_JA4"):
+        from pipeline.corpus import paths
+        v2_path = paths.PROJECT_ROOT / "data" / "processed" / "v3_ja4_v2" / "corpus_flows_ja4_v2.parquet"
+        if v2_path.exists():
+            v2_df = pd.read_parquet(v2_path, columns=["corpus_index", "ja4_v2", "ja4_v2_implementation"])
+            df = df.drop(columns=["ja4"], errors="ignore").merge(
+                v2_df.rename(columns={"ja4_v2": "ja4", "ja4_v2_implementation": "ja4_implementation"}),
+                on="corpus_index", how="left"
+            )
     task = spec.get("task")
     if task == "SOURCE_DS-008_VS_DS-009":
         df = df.copy()
