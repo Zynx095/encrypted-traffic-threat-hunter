@@ -1,0 +1,1704 @@
+{
+ "source": "https://github.com/FoxIO-LLC/ja4",
+ "commit": "c6469a7b0dbf8fe963810162429fbfd9d1acc4d5",
+ "commit_date": "2026-10-06T14:18:56Z",
+ "retrieved": "2026-10-17",
+ "expected_from": "rust/ja4/src/snapshots/ja4__insta@<pcap>.snap (FoxIO reference implementation output; TCP ja4 entries only)",
+ "pcaps_from": "pcap/<pcap>",
+ "spec": "technical_details/JA4.md",
+ "licensing_note": "JA4 (TLS client) is BSD 3-Clause (LICENSE-JA4). The capture files are not committed here: their licence is not stated separately in the FoxIO repository, so they are fetched into data/reference/foxio_ja4/pcap/ (git-ignored by *.pcap / *.pcapng) and pinned by SHA-256 below.",
+ "known_spec_vs_reference_differences": [
+  {
+   "field": "ALPN characters",
+   "spec": "non-alphanumeric first/last byte printed as hex digits",
+   "reference": "non-ASCII character replaced by '9' (rust first_last, python first_last_alpn)",
+   "etth": "follows the reference implementations",
+   "vector": "tls-non-ascii-alpn.pcapng"
+  }
+ ],
+ "pcap_sha256": {
+  "CVE-2018-6794.pcap": "d1aa18b493bc68bf7cb367ce5fc1ee493262b47baff886bbe42533e7495d8b1d",
+  "badcurveball.pcap": "9c4dbf9233a802833a0b5bf478375577ddc7868c544a66149dfe5ac627e9ac48",
+  "browsers-x509.pcapng": "e05937fe5f3659f1b94b46305e419b878ba309ebcba8308750acaac704112906",
+  "ipv6.pcapng": "8c00fd3e6c370b39dac61ad3a15c693088f74f3dbc836ee4e8f57105b1e84a91",
+  "latest.pcapng": "15973185fd81b88837fcbe396eb66f437d0a68a2b5ccfa1e5ed0c6b2a15bfa7c",
+  "sigalg-grease.pcapng": "b3496b7ba2df4cdc2a59a47880f9c17ac600e5b3db61151787b6e402d230cafa",
+  "single-packets.pcap": "19fd08485929cddc7aefed0ab6ccb72f915f3c0b93f53210f648976bb4331f5c",
+  "tls-alpn-h2.pcap": "8c00fd3e6c370b39dac61ad3a15c693088f74f3dbc836ee4e8f57105b1e84a91",
+  "tls-handshake.pcapng": "5a0c9f3d0f437e16fc68c3ce0d87998edf4f229b335c391361ed301bd22a513e",
+  "tls-non-ascii-alpn.pcapng": "cf1dd939619b8d65904dfd23b4f21c3255b6f513dc2e12117d5de2633d063f71",
+  "tls-sni.pcapng": "1c869a87ae758f390765672e5ba9ed96cc075e2ee131e94efb29fe98e4d417e1",
+  "tls12.pcap": "d8c9ae8781c9bbba3a1bf5a95d7a6f309a3edd14c64a7c8adbc673d337fd5af4",
+  "tls3.pcapng": "7b7c94cfdcd74da6fd4e7c5632ad360d1679d7e1c892887a9dcfaed699bb355d"
+ },
+ "vectors": [
+  {
+   "pcap": "badcurveball.pcap",
+   "client": [
+    "172.130.128.76",
+    55318
+   ],
+   "server": [
+    "54.226.182.138",
+    443
+   ],
+   "ja4": "t13d1615h2_46e7e9700bed_45f260be83e2"
+  },
+  {
+   "pcap": "browsers-x509.pcapng",
+   "client": [
+    "172.27.7.31",
+    54524
+   ],
+   "server": [
+    "13.107.21.239",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "browsers-x509.pcapng",
+   "client": [
+    "172.27.7.31",
+    54525
+   ],
+   "server": [
+    "68.67.160.117",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "browsers-x509.pcapng",
+   "client": [
+    "172.27.7.31",
+    54603
+   ],
+   "server": [
+    "103.42.133.15",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "ipv6.pcapng",
+   "client": [
+    "2001:4998:ef83:14:8000::100d",
+    64034
+   ],
+   "server": [
+    "2606:4700::6811:d209",
+    443
+   ],
+   "ja4": "t12d4605h2_85626a9a5f7f_aaf95bb78ec9"
+  },
+  {
+   "pcap": "latest.pcapng",
+   "client": [
+    "172.16.225.48",
+    52936
+   ],
+   "server": [
+    "34.212.93.65",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "latest.pcapng",
+   "client": [
+    "172.16.225.48",
+    52937
+   ],
+   "server": [
+    "13.33.165.101",
+    443
+   ],
+   "ja4": "t12d190800_d83cc789557e_7af1ed941c26"
+  },
+  {
+   "pcap": "latest.pcapng",
+   "client": [
+    "172.16.225.48",
+    52938
+   ],
+   "server": [
+    "34.205.195.66",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_9b887d9acb53"
+  },
+  {
+   "pcap": "latest.pcapng",
+   "client": [
+    "172.16.225.48",
+    52940
+   ],
+   "server": [
+    "52.249.29.248",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "latest.pcapng",
+   "client": [
+    "172.16.225.48",
+    52941
+   ],
+   "server": [
+    "52.249.29.248",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "sigalg-grease.pcapng",
+   "client": [
+    "192.168.0.1",
+    56544
+   ],
+   "server": [
+    "10.10.10.1",
+    443
+   ],
+   "ja4": "t13d1517h2_8daaf6152771_cb7bf5808d99"
+  },
+  {
+   "pcap": "tls-alpn-h2.pcap",
+   "client": [
+    "2001:4998:ef83:14:8000::100d",
+    64034
+   ],
+   "server": [
+    "2606:4700::6811:d209",
+    443
+   ],
+   "ja4": "t12d4605h2_85626a9a5f7f_aaf95bb78ec9"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50112
+   ],
+   "server": [
+    "142.251.16.94",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50113
+   ],
+   "server": [
+    "142.251.163.147",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50114
+   ],
+   "server": [
+    "172.253.122.84",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50115
+   ],
+   "server": [
+    "142.251.16.95",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50116
+   ],
+   "server": [
+    "104.112.30.74",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50122
+   ],
+   "server": [
+    "192.241.241.147",
+    443
+   ],
+   "ja4": "t13d1516h1_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50123
+   ],
+   "server": [
+    "142.251.163.188",
+    5228
+   ],
+   "ja4": "t13d151400_8daaf6152771_de4a06bb82e3"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50126
+   ],
+   "server": [
+    "172.253.122.94",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50127
+   ],
+   "server": [
+    "142.251.16.100",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50128
+   ],
+   "server": [
+    "142.251.111.101",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50130
+   ],
+   "server": [
+    "142.251.163.95",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50131
+   ],
+   "server": [
+    "31.13.66.35",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50134
+   ],
+   "server": [
+    "157.240.229.1",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50132
+   ],
+   "server": [
+    "157.240.229.1",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50135
+   ],
+   "server": [
+    "157.240.229.1",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50133
+   ],
+   "server": [
+    "157.240.229.1",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50136
+   ],
+   "server": [
+    "157.240.229.1",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50137
+   ],
+   "server": [
+    "157.240.229.1",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50139
+   ],
+   "server": [
+    "157.240.229.1",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50140
+   ],
+   "server": [
+    "31.13.66.2",
+    443
+   ],
+   "ja4": "t13d1516h1_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50142
+   ],
+   "server": [
+    "157.240.241.1",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50141
+   ],
+   "server": [
+    "157.240.14.19",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50143
+   ],
+   "server": [
+    "208.255.115.145",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50145
+   ],
+   "server": [
+    "157.240.229.2",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50146
+   ],
+   "server": [
+    "157.240.229.2",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50144
+   ],
+   "server": [
+    "157.240.229.2",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50147
+   ],
+   "server": [
+    "157.240.229.2",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50148
+   ],
+   "server": [
+    "157.240.229.2",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50149
+   ],
+   "server": [
+    "157.240.229.2",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50151
+   ],
+   "server": [
+    "142.251.163.95",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50152
+   ],
+   "server": [
+    "157.240.229.17",
+    443
+   ],
+   "ja4": "t13d1516h1_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50153
+   ],
+   "server": [
+    "157.240.229.17",
+    443
+   ],
+   "ja4": "t13d1517h1_8daaf6152771_6cdcb247c39b"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50155
+   ],
+   "server": [
+    "23.50.125.163",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50157
+   ],
+   "server": [
+    "23.218.218.147",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50158
+   ],
+   "server": [
+    "23.218.218.171",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50160
+   ],
+   "server": [
+    "23.212.251.12",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50162
+   ],
+   "server": [
+    "23.212.251.12",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50161
+   ],
+   "server": [
+    "23.212.251.12",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50159
+   ],
+   "server": [
+    "13.107.237.40",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50163
+   ],
+   "server": [
+    "18.67.65.105",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50164
+   ],
+   "server": [
+    "13.107.237.40",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50165
+   ],
+   "server": [
+    "13.107.238.40",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50166
+   ],
+   "server": [
+    "13.107.237.40",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50167
+   ],
+   "server": [
+    "40.126.24.84",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50168
+   ],
+   "server": [
+    "13.107.238.40",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50169
+   ],
+   "server": [
+    "13.107.237.40",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50170
+   ],
+   "server": [
+    "3.223.179.120",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50172
+   ],
+   "server": [
+    "23.55.200.211",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50175
+   ],
+   "server": [
+    "23.62.168.26",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50174
+   ],
+   "server": [
+    "23.62.168.26",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50177
+   ],
+   "server": [
+    "23.62.168.26",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50176
+   ],
+   "server": [
+    "23.62.168.26",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50178
+   ],
+   "server": [
+    "23.62.168.26",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50180
+   ],
+   "server": [
+    "23.62.168.26",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50182
+   ],
+   "server": [
+    "23.62.168.26",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50181
+   ],
+   "server": [
+    "23.62.168.26",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50179
+   ],
+   "server": [
+    "23.62.168.26",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50183
+   ],
+   "server": [
+    "23.62.168.26",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-handshake.pcapng",
+   "client": [
+    "192.168.1.168",
+    50184
+   ],
+   "server": [
+    "172.253.63.95",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-non-ascii-alpn.pcapng",
+   "client": [
+    "192.168.1.168",
+    50112
+   ],
+   "server": [
+    "142.251.16.94",
+    443
+   ],
+   "ja4": "t13d151699_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50112
+   ],
+   "server": [
+    "142.251.16.94",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50113
+   ],
+   "server": [
+    "142.251.163.147",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50114
+   ],
+   "server": [
+    "172.253.122.84",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50115
+   ],
+   "server": [
+    "142.251.16.95",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50116
+   ],
+   "server": [
+    "104.112.30.74",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50122
+   ],
+   "server": [
+    "192.241.241.147",
+    443
+   ],
+   "ja4": "t13d1516h1_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50123
+   ],
+   "server": [
+    "142.251.163.188",
+    5228
+   ],
+   "ja4": "t13d151400_8daaf6152771_de4a06bb82e3"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50126
+   ],
+   "server": [
+    "172.253.122.94",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50127
+   ],
+   "server": [
+    "142.251.16.100",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50128
+   ],
+   "server": [
+    "142.251.111.101",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50130
+   ],
+   "server": [
+    "142.251.163.95",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50131
+   ],
+   "server": [
+    "31.13.66.35",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50134
+   ],
+   "server": [
+    "157.240.229.1",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50132
+   ],
+   "server": [
+    "157.240.229.1",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50135
+   ],
+   "server": [
+    "157.240.229.1",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50133
+   ],
+   "server": [
+    "157.240.229.1",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50136
+   ],
+   "server": [
+    "157.240.229.1",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50137
+   ],
+   "server": [
+    "157.240.229.1",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50139
+   ],
+   "server": [
+    "157.240.229.1",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50140
+   ],
+   "server": [
+    "31.13.66.2",
+    443
+   ],
+   "ja4": "t13d1516h1_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50142
+   ],
+   "server": [
+    "157.240.241.1",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50141
+   ],
+   "server": [
+    "157.240.14.19",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50143
+   ],
+   "server": [
+    "208.255.115.145",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50145
+   ],
+   "server": [
+    "157.240.229.2",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50146
+   ],
+   "server": [
+    "157.240.229.2",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50144
+   ],
+   "server": [
+    "157.240.229.2",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50147
+   ],
+   "server": [
+    "157.240.229.2",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50148
+   ],
+   "server": [
+    "157.240.229.2",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50149
+   ],
+   "server": [
+    "157.240.229.2",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50151
+   ],
+   "server": [
+    "142.251.163.95",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50152
+   ],
+   "server": [
+    "157.240.229.17",
+    443
+   ],
+   "ja4": "t13d1516h1_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50153
+   ],
+   "server": [
+    "157.240.229.17",
+    443
+   ],
+   "ja4": "t13d1517h1_8daaf6152771_6cdcb247c39b"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50155
+   ],
+   "server": [
+    "23.50.125.163",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50157
+   ],
+   "server": [
+    "23.218.218.147",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50158
+   ],
+   "server": [
+    "23.218.218.171",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50160
+   ],
+   "server": [
+    "23.212.251.12",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50162
+   ],
+   "server": [
+    "23.212.251.12",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50161
+   ],
+   "server": [
+    "23.212.251.12",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50159
+   ],
+   "server": [
+    "13.107.237.40",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50163
+   ],
+   "server": [
+    "18.67.65.105",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50164
+   ],
+   "server": [
+    "13.107.237.40",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50165
+   ],
+   "server": [
+    "13.107.238.40",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50166
+   ],
+   "server": [
+    "13.107.237.40",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50167
+   ],
+   "server": [
+    "40.126.24.84",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50168
+   ],
+   "server": [
+    "13.107.238.40",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50169
+   ],
+   "server": [
+    "13.107.237.40",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50170
+   ],
+   "server": [
+    "3.223.179.120",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50172
+   ],
+   "server": [
+    "23.55.200.211",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50175
+   ],
+   "server": [
+    "23.62.168.26",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50174
+   ],
+   "server": [
+    "23.62.168.26",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50177
+   ],
+   "server": [
+    "23.62.168.26",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50176
+   ],
+   "server": [
+    "23.62.168.26",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50178
+   ],
+   "server": [
+    "23.62.168.26",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50180
+   ],
+   "server": [
+    "23.62.168.26",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50182
+   ],
+   "server": [
+    "23.62.168.26",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50181
+   ],
+   "server": [
+    "23.62.168.26",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50179
+   ],
+   "server": [
+    "23.62.168.26",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50183
+   ],
+   "server": [
+    "23.62.168.26",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls-sni.pcapng",
+   "client": [
+    "192.168.1.168",
+    50184
+   ],
+   "server": [
+    "172.253.63.95",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls12.pcap",
+   "client": [
+    "192.168.133.129",
+    36372
+   ],
+   "server": [
+    "34.117.237.239",
+    443
+   ],
+   "ja4": "t13d1715h2_5b57614c22b0_3d5424432f57"
+  },
+  {
+   "pcap": "tls3.pcapng",
+   "client": [
+    "192.168.1.169",
+    63248
+   ],
+   "server": [
+    "54.190.49.36",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls3.pcapng",
+   "client": [
+    "192.168.1.169",
+    63250
+   ],
+   "server": [
+    "54.190.49.36",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_9b887d9acb53"
+  },
+  {
+   "pcap": "tls3.pcapng",
+   "client": [
+    "192.168.1.169",
+    63251
+   ],
+   "server": [
+    "54.190.49.36",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_9b887d9acb53"
+  },
+  {
+   "pcap": "tls3.pcapng",
+   "client": [
+    "192.168.1.169",
+    63252
+   ],
+   "server": [
+    "104.21.234.234",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_9b887d9acb53"
+  },
+  {
+   "pcap": "tls3.pcapng",
+   "client": [
+    "192.168.1.169",
+    63253
+   ],
+   "server": [
+    "54.190.49.36",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls3.pcapng",
+   "client": [
+    "192.168.1.169",
+    63254
+   ],
+   "server": [
+    "54.190.49.36",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  },
+  {
+   "pcap": "tls3.pcapng",
+   "client": [
+    "192.168.1.169",
+    63255
+   ],
+   "server": [
+    "54.190.49.36",
+    443
+   ],
+   "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
+  }
+ ]
+}
