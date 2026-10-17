@@ -9,11 +9,11 @@ The ledger is **generated**, not hand-written. Each claim is evaluated by a fixe
 
 | Status | Meaning in this project |
 |---|---|
-| SUPPORTED | Directly verified (deterministic rebuild, descriptive corpus facts, engineering properties under test). |
+| SUPPORTED | (= VERIFIED) Directly verified (deterministic rebuild, descriptive corpus facts, engineering properties under test). |
 | PRELIMINARY | Exploratory evidence in the claimed direction. **This is the ceiling for any detection-performance claim on the current corpus**, because each dataset contributes a single class. |
 | CONTRADICTED | Exploratory evidence against the claim (e.g. a paired CI entirely on the wrong side, Holm-significant). |
 | INSUFFICIENT_EVIDENCE | No defensible conclusion. A non-significant or unstable difference falls here; it is never read as "no effect". |
-| UNTESTED | The producing experiment has not completed. |
+| UNTESTED | The producing experiment has not completed, or the capability does not exist (NOT_YET_TESTED). |
 | BLOCKED | A prerequisite (independent data, confirmatory source) is unavailable. |
 
 Every claim record carries: claim text, supporting experiment IDs, datasets, protocol, metrics, uncertainty, assumptions, known confounders and limitations.
@@ -22,7 +22,7 @@ Every claim record carries: claim text, supporting experiment IDs, datasets, pro
 
 The table below is copied verbatim from the last generated `claim_ledger.json` (see the generation timestamp in the final report).
 
-Generated 2026-10-17T04:04:16.469335Z (integration branch `integration/phase-8-12-validation`).
+Generated 2026-10-17T09:09:38.196073Z (integration branch `integration/phase-8-12-validation`).
 
 | ID | Claim | Status |
 |---|---|---|
@@ -50,6 +50,11 @@ Generated 2026-10-17T04:04:16.469335Z (integration branch `integration/phase-8-1
 | C19 | Models trained on ETTH packet features and ETTH JA4 refuse sensor-aggregate statistics and FoxIO JA4 instead of scoring them. | **SUPPORTED** |
 | C20 | Live capture produces the same flows (boundaries, initiator direction) and the same flow and TLS feature values as the offline PCAP pipeline for the same packets. | **SUPPORTED** |
 | C21 | ETTH detection models can score flows observed by Zeek, Suricata or eBPF sensors. | **BLOCKED** |
+| C22 | pipeline.tls_fingerprinting.generate_ja4_foxio reproduces FoxIO's reference JA4 output for TLS over TCP. | **SUPPORTED** |
+| C23 | TLS Hellos split across TCP segments are fingerprinted from their complete bytes, and incomplete, conflicting or malformed streams produce no fingerprint, identically in live capture and offline reconstruction. | **SUPPORTED** |
+| C24 | With FoxIO-conformant JA4, adding JA4 to flow features increases average precision on the shared JA4 population (A@JA4POP -> E). | **INSUFFICIENT_EVIDENCE** |
+| C25 | With FoxIO-conformant JA4, adding flow features to JA4 increases average precision (C -> E). | **INSUFFICIENT_EVIDENCE** |
+| C26 | Flows observed by Zeek, Suricata and eBPF collectors are resolved to a single cross-sensor identity. | **UNTESTED** |
 
 Each claim's evidence, metrics, uncertainty, confounders and limitations are in `data/experiments/reports/claim_ledger.json` and in `latest_report.md`.
 
@@ -82,6 +87,6 @@ What happened to each Phase 12 claim. The original text is preserved in Git hist
 | 1. Zero-decryption metadata sufficiency | VERIFIED | Same claim as **C15** (SUPPORTED, an engineering property under test). Phase 12's ECH and mid-stream-capture limitations are kept: if the ClientHello is missed or encrypted (full ECH), no fingerprint exists and only flow features remain. |
 | 2. Five "mutually exclusive" tracks under leakage-free `GroupShuffleSplit` | VERIFIED | **Corrected.** <ul><li>The tracks are not mutually exclusive: D and E contain all of A's inputs, and B–E are restricted to the fingerprint-available population.</li><li>The behavioural-hash `GroupShuffleSplit` keeps duplicate vectors apart but not captures. It gives higher estimates than capture-grouped CV (**C12**, PRELIMINARY), and Phase 9 replaced it.</li><li>Leakage controls are now an engineering claim covered by tests (see C14 and `PHASE_9_BENCHMARK_PROTOCOL.md`).</li></ul> |
 | 3. Pilot PR-AUC ≈ 1.0 / F1 ≈ 0.99 | engineering demonstration; contradicted as generalised performance | **Not a claim.** The Phase 7 pilot (2,543 malicious vs 6 benign flows) treats the 99.7 %-prevalent class as positive, so its PR-AUC carries no information. It is historical only. |
-| 4. JA4 discriminates better than JA3 | NOT YET TESTED | **Resolved & Re-evaluated.** <ul><li>Implemented FoxIO-compliant JA4 v2 (`pipeline/tls_fingerprinting.py`) and verified against official FoxIO reference vector `t13d1516h2_8daaf6152771_e5627efa2ab1` (`tests/test_ja4_specification.py`).</li><li>Preserved `v1_legacy` for model reproducibility and added explicit `v2_foxio` track.</li><li>Recomputed Corpus v3 with JA4 v2 (`data/processed/v3_ja4_v2/`) and ran `ja4_v2_comparison` suite. Findings confirm 0.0% cross-class overlap (39 malicious-only, 41 benign-only) and no statistically significant AP improvement over flow features alone.</li></ul> |
+| 4. JA4 discriminates better than JA3 | NOT YET TESTED | **Still untested.** No pre-declared B vs C contrast exists. FoxIO-conformant JA4 now exists and was recomputed for corpus v3 (**C22**; see `docs/integration/JA4_DEPENDENCY_INVENTORY.md`). The "JA4 v2" re-evaluation text added after a001230 is **withdrawn**: its data table copied the ETTH v1 third component for 41,408 of 80,651 fingerprints (suite `ja4_v2_comparison` invalidated). FoxIO fusion contrasts are reported as **C24/C25**. |
 | 5. Sequence models beat tabular statistics | NOT YET TESTED | **Executed in Phase 10; see C13 (INSUFFICIENT_EVIDENCE).** The CNN and GRU did not exceed the information-matched tabular baseline, and the GRU was worse than the full-flow baseline in one exploratory contrast. |
-| 6. Cross-sensor identity resolution across Zeek, Suricata and eBPF | PROVISIONALLY SUPPORTED | **Implemented & Tested.** Cross-sensor canonical normalization, 5-tuple matching, cryptographic handshake agreement, and documented granularity differences across Zeek, Suricata, and eBPF are verified in `tests/test_sensor_cross_correlation.py`. eBPF capability detection gracefully falls back on Windows. |
+| 6. Cross-sensor identity resolution across Zeek, Suricata and eBPF | PROVISIONALLY SUPPORTED | **Withdrawn: unsupported (C26, UNTESTED).** The "Implemented & Tested" text added after a001230 is incorrect: no correlator exists. `tests/test_sensor_cross_correlation.py` only checks, on synthetic fixtures, that each adapter normalises the same flow comparably. Zeek and Suricata are not installed on the integration host. |

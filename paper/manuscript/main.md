@@ -106,7 +106,7 @@ ETTH comprises the following components.
    - Forward means the initiator, i.e. the first packet's source.
    - Lengths are IP lengths.
    - Only TCP and UDP are reconstructed.
-3. **Feature extraction.** The 74 flow features plus TLS structural metadata. JA3 and ETTH-JA4 are computed from the ClientHello in the first TCP segment.
+3. **Feature extraction.** The 74 flow features plus TLS structural metadata. In corpus v3, JA3 and ETTH-JA4 are computed from the ClientHello in the first TCP segment. Live capture, and any future corpus version, fingerprints only complete Hellos reassembled from the TCP stream (C23).
 4. **Benchmark harness.** Allow-list governance, capture-grouped nested CV, calibration and threshold selection on validation captures only, bootstrap and Holm contrasts, and an append-only experiment registry (§11).
 5. **Real-time path.**
    - A pickle-free, checksum-pinned model registry.
@@ -114,11 +114,11 @@ ETTH comprises the following components.
    - Out-of-distribution and in-sample-replay flags.
    - A validated WebSocket event stream.
    - Live capture whose flows and features match the offline pipeline on identical synthetic packets (claim C20).
-6. **Sensor adapters & cross-sensor correlation.** Zeek, Suricata and eBPF-collector records are normalised into the same canonical flow contract.
-   - Their counters are tagged as sensor aggregates, and their JA4 implementation declared explicitly.
-   - Cross-sensor correlation tests (`tests/test_sensor_cross_correlation.py`) verify 5-tuple canonical normalization, cryptographic handshake agreement (SNI, JA3, JA4), and documented granularity differences (e.g. host process context in eBPF, alerts in Suricata).
-   - eBPF capability detection safely probes Linux kernel/BTF support while gracefully falling back without raising on non-Linux hosts (Windows development environment).
-   - Models trained on ETTH packet features refuse sensor aggregates (C18, C19), preventing invalid feature attribution.
+6. **Sensor adapters (engineering only).** Zeek, Suricata and eBPF-collector records are normalised into the same flow contract.
+   - Their counters are tagged as sensor aggregates, and their JA4 is tagged FoxIO without an ETTH version.
+   - Models trained on ETTH packet features refuse both (C18, C19).
+   - The adapters are not connected to the live stream. No cross-sensor correlator and no eBPF program exist (C26, UNTESTED); `tests/test_sensor_cross_correlation.py` only checks that each adapter normalises the same synthetic flow comparably.
+   - Neither Zeek nor Suricata was installed on the integration host, so no genuine sensor output was processed.
    - Detection on sensor telemetry is **blocked** (C21) until sensor-specific labeled datasets are available.
 
 ## 8. Datasets and Provenance
@@ -150,11 +150,36 @@ Observations about this corpus:
   - `tls_version`, meaning *offered*: 1.3 if the ClientHello carries `supported_versions`, else 1.2.
   - `alpn_value`, the first offered ALPN.
 - **JA3.** MD5 of `version,ciphers,extensions,curves,point_formats` with GREASE removed [3].
-- **JA4 Fingerprinting (Dual Implementation Architecture).**
-  - **ETTH Legacy Variant (`v1_legacy`):** Preserved for reproducibility of historical benchmark suites and pre-trained model matrices. It sorts signature algorithms and uses `n` for omitted SNI.
-  - **FoxIO-Compliant Variant (`v2_foxio`):** Implemented in `pipeline/tls_fingerprinting.py` (`generate_ja4_foxio`) and verified against official FoxIO reference vectors (`tests/test_ja4_specification.py`). It strictly adheres to the FoxIO specification: retains wire-order signature algorithms in the third component hash, uses `i` for omitted SNI, normalizes empty cipher/extension components, and produces `t13d1516h2_8daaf6152771_e5627efa2ab1` on the reference ClientHello.
-  - **Empirical Re-evaluation:** Corpus v3 was recomputed with JA4 v2 (`data/processed/v3_ja4_v2/`) and benchmarked under nested cross-validation (`ja4_v2_comparison` suite). FoxIO JA4 v2 exhibits the exact same empirical behavior on this corpus: 0.0% cross-class overlap (39 malicious-only, 41 benign-only, 0 shared) and no statistically significant AP improvement over flow features alone, proving that the absence of generalization is driven by dataset source-confounding rather than the fingerprint hashing algorithm.
-- **TCP Stream Reassembly for Multi-Segment Handshakes.** Multi-segment ClientHellos spanning multiple packets/MSS boundaries are reassembled using bounded sequence-aware TCP defragmentation (`TcpStreamReassembler`), resolving packet-boundary truncation across both live capture and offline reconstructors.
+- **JA4 (two implementations, never mixed).**
+  - **ETTH_JA4_V1** (corpus v3 column `ja4`; every "JA4" result in §§12–16 unless labelled FoxIO). It deviates from the FoxIO specification [5] in six ways:
+    - signature algorithms are sorted;
+    - `n` is used instead of `i` for "no SNI";
+    - the version code comes from the presence of `supported_versions` only;
+    - a trailing separator is hashed when there are no signature algorithms;
+    - the empty cipher list is hashed;
+    - counts are not capped at 99.
+
+    These values are **not comparable to FoxIO JA4 in the literature**.
+  - **FOXIO_JA4** (`generate_ja4_foxio`, version `ja4_foxio-c6469a7_etth-2`). It matches FoxIO's reference implementation output on 139/139 TCP vectors from FoxIO's repository (commit c6469a7; claim C22).
+    - For non-ASCII ALPN characters we follow FoxIO's reference code ('9'), which differs from the written specification (hex).
+    - QUIC and DTLS JA4 are not implemented.
+  - **Recomputation.** FoxIO JA4 cannot be derived from stored v1 strings, because the signature-algorithm wire order is lost. It was recomputed from the raw captures, with row alignment to corpus v3 proved by identical v1 JA4 and JA3 on every row (25/25 captures).
+    - 80,594 flows have a FoxIO value; 57 are withheld because their ClientHello was truncated in the first segment.
+    - The FoxIO corpus has 35 distinct values (v1: 82), none shared between classes.
+  - **FoxIO re-evaluation (exploratory; suite `ja4_foxio_capture_cv-20261017T063740Z`).**
+    - Setup: capture-grouped 5-fold CV, seed 42, per-capture cap 4,000.
+    - The JA4 population is 8,578 malicious and 2,621 benign flows.
+    - Primary model random_forest:
+      - C_JA4 AP 0.999 [0.989, 1.000];
+      - E_JA4_FLOW AP 0.994 [0.968, 1.000];
+      - A@JA4POP AP 0.995 [0.969, 1.000].
+    - Contrasts:
+      - A@JA4POP → E: ΔAP −0.0007 [−0.0043, 0.0003], Holm p = 1.0 (C24);
+      - C → E: ΔAP −0.0049 [−0.0267, 0.00004], Holm p = 1.0 (C25).
+    - Every interval is FEW_GROUPS, and both claims are INSUFFICIENT_EVIDENCE.
+    - The near-ceiling scores and zero class overlap reflect the same source confounding as the v1 results. They do not show that the hashing specification is irrelevant.
+  - **Withdrawn result.** An earlier "JA4 v2" table and its suite (`ja4_v2_comparison`) copied the v1 third component for 41,408 of 80,651 fingerprints. They are invalidated and not used.
+- **Limits of the corpus v3 parser.** Fingerprints of ClientHellos that span TCP segments are flagged as possibly truncated: 13 in DS-008, 1 in DS-009 and 43 in DS-011. The earlier draft omitted the DS-011 count.
 
 ## 10. Experimental Design: Feature Tracks
 
@@ -338,7 +363,10 @@ Permutation importance is computed on outer test folds, and impurity importance 
 
 1. **Confounding.** Dataset identity equals class. There is a single benign source (2017 lab browsing, mostly Kali Linux per its READMEs), no benign TLS 1.3, and largely different operating systems between classes. This is the dominant threat; it blocks C02 and C09.
 2. **Labels.** Labels are capture-level, not flow-level.
-3. **JA4 conformance and reassembly.** Resolved: FoxIO-compliant JA4 v2 and bounded TCP stream reassembly are implemented and verified (§9). Re-benchmarking confirms that non-generalization remains unchanged under FoxIO JA4 v2.
+3. **JA4 conformance and reassembly.**
+   - FoxIO-conformant JA4 and bounded Hello reassembly now exist and are tested (C22, C23).
+   - The §§12–16 results nevertheless use the historical ETTH variant.
+   - The FoxIO re-evaluation (§9, C24/C25) uses the same single-benign-source corpus, so it cannot separate a hashing-specification effect from source confounding.
 4. **Statistics.** There are few groups, a single seed, and no equivalence margin.
 5. **External validity.** No held-out benign environment exists. The confirmatory evaluation was not run.
 6. **Sensors.** Sensor integration was validated with synthetic fixtures only. Sensor telemetry cannot be scored by the current models (C21).
@@ -368,10 +396,10 @@ Raw captures must be re-acquired from the recorded URLs; their checksums are rec
 On legitimately available public data, we find no evidence that JA3 or JA4 adds detection value to encrypted-flow features under realistic evaluation. We do find strong evidence that fingerprint "value" in such corpora reflects client-stack and source identity, and that the popular duplicate-grouped holdout hides this.
 
 The research question stays open until the following are done:
-1. benign data from independent environments comparable to the malicious hosts (Windows, modern browsers, enterprise software), each used as a held-out source (see audit roadmap in `docs/research/INDEPENDENT_BENIGN_DATASET_AUDIT.md`);
+1. benign data from independent environments comparable to the malicious hosts (Windows, modern browsers, enterprise software), each used as a held-out source (no admissible candidate has been found; see `docs/research/BENIGN_DATA_AUDIT_CORRECTIONS.md`);
 2. a frozen confirmatory evaluation;
 3. flow-level labels, or documented background-traffic filtering;
-4. FoxIO-conformant JA4 and ClientHello reassembly (completed in Phase 11/12 integration; confirms negative fusion result is invariant to hashing specification);
+4. a corpus version built with ClientHello reassembly and FoxIO JA4 as the primary fingerprint (the implementation exists; the corpus was not rebuilt);
 5. multiple seeds and more benign captures;
 6. an IOC (hash-lookup) baseline.
 
