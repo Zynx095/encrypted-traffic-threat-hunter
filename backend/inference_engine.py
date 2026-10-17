@@ -8,6 +8,7 @@ from typing import Any, Deque, Dict, List, Optional, Tuple
 import pandas as pd
 
 from ml.features.governance import CANONICAL_TRACKS, FLOW_FEATURES, REGISTRY
+from backend.redaction import redact
 from pipeline.canonical_flow import FEATURE_PROVENANCE_ETTH, JA4_IMPLEMENTATION_ETTH
 
 logger = logging.getLogger(__name__)
@@ -100,7 +101,7 @@ class InferenceEngine:
             logger.warning("Model registry unavailable: %s", exc)
             active = {}
             for t in SUPPORTED_TRACKS:
-                self.load_status[t] = {"status": "REGISTRY_UNAVAILABLE", "error": str(exc)}
+                self.load_status[t] = {"status": "REGISTRY_UNAVAILABLE", "error": redact(str(exc))}
         models: Dict[str, Tuple[Dict[str, Any], Any]] = {}
         status: Dict[str, Dict[str, Any]] = {t: {"status": "NO_ACTIVE_MODEL"} for t in SUPPORTED_TRACKS}
         for track, entry in active.items():
@@ -113,7 +114,7 @@ class InferenceEngine:
                                  "calibration": entry.get("calibration", {}).get("status")}
             except Exception as exc:
                 status[track] = {"status": "LOAD_FAILED", "model_id": entry.get("model_id"),
-                                 "version": entry.get("version"), "error": f"{type(exc).__name__}: {exc}"}
+                                 "version": entry.get("version"), "error": redact(f"{type(exc).__name__}: {exc}")}
                 logger.error("Refusing to load model for %s: %s", track, exc)
         with self._lock:
             self.models, self.load_status = models, status
@@ -290,7 +291,7 @@ class InferenceEngine:
         except Exception as exc:
             logger.warning("Inference error for track %s: %s", track, exc)
             self.metrics.observe(track, "ERROR", 0.0, "INFERENCE_ERROR")
-            return self._result(track, "ERROR", entry=entry, skip_reason=f"INFERENCE_ERROR: {type(exc).__name__}: {exc}",
+            return self._result(track, "ERROR", entry=entry, skip_reason=redact(f"INFERENCE_ERROR: {type(exc).__name__}: {exc}"),
                                 evidence=["The model raised an error; no score was produced."])
 
 

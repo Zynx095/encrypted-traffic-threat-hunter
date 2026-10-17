@@ -28,6 +28,8 @@ from typing import Any, Dict, List, Optional
 
 import psutil
 
+from backend.redaction import redact
+
 logger = logging.getLogger(__name__)
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -163,7 +165,7 @@ class JobManager:
         path = self.dir / f"{job_id}.log"
         if not path.exists():
             return {"job_id": job_id, "lines": [], "truncated": False}
-        content = path.read_text(encoding="utf-8", errors="replace").splitlines()
+        content = redact(path.read_text(encoding="utf-8", errors="replace")).splitlines()
         lines = max(1, min(lines, 2000))
         return {"job_id": job_id, "lines": content[-lines:], "truncated": len(content) > lines}
 
