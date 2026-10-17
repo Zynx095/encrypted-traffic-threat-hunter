@@ -14,7 +14,9 @@ from pipeline.tls_fingerprinting import (
     generate_ja3s,
     generate_ja4
 )
-from backend.event_sources.tcp_reassembly import TcpStreamReassembler
+from pipeline import tls_reassembly
+from pipeline.canonical_flow import (JA4_IMPLEMENTATION_ETTH, JA4_IMPLEMENTATION_FOXIO, JA4_VERSION_ETTH_V1,
+                                     JA4_VERSION_FOXIO, TLS_HELLO_FIRST_SEGMENT, TLS_HELLO_TCP_REASSEMBLY)
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +24,8 @@ logger = logging.getLogger(__name__)
 DEFAULT_FLOW_IDLE_TIMEOUT = 120.0
 
 class Flow:
-    def __init__(self, pcap_sha256: str, canonical_key: Tuple, instance: int, first_packet_ts: float, first_src_ep: Tuple):
+    def __init__(self, pcap_sha256: str, canonical_key: Tuple, instance: int, first_packet_ts: float, first_src_ep: Tuple,
+                 reassemble_tls: bool = True):
         self.pcap_sha256 = pcap_sha256
         self.canonical_key = canonical_key
         self.instance = instance
@@ -72,8 +75,11 @@ class Flow:
         # be incomplete and JA3/JA4 computed from it may not match the true client stack.
         self.clienthello_record_truncated = None
         self.clienthello_parse_error = None
-        self.client_reassembler = TcpStreamReassembler()
-        self.server_reassembler = TcpStreamReassembler()
+        # TLS Hello acquisition. FIRST_SEGMENT reproduces corpus v3 exactly (first segment parsed,
+        # possibly truncated). TCP_REASSEMBLY fingerprints complete Hellos only.
+        self.reassemble_tls = reassemble_tls and canonical_key[2] == "TCP"
+        self.client_reassembler = tls_reassembly.HelloReassembler(None) if self.reassemble_tls else None
+        self.server_reassembler = tls_reassembly.HelloReassembler(None) if self.reassemble_tls else None
 
         # State
         self.closed_by_termination = False
@@ -89,14 +95,13 @@ class Flow:
             handshake_type = payload[5]
             
             # Policy: Take the first valid ClientHello
-            if handshake_type == 1 and (not self.client_hello_present or self.clienthello_record_truncated):
+            if handshake_type == 1 and not self.client_hello_present:
                 ch_data = parse_client_hello(payload)
                 if ch_data.get("error"):
                     self.clienthello_parse_error = ch_data.get("error")
                 if not ch_data.get("error"):
                     record_len = int.from_bytes(payload[3:5], 'big')
                     self.clienthello_record_truncated = (5 + record_len) > len(payload)
-                    self.clienthello_parse_error = None
                     self.client_hello_present = True
                     self.tls_record_version = ch_data["record_version"]
                     self.sni_present = ch_data["sni_present"]
@@ -107,8 +112,8 @@ class Flow:
                     self.ja3_string, self.ja3_hash = generate_ja3(ch_data)
                     self.ja4 = generate_ja4(ch_data, version="v1_legacy")
                     self.ja4_v2 = generate_ja4(ch_data, version="v2_foxio")
-                    self.ja4_implementation = "ETTH_JA4_V1"
-                    self.ja4_version = "v1_legacy"
+                    self.ja4_implementation = JA4_IMPLEMENTATION_ETTH
+                    self.ja4_version = JA4_VERSION_ETTH_V1
             
             # Policy: Take the first valid ServerHello
             elif handshake_type == 2 and not self.server_hello_present:
@@ -129,9 +134,8 @@ class Flow:
         self.relative_times.append(rel_time)
         self.tcp_flags_sequence.append(tcp_flags)
         
-        is_tls = False
-        if len(payload) >= 5 and payload[0] == 22:
-            is_tls = True
+        is_tls = len(payload) >= 5 and payload[0] == 22
+        if is_tls and not self.reassemble_tls:
             self.process_tls_payload(payload)
             
         is_forward = (src_ep == self.forward_ep)
@@ -154,21 +158,17 @@ class Flow:
         if tcp_flags != -1:
             if tcp_flags & dpkt.tcp.TH_FIN or tcp_flags & dpkt.tcp.TH_RST:
                 self.closed_by_termination = True
-                self.client_reassembler.reset()
-                self.server_reassembler.reset()
 
-        # Multi-segment TCP stream reassembly
-        if payload and tcp_seq is not None:
-            if is_forward and (not self.client_hello_present or self.clienthello_record_truncated):
-                rec = self.client_reassembler.add_segment(tcp_seq, payload)
-                if rec:
-                    is_tls = True
-                    self.process_tls_payload(rec)
-            elif not is_forward and not self.server_hello_present:
-                rec = self.server_reassembler.add_segment(tcp_seq, payload)
-                if rec:
-                    is_tls = True
-                    self.process_tls_payload(rec)
+        if self.reassemble_tls and payload and tcp_seq is not None:
+            r = self.client_reassembler if is_forward else self.server_reassembler
+            syn = bool(tcp_flags & dpkt.tcp.TH_SYN)
+            if syn:
+                r.set_isn(tcp_seq)
+            rec = r.add_segment((tcp_seq + 1) & 0xFFFFFFFF if syn else tcp_seq, payload)
+            if rec:
+                self.process_tls_payload(rec)
+        elif self.reassemble_tls and tcp_seq is not None and tcp_flags & dpkt.tcp.TH_SYN:
+            (self.client_reassembler if is_forward else self.server_reassembler).set_isn(tcp_seq)
 
         self.tls_candidate_sequence.append(1 if is_tls else 0)
 
@@ -208,12 +208,27 @@ class Flow:
             "sni_present": self.sni_present,
             "alpn": self.alpn,
             "clienthello_record_truncated": self.clienthello_record_truncated,
-            "clienthello_parse_error": self.clienthello_parse_error
+            "clienthello_parse_error": self.clienthello_parse_error,
+            "ja4_v2_implementation": JA4_IMPLEMENTATION_FOXIO if self.ja4_v2 else None,
+            "ja4_v2_version": JA4_VERSION_FOXIO if self.ja4_v2 else None,
+            "tls_hello_acquisition": TLS_HELLO_TCP_REASSEMBLY if self.reassemble_tls else TLS_HELLO_FIRST_SEGMENT,
+            "clienthello_reassembly": self._final_outcome(self.client_reassembler),
+            "serverhello_reassembly": self._final_outcome(self.server_reassembler),
         }
 
+    def _final_outcome(self, r):
+        if r is None:
+            return None
+        if r.done:
+            return r.outcome
+        if r.anchor is None and not r.unanchored:
+            return tls_reassembly.NO_CLIENTHELLO
+        return tls_reassembly.INCOMPLETE_TERMINATED if self.closed_by_termination else tls_reassembly.INCOMPLETE_TIMEOUT
+
 class FlowReconstructor:
-    def __init__(self, pcap_sha256: str, idle_timeout: float = DEFAULT_FLOW_IDLE_TIMEOUT):
+    def __init__(self, pcap_sha256: str, idle_timeout: float = DEFAULT_FLOW_IDLE_TIMEOUT, reassemble_tls: bool = True):
         self.pcap_sha256 = pcap_sha256
+        self.reassemble_tls = reassemble_tls
         self.idle_timeout = idle_timeout
         self.active_flows = {} # canonical_key -> Flow
         self.completed_flows = []
@@ -290,7 +305,7 @@ class FlowReconstructor:
         if flow is None:
             instance = self.instances.get(canonical_key, 0) + 1
             self.instances[canonical_key] = instance
-            flow = Flow(self.pcap_sha256, canonical_key, instance, ts, src_ep)
+            flow = Flow(self.pcap_sha256, canonical_key, instance, ts, src_ep, reassemble_tls=self.reassemble_tls)
             self.active_flows[canonical_key] = flow
 
         flow.add_packet(ts, src_ep, ip_len, tcp_flags, payload, tcp_seq=tcp_seq)

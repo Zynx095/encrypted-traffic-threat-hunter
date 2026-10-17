@@ -61,7 +61,7 @@ def process_pcaps():
 
     def run_reconstruction(pcap_path, label_meta):
         sha256 = compute_sha256(pcap_path)
-        reconstructor = FlowReconstructor(pcap_sha256=sha256)
+        reconstructor = FlowReconstructor(pcap_sha256=sha256, reassemble_tls=False)  # historical first-segment semantics
 
         try:
             with open(pcap_path, 'rb') as f:

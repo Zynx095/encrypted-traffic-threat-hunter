@@ -34,7 +34,7 @@ INCOMPLETE_TERMINATED = "INCOMPLETE_TERMINATED"
 MALFORMED = "MALFORMED"
 CONFLICTING_OVERLAP = "CONFLICTING_OVERLAP"
 UNSUPPORTED = "UNSUPPORTED"
-NO_CLIENTHELLO = "NO_CLIENTHELLO"   # stream does not start with the expected Hello
+NO_CLIENTHELLO = "NO_CLIENTHELLO"   # stream does not start with the expected Hello (name kept for both directions)
 TERMINAL = {COMPLETE, INCOMPLETE_TIMEOUT, INCOMPLETE_EVICTED, INCOMPLETE_TERMINATED, MALFORMED,
             CONFLICTING_OVERLAP, UNSUPPORTED, NO_CLIENTHELLO}
 
@@ -42,6 +42,10 @@ TLS_HANDSHAKE = 0x16
 MAX_TLS_RECORD = 16384 + 2048        # RFC 8446 5.2 upper bound for a record fragment
 DEFAULT_MAX_MESSAGE = 16384          # largest Hello we reassemble
 DEFAULT_MAX_SEGMENTS = 64
+
+
+_PLAINTEXT_PREFIXES = (b"GET ", b"POST ", b"HEAD ", b"PUT ", b"DELETE ", b"OPTIONS ", b"CONNECT ", b"HTTP/",
+                       b"SSH-", b"220 ", b"EHLO", b"HELO")
 
 
 def seq_diff(s1: int, s2: int) -> int:
@@ -57,9 +61,10 @@ def _plausible_record_header(data: bytes) -> bool:
 class HelloReassembler:
     """Reassembles the first TLS handshake message of one TCP direction."""
 
-    def __init__(self, handshake_type: int = 0x01, max_message: int = DEFAULT_MAX_MESSAGE,
+    def __init__(self, handshake_type: Optional[int] = 0x01, max_message: int = DEFAULT_MAX_MESSAGE,
                  max_segments: int = DEFAULT_MAX_SEGMENTS):
         self.handshake_type = handshake_type
+        self._accepted = (0x01, 0x02) if handshake_type is None else (handshake_type,)
         self.max_message = max_message
         self.max_bytes = 2 * max_message + 64        # message plus room for record headers
         self.max_segments = max_segments
@@ -97,6 +102,9 @@ class HelloReassembler:
             if _plausible_record_header(payload):
                 self.anchor = seq
                 self._adopt_unanchored()
+            elif not self.unanchored and payload.startswith(_PLAINTEXT_PREFIXES):
+                self._end(NO_CLIENTHELLO, "stream starts with a plaintext protocol")
+                return None
             else:
                 self._stash_unanchored(seq, payload)
                 return None
@@ -178,7 +186,7 @@ class HelloReassembler:
                 self._end(MALFORMED, f"invalid TLS record header at stream offset {pos}")
                 return None
             chunk = stream[pos + 5:pos + 5 + rlen]
-            if not body and chunk and chunk[0] != self.handshake_type:
+            if not body and chunk and chunk[0] not in self._accepted:
                 self._end(NO_CLIENTHELLO, f"first handshake message has type {chunk[0]}")
                 return None
             body += chunk

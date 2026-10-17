@@ -124,8 +124,10 @@ USABLE_RAW_STATUS = ("VERIFIED_CHECKSUM", "OBSERVED_AT_ACQUISITION")
 
 
 # ------------------------------------------------------------------------- reconstruct --
-def reconstruct_capture(pcap_path: Path, sha256: str) -> List[Dict[str, Any]]:
-    recon = FlowReconstructor(pcap_sha256=sha256)
+def reconstruct_capture(pcap_path: Path, sha256: str, reassemble_tls: bool = False) -> List[Dict[str, Any]]:
+    """Reconstruct one capture. ``reassemble_tls=False`` is corpus v3 semantics (first-segment
+    ClientHello parsing); changing it changes fingerprint values and requires a new corpus version."""
+    recon = FlowReconstructor(pcap_sha256=sha256, reassemble_tls=reassemble_tls)
     with open(pcap_path, "rb") as f:
         magic = f.read(4)
         f.seek(0)
