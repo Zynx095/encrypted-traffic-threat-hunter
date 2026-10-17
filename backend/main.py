@@ -295,21 +295,26 @@ def stop_session(session_id: str):
 
 @app.get("/api/sensors/status")
 def get_sensors_status():
+    """
+    What each source can do on this host and whether it is actually feeding the live stream.
+    Parser availability is not a running sensor: no Zeek/Suricata process or eBPF collector is
+    managed by ETTH, and only live capture is wired to the WebSocket stream.
+    """
     from backend.event_sources.live_capture import detect_live_capture_capability
     from backend.event_sources.ebpf_source import detect_ebpf_capability
+    live = replay_engine.live_capture_source.get_status()
+    log_adapter = {"adapter_available": True, "ingestion_active": False, "connected_to_live_stream": False,
+                   "process_managed_by_etth": False, "mode": "LOG_PARSING (offline files or lines passed by a caller)"}
     return {
-        "live_capture": detect_live_capture_capability(),
-        "ebpf": detect_ebpf_capability(),
-        "zeek": {
-            "available": True,
-            "parser": "ZeekCorrelator",
-            "supported_logs": ["conn.log", "ssl.log", "x509.log"]
-        },
-        "suricata": {
-            "available": True,
-            "parser": "SuricataCorrelator",
-            "supported_events": ["flow", "tls", "alert"]
-        }
+        "note": ("adapter_available means the parser/adapter can be imported; it does not mean a sensor is running. "
+                 "Only live capture feeds the live stream. Sensor flows keep SENSOR_AGGREGATE provenance and are "
+                 "refused by flow-feature models (see docs/integration/CROSS_PHASE_CONTRACTS.md)."),
+        "live_capture": {**detect_live_capture_capability(), "state": live["status"],
+                         "ingestion_active": live["status"] == "CAPTURING", "connected_to_live_stream": True},
+        "ebpf": {**detect_ebpf_capability(), "ingestion_active": False, "connected_to_live_stream": False,
+                 "mode": "JSON_EVENT_PARSING (external collector required)"},
+        "zeek": {**log_adapter, "parser": "ZeekCorrelator", "supported_logs": ["conn.log", "ssl.log"]},
+        "suricata": {**log_adapter, "parser": "SuricataCorrelator", "supported_events": ["flow", "tls", "alert"]},
     }
 
 from fastapi import WebSocket, WebSocketDisconnect

@@ -33,6 +33,16 @@ def detect_live_capture_capability() -> Dict[str, Any]:
 
     try:
         interfaces = get_available_interfaces()
+        # Interface enumeration works without a capture driver; sniffing does not. Scapy installs a
+        # placeholder socket class when libpcap/Npcap is missing (e.g. "wpcap.dll missing").
+        listener = getattr(scapy.all.conf, "L2listen", None)
+        if getattr(listener, "__name__", "") == "_NotAvailableSocket":
+            return {
+                "available": False,
+                "error": f"Packet capture driver unavailable ({str(listener).strip('<>')}). Install Npcap (Windows) or libpcap.",
+                "interfaces": interfaces,
+                "library": f"Scapy {getattr(scapy, '__version__', '2.7.0')}"
+            }
         return {
             "available": True,
             "error": None,
