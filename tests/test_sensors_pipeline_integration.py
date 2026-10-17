@@ -107,7 +107,7 @@ def test_pipeline_integration_ebpf():
         "pid": 2048,
         "comm": "chrome",
         "tls_sni": "youtube.com",
-        "ja3": "chrome_ja3_hash"
+        "ja3": "b32309a26951912be7dba376398abc3b"
     })
     assert ebpf_flow is not None
 
@@ -122,5 +122,5 @@ def test_pipeline_integration_ebpf():
 
     assert isinstance(event, ETTHStreamEvent)
     assert event.flow.total_packets == 22
-    assert event.tls.ja3_hash == "chrome_ja3_hash"
+    assert event.tls.ja3_hash == "b32309a26951912be7dba376398abc3b"
     assert event.attribution.target_id == "target_youtube"
