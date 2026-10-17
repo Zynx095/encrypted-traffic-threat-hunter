@@ -102,3 +102,40 @@ def test_early_stopping_uses_validation_only():
     r = train_model("gru", tr, va, seed=1, epochs=40, patience=2)
     assert r["epochs_run"] <= 40
     assert all("val_ap" in h and "train_loss" in h for h in r["history"])
+
+
+def test_sequence_suite_runs_end_to_end_on_synthetic_data(tmp_path, monkeypatch):
+    """
+    Regression: a refactor shadowed the contrast reading rule `interpret` with a local dict, so every
+    re-run of `python -m ml sequence` failed after training. Runs the full suite on a tiny synthetic
+    corpus in a temporary registry (never the real one).
+    """
+    import ml.benchmark.registry as R
+    import ml.sequence.experiment as E
+    from tests.ml_fixtures import synthetic_corpus
+
+    monkeypatch.setattr(R, "PHASE10_ROOT", tmp_path / "phase10")
+    monkeypatch.setattr(R, "REGISTRY_INDEX", tmp_path / "index.jsonl")
+    monkeypatch.setattr(E, "PHASE10_ROOT", tmp_path / "phase10")
+
+    def frame(datasets=None, per_capture_cap=None, seed=42):
+        df = synthetic_corpus(captures_per_class=6, flows_per_capture=20)
+        rng = np.random.default_rng(0)
+        cols = {"sequence_packet_lengths": [], "sequence_relative_times": [], "sequence_directions": [],
+                "sequence_tcp_flags": [], "sequence_original_length": []}
+        for y in df["y"]:
+            k = int(rng.integers(3, 40))
+            cols["sequence_packet_lengths"].append(list((rng.integers(40, 1500, size=k) * (2 if y else 1)) % 1500 + 40))
+            cols["sequence_relative_times"].append(list(np.cumsum(rng.random(k))))
+            cols["sequence_directions"].append(list(rng.choice([1, -1], size=k)))
+            cols["sequence_tcp_flags"].append(list(rng.choice([0x10, 0x18], size=k)))
+            cols["sequence_original_length"].append(k)
+        for c, v in cols.items():
+            df[c] = v
+        return df
+
+    monkeypatch.setattr(E, "load_benchmark_frame", frame)
+    res = E.run_sequence_suite(epochs=1, archs=["cnn"], n_boot=20)
+    assert res["status"] == "COMPLETED", res
+    assert res["summary"]["contrasts"] and all("interpretation" in c for c in res["summary"]["contrasts"])
+    assert (tmp_path / "index.jsonl").exists()

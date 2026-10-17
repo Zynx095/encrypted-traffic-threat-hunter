@@ -127,7 +127,7 @@ def run_sequence_suite(epochs: int = 30, archs: Optional[List[str]] = None, seed
                                   "task": "DETECTION"}) for m in model_names}
     preds: Dict[str, List[pd.DataFrame]] = {m: [] for m in model_names}
     fold_info: Dict[str, List[Dict]] = {m: [] for m in model_names}
-    interpret: Dict[str, Any] = {}
+    interpretations: Dict[str, Any] = {}   # per-architecture saliency summaries (not the contrast reading rule)
     try:
         for f in folds:
             if not f.two_class_test:
@@ -177,9 +177,9 @@ def run_sequence_suite(epochs: int = 30, archs: Optional[List[str]] = None, seed
                                            "latency_ms_per_flow": round(1000 * pred_s / max(len(f.test_idx), 1), 5),
                                            "rss_delta_mb": round((psutil.Process().memory_info().rss - rss0) / 2**20, 1),
                                            "normaliser": norm.to_dict(), "device": res["device"]})
-                if not interpret.get(arch):
+                if not interpretations.get(arch):
                     from ml.sequence.interpret import interpret_sequence_model
-                    interpret[arch] = interpret_sequence_model(res["model"], te, fold=f.name, iat_std=norm.stats[2][1])
+                    interpretations[arch] = interpret_sequence_model(res["model"], te, fold=f.name, iat_std=norm.stats[2][1])
             logger.info("Phase 10 fold %s complete", f.name)
 
         results = {}
@@ -194,8 +194,8 @@ def run_sequence_suite(epochs: int = 30, archs: Optional[List[str]] = None, seed
             summary["cost"] = {"fit_seconds_mean": {"mean": float(np.mean([x["fit_seconds"] for x in fold_info[m]]))},
                                "latency_ms_per_flow_mean": {"mean": float(np.mean([x["latency_ms_per_flow"] for x in fold_info[m]]))},
                                "parameters": fold_info[m][0].get("parameters")}
-            if m in interpret:
-                exps[m].save_artifact("interpretation.json", interpret[m])
+            if m in interpretations:
+                exps[m].save_artifact("interpretation.json", interpretations[m])
             results[m] = exps[m].finish("COMPLETED", metrics=summary)
         contrasts = []
         for a, b, label in CONTRASTS:
