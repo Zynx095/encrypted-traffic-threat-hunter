@@ -10,7 +10,7 @@
 [![Focus](https://img.shields.io/badge/Focus-TLS%20%7C%20JA3%20%7C%20JA4%20%7C%20Flow%20Analysis-blue?style=for-the-badge)](#-research-objective)
 [![Leakage Controls](https://img.shields.io/badge/Data%20Safety-Leakage%20Controlled-red?style=for-the-badge)](#-leakage-controls--model-safe-data)
 [![Python](https://img.shields.io/badge/Python-3.x-blue?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![Tests](https://img.shields.io/badge/Tests-362%20Passed-brightgreen?style=for-the-badge)](#-test-suite)
+[![Tests](https://img.shields.io/badge/Tests-459%20Passed-brightgreen?style=for-the-badge)](#-test-suite)
 
 **Investigating whether combining TLS fingerprint features with encrypted-flow behavioral features can improve malicious encrypted-traffic detection — without decrypting network payloads.**
 
@@ -378,7 +378,7 @@ encrypted-traffic-threat-hunter/
 │   └── experimental_dataset_constructor.py  # A–E experiment splits
 ├── ml/                              # Phases 9-10: governance, evaluation, benchmark, sequence models, reporting
 ├── backend/research/                # Research API, job manager, real-time check
-├── tests/                           # Test suite (362 tests)
+├── tests/                           # Test suite (459 tests)
 │   ├── test_ingestion.py
 │   ├── test_flow_reconstruction.py
 │   ├── test_tls_fingerprinting.py
@@ -408,8 +408,8 @@ python -m pytest -q
 
 | Metric | Value |
 |:-------|------:|
-| Total tests | 362 |
-| Passed | 362 |
+| Total tests | 459 |
+| Passed | 459 |
 | Failed | 0 |
 | Skipped | 0 |
 
