@@ -22,7 +22,7 @@ Every claim record carries: claim text, supporting experiment IDs, datasets, pro
 
 The table below is copied verbatim from the last generated `claim_ledger.json` (see the generation timestamp in the final report).
 
-Generated 2026-10-16T19:20:06.803974Z.
+Generated 2026-10-17T03:57:52.178674Z (integration branch `integration/phase-8-12-validation`).
 
 | ID | Claim | Status |
 |---|---|---|
@@ -46,17 +46,26 @@ Generated 2026-10-16T19:20:06.803974Z.
 | C13 | Sequence models (CNN/GRU on the first 64 packets) add detection value over information-matched tabular baselines. | **INSUFFICIENT_EVIDENCE** |
 | C14 | Real-time inference only uses registered, checksum-verified models and never derives a score from ground-truth labels. | **SUPPORTED** |
 | C15 | The system does not decrypt TLS application payloads. | **SUPPORTED** |
+| C18 | The Zeek, Suricata and eBPF adapters normalise records into the canonical flow contract without fabricating fingerprints, endpoints, protocols, durations or rates, and without silently dropping, duplicating or relabelling records. | **SUPPORTED** |
+| C19 | Models trained on ETTH packet features and ETTH JA4 refuse sensor-aggregate statistics and FoxIO JA4 instead of scoring them. | **SUPPORTED** |
+| C20 | Live capture produces the same flows (boundaries, initiator direction) and the same flow and TLS feature values as the offline PCAP pipeline for the same packets. | **SUPPORTED** |
+| C21 | ETTH detection models can score flows observed by Zeek, Suricata or eBPF sensors. | **BLOCKED** |
 
 Each claim's evidence, metrics, uncertainty, confounders and limitations are in `data/experiments/reports/claim_ledger.json` and in `latest_report.md`.
 
 ### Reading the snapshot
 
-* **Supported** claims are engineering, reproducibility and descriptive facts: C01, C03, C14, C15.
+* **Supported** claims are engineering, reproducibility and descriptive facts: C01, C03, C14, C15, and the integration properties C18–C20. C18–C20 are verified with synthetic fixtures and packets only.
 * **No detection-performance claim is SUPPORTED.**
 * The incremental-value claims C04–C07, which are the central research question, are **INSUFFICIENT_EVIDENCE**. On the shared TLS population both flow-only and fusion models are near the ceiling on source-confounded data.
+  * The status rule uses the pre-declared primary model (random forest).
+  * The evidence also reports the secondary models. Logistic regression gains ΔAP +0.0004 (JA3) and +0.0005 (JA4) on AP ≈ 0.9994. That is Holm-significant within the model's four contrasts (p 0.032 / 0.042), but not after Holm across all 12 model × contrast tests (p 0.096 / 0.154). Gradient boosting and random forest show no difference.
 * Cross-source transfer is **CONTRADICTED** for flow-only and fusion models (C08A, C08C). It is **INSUFFICIENT_EVIDENCE** for fingerprint-only models, whose held-out-source detection is all-or-nothing (C08B).
 * The preliminary diagnostics C10, C11B, C16, C17 and C12 describe shortcut and novelty effects.
-* Generalisation (C09) and benign sufficiency (C02) are **BLOCKED** on independent data.
+* Generalisation (C09) and benign sufficiency (C02) are **BLOCKED** on independent data. Detection on sensor telemetry (C21) is **BLOCKED** on sensor-aware models and labelled sensor data.
+* Every number behind these statuses was re-checked with `python -m ml verify`:
+  * 124/124 experiment records reproduce from their out-of-fold predictions (checksums, AP, FPR/recall at the validation threshold, class counts);
+  * re-deriving the ledger from the artefacts gives the same statuses.
 
 ## Reconciliation with the Phase 12 draft ledger
 

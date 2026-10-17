@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-16T19:20:06.803974Z",
+  "generated_at": "2026-10-17T03:57:52.178674Z",
   "claims": [
     {
       "claim_id": "C01",
@@ -110,7 +110,7 @@
       "claim_id": "C04",
       "claim": "Adding JA3 to flow features increases average precision on the shared JA3 population (A@JA3POP -> D).",
       "status": "INSUFFICIENT_EVIDENCE",
-      "evidence_summary": "pooled: dAP=-0.0023 CI[-0.01517338629370188, 5.510382078866004e-06] (FEW_GROUPS) Holm p=1.0; matched_lab: dAP=0.0000 CI[-2.220446049250313e-16, 2.220446049250313e-16] (FEW_GROUPS) Holm p=1.0 (primary model random_forest, capture-grouped 5-fold, capture bootstrap)",
+      "evidence_summary": "pooled: dAP=-0.0023 CI[-0.01517338629370188, 5.510382078866004e-06] (FEW_GROUPS) Holm p=1.0; matched_lab: dAP=0.0000 CI[-2.220446049250313e-16, 2.220446049250313e-16] (FEW_GROUPS) Holm p=1.0 (primary model random_forest, capture-grouped 5-fold, capture bootstrap). Secondary models (sensitivity, not used for the status): pooled logreg: dAP=+0.0004, Holm p within model 0.032, across 12 model x contrast tests 0.096; pooled hist_gb: dAP=+0.0115, Holm p within model 0.984, across 12 model x contrast tests 1.0; matched logreg: dAP=+0.0002, Holm p within model 1.0, across 12 model x contrast tests 1.0; matched hist_gb: dAP=+0.0000, Holm p within model 1.0, across 12 model x contrast tests 1.0",
       "supporting_experiments": [
         "EXP-20261016T170055-e93bb2a5-60af",
         "EXP-20261016T174524-e93bb2a5-9a4b",
@@ -119,7 +119,46 @@
       ],
       "datasets": [],
       "evaluation_protocol": "CAPTURE_GROUP_KFOLD, nested selection, paired capture bootstrap, Holm (4 contrasts)",
-      "metrics": {},
+      "metrics": {
+        "secondary_models": {
+          "pooled_capture_cv": {
+            "logreg": {
+              "difference": 0.0004396547628668923,
+              "ci_low": 4.202004063994236e-05,
+              "ci_high": 0.005289248575959353,
+              "p_holm_within_model": 0.032,
+              "p_holm_across_models": 0.096,
+              "n_tests_across_models": 12
+            },
+            "hist_gb": {
+              "difference": 0.011457305976829923,
+              "ci_low": -0.00016297139266682742,
+              "ci_high": 0.05749561289952186,
+              "p_holm_within_model": 0.984,
+              "p_holm_across_models": 1.0,
+              "n_tests_across_models": 12
+            }
+          },
+          "matched_lab_capture_cv": {
+            "logreg": {
+              "difference": 0.00019818008369654194,
+              "ci_low": 0.0,
+              "ci_high": 0.0007872215255387309,
+              "p_holm_within_model": 1.0,
+              "p_holm_across_models": 1.0,
+              "n_tests_across_models": 12
+            },
+            "hist_gb": {
+              "difference": 0.0,
+              "ci_low": -2.220446049250313e-16,
+              "ci_high": 1.1102230246251565e-16,
+              "p_holm_within_model": 1.0,
+              "p_holm_across_models": 1.0,
+              "n_tests_across_models": 12
+            }
+          }
+        }
+      },
       "uncertainty": {
         "pooled": {
           "metric_a": 0.9903779559223909,
@@ -167,7 +206,7 @@
       "claim_id": "C05",
       "claim": "Adding JA4 to flow features increases average precision on the shared JA4 population (A@JA4POP -> E).",
       "status": "INSUFFICIENT_EVIDENCE",
-      "evidence_summary": "pooled: dAP=0.0001 CI[-0.0030099017683952174, 0.0011921853730267658] (FEW_GROUPS) Holm p=1.0; matched_lab: dAP=0.0000 CI[-2.220446049250313e-16, 2.220446049250313e-16] (FEW_GROUPS) Holm p=1.0 (primary model random_forest, capture-grouped 5-fold, capture bootstrap)",
+      "evidence_summary": "pooled: dAP=0.0001 CI[-0.0030099017683952174, 0.0011921853730267658] (FEW_GROUPS) Holm p=1.0; matched_lab: dAP=0.0000 CI[-2.220446049250313e-16, 2.220446049250313e-16] (FEW_GROUPS) Holm p=1.0 (primary model random_forest, capture-grouped 5-fold, capture bootstrap). Secondary models (sensitivity, not used for the status): pooled logreg: dAP=+0.0005, Holm p within model 0.042, across 12 model x contrast tests 0.154; pooled hist_gb: dAP=+0.0115, Holm p within model 0.984, across 12 model x contrast tests 1.0; matched logreg: dAP=+0.0002, Holm p within model 1.0, across 12 model x contrast tests 1.0; matched hist_gb: dAP=+0.0000, Holm p within model 1.0, across 12 model x contrast tests 1.0",
       "supporting_experiments": [
         "EXP-20261016T170535-10e5c111-0b0a",
         "EXP-20261016T175041-10e5c111-5e86",
@@ -176,7 +215,46 @@
       ],
       "datasets": [],
       "evaluation_protocol": "CAPTURE_GROUP_KFOLD, nested selection, paired capture bootstrap, Holm (4 contrasts)",
-      "metrics": {},
+      "metrics": {
+        "secondary_models": {
+          "pooled_capture_cv": {
+            "logreg": {
+              "difference": 0.0004717478011120324,
+              "ci_low": 2.7648731855917137e-05,
+              "ci_high": 0.005365008891609904,
+              "p_holm_within_model": 0.042,
+              "p_holm_across_models": 0.154,
+              "n_tests_across_models": 12
+            },
+            "hist_gb": {
+              "difference": 0.011457305976829923,
+              "ci_low": -0.00016297139266682742,
+              "ci_high": 0.05749561289952186,
+              "p_holm_within_model": 0.984,
+              "p_holm_across_models": 1.0,
+              "n_tests_across_models": 12
+            }
+          },
+          "matched_lab_capture_cv": {
+            "logreg": {
+              "difference": 0.00019818008369654194,
+              "ci_low": 0.0,
+              "ci_high": 0.0007872215255387309,
+              "p_holm_within_model": 1.0,
+              "p_holm_across_models": 1.0,
+              "n_tests_across_models": 12
+            },
+            "hist_gb": {
+              "difference": 0.0,
+              "ci_low": -2.220446049250313e-16,
+              "ci_high": 1.1102230246251565e-16,
+              "p_holm_within_model": 1.0,
+              "p_holm_across_models": 1.0,
+              "n_tests_across_models": 12
+            }
+          }
+        }
+      },
       "uncertainty": {
         "pooled": {
           "metric_a": 0.9903779559223909,
@@ -224,7 +302,7 @@
       "claim_id": "C06",
       "claim": "Adding flow features to JA3 increases average precision (B -> D).",
       "status": "INSUFFICIENT_EVIDENCE",
-      "evidence_summary": "pooled: dAP=0.0171 CI[-4.9410618678719356e-05, 0.07177036033099671] (FEW_GROUPS) Holm p=0.52; matched_lab: dAP=0.0000 CI[-2.220446049250313e-16, 2.220446049250313e-16] (FEW_GROUPS) Holm p=1.0 (primary model random_forest, capture-grouped 5-fold, capture bootstrap)",
+      "evidence_summary": "pooled: dAP=0.0171 CI[-4.9410618678719356e-05, 0.07177036033099671] (FEW_GROUPS) Holm p=0.52; matched_lab: dAP=0.0000 CI[-2.220446049250313e-16, 2.220446049250313e-16] (FEW_GROUPS) Holm p=1.0 (primary model random_forest, capture-grouped 5-fold, capture bootstrap). Secondary models (sensitivity, not used for the status): pooled logreg: dAP=+0.0295, Holm p within model 1.0, across 12 model x contrast tests 1.0; pooled hist_gb: dAP=-0.0044, Holm p within model 0.28, across 12 model x contrast tests 0.7; matched logreg: dAP=-0.0006, Holm p within model 1.0, across 12 model x contrast tests 1.0; matched hist_gb: dAP=-0.0000, Holm p within model 1.0, across 12 model x contrast tests 1.0",
       "supporting_experiments": [
         "EXP-20261016T165046-82f49ed4-8867",
         "EXP-20261016T173412-82f49ed4-8d5c",
@@ -233,7 +311,46 @@
       ],
       "datasets": [],
       "evaluation_protocol": "CAPTURE_GROUP_KFOLD, nested selection, paired capture bootstrap, Holm (4 contrasts)",
-      "metrics": {},
+      "metrics": {
+        "secondary_models": {
+          "pooled_capture_cv": {
+            "logreg": {
+              "difference": 0.029544099332327933,
+              "ci_low": -0.00042420893490865096,
+              "ci_high": 0.13555093964931714,
+              "p_holm_within_model": 1.0,
+              "p_holm_across_models": 1.0,
+              "n_tests_across_models": 12
+            },
+            "hist_gb": {
+              "difference": -0.004358235093267493,
+              "ci_low": -0.029901961961215362,
+              "ci_high": 2.837984411946363e-06,
+              "p_holm_within_model": 0.28,
+              "p_holm_across_models": 0.7000000000000001,
+              "n_tests_across_models": 12
+            }
+          },
+          "matched_lab_capture_cv": {
+            "logreg": {
+              "difference": -0.0006060493644407527,
+              "ci_low": -0.002387876526142002,
+              "ci_high": 0.0,
+              "p_holm_within_model": 1.0,
+              "p_holm_across_models": 1.0,
+              "n_tests_across_models": 12
+            },
+            "hist_gb": {
+              "difference": -4.08682778715308e-05,
+              "ci_low": -0.00017277981790563834,
+              "ci_high": 2.220446049250313e-16,
+              "p_holm_within_model": 1.0,
+              "p_holm_across_models": 1.0,
+              "n_tests_across_models": 12
+            }
+          }
+        }
+      },
       "uncertainty": {
         "pooled": {
           "metric_a": 0.9710298168540592,
@@ -281,7 +398,7 @@
       "claim_id": "C07",
       "claim": "Adding flow features to JA4 increases average precision (C -> E).",
       "status": "INSUFFICIENT_EVIDENCE",
-      "evidence_summary": "pooled: dAP=-0.0030 CI[-0.03304864190292077, 0.01409634982502877] (FEW_GROUPS) Holm p=1.0; matched_lab: dAP=0.0000 CI[-2.220446049250313e-16, 2.220446049250313e-16] (FEW_GROUPS) Holm p=1.0 (primary model random_forest, capture-grouped 5-fold, capture bootstrap)",
+      "evidence_summary": "pooled: dAP=-0.0030 CI[-0.03304864190292077, 0.01409634982502877] (FEW_GROUPS) Holm p=1.0; matched_lab: dAP=0.0000 CI[-2.220446049250313e-16, 2.220446049250313e-16] (FEW_GROUPS) Holm p=1.0 (primary model random_forest, capture-grouped 5-fold, capture bootstrap). Secondary models (sensitivity, not used for the status): pooled logreg: dAP=+0.0010, Holm p within model 1.0, across 12 model x contrast tests 1.0; pooled hist_gb: dAP=-0.0044, Holm p within model 0.28, across 12 model x contrast tests 0.828; matched logreg: dAP=-0.0006, Holm p within model 1.0, across 12 model x contrast tests 1.0; matched hist_gb: dAP=-0.0000, Holm p within model 1.0, across 12 model x contrast tests 1.0",
       "supporting_experiments": [
         "EXP-20261016T165145-c043adda-fc48",
         "EXP-20261016T173510-c043adda-b48f",
@@ -290,7 +407,46 @@
       ],
       "datasets": [],
       "evaluation_protocol": "CAPTURE_GROUP_KFOLD, nested selection, paired capture bootstrap, Holm (4 contrasts)",
-      "metrics": {},
+      "metrics": {
+        "secondary_models": {
+          "pooled_capture_cv": {
+            "logreg": {
+              "difference": 0.0009527193893977826,
+              "ci_low": -0.0003077182237602255,
+              "ci_high": 0.00927060965946441,
+              "p_holm_within_model": 1.0,
+              "p_holm_across_models": 1.0,
+              "n_tests_across_models": 12
+            },
+            "hist_gb": {
+              "difference": -0.00438301608451519,
+              "ci_low": -0.02989761613019779,
+              "ci_high": 5.596478476863049e-06,
+              "p_holm_within_model": 0.28,
+              "p_holm_across_models": 0.828,
+              "n_tests_across_models": 12
+            }
+          },
+          "matched_lab_capture_cv": {
+            "logreg": {
+              "difference": -0.0006060493644407527,
+              "ci_low": -0.002387876526142002,
+              "ci_high": 0.0,
+              "p_holm_within_model": 1.0,
+              "p_holm_across_models": 1.0,
+              "n_tests_across_models": 12
+            },
+            "hist_gb": {
+              "difference": -4.08682778715308e-05,
+              "ci_low": -0.00017277981790563834,
+              "ci_high": 2.220446049250313e-16,
+              "p_holm_within_model": 1.0,
+              "p_holm_across_models": 1.0,
+              "n_tests_across_models": 12
+            }
+          }
+        }
+      },
       "uncertainty": {
         "pooled": {
           "metric_a": 0.9934934855276557,
@@ -590,7 +746,7 @@
       "claim_id": "C15",
       "claim": "The system does not decrypt TLS application payloads.",
       "status": "SUPPORTED",
-      "evidence_summary": "Only TLS handshake records (ClientHello/ServerHello) in the first segment are parsed; packet payloads are otherwise reduced to sizes, timings, directions and TCP flags. No key material, interception or decryption code exists (pipeline/tls_fingerprinting.py, backend/event_sources/live_capture.py).",
+      "evidence_summary": "Only TLS handshake records (ClientHello/ServerHello) in the first segment are parsed; packet payloads are otherwise reduced to sizes, timings, directions and TCP flags. No key material, interception or decryption code exists (pipeline/tls_fingerprinting.py, backend/event_sources/live_capture.py). The Zeek, Suricata and eBPF adapters read only metadata fields logged by those tools (backend/event_sources/{zeek,suricata,ebpf}_source.py).",
       "supporting_experiments": [],
       "datasets": [],
       "evaluation_protocol": "code inspection + tests",
@@ -599,6 +755,77 @@
       "assumptions": [],
       "known_confounders": [],
       "limitations": []
+    },
+    {
+      "claim_id": "C18",
+      "claim": "The Zeek, Suricata and eBPF adapters normalise records into the canonical flow contract without fabricating fingerprints, endpoints, protocols, durations or rates, and without silently dropping, duplicating or relabelling records.",
+      "status": "SUPPORTED",
+      "evidence_summary": "pipeline/canonical_flow.py; tests/test_canonical_flow.py, tests/test_sensors_zeek.py, tests/test_sensors_suricata.py, tests/test_sensors_ebpf.py (placeholder fingerprints rejected, negotiated TLS version / selected ALPN kept apart from ETTH features, expiry and overflow emit instead of drop, duplicates and late records counted).",
+      "supporting_experiments": [],
+      "datasets": [],
+      "evaluation_protocol": "unit and integration tests",
+      "metrics": {},
+      "uncertainty": {},
+      "assumptions": [],
+      "known_confounders": [],
+      "limitations": [
+        "Verified with synthetic fixtures only; no real Zeek, Suricata or eBPF collector output was processed.",
+        "Software contract evidence, not detection-quality evidence."
+      ]
+    },
+    {
+      "claim_id": "C19",
+      "claim": "Models trained on ETTH packet features and ETTH JA4 refuse sensor-aggregate statistics and FoxIO JA4 instead of scoring them.",
+      "status": "SUPPORTED",
+      "evidence_summary": "backend/inference_engine.py provenance and JA4-implementation rules; tests/test_inference_contract.py (FoxIO reference ClientHello: ETTH JA4 t13d1516h2_8daaf6152771_0adf69b4533f vs FoxIO ..._e5627efa2ab1) and tests/test_cross_phase_integration.py (all five tracks on sensor fixtures).",
+      "supporting_experiments": [],
+      "datasets": [],
+      "evaluation_protocol": "unit and integration tests",
+      "metrics": {},
+      "uncertainty": {},
+      "assumptions": [],
+      "known_confounders": [],
+      "limitations": [
+        "Verified with synthetic fixtures only; no real Zeek, Suricata or eBPF collector output was processed.",
+        "Software contract evidence, not detection-quality evidence."
+      ]
+    },
+    {
+      "claim_id": "C20",
+      "claim": "Live capture produces the same flows (boundaries, initiator direction) and the same flow and TLS feature values as the offline PCAP pipeline for the same packets.",
+      "status": "SUPPORTED",
+      "evidence_summary": "tests/test_live_offline_parity.py: synthetic packets written to a PCAP give identical flows and FLOW features (rel/abs 1e-9) through pipeline.flow_reconstruction and LiveCaptureSource.",
+      "supporting_experiments": [],
+      "datasets": [],
+      "evaluation_protocol": "parity test on synthetic packets",
+      "metrics": {},
+      "uncertainty": {},
+      "assumptions": [],
+      "known_confounders": [],
+      "limitations": [
+        "Native capture was not exercised (no capture driver on the integration host).",
+        "Flows longer than the live maximum duration are split, flagged and refused by flow-feature models."
+      ]
+    },
+    {
+      "claim_id": "C21",
+      "claim": "ETTH detection models can score flows observed by Zeek, Suricata or eBPF sensors.",
+      "status": "BLOCKED",
+      "evidence_summary": "No model is trained on sensor-observable features with sensor provenance, and no labelled sensor telemetry is available. Under the current contract only the JA3-only track accepts sensor flows, and those JA3 values are mostly outside the training vocabulary (UNSEEN_CATEGORY).",
+      "supporting_experiments": [],
+      "datasets": [],
+      "evaluation_protocol": "not run",
+      "metrics": {},
+      "uncertainty": {},
+      "assumptions": [],
+      "known_confounders": [
+        "dataset identity equals class at source level (DS-008/DS-009 malicious, DS-011 benign)",
+        "benign captures are 2017 Linux/iceweasel browsing; malicious captures are Windows hosts",
+        "capture-level labels propagated to flows (background traffic in malware captures labelled malicious)"
+      ],
+      "limitations": [
+        "Requires authorised, labelled sensor data and a retrained, sensor-aware model."
+      ]
     }
   ],
   "statuses": [
