@@ -8,8 +8,10 @@ from backend.schemas import (
     FlowDetails,
     TLSDetails,
     DetectionDetails,
-    ProvenanceDetails
+    ProvenanceDetails,
+    SensorContext
 )
+from pipeline.canonical_flow import unobserved_fields
 from backend.inference_engine import inference_engine
 from backend.target_resolver import target_resolver
 
@@ -30,6 +32,23 @@ class DetectionPipeline:
         if pd.isnull(val) or val is None or str(val).strip() == "" or str(val).lower() in ["none", "nan", "missing"]:
             return None
         return str(val)
+
+    def _sensor_context(self, flow: Dict[str, Any]) -> Optional[SensorContext]:
+        sensor_type = self._clean_str(flow.get("sensor_type"))
+        if not sensor_type:
+            return None
+        alerts = flow.get("sensor_alerts")
+        return SensorContext(
+            sensor_type=sensor_type,
+            sensor_record_id=self._clean_str(flow.get("sensor_record_id")),
+            feature_provenance=self._clean_str(flow.get("feature_provenance")),
+            byte_count_semantics=self._clean_str(flow.get("byte_count_semantics")),
+            ja4_implementation=self._clean_str(flow.get("ja4_implementation")),
+            tls_version_observed=self._clean_str(flow.get("tls_version_observed")),
+            tls_version_semantics=self._clean_str(flow.get("tls_version_semantics")),
+            alpn_negotiated=self._clean_str(flow.get("alpn_negotiated")),
+            external_alert_signatures=[str(a) for a in alerts if a] if isinstance(alerts, list) else [],
+        )
 
     def process_flow(
         self, 
@@ -71,6 +90,8 @@ class DetectionPipeline:
                 total_bytes=int(flow.get("total_bytes", 0)) if pd.notnull(flow.get("total_bytes")) else 0,
                 packets_per_second=float(flow.get("packets_per_second", 0.0)) if pd.notnull(flow.get("packets_per_second")) else 0.0,
                 bytes_per_second=float(flow.get("bytes_per_second", 0.0)) if pd.notnull(flow.get("bytes_per_second")) else 0.0,
+                unobserved_fields=unobserved_fields(flow)
+                + ([] if str(flow.get("protocol", "")).upper() in ("TCP", "UDP") else ["protocol"]),
             )
 
             # 2. TLS Details
@@ -117,7 +138,8 @@ class DetectionPipeline:
                 dataset_id=dataset_id,
                 source_file=self._clean_str(flow.get("source_file")),
                 label_ground_truth=str(flow.get("label", "UNKNOWN")).upper(),
-                caveat=self.caveat_text
+                caveat=self.caveat_text,
+                sensor=self._sensor_context(flow),
             )
 
             event_id = f"evt_{stream_id}_{sequence:05d}"
@@ -162,8 +184,10 @@ class DetectionPipeline:
                 event_type="flow.detected",
                 flow=FlowDetails(
                     flow_id=flow_id,
-                    forward_endpoint="0.0.0.0:0",
-                    reverse_endpoint="0.0.0.0:0"
+                    forward_endpoint="UNKNOWN",
+                    reverse_endpoint="UNKNOWN",
+                    unobserved_fields=["forward_endpoint", "reverse_endpoint", "flow_duration", "total_packets",
+                                       "total_bytes", "packets_per_second", "bytes_per_second"],
                 ),
                 tls=TLSDetails(),
                 detection=DetectionDetails(
@@ -171,8 +195,9 @@ class DetectionPipeline:
                     threat_score=0.0,
                     track=track if track in ["A_FLOW", "B_JA3", "C_JA4", "D_JA3_FLOW", "E_JA4_FLOW"] else "A_FLOW",
                     status="ERROR",
-                    skip_reason=f"Pipeline processing error: {str(e)}",
-                    evidence=[f"Per-flow processing exception: {str(e)}"]
+                    # Exception text can contain paths or data; clients get the type only (details are logged).
+                    skip_reason=f"PIPELINE_ERROR: {type(e).__name__} while processing this flow (details in the server log)",
+                    evidence=["Per-flow processing failed; no score was produced and the stream continues."]
                 ),
                 provenance=ProvenanceDetails(
                     dataset_id=dataset_id,

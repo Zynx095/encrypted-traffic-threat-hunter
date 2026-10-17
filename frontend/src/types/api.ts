@@ -194,6 +194,8 @@ export interface FlowDetails {
   total_bytes: number
   packets_per_second: number
   bytes_per_second: number
+  // Fields the source did not observe; their numeric values above are display defaults (0), not measurements.
+  unobserved_fields?: string[]
 }
 
 export interface TLSDetails {
@@ -228,11 +230,26 @@ export interface DetectionDetails {
   ood_flags?: string[]
 }
 
+// Phase 11 sensor provenance (optional; present only for Zeek / Suricata / eBPF flows)
+export interface SensorContext {
+  sensor_type: string
+  sensor_record_id?: string | null
+  feature_provenance?: string | null
+  byte_count_semantics?: string | null
+  ja4_implementation?: string | null
+  tls_version_observed?: string | null
+  tls_version_semantics?: string | null
+  alpn_negotiated?: string | null
+  // Third-party signature matches: context only, never ETTH predictions or ground truth.
+  external_alert_signatures?: string[]
+}
+
 export interface ProvenanceDetails {
   dataset_id: string
   source_file: string | null
   label_ground_truth: string
   caveat: string
+  sensor?: SensorContext | null
 }
 
 export type StreamState = 'IDLE' | 'PLAYING' | 'PAUSED' | 'COMPLETED' | 'STOPPED' | 'ERROR'

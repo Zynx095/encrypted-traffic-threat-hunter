@@ -11,6 +11,9 @@ class FlowDetails(BaseModel):
     total_bytes: int = 0
     packets_per_second: float = 0.0
     bytes_per_second: float = 0.0
+    # Fields the source did not observe. Their numeric values above are display defaults (0), not
+    # measurements; models never see these defaults (inference reads the raw flow record).
+    unobserved_fields: list[str] = []
 
 class TLSDetails(BaseModel):
     clienthello_present: bool = False
@@ -42,11 +45,26 @@ class DetectionDetails(BaseModel):
     decision_threshold: Optional[float] = None
     ood_flags: list[str] = []
 
+class SensorContext(BaseModel):
+    """Phase 11 sensor provenance (additive). Present only for flows from Zeek, Suricata or eBPF adapters."""
+    sensor_type: str
+    sensor_record_id: Optional[str] = None
+    feature_provenance: Optional[str] = None
+    byte_count_semantics: Optional[str] = None
+    ja4_implementation: Optional[str] = None
+    tls_version_observed: Optional[str] = None
+    tls_version_semantics: Optional[str] = None
+    alpn_negotiated: Optional[str] = None
+    # Third-party signature matches (e.g. Suricata alerts): context only. They are not ETTH
+    # predictions, not ground truth, and never model inputs.
+    external_alert_signatures: list[str] = []
+
 class ProvenanceDetails(BaseModel):
     dataset_id: str = "UNKNOWN"
     source_file: Optional[str] = None
     label_ground_truth: str = "UNKNOWN"
     caveat: str = "Research pilot: exploratory, source-confounded training data (one class per dataset)."
+    sensor: Optional[SensorContext] = None
 
 StreamState = Literal["IDLE", "PLAYING", "PAUSED", "COMPLETED", "STOPPED", "ERROR"]
 

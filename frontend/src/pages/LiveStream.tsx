@@ -553,15 +553,15 @@ export default function LiveStream() {
                 <div className="grid grid-cols-2 gap-2 font-mono text-[11px] pt-1">
                   <div className="p-2 rounded-sm bg-surface-900 border border-surface-700/50 flex flex-col">
                     <span className="text-[9px] uppercase text-etth-text/40">Packets</span>
-                    <span className="text-etth-text font-medium mt-0.5">{selectedEvent.flow?.total_packets?.toLocaleString() || 0}</span>
+                    <span className="text-etth-text font-medium mt-0.5">{selectedEvent.flow?.unobserved_fields?.includes('total_packets') ? 'not observed' : (selectedEvent.flow?.total_packets?.toLocaleString() || 0)}</span>
                   </div>
                   <div className="p-2 rounded-sm bg-surface-900 border border-surface-700/50 flex flex-col">
                     <span className="text-[9px] uppercase text-etth-text/40">Transfer Volume</span>
-                    <span className="text-etth-text font-medium mt-0.5">{selectedEvent.flow?.total_bytes?.toLocaleString() || 0} B</span>
+                    <span className="text-etth-text font-medium mt-0.5">{selectedEvent.flow?.unobserved_fields?.includes('total_bytes') ? 'not observed' : `${selectedEvent.flow?.total_bytes?.toLocaleString() || 0} B`}</span>
                   </div>
                   <div className="p-2 rounded-sm bg-surface-900 border border-surface-700/50 flex flex-col">
                     <span className="text-[9px] uppercase text-etth-text/40">Active Duration</span>
-                    <span className="text-etth-text font-medium mt-0.5">{(selectedEvent.flow?.duration || 0).toFixed(2)} s</span>
+                    <span className="text-etth-text font-medium mt-0.5">{selectedEvent.flow?.unobserved_fields?.includes('flow_duration') ? 'not observed' : `${(selectedEvent.flow?.duration || 0).toFixed(2)} s`}</span>
                   </div>
                 </div>
               </section>
