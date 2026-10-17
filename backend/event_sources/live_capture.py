@@ -5,8 +5,10 @@ import uuid
 import threading
 from typing import Dict, Any, Optional, List, Callable, Tuple
 from backend.event_sources.base import EventSource
-from backend.event_sources.tcp_reassembly import TcpStreamReassembler
-from pipeline.canonical_flow import BYTES_IP_LENGTH, FEATURE_PROVENANCE_ETTH, JA4_IMPLEMENTATION_ETTH
+from pipeline import tls_reassembly
+from pipeline.canonical_flow import (BYTES_IP_LENGTH, FEATURE_PROVENANCE_ETTH, JA4_IMPLEMENTATION_ETTH,
+                                     JA4_IMPLEMENTATION_FOXIO, JA4_VERSION_ETTH_V1, JA4_VERSION_FOXIO,
+                                     TLS_HELLO_FIRST_SEGMENT, TLS_HELLO_TCP_REASSEMBLY)
 
 logger = logging.getLogger(__name__)
 
@@ -158,12 +160,15 @@ class LiveFlowTracker:
         self.tls_version: Optional[float] = None
         self.clienthello_record_truncated: Optional[bool] = None
         self.has_fin_rst = False
-        self.client_reassembler = TcpStreamReassembler()
-        self.server_reassembler = TcpStreamReassembler()
+        # TCP Hellos are fingerprinted only from complete reassembled bytes (pipeline.tls_reassembly),
+        # exactly as the offline reconstructor in TCP_REASSEMBLY mode. UDP keeps per-datagram parsing.
+        self.reassemble_tls = proto == "TCP"
+        self.client_reassembler = tls_reassembly.HelloReassembler(None) if self.reassemble_tls else None
+        self.server_reassembler = tls_reassembly.HelloReassembler(None) if self.reassemble_tls else None
 
     def _apply_tls_meta(self, tls_meta: Dict[str, Any]):
         if tls_meta.get("clienthello_present") and tls_meta.get("ja3_hash"):
-            if not self.clienthello_present or self.clienthello_record_truncated:
+            if not self.clienthello_present:
                 self.clienthello_present = True
                 self.sni_present = bool(tls_meta.get("sni"))
                 self.alpn_value = tls_meta.get("alpn") or None
@@ -201,26 +206,30 @@ class LiveFlowTracker:
 
         if fin_or_rst:
             self.has_fin_rst = True
-            self.client_reassembler.reset()
-            self.server_reassembler.reset()
 
-        if tls_meta:
+        if tls_meta and not self.reassemble_tls:
             self._apply_tls_meta(tls_meta)
 
-        # Multi-segment TCP stream reassembly
-        if raw_payload and tcp_seq is not None:
-            if is_forward and (not self.clienthello_present or self.clienthello_record_truncated):
-                rec = self.client_reassembler.add_segment(tcp_seq, raw_payload)
+        if self.reassemble_tls and tcp_seq is not None:
+            r = self.client_reassembler if is_forward else self.server_reassembler
+            syn = tcp_flags != -1 and bool(tcp_flags & 0x02)
+            if syn:
+                r.set_isn(tcp_seq)
+            if raw_payload:
+                rec = r.add_segment((tcp_seq + 1) & 0xFFFFFFFF if syn else tcp_seq, raw_payload)
                 if rec:
                     meta = LiveCaptureSource.parse_tls_metadata(rec)
                     if meta:
                         self._apply_tls_meta(meta)
-            elif not is_forward and not self.serverhello_present:
-                rec = self.server_reassembler.add_segment(tcp_seq, raw_payload)
-                if rec:
-                    meta = LiveCaptureSource.parse_tls_metadata(rec)
-                    if meta:
-                        self._apply_tls_meta(meta)
+
+    def _final_outcome(self, r) -> Optional[str]:
+        if r is None:
+            return None
+        if r.done:
+            return r.outcome
+        if r.anchor is None and not r.unanchored:
+            return tls_reassembly.NO_CLIENTHELLO
+        return tls_reassembly.INCOMPLETE_TERMINATED if self.has_fin_rst else tls_reassembly.INCOMPLETE_TIMEOUT
 
     def is_finalized(self, now: float, idle_timeout: Optional[float] = None,
                      max_duration: float = LIVE_MAX_FLOW_DURATION) -> bool:
@@ -281,7 +290,12 @@ class LiveFlowTracker:
             "feature_provenance": FEATURE_PROVENANCE_ETTH,
             "byte_count_semantics": BYTES_IP_LENGTH,
             "ja4_implementation": self.ja4_implementation or (JA4_IMPLEMENTATION_ETTH if self.ja4 else None),
-            "ja4_version": self.ja4_version or ("v1_legacy" if self.ja4 else None),
+            "ja4_version": self.ja4_version or (JA4_VERSION_ETTH_V1 if self.ja4 else None),
+            "ja4_v2_implementation": JA4_IMPLEMENTATION_FOXIO if self.ja4_v2 else None,
+            "ja4_v2_version": JA4_VERSION_FOXIO if self.ja4_v2 else None,
+            "tls_hello_acquisition": TLS_HELLO_TCP_REASSEMBLY if self.reassemble_tls else TLS_HELLO_FIRST_SEGMENT,
+            "clienthello_reassembly": self._final_outcome(self.client_reassembler),
+            "serverhello_reassembly": self._final_outcome(self.server_reassembler),
             "label": "UNKNOWN",
         })
         return record
@@ -344,7 +358,7 @@ class LiveCaptureSource(EventSource):
                     ja4=generate_ja4(ch, version="v1_legacy"),
                     ja4_v2=generate_ja4(ch, version="v2_foxio"),
                     ja4_implementation=JA4_IMPLEMENTATION_ETTH,
-                    ja4_version="v1_legacy",
+                    ja4_version=JA4_VERSION_ETTH_V1,
                     sni=ch["sni_present"],
                     alpn=ch["alpn_str"] or None,
                     tls_version=1.3 if ch["has_supported_versions"] else 1.2,
@@ -426,7 +440,7 @@ class LiveCaptureSource(EventSource):
             # TLS metadata extraction (unencrypted handshakes only). Transport payload bytes, without
             # Ethernet padding, exactly as offline (dpkt transport.data).
             tls_meta = None
-            if payload_len >= 6:
+            if payload_len >= 6 and proto_str == "UDP":    # TCP Hellos go through reassembly
                 tls_meta = self.parse_tls_metadata(bytes(transport.payload)[:payload_len])
 
             with self._lock:
