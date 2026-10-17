@@ -1,6 +1,6 @@
 # ETTH Research Report
 
-Generated 2026-10-17T04:04:16.469335Z from persisted artefacts (`ml/reporting/report.py`). No value in this document was entered by hand.
+Generated 2026-10-17T05:31:06.452017Z from persisted artefacts (`ml/reporting/report.py`). No value in this document was entered by hand.
 
 ## Research question
 
@@ -85,6 +85,7 @@ JA3 values shared between classes: 0 of 90; JA4: 0 of 82.
 - **legacy_behavioral_holdout** (BEHAVIORAL_HOLDOUT): Phase 7 protocol (GroupShuffleSplit on behavioral_hash, seed 42) for continuity; captures leak across sides. Tracks: A_FLOW, B_JA3, C_JA4, D_JA3_FLOW, E_JA4_FLOW. Models: logreg, random_forest.
 - **encoding_ablation** (CAPTURE_GROUP_KFOLD): Fingerprint encoding strategies (one-hot, train-frequency, hashing) under capture-grouped CV. Tracks: B_JA3, C_JA4. Models: logreg.
 - **source_identifiability** (CAPTURE_GROUP_KFOLD): Diagnostic, not detection: can features tell the two MALICIOUS sources (DS-008 vs DS-009) apart? Tracks: A_FLOW, C_JA4, E_JA4_FLOW. Models: random_forest.
+- **ja4_v2_comparison** (CAPTURE_GROUP_KFOLD): 5 canonical feature tracks (A-E) under capture-grouped CV evaluated with FoxIO-compliant JA4 v2. Tracks: A_FLOW, B_JA3, C_JA4, D_JA3_FLOW, E_JA4_FLOW, A_FLOW@JA3POP, A_FLOW@JA4POP. Models: random_forest, logreg.
 
 Confirmatory evaluation: **BLOCKED** — All currently admitted sources (DS-008, DS-009, DS-011) are used in exploratory suites.
 
@@ -111,6 +112,55 @@ Paired contrasts (logreg; Holm over 4 pre-declared contrasts):
 | JA4 added to flow (A_FLOW@JA4POP→E_JA4_FLOW) | — | — | — | — [—, —] | — | NOT_RUN |
 | flow added to JA3 (B_JA3→D_JA3_FLOW) | — | — | — | — [—, —] | — | NOT_RUN |
 | flow added to JA4 (C_JA4→E_JA4_FLOW) | — | — | — | — [—, —] | — | NOT_RUN |
+
+### ja4_v2_comparison — `ja4_v2_comparison-20261017T050835Z`
+
+Seed 42; evaluation population {'per_capture_cap': 4000, 'rows': 62543, 'rows_by_dataset': {'DS-008': 2543, 'DS-009': 36000, 'DS-011': 24000}, 'positives': 38543, 'negatives': 24000, 'captures': 25}
+
+| Track | Model | Enc. | Status | Pos/Neg | AP [95% CI] (status) | ROC-AUC | Recall @ val-FPR≤1% | Test FPR | ECE | Brier |
+|---|---|---|---|---|---|---|---|---|---|---|
+| A_FLOW | random_forest | onehot | COMPLETED | 38543/24000 | 0.931 [0.818, 0.985] (FEW_GROUPS) | 0.909 | 49.5% | 5.8% | 0.104 | 0.121 |
+| C_JA4 | random_forest | onehot | COMPLETED | 8591/2629 | 0.993 [0.935, 1.000] (FEW_GROUPS) | 0.978 | 99.4% | 18.4% | 0.041 | 0.045 |
+| E_JA4_FLOW | random_forest | onehot | COMPLETED | 8591/2629 | 0.990 [0.923, 1.000] (FEW_GROUPS) | 0.976 | 99.6% | 12.1% | 0.018 | 0.022 |
+
+Paired contrasts (random_forest; Holm over 4 pre-declared contrasts):
+
+| Contrast | Shared rows | AP A | AP B | ΔAP [95% CI] | Holm p | Interpretation |
+|---|---|---|---|---|---|---|
+| JA3 added to flow (A_FLOW@JA3POP→D_JA3_FLOW) | — | — | — | — [—, —] | — | NOT_RUN |
+| JA4 added to flow (A_FLOW@JA4POP→E_JA4_FLOW) | — | — | — | — [—, —] | — | NOT_RUN |
+| flow added to JA3 (B_JA3→D_JA3_FLOW) | — | — | — | — [—, —] | — | NOT_RUN |
+| flow added to JA4 (C_JA4→E_JA4_FLOW) | 11220 | 0.9935 | 0.9905 | -0.0030 [-0.0354, 0.0261] | 0.7200 | No evidence of a difference (this is not evidence of equivalence) |
+
+Per-capture flagged rate at the validation-selected FPR≤1% threshold (primary model random_forest; benign rows = false-positive rate, malicious rows = detection rate):
+
+| Capture | Class | A_FLOW | C_JA4 | E_JA4_FLOW |
+|---|---|---|---|---|
+| DS008-C001 | MAL | 0.9% (n=1380) | 100.0% (n=45) | 73.3% (n=45) |
+| DS008-C002 | MAL | 0.0% (n=74) | 100.0% (n=17) | 100.0% (n=17) |
+| DS008-C003 | MAL | 1.6% (n=258) | 40.0% (n=50) | 86.0% (n=50) |
+| DS008-C004 | MAL | 0.0% (n=9) | 100.0% (n=2) | 100.0% (n=2) |
+| DS008-C005 | MAL | 0.0% (n=20) | 0.0% (n=8) | 50.0% (n=8) |
+| DS008-C006 | MAL | 18.5% (n=27) | 100.0% (n=6) | 0.0% (n=6) |
+| DS008-C007 | MAL | 12.1% (n=423) | 0.0% (n=10) | 30.0% (n=10) |
+| DS008-C008 | MAL | 37.5% (n=16) | 100.0% (n=2) | 100.0% (n=2) |
+| DS008-C009 | MAL | 35.0% (n=214) | 100.0% (n=51) | 100.0% (n=51) |
+| DS008-C010 | MAL | 13.9% (n=122) | 100.0% (n=3) | 100.0% (n=3) |
+| DS009-CTU-MCB-238-1 | MAL | 38.8% (n=4000) | 100.0% (n=1700) | 100.0% (n=1700) |
+| DS009-CTU-MCB-240-1 | MAL | 41.4% (n=4000) | 100.0% (n=1725) | 100.0% (n=1725) |
+| DS009-CTU-MCB-246-1 | MAL | 48.3% (n=4000) | 100.0% (n=1353) | 100.0% (n=1353) |
+| DS009-CTU-MCB-248-1 | MAL | 77.4% (n=4000) | 100.0% (n=1494) | 100.0% (n=1494) |
+| DS009-CTU-MCB-249-1 | MAL | 69.6% (n=4000) | 100.0% (n=1238) | 100.0% (n=1238) |
+| DS009-CTU-MCB-259-1 | MAL | 100.0% (n=4000) | — | — |
+| DS009-CTU-MCB-260-1 | MAL | 53.9% (n=4000) | 100.0% (n=887) | 99.9% (n=887) |
+| DS009-CTU-MCB-264-1 | MAL | 23.8% (n=4000) | — | — |
+| DS009-CTU-MCB-268-1 | MAL | 19.3% (n=4000) | — | — |
+| DS011-CTU-Normal-20 | BEN | 0.0% (n=4000) | 0.0% (n=370) | 0.0% (n=370) |
+| DS011-CTU-Normal-21 | BEN | 34.4% (n=4000) | 100.0% (n=483) | 65.8% (n=483) |
+| DS011-CTU-Normal-23 | BEN | 0.1% (n=4000) | 0.4% (n=497) | 0.0% (n=497) |
+| DS011-CTU-Normal-24 | BEN | 0.1% (n=4000) | 0.0% (n=423) | 0.0% (n=423) |
+| DS011-CTU-Normal-26 | BEN | 0.0% (n=4000) | 0.0% (n=297) | 0.0% (n=297) |
+| DS011-CTU-Normal-28 | BEN | 0.2% (n=4000) | 0.0% (n=559) | 0.0% (n=559) |
 
 ### leave_one_family_out — `leave_one_family_out-20261016T181651Z`
 
@@ -577,7 +627,7 @@ Sequence vs tabular contrasts:
 
 - Python 3.12.0 on Windows-11-10.0.26200-SP0; CPUs 24
 - Packages: {'numpy': '2.4.6', 'pandas': '3.0.5', 'sklearn': '1.9.0', 'scipy': '1.18.0', 'pyarrow': '25.0.1', 'torch': '2.13.0+cpu', 'dpkt': '1.9.8'}
-- Source revision: e50ea6c945ba54cc0aadbf4bf0265fa2dfaba6f2
+- Source revision: 07aba418dd2aad9d92ac428c6c1a839c490f5ad0
 
 ## Limitations and negative results
 
