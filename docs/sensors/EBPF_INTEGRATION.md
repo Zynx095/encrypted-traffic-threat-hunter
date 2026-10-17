@@ -1,70 +1,60 @@
-# Phase 11 — eBPF Kernel Observability Integration Guide
+# Phase 11 — eBPF Event Contract and Adapter
 
-## 1. Overview & Objective
-eBPF enables lightweight, in-kernel observability by attaching programs to kernel tracepoints, kprobes, and socket buffers (`sock_ops`, TC, XDP) without patching kernel source or loading out-of-tree kernel modules.
+> **Status.** ETTH ships **no eBPF program, loader or collector**. `backend/event_sources/ebpf_source.py` provides:
+> - a JSON event contract for an external collector;
+> - an adapter that validates those events;
+> - a host capability probe.
+>
+> Validation used only the synthetic fixture `data/fixtures/sensors/ebpf_synthetic.json`. No kernel probe was attached or tested, and the integration host runs Windows. The adapter is not connected to the live stream.
 
-In ETTH, eBPF telemetry provides:
-- High-performance, zero-copy packet counting and directional byte volume tracking.
-- Operating system process context (attributing socket connections to local `pid` and `comm` process binaries).
-- Unencrypted TLS ClientHello extraction (SNI, JA3, JA4) directly from socket ingress before encryption or payload forwarding occurs.
+## 1. Capability probe
 
----
+`detect_ebpf_capability()` never raises. It reports:
 
-## 2. Canonical eBPF Ring Buffer Schema (`EBPFEventContract`)
+| Key | Meaning |
+|---|---|
+| `adapter_available` | always `True`: the JSON adapter runs on any OS |
+| `native_probe_included` | always `False`: ETTH does not provide a probe |
+| `available` | whether this host *could* attach native programs: Linux, `/sys/kernel/btf/vmlinux` present, running as root. `CAP_BPF` is not checked |
+| `reason`, `os`, `kernel_version`, `btf_available`, `privileges` | diagnostics |
 
-The ETTH `EBPFEventSource` expects JSON or binary ring-buffer events adhering to the following schema:
+On Windows and macOS, `available` is `False` with an explanatory `reason`.
+
+## 2. Event contract (one JSON object per flow)
 
 ```json
 {
-  "saddr": "192.168.1.100",
-  "daddr": "104.16.12.1",
-  "sport": 54321,
-  "dport": 443,
-  "protocol": 6,
-  "start_ns": 1729080000000000000,
-  "end_ns": 1729080002500000000,
-  "duration_ns": 2500000000,
-  "bytes_sent": 1500,
-  "bytes_recv": 6000,
-  "packets_sent": 10,
-  "packets_recv": 15,
-  "pid": 4321,
-  "comm": "curl",
+  "flow_id": "optional collector id (enables duplicate suppression)",
+  "saddr": "192.168.1.100", "sport": 54321, "daddr": "104.16.12.1", "dport": 443, "protocol": 6,
+  "start_ns": 1729080000000000000, "end_ns": 1729080002500000000,
+  "bytes_sent": 1500, "bytes_recv": 6000, "packets_sent": 10, "packets_recv": 15,
+  "byte_count_semantics": "IP_LENGTH | LINK_LAYER_FRAME | TRANSPORT_PAYLOAD (optional)",
+  "pid": 4321, "comm": "curl",
   "tls_sni": "api.example.com",
   "ja3_hash": "6734f37431670b3ab4292b8f60f29984",
-  "ja4": "t13d1516h2_8daaf6152771_012e83626249",
-  "alpn": "h2"
+  "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1", "ja4_implementation": "FOXIO_JA4 | ETTH_JA4_V1 (optional)",
+  "tls_version": "TLS 1.3", "alpn": "h2"
 }
 ```
 
-### Transformation & Normalization Rules:
-1. **Timestamp Conversion**: `duration_ns` is divided by `1e9` to convert kernel nanoseconds into standard floating-point seconds.
-2. **Process Attribution**: `pid` and `comm` are preserved in flow metadata to assist SOC threat hunters.
-3. **Non-Fabrication Policy**: If an eBPF collector lacks a TLS parser probe, `ja3_hash`, `ja4`, and `sni` evaluate to `None`. No synthetic hashes are injected.
+## 3. Validation and normalisation rules
 
----
+| Input | Rule |
+|---|---|
+| addresses and ports | Both addresses are required, and ports must be 1–65535. Otherwise the event is malformed and counted |
+| protocol | Only TCP (6) and UDP (17); others are counted as `unsupported_events` |
+| duration | `duration_ns / 1e9`, or `(end_ns − start_ns) / 1e9`, or `flow_duration`. Missing means `None`, and then no rate is computed |
+| bytes | `byte_count_semantics` as declared, else `UNKNOWN` |
+| `ja3_hash` / `ja3` | Must be an MD5 hex digest or a complete JA3 string (five comma-separated fields), which is MD5-hashed. Anything else is rejected: the fixture's `"771,4865-4866,0-23"` is incomplete |
+| `ja4` | Syntax-checked. `ja4_implementation` is the declared value, else `UNKNOWN`. Models trained on ETTH JA4 accept only `ETTH_JA4_V1` |
+| `tls_version`, `alpn` | Collector-defined meaning: `tls_version_observed` (`COLLECTOR_DEFINED`) and `sensor_alpn`. They never fill `tls_version` or `alpn_value` |
+| `pid`, `comm` | `process_pid`, `process_name`: local context, never a model input |
+| duplicates | A repeated collector `flow_id` is suppressed |
 
-## 3. Platform Limitations & System Requirements
+All flows are tagged `feature_provenance=SENSOR_AGGREGATE`, so models that use ETTH packet features refuse them.
 
-> [!WARNING]
-> **Operating System & Privilege Requirements**:
-> - **Supported OS**: Linux (Kernel >= 5.8 with BTF `/sys/kernel/btf/vmlinux`).
-> - **Privileges**: Root (`uid 0`) or `CAP_BPF` + `CAP_NET_ADMIN` capabilities.
-> - **Windows Environments**: Native kernel attachment is unsupported. When running on Windows, `detect_ebpf_capability()` cleanly returns `available: false` with detailed operational diagnostics. To run on Windows workstations, deploy the eBPF collector inside WSL2 or an Ubuntu VM streaming telemetry over HTTP/WebSocket to the ETTH API.
+## 4. Deploying a collector (future work)
 
----
+A collector would run on Linux ≥ 5.8 with BTF, as root or with `CAP_BPF` + `CAP_NET_ADMIN`. It would aggregate per-socket or per-flow counters, optionally parse the cleartext ClientHello, and emit the JSON above.
 
-## 4. Ingestion Usage
-
-```python
-from backend.event_sources.ebpf_source import EBPFEventSource
-
-ebpf_source = EBPFEventSource()
-await ebpf_source.start()
-
-# Consume raw ring buffer JSON line
-flow = ebpf_source.parse_line(raw_ring_buffer_line)
-if flow:
-    # Process through ETTH DetectionPipeline
-    event = detection_pipeline.process_flow(flow, track="A_FLOW")
-```
+Nothing in this repository implements or tests that collector.

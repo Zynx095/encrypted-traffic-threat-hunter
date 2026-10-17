@@ -1,72 +1,62 @@
-# Phase 11 — Sensor Ingestion & Telemetry Architecture
+# Phase 11 — Sensor Ingestion Architecture
 
-## 1. Overview & Objective
+> **Integration status (Phase 8–12 integration).** The Zeek, Suricata and eBPF components are **adapters**: they parse log lines or JSON events and normalise them into the canonical ETTH flow contract. They are not running sensors, and none of them is connected to the live WebSocket stream. All of them are validated only against synthetic fixtures. The authoritative field contract is in [`docs/integration/CROSS_PHASE_CONTRACTS.md`](../integration/CROSS_PHASE_CONTRACTS.md).
 
-The **Encrypted Traffic Threat Hunter (ETTH)** Sensor Ingestion Layer extends the platform from offline PCAP replay and Scapy-based interface sniffing to production-grade network telemetry from:
-- **Zeek** (formerly Bro) network security monitor
-- **Suricata** high-performance Network Threat Detection engine
-- **eBPF** (extended Berkeley Packet Filter) Linux socket/flow observability
+## 1. Purpose
 
-### The Zero-Decryption Boundary
-Across all sensor ingest pipelines, ETTH maintains its fundamental scientific commitment:
-1. **Zero Payload Decryption**: Network packet payloads are never decrypted or inspected in plaintext.
-2. **Zero Fingerprint Fabrication**: Missing TLS handshakes, JA3, or JA4 hashes are preserved as semantic nulls (`None`). No dummy values are imputed.
-3. **Canonical Event Contract**: Normalized sensor flows feed seamlessly into `DetectionPipeline.process_flow()`, producing validated `ETTHStreamEvent` messages for real-time inference and WebSocket streaming.
+The adapters let ETTH consume flow and TLS-handshake metadata produced by external tools:
+- **Zeek:** `conn.log` + `ssl.log`, JSON;
+- **Suricata:** EVE `flow`, `tls` and `alert` events;
+- **eBPF:** JSON flow summaries from an external collector. ETTH ships no eBPF program.
 
----
+Boundaries:
+1. **No decryption.** The adapters read only metadata fields that the sensors themselves log.
+2. **No fabrication.** Missing JA3/JA4/SNI, endpoints, durations and counters stay absent or `None`. Unsupported protocols are skipped and counted, never relabelled as TCP.
+3. **Provenance.** Every sensor flow carries `sensor_type`, `sensor_record_id`, `feature_provenance=SENSOR_AGGREGATE`, `byte_count_semantics` and, where present, `ja4_implementation`.
 
-## 2. Sensor Integration Architecture
+## 2. Data path
 
-```mermaid
-flowchart TD
-    subgraph Sensors["Network Sensor Sources"]
-        Z1["Zeek conn.log"] --> ZA["ZeekCorrelator (UID Match)"]
-        Z2["Zeek ssl.log"] --> ZA
-        S1["Suricata eve.json (flow)"] --> SA["SuricataCorrelator (flow_id)"]
-        S2["Suricata eve.json (tls)"] --> SA
-        S3["Suricata eve.json (alert)"] --> SA
-        E1["eBPF Ring Buffer / Perf Map"] --> EA["EBPFEventSource (Schema Validation)"]
-        P1["Live PCAP / Scapy Npcap"] --> LA["LiveCaptureSource"]
-    end
-
-    ZA --> Q["Async Bounded Queue (Backpressure)"]
-    SA --> Q
-    EA --> Q
-    LA --> Q
-
-    Q --> TR["TargetResolver (Hostname, Subdomain, DNSCache)"]
-    TR --> DP["DetectionPipeline (Model Tracks A–E)"]
-    DP --> EV["ETTHStreamEvent Envelope"]
-    EV --> WS["WebSocket ConnectionManager"]
-    WS --> UI["Live Stream Dashboard UI"]
-
-    style Sensors fill:#1e293b,stroke:#3b82f6,color:#f8fafc
-    style DP fill:#0f172a,stroke:#10b981,color:#f8fafc
-    style EV fill:#0f172a,stroke:#f59e0b,color:#f8fafc
+```
+Zeek conn/ssl ──► ZeekCorrelator (uid) ───────┐
+Suricata EVE ───► SuricataCorrelator (flow_id)├──► canonical flow dict ──► DetectionPipeline.process_flow()
+eBPF JSON ──────► EBPFEventSource ────────────┘         (called by tests / tooling; not by the running server)
 ```
 
----
+`DetectionPipeline` accepts sensor flows. The inference engine then applies the provenance rules:
 
-## 3. Sensor Normalization Matrix
+| Track | What happens to a sensor flow | Reason |
+|---|---|---|
+| A, D, E (flow features) | SKIPPED | sensors provide aggregate counters, not ETTH packet-level statistics |
+| C, E (JA4) | SKIPPED | Zeek and Suricata compute FoxIO JA4; the models were trained on the non-conformant ETTH JA4 |
+| B (JA3 only) | scored | JA3 is specification-compatible; sensor JA3 values are usually outside the training vocabulary and flagged `UNSEEN_CATEGORY` |
 
-| Feature / Metadata | Zeek (`conn.log` + `ssl.log`) | Suricata (`eve.json`) | eBPF Kernel Telemetry |
-| :--- | :--- | :--- | :--- |
-| **Connection ID** | `uid` (string) | `flow_id` (numeric/string) | `flow_id` derived from 5-tuple + PID |
-| **5-Tuple** | `id.orig_h`, `id.orig_p`, `id.resp_h`, `id.resp_p`, `proto` | `src_ip`, `src_port`, `dest_ip`, `dest_port`, `proto` | `saddr`, `sport`, `daddr`, `dport`, `protocol` |
-| **Duration** | `duration` (seconds) | `flow.age` (seconds) | `duration_ns` / `end_ns - start_ns` (nanoseconds to seconds) |
-| **Packet Counts** | `orig_pkts`, `resp_pkts` | `flow.pkts_toserver`, `flow.pkts_toclient` | `packets_sent`, `packets_recv` |
-| **Byte Counts** | `orig_bytes`, `resp_bytes` | `flow.bytes_toserver`, `flow.bytes_toclient` | `bytes_sent`, `bytes_recv` |
-| **TLS Version** | `ssl.version` | `tls.version` | `tls_version` (if kprobe attached) |
-| **Server Name (SNI)** | `ssl.server_name` | `tls.sni` | `tls_sni` (ClientHello socket probe) |
-| **JA3 Fingerprint** | `ssl.ja3` (Zeek JA3 package) | `tls.ja3.hash` | `ja3_hash` (collector probe) |
-| **JA4 Fingerprint** | `ssl.ja4` (Zeek JA4 package) | `tls.ja4` (Suricata 7+) | `ja4` (collector probe) |
-| **Alert / Threat Metadata** | N/A (or Notice framework) | `alert.signature`, `alert.severity` | `process_name`, `process_pid` |
+Only corpus replay and live capture are wired to `/ws/live-stream`.
 
----
+## 3. Normalisation matrix
 
-## 4. Reliability & Error Isolation
+| Canonical field | Zeek | Suricata | eBPF (collector contract) |
+|---|---|---|---|
+| `sensor_record_id` | `uid` | `flow_id` | `flow_id` (optional) |
+| endpoints | `id.orig_*` → forward, `id.resp_*` → reverse | `src_*` / `dest_*` | `saddr:sport` / `daddr:dport` |
+| `flow_duration` (s) | `duration` | `flow.end − flow.start` (fallback `flow.age`, integer seconds, tagged) | `duration_ns`, `end_ns − start_ns`, or `flow_duration` |
+| packets | `orig_pkts` / `resp_pkts` | `flow.pkts_toserver` / `pkts_toclient` | `packets_sent` / `packets_recv` |
+| bytes and `byte_count_semantics` | `*_ip_bytes` (`IP_LENGTH`); else `orig_bytes`/`resp_bytes` (`TRANSPORT_PAYLOAD`) | `flow.bytes_to*` (`UNKNOWN`: not documented as IP length) | as declared, else `UNKNOWN` |
+| negotiated TLS version | `version` → `tls_version_observed` | `tls.version` → `tls_version_observed` | `tls_version` → `tls_version_observed` (collector-defined) |
+| `alpn_value` (first offered) | not available | `tls.client_alpns[0]` | not mapped |
+| `alpn_negotiated` | `next_protocol` | `tls.server_alpns[0]` | `sensor_alpn` |
+| `ja3_hash` | `ja3` (Zeek ja3 package) | `tls.ja3.hash`, or MD5 of `tls.ja3.string` | `ja3_hash`/`ja3` (MD5 hex or complete JA3 string) |
+| `ja4` and `ja4_implementation` | `ja4` → `FOXIO_JA4` | `tls.ja4` → `FOXIO_JA4` | `ja4` → declared, or `UNKNOWN` |
+| alerts | — | `alert.*` → `sensor_alerts` (context only) | — |
 
-- **Backpressure**: Ingestion adapters push to an `asyncio.Queue(maxsize=5000)`. If the detection pipeline or WebSocket downstream slows, sensors drop or throttle incoming lines rather than causing unbounded heap growth.
-- **Correlator TTL**: State machines maintain an in-memory sliding window (default: 60s TTL) to match asynchronous events across logs. Stale entries are evicted automatically.
-- **Malformed Line Isolation**: Corrupted JSON lines or truncated logs increment `malformed_lines` without crashing the ingestion worker or stream loops.
-- **Out-of-Order Tolerance**: Correlators accept `ssl` or `alert` records arriving before the corresponding `conn` or `flow` event without dropping state.
+The ETTH model feature `tls_version` is never set from a sensor. ETTH defines it as the version **offered** in the ClientHello.
+
+## 4. Reliability
+
+| Behaviour | Zeek | Suricata | eBPF |
+|---|---|---|---|
+| Correlation | UID, in either order | `flow_id`; the `flow` event finalises a flow | no correlation (one event per flow) |
+| Bounded memory | yes, with a TTL (default 60 s, wall clock) | yes, with a TTL | not applicable |
+| Expiry and overflow | expired or overflowing `conn` records are **emitted without TLS**; orphan `ssl` records are counted | tls/alert entries without a flow event are counted | not applicable |
+| Duplicates and late records | suppressed and counted | suppressed and counted | duplicate collector `flow_id`s suppressed |
+
+All adapters count malformed lines and unsupported record types. Their queues are bounded, and queue overflow is counted (`queue_dropped`).
