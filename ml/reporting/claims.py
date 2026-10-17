@@ -56,6 +56,33 @@ def _contrast(summary: Dict[str, Any], model: str, label: str) -> Optional[Dict[
     return None
 
 
+SECONDARY_MODELS = ("logreg", "hist_gb")
+
+
+def _secondary_evidence(summary: Dict[str, Any], label: str) -> Dict[str, Any]:
+    """
+    Sensitivity view of one contrast for the secondary (non-primary) models. The suite applies Holm
+    within each model's 4 contrasts; here the same raw p-values are also Holm-adjusted across all
+    models x 4 contrasts of the suite. This is a post-hoc multiplicity check reported for
+    transparency; it never changes a claim status (claims use the pre-declared primary model).
+    """
+    from ml.evaluation.uncertainty import holm
+    fams = (summary or {}).get("paired_contrasts") or {}
+    raw = {f"{m}|{c['contrast']}": (c.get("holm") or {}).get("p")
+           for m, fam in fams.items() for c in fam.get("contrasts", []) if c.get("status") == "COMPLETED"}
+    across = holm(raw) if raw else {}
+    out = {}
+    for m in SECONDARY_MODELS:
+        c = _contrast(summary, m, label)
+        if c and c.get("status") == "COMPLETED":
+            ap = c.get("average_precision") or {}
+            out[m] = {"difference": ap.get("difference"), "ci_low": ap.get("ci_low"), "ci_high": ap.get("ci_high"),
+                      "p_holm_within_model": (c.get("holm") or {}).get("p_holm"),
+                      "p_holm_across_models": (across.get(f"{m}|{label}") or {}).get("p_holm"),
+                      "n_tests_across_models": len(raw)}
+    return out
+
+
 def _contrast_status(cs: List[Optional[Dict[str, Any]]]) -> str:
     done = [c for c in cs if c and c.get("status") == "COMPLETED"]
     if not done:
@@ -132,9 +159,19 @@ def build_claims(latest: Dict[str, Dict[str, Any]]) -> List[Dict[str, Any]]:
                           f"({ap.get('status')}) Holm p={(c.get('holm') or {}).get('p_holm')}")
             else:
                 ev.append(f"{name}: NOT_RUN")
-        claims.append(_claim(cid, text, status, "; ".join(ev) + " (primary model random_forest, capture-grouped 5-fold, capture bootstrap)",
+        secondary = {name: _secondary_evidence(S(name), lab) for name in ("pooled_capture_cv", "matched_lab_capture_cv")}
+        sec_txt = []
+        for name, blk in secondary.items():
+            for m, v in blk.items():
+                if v.get("difference") is not None:
+                    sec_txt.append(f"{name.split('_')[0]} {m}: dAP={v['difference']:+.4f}, Holm p within model "
+                                   f"{v['p_holm_within_model']}, across {v['n_tests_across_models']} model x contrast tests "
+                                   f"{None if v['p_holm_across_models'] is None else round(v['p_holm_across_models'], 3)}")
+        claims.append(_claim(cid, text, status, "; ".join(ev) + " (primary model random_forest, capture-grouped 5-fold, capture bootstrap)"
+                             + (". Secondary models (sensitivity, not used for the status): " + "; ".join(sec_txt) if sec_txt else ""),
                              experiments=[c.get("experiment_a") for c in cs if c] + [c.get("experiment_b") for c in cs if c],
                              protocol="CAPTURE_GROUP_KFOLD, nested selection, paired capture bootstrap, Holm (4 contrasts)",
+                             metrics={"secondary_models": secondary},
                              uncertainty={n: (c or {}).get("average_precision") for n, c in zip(("pooled", "matched_lab"), cs)},
                              confounders=CONFOUNDERS,
                              limitations=["Exploratory; at most PRELIMINARY on this corpus.", "No equivalence margin was pre-registered."]))
@@ -253,5 +290,34 @@ def build_claims(latest: Dict[str, Dict[str, Any]]) -> List[Dict[str, Any]]:
     claims.append(_claim("C15", "The system does not decrypt TLS application payloads.", "SUPPORTED",
                          "Only TLS handshake records (ClientHello/ServerHello) in the first segment are parsed; packet payloads are otherwise reduced to sizes, "
                          "timings, directions and TCP flags. No key material, interception or decryption code exists (pipeline/tls_fingerprinting.py, "
-                         "backend/event_sources/live_capture.py).", protocol="code inspection + tests"))
+                         "backend/event_sources/live_capture.py). The Zeek, Suricata and eBPF adapters read only metadata fields logged by those tools "
+                         "(backend/event_sources/{zeek,suricata,ebpf}_source.py).", protocol="code inspection + tests"))
+
+    # ---- Phase 11 sensor integration (engineering properties; synthetic fixtures only) ----------------
+    sensor_limits = ["Verified with synthetic fixtures only; no real Zeek, Suricata or eBPF collector output was processed.",
+                     "Software contract evidence, not detection-quality evidence."]
+    claims.append(_claim("C18", "The Zeek, Suricata and eBPF adapters normalise records into the canonical flow contract without fabricating "
+                                "fingerprints, endpoints, protocols, durations or rates, and without silently dropping, duplicating or relabelling records.",
+                         "SUPPORTED", "pipeline/canonical_flow.py; tests/test_canonical_flow.py, tests/test_sensors_zeek.py, tests/test_sensors_suricata.py, "
+                                      "tests/test_sensors_ebpf.py (placeholder fingerprints rejected, negotiated TLS version / selected ALPN kept apart from "
+                                      "ETTH features, expiry and overflow emit instead of drop, duplicates and late records counted).",
+                         protocol="unit and integration tests", limitations=sensor_limits))
+    claims.append(_claim("C19", "Models trained on ETTH packet features and ETTH JA4 refuse sensor-aggregate statistics and FoxIO JA4 instead of scoring them.",
+                         "SUPPORTED", "backend/inference_engine.py provenance and JA4-implementation rules; tests/test_inference_contract.py (FoxIO reference "
+                                      "ClientHello: ETTH JA4 t13d1516h2_8daaf6152771_0adf69b4533f vs FoxIO ..._e5627efa2ab1) and "
+                                      "tests/test_cross_phase_integration.py (all five tracks on sensor fixtures).",
+                         protocol="unit and integration tests", limitations=sensor_limits))
+    claims.append(_claim("C20", "Live capture produces the same flows (boundaries, initiator direction) and the same flow and TLS feature values as "
+                                "the offline PCAP pipeline for the same packets.",
+                         "SUPPORTED", "tests/test_live_offline_parity.py: synthetic packets written to a PCAP give identical flows and FLOW features "
+                                      "(rel/abs 1e-9) through pipeline.flow_reconstruction and LiveCaptureSource.",
+                         protocol="parity test on synthetic packets",
+                         limitations=["Native capture was not exercised (no capture driver on the integration host).",
+                                      "Flows longer than the live maximum duration are split, flagged and refused by flow-feature models."]))
+    claims.append(_claim("C21", "ETTH detection models can score flows observed by Zeek, Suricata or eBPF sensors.", "BLOCKED",
+                         "No model is trained on sensor-observable features with sensor provenance, and no labelled sensor telemetry is available. "
+                         "Under the current contract only the JA3-only track accepts sensor flows, and those JA3 values are mostly outside the training "
+                         "vocabulary (UNSEEN_CATEGORY).",
+                         protocol="not run", confounders=CONFOUNDERS,
+                         limitations=["Requires authorised, labelled sensor data and a retrained, sensor-aware model."]))
     return claims
