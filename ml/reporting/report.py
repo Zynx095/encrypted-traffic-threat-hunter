@@ -233,7 +233,7 @@ def render_markdown(r: Dict[str, Any]) -> str:
           f"- Packages: {env['packages']}", f"- Source revision: {env['source_revision']}", "",
           "## Limitations and negative results", "",
           "- Every dataset contributes a single class; any classifier can exploit source/environment differences.",
-          "- Benign data are 2017 Linux/iceweasel browsing captures; malicious data are Windows hosts (2017 and 2024-2026).",
+          "- Benign data are 2017 Stratosphere lab browsing captures (mostly Kali Linux / iceweasel 43 per their READMEs; OS metadata conflicts are recorded); malicious data are Windows hosts (2017 and 2024-2026).",
           "- Labels are capture-level; benign background flows inside malware captures are labelled malicious.",
           "- The ETTH JA4 implementation differs from the FoxIO JA4 specification (e.g. 'n' instead of 'i' for no SNI; TLS version from the presence of supported_versions); values are not comparable with external JA4 databases.",
           "- ClientHellos are parsed from the first TCP segment only (truncation flagged).",

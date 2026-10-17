@@ -328,7 +328,7 @@ Obtaining academic access to **DS-006 (Beyond JA4+)** or **DS-007 (Annotated Enc
 | Workbench | `/workbench` page and `/api/research/*`: corpus, coverage, benchmarks, models, background jobs, claims | — |
 | Evidence | Generated claim ledger and report (`python -m ml report`) | [RESEARCH_CLAIM_LEDGER.md](docs/research/RESEARCH_CLAIM_LEDGER.md), [PAPER_READINESS_AUDIT.md](docs/research/PAPER_READINESS_AUDIT.md), [REPRODUCIBILITY_GUIDE.md](docs/research/REPRODUCIBILITY_GUIDE.md) |
 
-> ⚠️ **Every dataset contributes a single class** (benign: 2017 Linux/iceweasel browsing; malicious: Windows malware hosts). All Phase 9/10 results are therefore **exploratory and source-confounded**, and the central research question remains **open**.
+> ⚠️ **Every dataset contributes a single class** (benign: 2017 lab browsing, mostly Kali Linux/iceweasel per the capture READMEs; malicious: Windows malware hosts). All Phase 9/10 results are therefore **exploratory and source-confounded**, and the central research question remains **open**.
 
 ---
 

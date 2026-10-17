@@ -20,7 +20,7 @@ from pipeline import config as pipeline_config
 ROOT = pipeline_config.PROJECT_ROOT
 CONFOUNDERS = [
     "dataset identity equals class at source level (DS-008/DS-009 malicious, DS-011 benign)",
-    "benign captures are 2017 Linux/iceweasel browsing; malicious captures are Windows hosts",
+    "benign captures are 2017 Stratosphere lab browsing (READMEs of 5 of 6 captures state Kali Linux / iceweasel 43; file names of 3 say 'win'); malicious captures are Windows hosts",
     "capture-level labels propagated to flows (background traffic in malware captures labelled malicious)",
 ]
 
