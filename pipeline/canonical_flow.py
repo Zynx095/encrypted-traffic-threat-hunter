@@ -29,6 +29,16 @@ JA4_IMPLEMENTATION_V2 = JA4_IMPLEMENTATION_FOXIO
 JA4_IMPLEMENTATION_UNKNOWN = "UNKNOWN"
 SUPPORTED_JA4_IMPLEMENTATIONS = {JA4_IMPLEMENTATION_ETTH, JA4_IMPLEMENTATION_FOXIO, JA4_IMPLEMENTATION_UNKNOWN}
 
+# Exact versions of ETTH's own fingerprint code. A model records the version it was trained on;
+# inference refuses any other version (see backend.inference_engine).
+JA4_VERSION_ETTH_V1 = "etth_ja4_v1"                     # historical, non-conformant (corpus v3 'ja4')
+JA4_VERSION_FOXIO = "ja4_foxio-c6469a7_etth-2"          # generate_ja4_foxio; 139/139 FoxIO vectors
+                                                        # (data/reference/foxio_ja4/vectors.json)
+
+# How the ClientHello bytes behind a fingerprint were obtained.
+TLS_HELLO_FIRST_SEGMENT = "FIRST_SEGMENT"               # corpus v3: first segment only, may be truncated
+TLS_HELLO_TCP_REASSEMBLY = "TCP_REASSEMBLY"             # pipeline.tls_reassembly, complete Hellos only
+
 # What a byte counter measures.
 BYTES_IP_LENGTH = "IP_LENGTH"                  # ETTH offline / live capture, Zeek *_ip_bytes
 BYTES_LINK_LAYER = "LINK_LAYER_FRAME"          # Suricata flow counters (captured packet length)
