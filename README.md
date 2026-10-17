@@ -10,7 +10,7 @@
 [![Focus](https://img.shields.io/badge/Focus-TLS%20%7C%20JA3%20%7C%20JA4%20%7C%20Flow%20Analysis-blue?style=for-the-badge)](#-research-objective)
 [![Leakage Controls](https://img.shields.io/badge/Data%20Safety-Leakage%20Controlled-red?style=for-the-badge)](#-leakage-controls--model-safe-data)
 [![Python](https://img.shields.io/badge/Python-3.x-blue?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![Tests](https://img.shields.io/badge/Tests-233%20Passed-brightgreen?style=for-the-badge)](#-test-suite)
+[![Tests](https://img.shields.io/badge/Tests-362%20Passed-brightgreen?style=for-the-badge)](#-test-suite)
 
 **Investigating whether combining TLS fingerprint features with encrypted-flow behavioral features can improve malicious encrypted-traffic detection — without decrypting network payloads.**
 
@@ -77,6 +77,8 @@ ETTH does **not** decrypt TLS payload contents. The research operates exclusivel
 | Phase 8 — Benign Corpus Acquisition | **PARTIAL** — 1 independent benign source admitted; generalisation sufficiency NOT MET |
 | Phase 9 — Multi-Track Benchmark | **EXECUTED (EXPLORATORY)** — confirmatory evaluation BLOCKED |
 | Phase 10 — Sequence Models | **EXECUTED (EXPLORATORY, CPU)** |
+| Phase 11 — Sensor Integration | **ADAPTERS IMPLEMENTED** (Zeek / Suricata / eBPF-collector JSON; synthetic fixtures only; not wired to the live stream; no eBPF probe included) |
+| Phase 12 — Manuscript | **DRAFT RECONCILED** with executed results; not publication-ready |
 | Engineering Pipeline | **READY** |
 | Scientific Evaluation | **READY WITH CONDITIONS** |
 | ML Models | **RESEARCH PILOTS** (registered, checksum-pinned, source-confounded) |
@@ -326,6 +328,8 @@ Obtaining academic access to **DS-006 (Beyond JA4+)** or **DS-007 (Annotated Enc
 | Phase 10 sequences | One-per-flow packet sequences (first 64 packets, header metadata only); masked CNN and GRU on CPU; information-matched and full-flow tabular baselines on identical folds | [PHASE_10_SEQUENCE_MODELS.md](docs/research/PHASE_10_SEQUENCE_MODELS.md) |
 | Real time | Pickle-free, checksum-pinned model registry with activation and rollback; schema-enforcing inference (no zero-filling, no label echo); real JA3/JA4 parsing in live capture | Phase 9 §9-10 |
 | Workbench | `/workbench` page and `/api/research/*`: corpus, coverage, benchmarks, models, background jobs, claims | — |
+| Sensors (Phase 11) | Zeek / Suricata / eBPF adapters normalised to one flow contract; sensor aggregates and FoxIO JA4 are refused by ETTH-trained models; `/api/sensors/status` reports adapters, not running sensors | [CROSS_PHASE_CONTRACTS.md](docs/integration/CROSS_PHASE_CONTRACTS.md), [docs/sensors/](docs/sensors/) |
+| Integration (Phases 8–12) | Cross-phase audit, contracts, live/offline parity, `python -m ml verify` (124/124 persisted results re-verified) | [CROSS_PHASE_INTEGRATION_REPORT.md](docs/integration/CROSS_PHASE_INTEGRATION_REPORT.md) |
 | Evidence | Generated claim ledger and report (`python -m ml report`) | [RESEARCH_CLAIM_LEDGER.md](docs/research/RESEARCH_CLAIM_LEDGER.md), [PAPER_READINESS_AUDIT.md](docs/research/PAPER_READINESS_AUDIT.md), [REPRODUCIBILITY_GUIDE.md](docs/research/REPRODUCIBILITY_GUIDE.md) |
 
 > ⚠️ **Every dataset contributes a single class** (benign: 2017 lab browsing, mostly Kali Linux/iceweasel per the capture READMEs; malicious: Windows malware hosts). All Phase 9/10 results are therefore **exploratory and source-confounded**, and the central research question remains **open**.
@@ -374,7 +378,7 @@ encrypted-traffic-threat-hunter/
 │   └── experimental_dataset_constructor.py  # A–E experiment splits
 ├── ml/                              # Phases 9-10: governance, evaluation, benchmark, sequence models, reporting
 ├── backend/research/                # Research API, job manager, real-time check
-├── tests/                           # Test suite (233 tests)
+├── tests/                           # Test suite (362 tests)
 │   ├── test_ingestion.py
 │   ├── test_flow_reconstruction.py
 │   ├── test_tls_fingerprinting.py
@@ -404,12 +408,12 @@ python -m pytest -q
 
 | Metric | Value |
 |:-------|------:|
-| Total tests | 233 |
-| Passed | 233 |
+| Total tests | 362 |
+| Passed | 362 |
 | Failed | 0 |
 | Skipped | 0 |
 
-Tests cover: PCAP ingestion, flow reconstruction, TLS fingerprint extraction, behavioral feature derivation, model-safe leakage constraints, and experimental dataset isolation (A–E feature-family mutual exclusion).
+Tests cover: PCAP ingestion, flow reconstruction, TLS fingerprint extraction, behavioral feature derivation, model-safe leakage constraints, feature governance and capture-grouped splits, benchmark metrics and end-to-end suite runs, the model registry and schema-enforcing inference, sensor adapters and the cross-phase flow contract, live/offline feature parity, the research API, and API route smoke checks. The suite needs no git-ignored data (verified on a clean `git archive` export). All fixtures are synthetic and are not detection evidence.
 
 ---
 
