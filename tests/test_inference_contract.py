@@ -56,10 +56,42 @@ def test_foxio_ja4_is_refused_by_etth_ja4_models(engine, track):
     assert res["skip_reason"].startswith("INCOMPATIBLE_FEATURE_SCHEMA") and "FOXIO_JA4" in res["skip_reason"]
 
 
-@pytest.mark.parametrize("impl", [None, "ETTH_JA4_V1"])
-def test_etth_ja4_and_legacy_records_are_still_scored(engine, impl):
-    rec = complete_flow_record() if impl is None else complete_flow_record(ja4_implementation=impl)
-    assert engine.predict(rec, track="C_JA4")["status"] == "COMPLETED"
+def test_etth_ja4_records_are_still_scored(engine):
+    assert engine.predict(complete_flow_record(ja4_implementation="ETTH_JA4_V1"), track="C_JA4")["status"] == "COMPLETED"
+    assert engine.predict(complete_flow_record(ja4_version=None), track="C_JA4")["status"] == "COMPLETED"
+
+
+@pytest.mark.parametrize("track", ["C_JA4", "E_JA4_FLOW"])
+@pytest.mark.parametrize("overrides", [
+    {"ja4_implementation": None, "ja4_version": None},     # undeclared: fail closed (was accepted before)
+    {"ja4_implementation": "UNKNOWN"},
+    {"ja4_implementation": "SOME_OTHER_JA4"},
+    {"ja4_version": "etth_ja4_v0"},                        # right family, wrong version
+])
+def test_undeclared_unknown_or_mismatched_ja4_fails_closed(engine, track, overrides):
+    res = engine.predict(complete_flow_record(**overrides), track=track)
+    assert res["status"] == "SKIPPED" and res["threat_score"] == 0.0
+    assert res["skip_reason"].startswith("INCOMPATIBLE_FEATURE_SCHEMA") and "ja4" in res["skip_reason"]
+
+
+def test_model_declaring_foxio_refuses_etth_v1_and_accepts_exact_foxio(tmp_path):
+    from pipeline.canonical_flow import JA4_VERSION_FOXIO
+    eng = InferenceEngine(autoload=False)
+    entry, model = fixture_models(tmp_path, tracks=["C_JA4"])["C_JA4"]
+    entry = dict(entry, fingerprint_implementations={"ja4": {"implementation": "FOXIO_JA4", "version": JA4_VERSION_FOXIO}})
+    eng.install("C_JA4", entry, model)
+    assert eng.predict(complete_flow_record(), track="C_JA4")["status"] == "SKIPPED"
+    ok = complete_flow_record(ja4_implementation="FOXIO_JA4", ja4_version=JA4_VERSION_FOXIO)
+    assert eng.predict(ok, track="C_JA4")["status"] == "COMPLETED"
+    stale = complete_flow_record(ja4_implementation="FOXIO_JA4", ja4_version="ja4_foxio-older_etth-1")
+    assert eng.predict(stale, track="C_JA4")["status"] == "SKIPPED"
+    # A sensor's FOXIO_JA4 without a version is not assumed to match ETTH's validated version.
+    assert eng.predict(complete_flow_record(ja4_implementation="FOXIO_JA4", ja4_version=None), track="C_JA4")["status"] == "SKIPPED"
+
+
+def test_missing_ja4_is_missing_not_substituted(engine):
+    res = engine.predict(complete_flow_record(ja4=None), track="C_JA4")
+    assert res["status"] == "SKIPPED" and "JA4 fingerprint missing" in res["skip_reason"]
 
 
 def test_ja4_implementation_does_not_affect_ja3_models(engine):

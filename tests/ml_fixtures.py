@@ -52,7 +52,8 @@ def complete_flow_record(**overrides) -> Dict:
     rec = {f: 1.0 for f in FLOW_FEATURES}
     rec.update({"clienthello_present": True, "serverhello_present": True, "sni_present": True,
                 "tls_version": 1.3, "alpn_value": "h2", "ja3_hash": "e7d705a3286e19ea42f587b344ee6865",
-                "ja4": "t13d151600_8daaf6152771_e8006e86689d", "flow_id": "fixture_flow"})
+                "ja4": "t13d151600_8daaf6152771_e8006e86689d", "flow_id": "fixture_flow",
+                "ja4_implementation": "ETTH_JA4_V1", "ja4_version": "etth_ja4_v1"})
     rec.update(overrides)
     return rec
 

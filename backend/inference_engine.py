@@ -9,7 +9,7 @@ import pandas as pd
 
 from ml.features.governance import CANONICAL_TRACKS, FLOW_FEATURES, REGISTRY
 from backend.redaction import redact
-from pipeline.canonical_flow import FEATURE_PROVENANCE_ETTH, JA4_IMPLEMENTATION_ETTH
+from pipeline.canonical_flow import FEATURE_PROVENANCE_ETTH, ja4_compatibility_problem
 
 logger = logging.getLogger(__name__)
 
@@ -161,7 +161,7 @@ class InferenceEngine:
             "decision_threshold": threshold, "ood_flags": ood or [],
         }
 
-    def _schema_problems(self, flow: Dict[str, Any], model: Any) -> List[str]:
+    def _schema_problems(self, flow: Dict[str, Any], model: Any, entry: Optional[Dict[str, Any]] = None) -> List[str]:
         problems = []
         state = model.preprocessing["state"]
         for col, s in state["numeric"].items():
@@ -192,10 +192,10 @@ class InferenceEngine:
                 c in REGISTRY and REGISTRY[c].family in PACKET_PIPELINE_FAMILIES for c in inputs):
             contract.append(f"flow/TLS-structural inputs have provenance {provenance}; the model requires values "
                             f"computed by the ETTH packet pipeline ({FEATURE_PROVENANCE_ETTH})")
-        ja4_impl = flow.get("ja4_implementation")
-        if "ja4" in inputs and ja4_impl not in (None, JA4_IMPLEMENTATION_ETTH):
-            contract.append(f"ja4 was computed by {ja4_impl}; the model was trained on {JA4_IMPLEMENTATION_ETTH} values, "
-                            "which differ for the same ClientHello")
+        if "ja4" in inputs and self._is_clean_value(flow.get("ja4")):
+            why = ja4_compatibility_problem(flow, entry)
+            if why:
+                contract.append(why)
         return contract + problems
 
     def _ood_flags(self, flow: Dict[str, Any], entry: Dict[str, Any]) -> List[str]:
@@ -248,7 +248,7 @@ class InferenceEngine:
             return res
 
         entry, model = loaded
-        problems = self._schema_problems(flow, model)
+        problems = self._schema_problems(flow, model, entry)
         if problems:
             shown = problems[:8]
             res = self._result(track, "SKIPPED", entry=entry,

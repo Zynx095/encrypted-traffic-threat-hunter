@@ -35,6 +35,36 @@ JA4_VERSION_ETTH_V1 = "etth_ja4_v1"                     # historical, non-confor
 JA4_VERSION_FOXIO = "ja4_foxio-c6469a7_etth-2"          # generate_ja4_foxio; 139/139 FoxIO vectors
                                                         # (data/reference/foxio_ja4/vectors.json)
 
+# Models registered before fingerprint versions were recorded were all trained on corpus v3, whose
+# 'ja4' column is the historical ETTH implementation. Inference assumes this for such entries.
+LEGACY_MODEL_JA4 = {"implementation": JA4_IMPLEMENTATION_ETTH, "version": JA4_VERSION_ETTH_V1}
+JA4_VERSION_BY_IMPLEMENTATION = {JA4_IMPLEMENTATION_ETTH: JA4_VERSION_ETTH_V1}
+
+
+def model_ja4_requirement(entry) -> dict:
+    """The JA4 implementation/version a registry entry was trained on (legacy default if unrecorded)."""
+    rec = ((entry or {}).get("fingerprint_implementations") or {}).get("ja4")
+    return rec or LEGACY_MODEL_JA4
+
+
+def ja4_compatibility_problem(flow, entry) -> "str | None":
+    """Why a flow's JA4 may not be fed to a model, or None. Fails closed on undeclared provenance."""
+    need = model_ja4_requirement(entry)
+    impl, ver = flow.get("ja4_implementation"), flow.get("ja4_version")
+    if impl is None or (isinstance(impl, float) and impl != impl):
+        return ("ja4 has no declared implementation; the model requires "
+                f"{need['implementation']} ({need['version']}) and undeclared fingerprints are refused")
+    if impl != need["implementation"]:
+        return (f"ja4 was computed by {impl}; the model was trained on {need['implementation']} values, "
+                "which differ for the same ClientHello")
+    expected_ver = need.get("version")
+    if ver is None:
+        ver = JA4_VERSION_BY_IMPLEMENTATION.get(impl)
+    if expected_ver and ver != expected_ver:
+        return f"ja4 implementation version {ver} differs from the model's {expected_ver}"
+    return None
+
+
 # How the ClientHello bytes behind a fingerprint were obtained.
 TLS_HELLO_FIRST_SEGMENT = "FIRST_SEGMENT"               # corpus v3: first segment only, may be truncated
 TLS_HELLO_TCP_REASSEMBLY = "TCP_REASSEMBLY"             # pipeline.tls_reassembly, complete Hellos only

@@ -53,6 +53,7 @@ def test_3_ja4_only_inference():
     flow = {
         "flow_id": "test_f3",
         "ja4": "t13d151600_8daaf6152771_e8006e86689d",
+        "ja4_implementation": "ETTH_JA4_V1",   # declared, as every ETTH source does; undeclared JA4 is refused
         "label": "MALICIOUS"
     }
     res = inference_engine.predict(flow, track="C_JA4")
