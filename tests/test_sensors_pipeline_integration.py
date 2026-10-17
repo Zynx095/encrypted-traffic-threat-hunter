@@ -55,8 +55,8 @@ def test_pipeline_integration_suricata():
         "flow_id": 55443322,
         "tls": {
             "sni": "youtube.com",
-            "ja3": {"hash": "suricata_ja3_hash"},
-            "ja4": "t13d1516h2_suricata"
+            "ja3": {"hash": "b32309a26951912be7dba376398abc3b"},
+            "ja4": "t13d1516h2_8daaf6152771_e5627efa2ab1"
         }
     })
     suri_flow = correlator.add_eve_event({
@@ -89,7 +89,7 @@ def test_pipeline_integration_suricata():
     assert isinstance(event, ETTHStreamEvent)
     assert event.flow.total_packets == 22
     assert event.tls.sni_value == "youtube.com"
-    assert event.tls.ja4 == "t13d1516h2_suricata"
+    assert event.tls.ja4 == "t13d1516h2_8daaf6152771_e5627efa2ab1"
 
 def test_pipeline_integration_ebpf():
     source = EBPFEventSource()
