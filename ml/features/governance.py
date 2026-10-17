@@ -71,6 +71,8 @@ FORBIDDEN: Dict[str, str] = {
     "sequence_original_length": "storage diagnostic",
     "sequence_truncated": "storage diagnostic",
     "sni": "raw server name", "sni_value": "raw server name", "server_name": "raw server name",
+    "ja4_implementation": "provenance metadata, not model feature",
+    "ja4_version": "provenance metadata, not model feature",
 }
 FORBIDDEN_SUBSTRINGS = ("_ip", "ip_", "port", "mac_", "timestamp", "endpoint", "dataset", "capture", "family", "source_file")
 
@@ -176,7 +178,8 @@ def build_registry() -> Dict[str, FeatureSpec]:
                        "one-hot / frequency / hashing encoders fitted on training fold; unseen values -> __UNKNOWN__", _tracks_for("JA4"))
     for f, why in (("ja3_string", "raw JA3 string (same information as ja3_hash)"),
                    ("ja3s_hash", "server fingerprint; not part of the research question and can reflect interception proxies"),
-                   ("ja3s_string", "raw JA3S string")):
+                   ("ja3s_string", "raw JA3S string"),
+                   ("ja4_v2", "FoxIO-compliant JA4 v2 fingerprint; see pipeline.tls_fingerprinting.generate_ja4_foxio")):
         reg[f] = _spec(f, "categorical", "UNUSED_FINGERPRINT", "pipeline.tls_fingerprinting", "flows with handshake",
                        "HIGH", why, "not used by any track", ())
     for f in SEQUENCE_FEATURES:
