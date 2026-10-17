@@ -320,4 +320,47 @@ def build_claims(latest: Dict[str, Dict[str, Any]]) -> List[Dict[str, Any]]:
                          "vocabulary (UNSEEN_CATEGORY).",
                          protocol="not run", confounders=CONFOUNDERS,
                          limitations=["Requires authorised, labelled sensor data and a retrained, sensor-aware model."]))
+
+    # ---- Phase 13: FoxIO JA4 conformance, Hello reassembly, FoxIO re-evaluation ------------------------
+    claims.append(_claim("C22", "pipeline.tls_fingerprinting.generate_ja4_foxio reproduces FoxIO's reference JA4 output for TLS over TCP.",
+                         "SUPPORTED", "tests/test_ja4_foxio_reference.py: 139/139 TCP vectors from FoxIO-LLC/ja4 commit c6469a7 "
+                                      "(snapshot outputs of FoxIO's reference implementation; captures pinned by SHA-256 in "
+                                      "data/reference/foxio_ja4/vectors.json). Implementation id FOXIO_JA4 / ja4_foxio-c6469a7_etth-2.",
+                         protocol="reference-vector conformance test",
+                         limitations=["QUIC ('q') and DTLS ('d') JA4 are not implemented.",
+                                      "Non-ASCII ALPN follows FoxIO's reference code ('9'), which differs from the written spec (hex).",
+                                      "The pcap test is skipped when the reference captures are not fetched; conformance is claimed only from runs where it executed.",
+                                      "Corpus v3's 'ja4' column remains the historical, non-conformant ETTH_JA4_V1."]))
+    claims.append(_claim("C23", "TLS Hellos split across TCP segments are fingerprinted from their complete bytes, and incomplete, conflicting or "
+                                "malformed streams produce no fingerprint, identically in live capture and offline reconstruction.",
+                         "SUPPORTED", "pipeline/tls_reassembly.py; tests/test_tls_reassembly.py (24 cases: segmentation, wraparound, reordering, "
+                                      "retransmission, overlaps, conflicts, timeouts, termination, malformed lengths, eviction, concurrency) and "
+                                      "tests/test_hello_acquisition_parity.py (live = offline on the same packets).",
+                         protocol="unit and parity tests on synthetic packets",
+                         limitations=["Synthetic segments only; no real-interface capture was exercised.",
+                                      "Corpus v3 was built with first-segment parsing and is unchanged; reassembly applies to new builds and live capture."]))
+    fox = S("ja4_foxio_capture_cv")
+    fox_labels = [("C24", "With FoxIO-conformant JA4, adding JA4 to flow features increases average precision on the shared JA4 population (A@JA4POP -> E).", "JA4 added to flow"),
+                  ("C25", "With FoxIO-conformant JA4, adding flow features to JA4 increases average precision (C -> E).", "flow added to JA4")]
+    for cid, text, lab in fox_labels:
+        c = _contrast(fox, "random_forest", lab)
+        st = _contrast_status([c])
+        if c and c.get("status") == "COMPLETED":
+            ap = c["average_precision"]
+            ev = (f"ja4_foxio_capture_cv ({sid('ja4_foxio_capture_cv')}), random_forest: dAP={ap.get('difference')} "
+                  f"CI[{ap.get('ci_low')}, {ap.get('ci_high')}] ({ap.get('status')}) Holm p={(c.get('holm') or {}).get('p_holm')}")
+        else:
+            ev = "ja4_foxio_capture_cv not run"
+        status = {"SUPPORTED": "PRELIMINARY", "UNTESTED": "UNTESTED"}.get(st, "INSUFFICIENT_EVIDENCE" if st != "CONTRADICTED" else st)
+        claims.append(_claim(cid, text, status, ev + ". The suite ja4_v2_comparison (Phase 13 pre-audit) is invalidated and not used.",
+                             experiments=[sid("ja4_foxio_capture_cv")] if sid("ja4_foxio_capture_cv") else [],
+                             datasets=["DS-008", "DS-009", "DS-011"], protocol="capture-grouped 5-fold CV, exploratory",
+                             confounders=CONFOUNDERS,
+                             limitations=["Same single-benign-source corpus as every other suite: dataset identity equals class.",
+                                          "FoxIO JA4 is withheld for ClientHellos that corpus v3 parsed from a truncated first segment."]))
+    claims.append(_claim("C26", "Flows observed by Zeek, Suricata and eBPF collectors are resolved to a single cross-sensor identity.",
+                         "UNTESTED", "No cross-sensor correlation is implemented: tests/test_sensor_cross_correlation.py checks, on synthetic "
+                                           "fixtures, that each adapter normalises the same flow to comparable fields, but no component joins records "
+                                           "across sensors.", protocol="not run",
+                         limitations=["Needs an implemented correlator that handles NAT, clock skew and missing records, and genuine tool output."]))
     return claims
