@@ -86,3 +86,24 @@ cd frontend && npm ci && npm run build           # type-check + production build
 
 Python 3.12.0, numpy 2.4.6, pandas 3.0.5, scikit-learn 1.9.0, scipy 1.18.0, pyarrow 25.0.1, dpkt 1.9.8, torch 2.13.0+cpu, Windows 11.
 Each `suite.json` records the exact environment snapshot and git revision used for that run.
+
+## 7. Sensor adapters (Phase 11)
+
+The Zeek, Suricata and eBPF adapters are tested only against **synthetic fixtures** (`data/fixtures/sensors/`). The fixtures test software behaviour; they are not detection evidence.
+
+```bash
+python -m pytest -q -p no:cacheprovider tests/test_sensors_zeek.py tests/test_sensors_suricata.py \
+    tests/test_sensors_ebpf.py tests/test_sensors_pipeline_integration.py
+```
+
+No native eBPF probe, Zeek process or Suricata process was run. See `docs/sensors/` and `docs/integration/CROSS_PHASE_CONTRACTS.md` for what the adapters guarantee.
+
+## 8. Phase 7 pilot (historical)
+
+The Phase 12 draft guide documented the Phase 7 pilot run. It is kept here for provenance only. The pilot is source-confounded and its metrics carry no information (see the claim ledger reconciliation).
+
+```bash
+python step7_step5_pilot_run.py   # writes data/experiments/phase7_step5_pilot/{pilot_fold_results.csv,pilot_summary.json}
+```
+
+The pilot used `GroupShuffleSplit(test_size=0.2, random_state=42)` on `behavioral_hash`, with preprocessing inside `imblearn` pipelines. Phase 9 replaced it with capture-grouped nested cross-validation (§3).

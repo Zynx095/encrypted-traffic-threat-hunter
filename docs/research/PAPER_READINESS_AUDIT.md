@@ -41,3 +41,18 @@ See `RESEARCH_CLAIM_LEDGER.md`. In short: engineering and reproducibility claims
   * The availability probe alone reaches AP 0.77 against a 0.60 prevalence.
   * In this corpus fingerprint "value" is client-stack memorisation, and the legacy protocol hides it.
 * An **open, reproducible, leakage-audited benchmark harness** for fingerprint+flow fusion. It enforces feature governance and source-aware splits, and the claim ledger states exactly what is not yet known.
+
+## 4. Reconciliation with the Phase 12 draft audit
+
+The Phase 12 branch (`7c609af`) contained a separate audit, *ETTH Academic Paper Readiness & Peer-Review Audit*. It was written against the Phase 7 pilot. The verdicts above are kept. The Phase 12 audit's items were handled as follows.
+
+| Phase 12 item | Disposition |
+|---|---|
+| "Readiness score 52/100" and rubric scores (novelty 8.5/10, rigour 9.0/10, reproducibility 8.5/10) | **Not adopted.** No defined scoring procedure supports these numbers, and they contradict the evidence-based assessment above (novelty *weak*; external validity *not established*). |
+| Engineering described as "production-grade and scientifically rigorous" | **Not adopted.** The platform is a tested research prototype. Its models are research pilots with status `RESEARCH_PILOT_SOURCE_CONFOUNDED`. |
+| Dataset deficiency (424:1 pilot ratio, 6 benign flows) | **Superseded.** Corpus v3 has 577,238 flows from 25 captures, including 6 benign CTU-Normal captures. The structural blocker remains: each dataset contributes only one class, and there is a single benign source. |
+| Missing neural baselines | **Done in Phase 10.** The CNN and GRU were run with information-matched tabular baselines; see C13. |
+| Missing hash-lookup (IOC) baseline | **Adopted as future work.** A JA3/JA4 blocklist baseline would show how much of B/C is plain memorisation. With a JA3/JA4 class overlap of 0 (C03), it would be expected to be near-perfect in-sample and to fail on unseen fingerprints (C16). |
+| SHAP/LIME attributions | **Partly addressed.** `python -m ml explain` reports permutation importance on held-out folds. Feature importance is associative and is never presented as causal. |
+| "143/144 tests passing" | **Outdated.** See `docs/integration/CROSS_PHASE_INTEGRATION_REPORT.md` for current results. |
+| Target venues (RAID, ACSAC, CoNEXT/WiSec, S&P/USENIX Security) | **Kept as orientation only.** No deadlines were verified. Choosing a venue is premature until a confirmatory evaluation exists. An honest negative or methodological result (§3) fits venues that accept measurement and evaluation-methodology papers. |

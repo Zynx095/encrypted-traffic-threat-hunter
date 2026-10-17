@@ -57,3 +57,22 @@ Each claim's evidence, metrics, uncertainty, confounders and limitations are in 
 * Cross-source transfer is **CONTRADICTED** for flow-only and fusion models (C08A, C08C). It is **INSUFFICIENT_EVIDENCE** for fingerprint-only models, whose held-out-source detection is all-or-nothing (C08B).
 * The preliminary diagnostics C10, C11B, C16, C17 and C12 describe shortcut and novelty effects.
 * Generalisation (C09) and benign sufficiency (C02) are **BLOCKED** on independent data.
+
+## Reconciliation with the Phase 12 draft ledger
+
+The Phase 12 branch (`research/phase-12-paper-manuscript`, `7c609af`) contained a hand-written ledger, *ETTH Research Claim Ledger*. It was based on the Phase 7 pilot and written before any Phase 8–10 result existed.
+
+During the cross-phase merge the generated ledger above was kept as the authoritative version, for two reasons:
+* it is computed from persisted artefacts by `ml/reporting/claims.py`;
+* the hand-written version contradicts those artefacts.
+
+What happened to each Phase 12 claim. The original text is preserved in Git history on the Phase 12 branch.
+
+| Phase 12 claim | Phase 12 status | Disposition after reconciliation |
+|---|---|---|
+| 1. Zero-decryption metadata sufficiency | VERIFIED | Same claim as **C15** (SUPPORTED, an engineering property under test). Phase 12's ECH and mid-stream-capture limitations are kept: if the ClientHello is missed or encrypted (full ECH), no fingerprint exists and only flow features remain. |
+| 2. Five "mutually exclusive" tracks under leakage-free `GroupShuffleSplit` | VERIFIED | **Corrected.** <ul><li>The tracks are not mutually exclusive: D and E contain all of A's inputs, and B–E are restricted to the fingerprint-available population.</li><li>The behavioural-hash `GroupShuffleSplit` keeps duplicate vectors apart but not captures. It gives higher estimates than capture-grouped CV (**C12**, PRELIMINARY), and Phase 9 replaced it.</li><li>Leakage controls are now an engineering claim covered by tests (see C14 and `PHASE_9_BENCHMARK_PROTOCOL.md`).</li></ul> |
+| 3. Pilot PR-AUC ≈ 1.0 / F1 ≈ 0.99 | engineering demonstration; contradicted as generalised performance | **Not a claim.** The Phase 7 pilot (2,543 malicious vs 6 benign flows) treats the 99.7 %-prevalent class as positive, so its PR-AUC carries no information. It is historical only. |
+| 4. JA4 discriminates better than JA3 | NOT YET TESTED | **Untested.** No pre-declared B vs C contrast exists. ETTH's JA4 is not FoxIO-conformant (signature algorithms are sorted; see `docs/integration/CROSS_PHASE_CONTRACTS.md`), so no statement about FoxIO JA4 can be tested with the current corpus. |
+| 5. Sequence models beat tabular statistics | NOT YET TESTED | **Executed in Phase 10; see C13 (INSUFFICIENT_EVIDENCE).** The CNN and GRU did not exceed the information-matched tabular baseline, and the GRU was worse than the full-flow baseline in one exploratory contrast. |
+| 6. Cross-sensor identity resolution across Zeek, Suricata and eBPF | PROVISIONALLY SUPPORTED | **Withdrawn: unsupported.** No cross-sensor correlation is implemented. Each adapter correlates records only within its own sensor (Zeek `uid`, Suricata `flow_id`), and only synthetic fixtures were tested. The engineering claims about the sensor adapters are tracked separately in the generated ledger. |
