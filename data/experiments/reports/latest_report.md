@@ -1,6 +1,6 @@
 # ETTH Research Report
 
-Generated 2026-10-17T03:57:52.178674Z from persisted artefacts (`ml/reporting/report.py`). No value in this document was entered by hand.
+Generated 2026-10-17T04:04:16.469335Z from persisted artefacts (`ml/reporting/report.py`). No value in this document was entered by hand.
 
 ## Research question
 
@@ -577,12 +577,12 @@ Sequence vs tabular contrasts:
 
 - Python 3.12.0 on Windows-11-10.0.26200-SP0; CPUs 24
 - Packages: {'numpy': '2.4.6', 'pandas': '3.0.5', 'sklearn': '1.9.0', 'scipy': '1.18.0', 'pyarrow': '25.0.1', 'torch': '2.13.0+cpu', 'dpkt': '1.9.8'}
-- Source revision: c9615c9dc3e63de6d0d07167bc93c71f9c6d4351
+- Source revision: e50ea6c945ba54cc0aadbf4bf0265fa2dfaba6f2
 
 ## Limitations and negative results
 
 - Every dataset contributes a single class; any classifier can exploit source/environment differences.
-- Benign data are 2017 Linux/iceweasel browsing captures; malicious data are Windows hosts (2017 and 2024-2026).
+- Benign data are 2017 Stratosphere lab browsing captures (mostly Kali Linux / iceweasel 43 per their READMEs; OS metadata conflicts are recorded); malicious data are Windows hosts (2017 and 2024-2026).
 - Labels are capture-level; benign background flows inside malware captures are labelled malicious.
 - The ETTH JA4 implementation differs from the FoxIO JA4 specification (e.g. 'n' instead of 'i' for no SNI; TLS version from the presence of supported_versions); values are not comparable with external JA4 databases.
 - ClientHellos are parsed from the first TCP segment only (truncation flagged).

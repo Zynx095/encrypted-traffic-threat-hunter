@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-17T03:57:52.178674Z",
+  "generated_at": "2026-10-17T04:04:16.469335Z",
   "research_question": "Does combining TLS fingerprint information, including JA3 and JA4 where available, with encrypted-flow behavioral features improve malicious encrypted-traffic detection compared with individual feature families, under realistic generalization conditions and without decrypting TLS application payloads?",
   "status_vocabulary": [
     "IMPLEMENTED",
@@ -14874,7 +14874,7 @@
       "assumptions": [],
       "known_confounders": [
         "dataset identity equals class at source level (DS-008/DS-009 malicious, DS-011 benign)",
-        "benign captures are 2017 Linux/iceweasel browsing; malicious captures are Windows hosts",
+        "benign captures are 2017 Stratosphere lab browsing (READMEs of 5 of 6 captures state Kali Linux / iceweasel 43; file names of 3 say 'win'); malicious captures are Windows hosts",
         "capture-level labels propagated to flows (background traffic in malware captures labelled malicious)"
       ],
       "limitations": [
@@ -14969,7 +14969,7 @@
       "assumptions": [],
       "known_confounders": [
         "dataset identity equals class at source level (DS-008/DS-009 malicious, DS-011 benign)",
-        "benign captures are 2017 Linux/iceweasel browsing; malicious captures are Windows hosts",
+        "benign captures are 2017 Stratosphere lab browsing (READMEs of 5 of 6 captures state Kali Linux / iceweasel 43; file names of 3 say 'win'); malicious captures are Windows hosts",
         "capture-level labels propagated to flows (background traffic in malware captures labelled malicious)"
       ],
       "limitations": [
@@ -15065,7 +15065,7 @@
       "assumptions": [],
       "known_confounders": [
         "dataset identity equals class at source level (DS-008/DS-009 malicious, DS-011 benign)",
-        "benign captures are 2017 Linux/iceweasel browsing; malicious captures are Windows hosts",
+        "benign captures are 2017 Stratosphere lab browsing (READMEs of 5 of 6 captures state Kali Linux / iceweasel 43; file names of 3 say 'win'); malicious captures are Windows hosts",
         "capture-level labels propagated to flows (background traffic in malware captures labelled malicious)"
       ],
       "limitations": [
@@ -15161,7 +15161,7 @@
       "assumptions": [],
       "known_confounders": [
         "dataset identity equals class at source level (DS-008/DS-009 malicious, DS-011 benign)",
-        "benign captures are 2017 Linux/iceweasel browsing; malicious captures are Windows hosts",
+        "benign captures are 2017 Stratosphere lab browsing (READMEs of 5 of 6 captures state Kali Linux / iceweasel 43; file names of 3 say 'win'); malicious captures are Windows hosts",
         "capture-level labels propagated to flows (background traffic in malware captures labelled malicious)"
       ],
       "limitations": [
@@ -15257,7 +15257,7 @@
       "assumptions": [],
       "known_confounders": [
         "dataset identity equals class at source level (DS-008/DS-009 malicious, DS-011 benign)",
-        "benign captures are 2017 Linux/iceweasel browsing; malicious captures are Windows hosts",
+        "benign captures are 2017 Stratosphere lab browsing (READMEs of 5 of 6 captures state Kali Linux / iceweasel 43; file names of 3 say 'win'); malicious captures are Windows hosts",
         "capture-level labels propagated to flows (background traffic in malware captures labelled malicious)"
       ],
       "limitations": [
@@ -15283,7 +15283,7 @@
       "assumptions": [],
       "known_confounders": [
         "dataset identity equals class at source level (DS-008/DS-009 malicious, DS-011 benign)",
-        "benign captures are 2017 Linux/iceweasel browsing; malicious captures are Windows hosts",
+        "benign captures are 2017 Stratosphere lab browsing (READMEs of 5 of 6 captures state Kali Linux / iceweasel 43; file names of 3 say 'win'); malicious captures are Windows hosts",
         "capture-level labels propagated to flows (background traffic in malware captures labelled malicious)"
       ],
       "limitations": [
@@ -15310,7 +15310,7 @@
       "assumptions": [],
       "known_confounders": [
         "dataset identity equals class at source level (DS-008/DS-009 malicious, DS-011 benign)",
-        "benign captures are 2017 Linux/iceweasel browsing; malicious captures are Windows hosts",
+        "benign captures are 2017 Stratosphere lab browsing (READMEs of 5 of 6 captures state Kali Linux / iceweasel 43; file names of 3 say 'win'); malicious captures are Windows hosts",
         "capture-level labels propagated to flows (background traffic in malware captures labelled malicious)"
       ],
       "limitations": [
@@ -15337,7 +15337,7 @@
       "assumptions": [],
       "known_confounders": [
         "dataset identity equals class at source level (DS-008/DS-009 malicious, DS-011 benign)",
-        "benign captures are 2017 Linux/iceweasel browsing; malicious captures are Windows hosts",
+        "benign captures are 2017 Stratosphere lab browsing (READMEs of 5 of 6 captures state Kali Linux / iceweasel 43; file names of 3 say 'win'); malicious captures are Windows hosts",
         "capture-level labels propagated to flows (background traffic in malware captures labelled malicious)"
       ],
       "limitations": [
@@ -15357,7 +15357,7 @@
       "assumptions": [],
       "known_confounders": [
         "dataset identity equals class at source level (DS-008/DS-009 malicious, DS-011 benign)",
-        "benign captures are 2017 Linux/iceweasel browsing; malicious captures are Windows hosts",
+        "benign captures are 2017 Stratosphere lab browsing (READMEs of 5 of 6 captures state Kali Linux / iceweasel 43; file names of 3 say 'win'); malicious captures are Windows hosts",
         "capture-level labels propagated to flows (background traffic in malware captures labelled malicious)"
       ],
       "limitations": []
@@ -15377,7 +15377,7 @@
       "assumptions": [],
       "known_confounders": [
         "dataset identity equals class at source level (DS-008/DS-009 malicious, DS-011 benign)",
-        "benign captures are 2017 Linux/iceweasel browsing; malicious captures are Windows hosts",
+        "benign captures are 2017 Stratosphere lab browsing (READMEs of 5 of 6 captures state Kali Linux / iceweasel 43; file names of 3 say 'win'); malicious captures are Windows hosts",
         "capture-level labels propagated to flows (background traffic in malware captures labelled malicious)"
       ],
       "limitations": [
@@ -15436,7 +15436,7 @@
       "assumptions": [],
       "known_confounders": [
         "dataset identity equals class at source level (DS-008/DS-009 malicious, DS-011 benign)",
-        "benign captures are 2017 Linux/iceweasel browsing; malicious captures are Windows hosts",
+        "benign captures are 2017 Stratosphere lab browsing (READMEs of 5 of 6 captures state Kali Linux / iceweasel 43; file names of 3 say 'win'); malicious captures are Windows hosts",
         "capture-level labels propagated to flows (background traffic in malware captures labelled malicious)"
       ],
       "limitations": [
@@ -15496,7 +15496,7 @@
       "assumptions": [],
       "known_confounders": [
         "dataset identity equals class at source level (DS-008/DS-009 malicious, DS-011 benign)",
-        "benign captures are 2017 Linux/iceweasel browsing; malicious captures are Windows hosts",
+        "benign captures are 2017 Stratosphere lab browsing (READMEs of 5 of 6 captures state Kali Linux / iceweasel 43; file names of 3 say 'win'); malicious captures are Windows hosts",
         "capture-level labels propagated to flows (background traffic in malware captures labelled malicious)"
       ],
       "limitations": [
@@ -15595,7 +15595,7 @@
       "assumptions": [],
       "known_confounders": [
         "dataset identity equals class at source level (DS-008/DS-009 malicious, DS-011 benign)",
-        "benign captures are 2017 Linux/iceweasel browsing; malicious captures are Windows hosts",
+        "benign captures are 2017 Stratosphere lab browsing (READMEs of 5 of 6 captures state Kali Linux / iceweasel 43; file names of 3 say 'win'); malicious captures are Windows hosts",
         "capture-level labels propagated to flows (background traffic in malware captures labelled malicious)"
       ],
       "limitations": [
@@ -15617,7 +15617,7 @@
       "torch": "2.13.0+cpu",
       "dpkt": "1.9.8"
     },
-    "source_revision": "c9615c9dc3e63de6d0d07167bc93c71f9c6d4351"
+    "source_revision": "e50ea6c945ba54cc0aadbf4bf0265fa2dfaba6f2"
   },
   "artifact_references": {
     "corpus_manifest": "data/processed/v3/corpus_manifest.json",

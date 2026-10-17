@@ -22,7 +22,7 @@ Every claim record carries: claim text, supporting experiment IDs, datasets, pro
 
 The table below is copied verbatim from the last generated `claim_ledger.json` (see the generation timestamp in the final report).
 
-Generated 2026-10-17T03:57:52.178674Z (integration branch `integration/phase-8-12-validation`).
+Generated 2026-10-17T04:04:16.469335Z (integration branch `integration/phase-8-12-validation`).
 
 | ID | Claim | Status |
 |---|---|---|
