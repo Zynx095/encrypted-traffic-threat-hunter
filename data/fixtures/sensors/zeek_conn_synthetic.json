@@ -1,0 +1,9 @@
+# SYNTHETIC SOFTWARE TEST FIXTURE — DO NOT USE AS EMPIRICAL DETECTION EVIDENCE
+# These records test JSON parsing, field mapping, correlation, and error handling for Zeek conn.log.
+
+{"ts":1729080000.123,"uid":"C_test_001","id.orig_h":"192.168.1.105","id.orig_p":49822,"id.resp_h":"104.18.25.10","id.resp_p":443,"proto":"tcp","service":"ssl","duration":2.45,"orig_bytes":1420,"resp_bytes":5820,"conn_state":"SF","local_orig":true,"local_resp":false,"missed_bytes":0,"history":"ShADadFf","orig_pkts":14,"resp_pkts":18}
+{"ts":1729080001.456,"uid":"C_test_002","id.orig_h":"192.168.1.106","id.orig_p":51234,"id.resp_h":"198.51.100.22","id.resp_p":443,"proto":"tcp","service":"ssl","duration":0.82,"orig_bytes":512,"resp_bytes":0,"conn_state":"S0","local_orig":true,"local_resp":false,"missed_bytes":0,"history":"S","orig_pkts":4,"resp_pkts":0}
+{"ts":1729080002.789,"uid":"C_test_003_notls","id.orig_h":"192.168.1.107","id.orig_p":53111,"id.resp_h":"1.1.1.1","id.resp_p":53,"proto":"udp","service":"dns","duration":0.05,"orig_bytes":72,"resp_bytes":148,"conn_state":"SF","local_orig":true,"local_resp":false,"missed_bytes":0,"history":"Dd","orig_pkts":1,"resp_pkts":1}
+# Malformed line below for error isolation testing
+{"ts":1729080003.999,"uid":"C_malformed", CORRUPTED_JSON_ENTRY
+{"ts":1729080004.111,"uid":"C_test_004_out_of_order","id.orig_h":"192.168.1.108","id.orig_p":55432,"id.resp_h":"142.250.190.46","id.resp_p":443,"proto":"tcp","service":"ssl","duration":1.12,"orig_bytes":820,"resp_bytes":2400,"conn_state":"SF","local_orig":true,"local_resp":false,"missed_bytes":0,"history":"ShADdFf","orig_pkts":8,"resp_pkts":10}

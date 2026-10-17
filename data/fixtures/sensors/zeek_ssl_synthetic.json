@@ -1,0 +1,8 @@
+# SYNTHETIC SOFTWARE TEST FIXTURE — DO NOT USE AS EMPIRICAL DETECTION EVIDENCE
+# These records test SSL/TLS metadata extraction, JA3/JA4 parsing, and missing-value preservation.
+
+{"ts":1729080000.150,"uid":"C_test_001","version":"TLSv12","cipher":"TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256","server_name":"example.com","ja3":"6734f37431670b3ab4292b8f60f29984","ja3s":"ec74a5c5110605f9f8eac84b7252e1fb","ja4":"t12d1516h2_8daaf6152771_b32608d13a69","alpn":"h2","established":true}
+# Record with MISSING JA3 and JA4 (must remain None - strictly not fabricated)
+{"ts":1729080001.460,"uid":"C_test_002","version":"TLSv13","cipher":"TLS_AES_256_GCM_SHA384","server_name":"threat-c2.example.net","ja3":"-","ja3s":"-","ja4":null,"alpn":null,"established":false}
+# Out of order ssl record arriving BEFORE conn.log
+{"ts":1729080004.100,"uid":"C_test_004_out_of_order","version":"TLSv13","cipher":"TLS_AES_128_GCM_SHA256","server_name":"youtube.com","ja3":"51c64c77e60f3980eea90869b68c58a8","ja4":"t13d1516h2_8daaf6152771_012e83626249","alpn":"h2","established":true}
