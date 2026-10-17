@@ -181,6 +181,7 @@ def train_deployable(track: str, model: str, df_all: pd.DataFrame, evaluation_ex
         entry = {
             "model_id": model_id, "version": version, "track": track, "estimator": model, "params": params,
             "status": "CANDIDATE", "research_status": RESEARCH_STATUS, "created_at": _now(),
+            "fingerprint_implementations": _fingerprint_implementations(df, cols),
             "feature_schema": {"schema_version": SCHEMA_VERSION, "fingerprint": schema_fingerprint(track),
                                "numeric": cols["numeric"], "categorical": cols["categorical"],
                                "population": TRACKS[track].population},
@@ -212,3 +213,25 @@ def most_selected_params(record: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     import ast
     best = Counter(counts).most_common(1)[0][0]
     return ast.literal_eval(best)
+
+
+def _fingerprint_implementations(df, cols) -> Dict[str, Any]:
+    """Record which fingerprint implementation produced the training values, so inference can refuse
+    fingerprints from any other implementation. Corpus v3 carries no tag: its 'ja4' is ETTH v1."""
+    from pipeline.canonical_flow import JA4_VERSION_BY_IMPLEMENTATION, LEGACY_MODEL_JA4
+    out: Dict[str, Any] = {}
+    if "ja4" in cols["categorical"]:
+        impls = sorted(df["ja4_implementation"].dropna().unique()) if "ja4_implementation" in df else []
+        if len(impls) > 1:
+            raise ModelRegistryError(f"training data mixes JA4 implementations {impls}")
+        if impls:
+            vers = sorted(df["ja4_version"].dropna().unique()) if "ja4_version" in df else []
+            if len(vers) > 1:
+                raise ModelRegistryError(f"training data mixes JA4 versions {vers}")
+            out["ja4"] = {"implementation": impls[0],
+                          "version": vers[0] if vers else JA4_VERSION_BY_IMPLEMENTATION.get(impls[0])}
+        else:
+            out["ja4"] = dict(LEGACY_MODEL_JA4)
+    if "ja3_hash" in cols["categorical"]:
+        out["ja3"] = {"implementation": "JA3_MD5_GREASE_FILTERED", "version": "pipeline.tls_fingerprinting.generate_ja3"}
+    return out
