@@ -5,6 +5,7 @@ import uuid
 import threading
 from typing import Dict, Any, Optional, List, Callable, Tuple
 from backend.event_sources.base import EventSource
+from backend.event_sources.tcp_reassembly import TcpStreamReassembler
 from pipeline.canonical_flow import BYTES_IP_LENGTH, FEATURE_PROVENANCE_ETTH, JA4_IMPLEMENTATION_ETTH
 
 logger = logging.getLogger(__name__)
@@ -157,9 +158,31 @@ class LiveFlowTracker:
         self.tls_version: Optional[float] = None
         self.clienthello_record_truncated: Optional[bool] = None
         self.has_fin_rst = False
+        self.client_reassembler = TcpStreamReassembler()
+        self.server_reassembler = TcpStreamReassembler()
+
+    def _apply_tls_meta(self, tls_meta: Dict[str, Any]):
+        if tls_meta.get("clienthello_present") and tls_meta.get("ja3_hash"):
+            if not self.clienthello_present or self.clienthello_record_truncated:
+                self.clienthello_present = True
+                self.sni_present = bool(tls_meta.get("sni"))
+                self.alpn_value = tls_meta.get("alpn") or None
+                self.ja3_hash = tls_meta.get("ja3_hash")
+                self.ja3_string = tls_meta.get("ja3_string")
+                self.ja4 = tls_meta.get("ja4")
+                self.ja4_v2 = tls_meta.get("ja4_v2")
+                self.ja4_implementation = tls_meta.get("ja4_implementation")
+                self.ja4_version = tls_meta.get("ja4_version")
+                self.tls_version = tls_meta.get("tls_version")
+                self.clienthello_record_truncated = tls_meta.get("clienthello_record_truncated")
+        if tls_meta.get("serverhello_present") and not self.serverhello_present and tls_meta.get("ja3s_hash"):
+            self.serverhello_present = True
+            self.ja3s_hash = tls_meta.get("ja3s_hash")
+            self.ja3s_string = tls_meta.get("ja3s_string")
 
     def update(self, is_forward: bool, pkt_len: int, timestamp: float, fin_or_rst: bool = False,
-               tls_meta: Optional[Dict[str, Any]] = None, tcp_flags: int = -1):
+               tls_meta: Optional[Dict[str, Any]] = None, tcp_flags: int = -1,
+               tcp_seq: Optional[int] = None, raw_payload: Optional[bytes] = None):
         self.last_seen = timestamp
         if is_forward:
             self.forward_packets += 1
@@ -178,25 +201,26 @@ class LiveFlowTracker:
 
         if fin_or_rst:
             self.has_fin_rst = True
+            self.client_reassembler.reset()
+            self.server_reassembler.reset()
 
         if tls_meta:
-            # First valid ClientHello / ServerHello only, mirroring the offline policy.
-            if tls_meta.get("clienthello_present") and not self.clienthello_present and tls_meta.get("ja3_hash"):
-                self.clienthello_present = True
-                self.sni_present = bool(tls_meta.get("sni"))
-                self.alpn_value = tls_meta.get("alpn") or None
-                self.ja3_hash = tls_meta.get("ja3_hash")
-                self.ja3_string = tls_meta.get("ja3_string")
-                self.ja4 = tls_meta.get("ja4")
-                self.ja4_v2 = tls_meta.get("ja4_v2")
-                self.ja4_implementation = tls_meta.get("ja4_implementation")
-                self.ja4_version = tls_meta.get("ja4_version")
-                self.tls_version = tls_meta.get("tls_version")
-                self.clienthello_record_truncated = tls_meta.get("clienthello_record_truncated")
-            if tls_meta.get("serverhello_present") and not self.serverhello_present and tls_meta.get("ja3s_hash"):
-                self.serverhello_present = True
-                self.ja3s_hash = tls_meta.get("ja3s_hash")
-                self.ja3s_string = tls_meta.get("ja3s_string")
+            self._apply_tls_meta(tls_meta)
+
+        # Multi-segment TCP stream reassembly
+        if raw_payload and tcp_seq is not None:
+            if is_forward and (not self.clienthello_present or self.clienthello_record_truncated):
+                rec = self.client_reassembler.add_segment(tcp_seq, raw_payload)
+                if rec:
+                    meta = LiveCaptureSource.parse_tls_metadata(rec)
+                    if meta:
+                        self._apply_tls_meta(meta)
+            elif not is_forward and not self.serverhello_present:
+                rec = self.server_reassembler.add_segment(tcp_seq, raw_payload)
+                if rec:
+                    meta = LiveCaptureSource.parse_tls_metadata(rec)
+                    if meta:
+                        self._apply_tls_meta(meta)
 
     def is_finalized(self, now: float, idle_timeout: Optional[float] = None,
                      max_duration: float = LIVE_MAX_FLOW_DURATION) -> bool:
@@ -291,7 +315,8 @@ class LiveCaptureSource(EventSource):
         self.sweep_task: Optional[asyncio.Task] = None
         self.callback: Optional[Callable[[Dict[str, Any]], None]] = None
 
-    def parse_tls_metadata(self, raw_payload: bytes) -> Optional[Dict[str, Any]]:
+    @staticmethod
+    def parse_tls_metadata(raw_payload: bytes) -> Optional[Dict[str, Any]]:
         """
         Parses an unencrypted TLS ClientHello / ServerHello in a single TCP segment with the SAME
         parser and fingerprint functions as the offline pipeline (pipeline.tls_fingerprinting).
@@ -360,11 +385,13 @@ class LiveCaptureSource(EventSource):
             tcp_flag_value = -1
 
             # Only TCP and UDP flows are reconstructed, as offline (other protocols are ignored).
+            tcp_seq = None
             if pkt.haslayer(TCP):
                 transport = pkt[TCP]
                 proto_str = "TCP"
                 flags = int(getattr(transport, "flags", 0))
                 tcp_flag_value = flags
+                tcp_seq = int(getattr(transport, "seq", 0))
                 # Check FIN (0x01) or RST (0x04)
                 if flags and (flags & 0x01 or flags & 0x04):
                     fin_or_rst = True
@@ -423,13 +450,16 @@ class LiveCaptureSource(EventSource):
                     self.active_flows[canonical_key] = flow_tracker
                 is_forward = (src_ip, src_port) == flow_tracker.forward_tuple
 
+            raw_payload = bytes(transport.payload)[:payload_len] if payload_len > 0 else b""
             flow_tracker.update(
                 is_forward=is_forward,
                 pkt_len=pkt_len,
                 timestamp=now,
                 fin_or_rst=fin_or_rst,
                 tls_meta=tls_meta,
-                tcp_flags=tcp_flag_value
+                tcp_flags=tcp_flag_value,
+                tcp_seq=tcp_seq,
+                raw_payload=raw_payload,
             )
 
         except Exception as e:
