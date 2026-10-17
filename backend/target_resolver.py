@@ -150,11 +150,13 @@ class TargetResolver:
         dst = flow.get("destination_ip") or flow.get("dst_ip") or flow.get("dest_ip")
         if dst:
             return str(dst).strip()
-        # Parse from reverse_endpoint or forward_endpoint (e.g. "172.217.14.206:443")
-        endpoint = flow.get("reverse_endpoint") or flow.get("forward_endpoint")
+        # Parse from the responder endpoint only (e.g. "172.217.14.206:443"). The forward endpoint
+        # is the initiator (usually the monitored client), so falling back to it would attribute
+        # flows by the client's own address.
+        endpoint = flow.get("reverse_endpoint")
         if endpoint and isinstance(endpoint, str) and ":" in endpoint:
-            ip_part = endpoint.split(":")[0].strip()
-            if ip_part and ip_part != "0.0.0.0":
+            ip_part = endpoint.rsplit(":", 1)[0].strip().strip("[]")   # "2001:db8::1:443" -> "2001:db8::1"
+            if ip_part and ip_part not in ("0.0.0.0", "UNKNOWN"):
                 return ip_part
         return None
 

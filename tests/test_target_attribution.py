@@ -203,3 +203,20 @@ def test_24_no_fabricated_sni():
 def test_25_resolver_version_included():
     res = target_resolver.resolve({"flow_id": "f25"})
     assert res.resolver_version == "7.6.1"
+
+
+# ---- cross-phase integration: destination is the responder only --------------------------------
+
+def test_initiator_endpoint_is_never_used_as_destination():
+    # The client's own address must not produce DNS-based attribution when the responder is unknown.
+    target_resolver.dns_cache.add_observation("youtube.com", "192.168.1.50", ttl=300)
+    flow = {"flow_id": "f-init", "forward_endpoint": "192.168.1.50:51000"}
+    res = target_resolver.resolve(flow, target_id="target_youtube")
+    assert res.status == "UNKNOWN"
+
+
+def test_ipv6_responder_endpoint_is_parsed():
+    target_resolver.dns_cache.add_observation("youtube.com", "2001:db8::1", ttl=300)
+    flow = {"flow_id": "f-v6", "reverse_endpoint": "2001:db8::1:443"}
+    res = target_resolver.resolve(flow, target_id="target_youtube")
+    assert res.status == "PROBABLE" and res.evidence[0].type == "DNS_MATCH"
