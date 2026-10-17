@@ -31,10 +31,17 @@ def _load(path: Path) -> Optional[Dict[str, Any]]:
     return json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
 
 
+def invalidated_suites() -> Dict[str, str]:
+    from ml.benchmark.suites import SUITES
+    return {n: s["invalidated"] for n, s in SUITES.items() if s.get("invalidated")}
+
+
 def latest_suites() -> Dict[str, Dict[str, Any]]:
+    """Latest completed run per suite. Invalidated suites are preserved on disk but never reported as results."""
     out: Dict[str, Dict[str, Any]] = {}
+    bad = invalidated_suites()
     for s in list_suites():
-        if not str(s.get("status", "")).startswith("COMPLETED"):
+        if not str(s.get("status", "")).startswith("COMPLETED") or s["name"] in bad:
             continue
         name = s["name"]
         if name not in out or s["created_at"] > out[name]["suite"]["created_at"]:
@@ -99,7 +106,8 @@ def generate_report() -> Dict[str, str]:
                        "seed": e["suite"]["config"].get("seed"), "evaluation_population": e["suite"].get("evaluation_population"),
                        "dataset": e["suite"].get("dataset"), "environment": e["suite"].get("environment"),
                        "summary": e["summary"], "per_capture_primary": _per_capture(e)} for n, e in latest.items()},
-        "suites_not_run": sorted(set(SUITES) - set(latest)),
+        "suites_not_run": sorted(set(SUITES) - set(latest) - set(invalidated_suites())),
+        "invalidated_suites": invalidated_suites(),
         "model_registry": {"models": [{k: m.get(k) for k in ("model_id", "version", "track", "estimator", "status", "research_status",
                                                              "calibration", "thresholds", "evaluation", "artifact")}
                                       for m in (models or {}).get("models", [])],
@@ -218,6 +226,8 @@ def render_markdown(r: Dict[str, Any]) -> str:
         L.append("")
     if r["suites_not_run"]:
         L += ["Suites NOT_RUN: " + ", ".join(r["suites_not_run"]), ""]
+    for name, why in (r.get("invalidated_suites") or {}).items():
+        L += [f"Suite **{name}** is INVALIDATED and excluded from results: {why}", ""]
     L += ["## Claim ledger", "", "| ID | Claim | Status | Evidence |", "|---|---|---|---|"]
     for c in r["claims"]:
         L.append(f"| {c['claim_id']} | {c['claim']} | **{c['status']}** | {c['evidence_summary']} |")

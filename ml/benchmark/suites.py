@@ -56,9 +56,20 @@ SUITES: Dict[str, Dict[str, Any]] = {
         "datasets": ["DS-008", "DS-009"], "task": "SOURCE_DS-008_VS_DS-009", "protocol": "CAPTURE_GROUP_KFOLD",
         "tracks": ["A_FLOW", "C_JA4", "E_JA4_FLOW"], "models": ["random_forest"], "encodings": ["onehot"]},
     "ja4_v2_comparison": {
-        "description": "5 canonical feature tracks (A-E) under capture-grouped CV evaluated with FoxIO-compliant JA4 v2.",
+        "description": "INVALIDATED. Ran on data/processed/v3_ja4_v2, which is not FoxIO JA4 (see 'invalidated').",
         "datasets": None, "protocol": "CAPTURE_GROUP_KFOLD", "tracks": CANONICAL + PAIRED,
-        "models": ["random_forest", "logreg"], "encodings": ["onehot"], "ja4_source": "v2_foxio"},
+        "models": ["random_forest", "logreg"], "encodings": ["onehot"], "ja4_source": "v2_foxio",
+        "invalidated": ("pipeline/corpus/recompute_ja4_v2.py derived 'ja4_v2' from the stored ETTH v1 string: it copied "
+                        "the v1 third component (sorted signature algorithms) for 41,408 of 80,651 fingerprints, hard-coded "
+                        "one reference-vector mapping, and did not recompute the version field. Results of this suite "
+                        "(suite ja4_v2_comparison-20261017T050835Z) are preserved but are not FoxIO JA4 evidence. "
+                        "Superseded by ja4_foxio_capture_cv.")},
+    "ja4_foxio_capture_cv": {
+        "description": "Tracks A-E under capture-grouped CV with FoxIO JA4 recomputed from the raw captures "
+                       "(data/processed/v3_ja4_foxio, verified against 139 FoxIO reference vectors).",
+        "datasets": None, "protocol": "CAPTURE_GROUP_KFOLD", "tracks": CANONICAL + PAIRED,
+        "models": ["dummy_prior", "logreg", "random_forest", "hist_gb"], "encodings": ["onehot"],
+        "ja4_source": "FOXIO_JA4"},
 }
 
 CONFIRMATORY_POLICY = {
@@ -69,17 +80,41 @@ CONFIRMATORY_POLICY = {
 }
 
 
+def _with_foxio_ja4(df: pd.DataFrame) -> pd.DataFrame:
+    """Replace the historical 'ja4' column with FoxIO JA4 recomputed from the raw captures.
+
+    Fails if the recomputed table is missing, incomplete or does not match its checksum; it never
+    falls back to the historical values. Rows whose ClientHello was truncated get no FoxIO JA4.
+    """
+    from pipeline.corpus.recompute_ja4_foxio import load_ja4_foxio
+    fox = load_ja4_foxio(require_complete=True)[["corpus_index", "ja4_foxio", "ja4_foxio_status",
+                                                  "ja4_implementation", "ja4_version"]]
+    out = df.drop(columns=["ja4"]).merge(fox, on="corpus_index", how="left", validate="one_to_one")
+    if out["ja4_foxio_status"].isna().any():
+        raise ValueError("benchmark rows without a FoxIO JA4 status: table does not cover the frame")
+    return out.rename(columns={"ja4_foxio": "ja4"})
+
+
+def track_uses_ja4(track: str) -> bool:
+    return track.split("@")[0] in ("C_JA4", "E_JA4_FLOW") or track.endswith("@JA4POP")
+
+
+def _ja4_provenance(spec: Dict[str, Any]) -> Dict[str, Any]:
+    """Only added when a suite departs from corpus v3's historical JA4, so existing config hashes stay valid."""
+    if spec.get("ja4_source") == "FOXIO_JA4":
+        from pipeline.canonical_flow import JA4_IMPLEMENTATION_FOXIO, JA4_VERSION_FOXIO
+        from pipeline.corpus.recompute_ja4_foxio import TABLE_VERSION
+        return {"ja4_implementation": JA4_IMPLEMENTATION_FOXIO, "ja4_version": JA4_VERSION_FOXIO,
+                "ja4_table": TABLE_VERSION}
+    return {}
+
+
 def suite_frame(spec: Dict[str, Any], seed: int = 42) -> pd.DataFrame:
     df = load_benchmark_frame(spec.get("datasets"), per_capture_cap=spec.get("per_capture_cap", DEFAULT_PER_CAPTURE_CAP), seed=seed)
-    if spec.get("ja4_source") in ("v2_foxio", "v2", "FOXIO_JA4"):
-        from pipeline.corpus import paths
-        v2_path = paths.PROJECT_ROOT / "data" / "processed" / "v3_ja4_v2" / "corpus_flows_ja4_v2.parquet"
-        if v2_path.exists():
-            v2_df = pd.read_parquet(v2_path, columns=["corpus_index", "ja4_v2", "ja4_v2_implementation"])
-            df = df.drop(columns=["ja4"], errors="ignore").merge(
-                v2_df.rename(columns={"ja4_v2": "ja4", "ja4_v2_implementation": "ja4_implementation"}),
-                on="corpus_index", how="left"
-            )
+    if spec.get("invalidated"):
+        raise ValueError(f"suite is invalidated: {spec['invalidated']}")
+    if spec.get("ja4_source") == "FOXIO_JA4":
+        df = _with_foxio_ja4(df)
     task = spec.get("task")
     if task == "SOURCE_DS-008_VS_DS-009":
         df = df.copy()
@@ -113,7 +148,8 @@ def run_suite(name: str, seed: int = 42, n_boot: int = 1000, models: Optional[Li
         for model in spec["models"]:
             for enc in spec["encodings"]:
                 extra = {"per_capture_cap": spec.get("per_capture_cap", DEFAULT_PER_CAPTURE_CAP),
-                         **({"task": spec["task"]} if spec.get("task") else {})}
+                         **({"task": spec["task"]} if spec.get("task") else {}),
+                         **(_ja4_provenance(spec) if track_uses_ja4(track) else {})}
                 probe_cfg = experiment_config(track, spec["protocol"], model, enc, seed, n_boot, extra)
                 h = config_hash(probe_cfg)
                 if h in done:
