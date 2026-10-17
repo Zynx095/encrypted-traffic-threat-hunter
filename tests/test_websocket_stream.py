@@ -11,6 +11,20 @@ from backend.ws_manager import manager
 
 client = TestClient(app)
 
+
+def _engine_with_synthetic_replay(rows: int = 5) -> ReplayEngine:
+    """
+    Replay engine over a small, clearly labelled synthetic table. The lifecycle tests exercise the
+    state machine, not research data, so they must not depend on the git-ignored corpus replay
+    parquet (absent from a clean checkout, where the engine correctly reports ERROR).
+    """
+    import pandas as pd
+    engine = ReplayEngine()
+    engine.df = pd.DataFrame([{"flow_id": f"synthetic-{i}", "dataset_id": "SYNTHETIC_TEST_FIXTURE", "label": "UNKNOWN",
+                               "protocol": "TCP", "flow_duration": 1.0, "total_packets": 2, "total_bytes": 120}
+                              for i in range(rows)])
+    return engine
+
 def test_1_event_schema_validation():
     # Valid event
     event = ETTHStreamEvent(
@@ -81,7 +95,7 @@ def test_4_deterministic_replay_ordering():
         assert r1_f1 == r2_f1 == row1_flow_id
 
 def test_5_lifecycle_events():
-    engine = ReplayEngine()
+    engine = _engine_with_synthetic_replay()
     asyncio.run(engine.start(speed=10.0, loop_replay=False))
     assert engine.state == "PLAYING"
 
@@ -141,7 +155,7 @@ def test_11_initial_idle_state():
     assert engine.error_events == 0
 
 def test_12_state_machine_transitions():
-    engine = ReplayEngine()
+    engine = _engine_with_synthetic_replay()
     # 1. IDLE -> PLAYING
     asyncio.run(engine.start(speed=10.0, loop_replay=False))
     assert engine.state == "PLAYING"
@@ -163,9 +177,7 @@ def test_12_state_machine_transitions():
     assert engine.state == "STOPPED"
 
 def test_13_replay_completed_transition():
-    engine = ReplayEngine()
-    if engine.df is not None and not engine.df.empty:
-        engine.df = engine.df.head(2) # truncate for fast completion
+    engine = _engine_with_synthetic_replay(rows=2)  # two rows for fast completion
 
     async def _run():
         await engine.start(speed=100.0, loop_replay=False)
@@ -177,6 +189,18 @@ def test_13_replay_completed_transition():
     if engine.state == "COMPLETED":
         assert engine.current_index >= len(engine.df)
     asyncio.run(engine.stop())
+
+def test_13b_replay_without_dataset_reports_error_not_playing():
+    engine = ReplayEngine()
+    engine.df = None                                   # e.g. clean checkout without the replay parquet
+
+    async def _run():
+        await engine.start(speed=100.0, loop_replay=False)
+        if engine.task:
+            await asyncio.wait_for(engine.task, timeout=2.0)
+
+    asyncio.run(_run())
+    assert engine.state == "ERROR"
 
 def test_14_speed_changes_timing_only():
     engine = ReplayEngine()
@@ -272,7 +296,7 @@ def test_19_multi_client_telemetry_broadcast():
             assert msg2["event_type"] in ["stream.started", "stream.stopped", "stream.telemetry"]
 
 def test_20_duplicate_start_protection():
-    engine = ReplayEngine()
+    engine = _engine_with_synthetic_replay()
     asyncio.run(engine.start(speed=1.0, loop_replay=False))
     task1 = engine.task
     stream_id1 = engine.stream_id
