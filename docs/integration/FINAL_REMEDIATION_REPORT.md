@@ -99,6 +99,8 @@ The full map is in `docs/integration/JA4_DEPENDENCY_INVENTORY.md`.
 | `data/processed/v3_ja4_foxio/` | `python -m pipeline.corpus.recompute_ja4_foxio --raw-root "D:/College/SOMESHIT DOWNLOADS/encrypted-traffic-threat-hunter"` | 25/25 captures: raw SHA-256 verified, alignment proved (v1 JA4 and JA3 identical on every row), 0 mismatches. 80,594 COMPUTED, 57 INCOMPLETE_FIRST_SEGMENT (DS-008: 13, DS-009: 1, DS-011: 43), 496,587 NO_CLIENTHELLO. 35 distinct FoxIO values, 0 shared between classes. |
 | suite `ja4_foxio_capture_cv-20261017T063740Z` | `python -m ml suite ja4_foxio_capture_cv` | 28 new experiments |
 
+**Provenance note (independent audit).** The manifest records `git_revision` `b622ede…+dirty`, because the recompute script was still uncommitted when it ran. It was later committed unchanged as `5e58e7c`. Re-running the committed script at `286cfcc` into a scratch directory produced a byte-identical table (output SHA-256 `7bc0e796…16e8`). A second, independent extraction path (`pipeline.ja4_reference`) agreed on all 181 DS-008 first-instance FoxIO values.
+
 **Preserved unchanged**
 - Corpus v3 (including its v1 `ja4`).
 - All Phase 9 and Phase 10 suites and records.
@@ -213,8 +215,8 @@ No citation was added.
 
 | Check | Result |
 |---|---|
-| Backend tests, with local data | **459 passed** (run before `f226493`; the files touched by `f226493` were re-run afterwards: 22 passed) |
-| Backend tests, clean `git archive` export | 457 passed, 1 skipped (FoxIO captures absent), 1 failed. The failure was fixed in `f226493`, and the test passes on the export after the fix. |
+| Backend tests, with local data | **459 passed**. Re-run at `286cfcc` during the independent audit: 459 passed. |
+| Backend tests, clean `git archive` export | At `286cfcc`: **458 passed, 1 skipped** (FoxIO reference captures absent; skip reason printed). Before `f226493` the same run gave 457 passed, 1 skipped, 1 failed; `f226493` fixed that failure. |
 | Frontend `npm run build` | passes (chunk-size warning only) |
 | `npm run lint` | **not executable**: `eslint` is not installed (pre-existing) |
 | pyflakes | 68 findings, all unused imports or variables; no undefined names. The one new finding in Phase 13 code was fixed; the re-export in `tcp_reassembly.py` is intentional. |
