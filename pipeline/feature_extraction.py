@@ -160,7 +160,10 @@ def extract_tls_features(row: Dict[str, Any]) -> Dict[str, Any]:
         "ja3_string": row.get("ja3_string", None),
         "ja3s_hash": row.get("ja3s_hash", None),
         "ja3s_string": row.get("ja3s_string", None),
-        "ja4": row.get("ja4", None)
+        "ja4": row.get("ja4", None),
+        "ja4_v2": row.get("ja4_v2", None),
+        "ja4_implementation": row.get("ja4_implementation", None),
+        "ja4_version": row.get("ja4_version", None)
     }
 
 def build_feature_record(row: Dict[str, Any]) -> Dict[str, Any]:

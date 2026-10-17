@@ -151,6 +151,9 @@ class LiveFlowTracker:
         self.ja3s_hash: Optional[str] = None
         self.ja3s_string: Optional[str] = None
         self.ja4: Optional[str] = None
+        self.ja4_v2: Optional[str] = None
+        self.ja4_implementation: Optional[str] = None
+        self.ja4_version: Optional[str] = None
         self.tls_version: Optional[float] = None
         self.clienthello_record_truncated: Optional[bool] = None
         self.has_fin_rst = False
@@ -185,6 +188,9 @@ class LiveFlowTracker:
                 self.ja3_hash = tls_meta.get("ja3_hash")
                 self.ja3_string = tls_meta.get("ja3_string")
                 self.ja4 = tls_meta.get("ja4")
+                self.ja4_v2 = tls_meta.get("ja4_v2")
+                self.ja4_implementation = tls_meta.get("ja4_implementation")
+                self.ja4_version = tls_meta.get("ja4_version")
                 self.tls_version = tls_meta.get("tls_version")
                 self.clienthello_record_truncated = tls_meta.get("clienthello_record_truncated")
             if tls_meta.get("serverhello_present") and not self.serverhello_present and tls_meta.get("ja3s_hash"):
@@ -240,6 +246,7 @@ class LiveFlowTracker:
             "ja3s_hash": self.ja3s_hash,
             "ja3s_string": self.ja3s_string,
             "ja4": self.ja4,
+            "ja4_v2": self.ja4_v2,
             "tls_version": self.tls_version,
             "clienthello_record_truncated": self.clienthello_record_truncated,
             "live_feature_window_truncated": self.window_truncated,
@@ -249,7 +256,8 @@ class LiveFlowTracker:
             "end_time": self.last_seen,
             "feature_provenance": FEATURE_PROVENANCE_ETTH,
             "byte_count_semantics": BYTES_IP_LENGTH,
-            "ja4_implementation": JA4_IMPLEMENTATION_ETTH if self.ja4 else None,
+            "ja4_implementation": self.ja4_implementation or (JA4_IMPLEMENTATION_ETTH if self.ja4 else None),
+            "ja4_version": self.ja4_version or ("v1_legacy" if self.ja4 else None),
             "label": "UNKNOWN",
         })
         return record
@@ -305,9 +313,18 @@ class LiveCaptureSource(EventSource):
             else:
                 ja3_string, ja3_hash = generate_ja3(ch)
                 record_len = int.from_bytes(raw_payload[3:5], "big")
-                meta.update(ja3_hash=ja3_hash, ja3_string=ja3_string, ja4=generate_ja4(ch), sni=ch["sni_present"],
-                            alpn=ch["alpn_str"] or None, tls_version=1.3 if ch["has_supported_versions"] else 1.2,
-                            clienthello_record_truncated=(5 + record_len) > len(raw_payload))
+                meta.update(
+                    ja3_hash=ja3_hash,
+                    ja3_string=ja3_string,
+                    ja4=generate_ja4(ch, version="v1_legacy"),
+                    ja4_v2=generate_ja4(ch, version="v2_foxio"),
+                    ja4_implementation=JA4_IMPLEMENTATION_ETTH,
+                    ja4_version="v1_legacy",
+                    sni=ch["sni_present"],
+                    alpn=ch["alpn_str"] or None,
+                    tls_version=1.3 if ch["has_supported_versions"] else 1.2,
+                    clienthello_record_truncated=(5 + record_len) > len(raw_payload)
+                )
         elif handshake_type == 0x02:
             meta["serverhello_present"] = True
             sh = parse_server_hello(raw_payload)

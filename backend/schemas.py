@@ -21,6 +21,9 @@ class TLSDetails(BaseModel):
     ja3_hash: Optional[str] = None
     ja3s_hash: Optional[str] = None
     ja4: Optional[str] = None
+    ja4_v2: Optional[str] = None
+    ja4_implementation: Optional[str] = None
+    ja4_version: Optional[str] = None
     sni_present: bool = False
     sni_value: Optional[str] = None
     alpn: Optional[str] = None

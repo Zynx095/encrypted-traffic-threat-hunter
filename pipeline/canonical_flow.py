@@ -24,7 +24,10 @@ FEATURE_PROVENANCE_SENSOR = "SENSOR_AGGREGATE"     # counters reported by an ext
 # JA4 implementations. Models in the registry were trained on ETTH_JA4_V1 values only.
 JA4_IMPLEMENTATION_ETTH = "ETTH_JA4_V1"   # pipeline.tls_fingerprinting.generate_ja4 (sorted sig-algs, 'n' for no SNI)
 JA4_IMPLEMENTATION_FOXIO = "FOXIO_JA4"    # FoxIO reference (Zeek ja4 package, Suricata >= 7)
+JA4_IMPLEMENTATION_V1 = JA4_IMPLEMENTATION_ETTH
+JA4_IMPLEMENTATION_V2 = JA4_IMPLEMENTATION_FOXIO
 JA4_IMPLEMENTATION_UNKNOWN = "UNKNOWN"
+SUPPORTED_JA4_IMPLEMENTATIONS = {JA4_IMPLEMENTATION_ETTH, JA4_IMPLEMENTATION_FOXIO, JA4_IMPLEMENTATION_UNKNOWN}
 
 # What a byte counter measures.
 BYTES_IP_LENGTH = "IP_LENGTH"                  # ETTH offline / live capture, Zeek *_ip_bytes

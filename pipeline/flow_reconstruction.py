@@ -59,6 +59,9 @@ class Flow:
         self.ja3s_string = None
         self.ja3s_hash = None
         self.ja4 = None
+        self.ja4_v2 = None
+        self.ja4_implementation = None
+        self.ja4_version = None
         self.tls_version = None
         self.tls_record_version = None
         self.sni_present = False
@@ -98,7 +101,10 @@ class Flow:
                     self.tls_version = 1.3 if ch_data["has_supported_versions"] else 1.2
                     
                     self.ja3_string, self.ja3_hash = generate_ja3(ch_data)
-                    self.ja4 = generate_ja4(ch_data)
+                    self.ja4 = generate_ja4(ch_data, version="v1_legacy")
+                    self.ja4_v2 = generate_ja4(ch_data, version="v2_foxio")
+                    self.ja4_implementation = "ETTH_JA4_V1"
+                    self.ja4_version = "v1_legacy"
             
             # Policy: Take the first valid ServerHello
             elif handshake_type == 2 and not self.server_hello_present:
@@ -174,6 +180,9 @@ class Flow:
             "ja3s_string": self.ja3s_string,
             "ja3s_hash": self.ja3s_hash,
             "ja4": self.ja4,
+            "ja4_v2": self.ja4_v2,
+            "ja4_implementation": self.ja4_implementation,
+            "ja4_version": self.ja4_version,
             "tls_version": self.tls_version,
             "tls_record_version": self.tls_record_version,
             "sni_present": self.sni_present,
