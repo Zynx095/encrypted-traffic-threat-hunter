@@ -171,3 +171,27 @@ def test_unseen_fingerprint_analysis_partitions_predictions(scratch_registry):
     assert out["status"] == "COMPLETED"
     assert sum(c["flows"] for c in out["cells"]) == rec["coverage"]["population_rows"]
     assert unseen_analysis(df, {**rec, "config": {**rec["config"], "track": "A_FLOW"}}, {})["status"] == "NOT_APPLICABLE"
+
+
+def test_pooled_suite_runs_end_to_end_and_reverifies(tmp_path, monkeypatch):
+    """A Phase 9 suite re-run (synthetic corpus, temporary registry) completes, produces paired contrasts
+    and its records re-verify against their own predictions."""
+    import ml.benchmark.registry as R
+    import ml.benchmark.suites as S
+    import ml.reporting.verify as V
+    from tests.ml_fixtures import synthetic_corpus
+
+    monkeypatch.setattr(R, "PHASE9_ROOT", tmp_path / "phase9")
+    monkeypatch.setattr(R, "REGISTRY_INDEX", tmp_path / "index.jsonl")
+    monkeypatch.setattr(S, "load_benchmark_frame",
+                        lambda datasets=None, per_capture_cap=None, seed=42: synthetic_corpus(captures_per_class=6, flows_per_capture=25))
+    res = S.run_suite("pooled_capture_cv", n_boot=20, models=["logreg"],
+                      tracks=["A_FLOW@JA3POP", "A_FLOW@JA4POP", "B_JA3", "C_JA4", "D_JA3_FLOW", "E_JA4_FLOW"])
+    assert res["status"] == "COMPLETED", res
+    contrasts = res["summary"]["paired_contrasts"]["logreg"]["contrasts"]
+    assert {c["contrast"] for c in contrasts} == {"JA3 added to flow", "JA4 added to flow", "flow added to JA3", "flow added to JA4"}
+    assert all(c["rows_a_only"] == 0 and c["rows_b_only"] == 0 for c in contrasts)      # paired on identical rows
+    monkeypatch.setattr(V, "ROOT", tmp_path)        # records outside the repository keep absolute artefact paths
+    for rec_path in (tmp_path / "phase9" / res["suite_id"]).glob("*/record.json"):
+        rec = json.loads(rec_path.read_text(encoding="utf-8"))
+        assert V.verify_record(rec)["result"] == "VERIFIED"

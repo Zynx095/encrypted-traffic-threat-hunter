@@ -98,7 +98,8 @@ def _write_json(path: Path, obj: Any) -> None:
 
 class Suite:
     def __init__(self, name: str, cfg: Dict[str, Any], stage: str = "EXPLORATORY", suite_id: Optional[str] = None,
-                 root: Path = PHASE9_ROOT):
+                 root: Optional[Path] = None):
+        root = PHASE9_ROOT if root is None else root     # resolved at call time (testable, like the model registry)
         if stage not in STAGES:
             raise ValueError(stage)
         self.name = name
@@ -185,7 +186,8 @@ class Experiment:
         return self.record
 
 
-def list_suites(roots=(PHASE9_ROOT, PHASE10_ROOT)) -> List[Dict[str, Any]]:
+def list_suites(roots=None) -> List[Dict[str, Any]]:
+    roots = (PHASE9_ROOT, PHASE10_ROOT) if roots is None else roots
     out = []
     for root in roots:
         if root.exists():
