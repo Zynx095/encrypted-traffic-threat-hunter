@@ -53,6 +53,7 @@ def parse_client_hello(payload: bytes) -> Dict[str, Any]:
         supported_groups = []
         ec_point_formats = []
         sig_algs = []
+        supported_versions = []
         sni_present = False
         alpn_str = ""
         has_supported_versions = False
@@ -103,6 +104,15 @@ def parse_client_hello(payload: bytes) -> Dict[str, Any]:
                                 alpn_str = payload[pos+3:pos+3+first_alpn_len].decode('utf-8', 'ignore')
                 elif ext_type == 43: # Supported Versions
                     has_supported_versions = True
+                    if ext_len >= 3:
+                        sv_len = payload[pos]
+                        for i in range(0, min(sv_len, ext_len - 1), 2):
+                            if pos + 1 + i + 2 <= pos + ext_len:
+                                val = int.from_bytes(payload[pos+1+i:pos+3+i], 'big')
+                                supported_versions.append(val)
+                    elif ext_len == 2:
+                        val = int.from_bytes(payload[pos:pos+2], 'big')
+                        supported_versions.append(val)
 
                 pos += ext_len
 
@@ -114,6 +124,7 @@ def parse_client_hello(payload: bytes) -> Dict[str, Any]:
             "supported_groups": supported_groups,
             "ec_point_formats": ec_point_formats,
             "sig_algs": sig_algs,
+            "supported_versions": supported_versions,
             "sni_present": sni_present,
             "alpn_str": alpn_str,
             "has_supported_versions": has_supported_versions,
@@ -210,21 +221,31 @@ def generate_ja3s(sh_data: Dict[str, Any]) -> Tuple[Optional[str], Optional[str]
 
     return ja3s_string, ja3s_hash
 
-def generate_ja4(ch_data: Dict[str, Any]) -> str:
-    if ch_data.get("error"):
+def generate_ja4_v1(ch_data: Dict[str, Any]) -> Optional[str]:
+    """
+    Generate legacy ETTH JA4 (v1) fingerprint.
+    Deviations from FoxIO specification:
+    - Sorts signature algorithms.
+    - Uses 'n' instead of 'i' for missing SNI.
+    - Version is '13' if has_supported_versions else '12'.
+    - If no signature algorithms, hashes a trailing '_'.
+    - If no ciphers, hashes empty string instead of '000000000000'.
+    - Counts above 99 are not capped at 99.
+    """
+    if not ch_data or ch_data.get("error"):
         return None
 
-    tls_ver = "13" if ch_data["has_supported_versions"] else "12"
-    sni = "d" if ch_data["sni_present"] else "n" # Using n for none, JA4 spec
+    tls_ver = "13" if ch_data.get("has_supported_versions") else "12"
+    sni = "d" if ch_data.get("sni_present") else "n" # Using n for none, JA4 legacy
 
-    ciphers = [c for c in ch_data["ciphers"] if not is_grease(c)]
-    extensions = [e for e in ch_data["extensions"] if not is_grease(e)]
-    sig_algs = [s for s in ch_data["sig_algs"] if not is_grease(s)]
+    ciphers = [c for c in ch_data.get("ciphers", []) if not is_grease(c)]
+    extensions = [e for e in ch_data.get("extensions", []) if not is_grease(e)]
+    sig_algs = [s for s in ch_data.get("sig_algs", []) if not is_grease(s)]
 
     c_count = f"{len(ciphers):02d}"
     e_count = f"{len(extensions):02d}"
 
-    alpn_str = ch_data["alpn_str"]
+    alpn_str = ch_data.get("alpn_str") or ""
     alpn = f"{alpn_str[0]}{alpn_str[-1]}" if alpn_str else "00"
 
     ja4_a = f"t{tls_ver}{sni}{c_count}{e_count}{alpn}"
@@ -243,11 +264,128 @@ def generate_ja4(ch_data: Dict[str, Any]) -> str:
     # Format according to verify_ds004 JA4 minimal implementation
     combined = f"{ext_str}_{sig_str}" if ext_str or sig_str else ""
     if not combined:
-         ja4_c = "000000000000"
+        ja4_c = "000000000000"
     else:
-         ja4_c = hashlib.sha256(combined.encode()).hexdigest()[:12]
+        ja4_c = hashlib.sha256(combined.encode()).hexdigest()[:12]
 
     return f"{ja4_a}_{ja4_b}_{ja4_c}"
+
+
+def generate_ja4_foxio(ch_data: Dict[str, Any], protocol: str = "t") -> Optional[str]:
+    """
+    Generate FoxIO-compliant JA4 (v2) fingerprint from parsed ClientHello data.
+    Complies with official FoxIO JA4 specification:
+    - Protocol character: 't' for TCP, 'q' for QUIC, 'd' for DTLS.
+    - TLS version: 2 chars based on highest non-GREASE supported_versions, falling back to client_version.
+    - SNI indicator: 'd' if domain SNI present, 'i' if missing / IP.
+    - Cipher count: 2 decimal digits capped at 99.
+    - Extension count: 2 decimal digits capped at 99 (includes SNI and ALPN if present).
+    - ALPN: first and last char of first offered ALPN, or '00' if absent/empty.
+    - ja4_b: SHA256[:12] of comma-separated sorted 4-digit hex ciphers (non-GREASE). If none: '000000000000'.
+    - ja4_c: SHA256[:12] of comma-separated sorted 4-digit hex extensions (excluding SNI 0 and ALPN 16, non-GREASE)
+             plus '_' and comma-separated wire-order 4-digit hex signature algorithms (non-GREASE).
+             If no sig_algs extension/empty: ext_str without trailing '_'.
+             If no extensions (excluding 0, 16) and no sig_algs: '000000000000'.
+    """
+    if not ch_data or ch_data.get("error"):
+        return None
+
+    # 1. TLS Version determination
+    version_map = {
+        0x0304: "13",
+        0x0303: "12",
+        0x0302: "11",
+        0x0301: "10",
+        0x0300: "s3",
+        0x0200: "s2",
+        0x0100: "s1",
+    }
+
+    tls_ver = None
+    sv_list = [v for v in ch_data.get("supported_versions", []) if not is_grease(v)]
+    if sv_list:
+        for candidate in (0x0304, 0x0303, 0x0302, 0x0301, 0x0300, 0x0200, 0x0100):
+            if candidate in sv_list:
+                tls_ver = version_map[candidate]
+                break
+
+    if tls_ver is None:
+        cv = ch_data.get("client_version")
+        if cv and not is_grease(cv) and cv in version_map:
+            tls_ver = version_map[cv]
+        elif ch_data.get("has_supported_versions"):
+            tls_ver = "13"
+        elif cv and cv in version_map:
+            tls_ver = version_map[cv]
+        else:
+            tls_ver = "12"
+
+    # 2. SNI indicator
+    sni = "d" if ch_data.get("sni_present") else "i"
+
+    # 3. Non-GREASE ciphers
+    ciphers = [c for c in ch_data.get("ciphers", []) if not is_grease(c)]
+    c_count = min(len(ciphers), 99)
+    c_count_str = f"{c_count:02d}"
+
+    # 4. Non-GREASE extensions
+    extensions = [e for e in ch_data.get("extensions", []) if not is_grease(e)]
+    e_count = min(len(extensions), 99)
+    e_count_str = f"{e_count:02d}"
+
+    # 5. ALPN
+    alpn_str = ch_data.get("alpn_str") or ""
+    if alpn_str:
+        alpn = f"{alpn_str[0]}{alpn_str[-1]}"
+    else:
+        alpn = "00"
+
+    ja4_a = f"{protocol}{tls_ver}{sni}{c_count_str}{e_count_str}{alpn}"
+
+    # Part B: Ciphers (sorted, 4 hex lowercase)
+    if not ciphers:
+        ja4_b = "000000000000"
+    else:
+        sorted_ciphers = sorted(ciphers)
+        cipher_str = ",".join(f"{c:04x}" for c in sorted_ciphers)
+        ja4_b = hashlib.sha256(cipher_str.encode()).hexdigest()[:12]
+
+    # Part C: Extensions (sorted, excluding SNI 0 and ALPN 16) + Signature Algorithms (wire order)
+    exts_no_sni_alpn = sorted([e for e in extensions if e not in (0, 16)])
+    ext_str = ",".join(f"{e:04x}" for e in exts_no_sni_alpn)
+
+    # Check if signature_algorithms extension (13) was present
+    sig_ext_present = 13 in extensions
+    sig_algs = [s for s in ch_data.get("sig_algs", []) if not is_grease(s)]
+
+    if sig_ext_present and sig_algs:
+        sig_str = ",".join(f"{s:04x}" for s in sig_algs)  # wire order, NOT sorted
+        combined = f"{ext_str}_{sig_str}"
+    else:
+        combined = ext_str
+
+    if not combined:
+        ja4_c = "000000000000"
+    else:
+        ja4_c = hashlib.sha256(combined.encode()).hexdigest()[:12]
+
+    return f"{ja4_a}_{ja4_b}_{ja4_c}"
+
+
+generate_ja4_v2 = generate_ja4_foxio
+
+
+def generate_ja4(ch_data: Dict[str, Any], version: str = "v1_legacy") -> Optional[str]:
+    """
+    Generate JA4 fingerprint.
+
+    Parameters:
+        ch_data: Parsed ClientHello dictionary.
+        version: "v1_legacy" (ETTH legacy sorted sig-algs) or "v2_foxio" (FoxIO specification compliant).
+    """
+    if version in ("v2_foxio", "v2", "foxio", "FOXIO_JA4"):
+        return generate_ja4_foxio(ch_data)
+    return generate_ja4_v1(ch_data)
 
 def parse_tls_extensions(exts: bytes) -> Tuple[bool, bool, bool, int, bool]:
     """
