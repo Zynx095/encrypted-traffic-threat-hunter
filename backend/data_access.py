@@ -41,6 +41,17 @@ def _first_existing():
     return None
 
 
+def _tag_historical_ja4(df: pd.DataFrame) -> pd.DataFrame:
+    """Every replay candidate predates FoxIO JA4 in ETTH: its 'ja4' column is the historical ETTH
+    implementation. Declare that explicitly, since inference refuses undeclared JA4 values."""
+    if "ja4" in df.columns and "ja4_implementation" not in df.columns:
+        from pipeline.canonical_flow import JA4_IMPLEMENTATION_ETTH, JA4_VERSION_ETTH_V1
+        has = df["ja4"].notna()
+        df = df.assign(ja4_implementation=has.map({True: JA4_IMPLEMENTATION_ETTH, False: None}),
+                       ja4_version=has.map({True: JA4_VERSION_ETTH_V1, False: None}))
+    return df
+
+
 def replay_frame() -> Tuple[Optional[pd.DataFrame], Optional[str]]:
     """Returns (dataframe, source path) or (None, None) when no dataset exists."""
     with _lock:
@@ -49,7 +60,7 @@ def replay_frame() -> Tuple[Optional[pd.DataFrame], Optional[str]]:
             df = None
             if path is not None:
                 try:
-                    df = pd.read_parquet(path)
+                    df = _tag_historical_ja4(pd.read_parquet(path))
                     logger.info("Loaded %d replay rows from %s", len(df), path.name)
                 except Exception as exc:
                     logger.error("Failed to read %s: %s", path, exc)
