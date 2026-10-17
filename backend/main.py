@@ -302,19 +302,38 @@ def get_sensors_status():
     """
     from backend.event_sources.live_capture import detect_live_capture_capability
     from backend.event_sources.ebpf_source import detect_ebpf_capability
+    import shutil
     live = replay_engine.live_capture_source.get_status()
+    live_cap = detect_live_capture_capability()
+    ebpf_cap = detect_ebpf_capability()
     log_adapter = {"adapter_available": True, "ingestion_active": False, "connected_to_live_stream": False,
                    "process_managed_by_etth": False, "mode": "LOG_PARSING (offline files or lines passed by a caller)"}
+
+    def states(implemented, configured, installed, running, observed, validated):
+        # Six distinct facts; None means ETTH cannot know (it does not manage or monitor the process).
+        return {"adapter_implemented": implemented, "configured": configured, "dependency_installed": installed,
+                "sensor_running": running, "sensor_output_observed": observed, "end_to_end_validated": validated}
+
+    validated_note = "never validated against genuine tool output or a real interface on this branch"
     return {
         "note": ("adapter_available means the parser/adapter can be imported; it does not mean a sensor is running. "
                  "Only live capture feeds the live stream. Sensor flows keep SENSOR_AGGREGATE provenance and are "
                  "refused by flow-feature models (see docs/integration/CROSS_PHASE_CONTRACTS.md)."),
-        "live_capture": {**detect_live_capture_capability(), "state": live["status"],
-                         "ingestion_active": live["status"] == "CAPTURING", "connected_to_live_stream": True},
-        "ebpf": {**detect_ebpf_capability(), "ingestion_active": False, "connected_to_live_stream": False,
-                 "mode": "JSON_EVENT_PARSING (external collector required)"},
-        "zeek": {**log_adapter, "parser": "ZeekCorrelator", "supported_logs": ["conn.log", "ssl.log"]},
-        "suricata": {**log_adapter, "parser": "SuricataCorrelator", "supported_events": ["flow", "tls", "alert"]},
+        "live_capture": {**live_cap, "state": live["status"],
+                         "ingestion_active": live["status"] == "CAPTURING", "connected_to_live_stream": True,
+                         "states": states(True, live.get("selected_interface") is not None, bool(live_cap.get("available")),
+                                          live["status"] == "CAPTURING", live.get("packets_observed", 0) > 0, False),
+                         "validation_note": validated_note},
+        "ebpf": {**ebpf_cap, "ingestion_active": False, "connected_to_live_stream": False,
+                 "mode": "JSON_EVENT_PARSING (external collector required)",
+                 "states": states(True, False, False, None, False, False),
+                 "validation_note": "no eBPF program exists in ETTH; only the JSON event contract is implemented"},
+        "zeek": {**log_adapter, "parser": "ZeekCorrelator", "supported_logs": ["conn.log", "ssl.log"],
+                 "states": states(True, False, shutil.which("zeek") is not None, None, False, False),
+                 "validation_note": validated_note},
+        "suricata": {**log_adapter, "parser": "SuricataCorrelator", "supported_events": ["flow", "tls", "alert"],
+                     "states": states(True, False, shutil.which("suricata") is not None, None, False, False),
+                     "validation_note": validated_note},
     }
 
 from fastapi import WebSocket, WebSocketDisconnect
