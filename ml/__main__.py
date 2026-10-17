@@ -10,6 +10,7 @@ ETTH research command line (Phases 9-10).
     python -m ml rollback --track E_JA4_FLOW
     python -m ml sequence [--epochs 30] [--archs cnn,gru] [--datasets DS-009,DS-011]
     python -m ml report
+    python -m ml verify [--out FILE]   # re-check persisted results against their predictions
     python -m ml unseen --suite-id ID --track C_JA4 --model logreg
     python -m ml repro-package --suite-id ID
 """
@@ -63,6 +64,8 @@ def main(argv=None) -> int:
     q.add_argument("--seed", type=int, default=42)
     q.add_argument("--max-len", type=int, default=64)
     sub.add_parser("report")
+    vf = sub.add_parser("verify")
+    vf.add_argument("--out")
     u = sub.add_parser("unseen")
     u.add_argument("--suite-id", required=True)
     u.add_argument("--track", required=True)
@@ -160,6 +163,15 @@ def main(argv=None) -> int:
         from ml.reporting.report import generate_report
         paths = generate_report()
         print(json.dumps(paths, indent=2))
+    elif args.cmd == "verify":
+        from ml.reporting.verify import verify_all
+        result = verify_all()
+        if args.out:
+            _write(Path(args.out), result)
+        print(json.dumps({"result_counts": result["result_counts"],
+                          "claim_status_differences": result["claims"].get("status_differences")}, indent=2))
+        bad = set(result["result_counts"]) - {"VERIFIED", "MISSING", "NOT_COMPLETED"}
+        return 1 if bad or result["claims"].get("status_differences") else 0
     return 0
 
 
