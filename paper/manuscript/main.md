@@ -1,182 +1,409 @@
-# Encrypted Traffic Threat Hunter: Evaluating TLS Fingerprints and Behavioral Flow Fusion for Zero-Decryption Network Intrusion Detection
+# Do TLS Fingerprints Add Value to Encrypted-Flow Features? A Source-Aware Exploratory Evaluation Without Decryption
 
-**Authors:** ETTH Academic Research Group  
-**Target Submission:** Research in Attacks, Intrusions, and Defenses (RAID) / Annual Computer Security Applications Conference (ACSAC)  
-**Status:** Working Draft (Post-Phase 7 Controlled Pilot & Phase 11 Sensor Architecture)  
+**Authors:** ETTH project (author list to be finalised)
+**Status:** WORKING DRAFT. Not submitted and **not publication-ready**.
+- All empirical results are **exploratory** and **source-confounded**: every dataset contributes a single class.
+- No confirmatory evaluation has been run. It is blocked on independent benign data.
+- Every number below comes from persisted artefacts and has been re-verified with `python -m ml verify`: 124/124 experiment records reproduce from their stored out-of-fold predictions. The evidence ledger is `docs/research/RESEARCH_CLAIM_LEDGER.md`.
+
+**Reconciliation note (integration of Phases 8–12).** An earlier Phase 12 draft of this manuscript was written against the Phase 7 pilot (2,543 malicious vs 6 benign flows). Its results, the claimed feature-importance narrative, the "15-second idle timeout", the "80 features", the "mutually exclusive tracks" and several references were incorrect or unsupported. This version replaces them with the executed Phase 8–10 results. The superseded draft is preserved in Git history (branch `research/phase-12-paper-manuscript`).
 
 ---
 
 ## Abstract
 
-The near-universal adoption of Transport Layer Security (TLS 1.2 and TLS 1.3) has rendered traditional deep packet inspection (DPI) obsolete for modern network intrusion detection. While organizations increasingly deploy TLS-intercepting middleboxes, payload decryption introduces severe privacy violations, high computational overhead, and cryptographic vulnerabilities. In response, this paper presents **Encrypted Traffic Threat Hunter (ETTH)**, an open, zero-decryption threat detection architecture designed to investigate whether fusing observable client TLS fingerprints (JA3 and JA4) with bidirectional encrypted-flow behavioral features provides measurable advantages over isolated feature families. 
+TLS encrypts application payloads, but passive observers can still see the cleartext handshake (summarised as JA3/JA4 client fingerprints) and the size and timing of encrypted packets.
 
-We evaluate five controlled experimental configurations (Tracks A–E) across 2,549 network flows under a group-aware cross-validation protocol (`GroupShuffleSplit`) that strictly isolates repetitive malware beaconing geometries (`behavioral_hash`) and strips all deterministic host and environmental identifiers. Our engineering pilot demonstrates that the multi-track pipeline executes deterministically without data leakage. However, our rigorous statistical audit reveals a critical methodological limitation: existing academic evaluations frequently suffer from severe **dataset-source confounding**. In our pilot corpus (2,543 malicious flows from Malware-Traffic-Analysis.net vs. 6 benign validation flows from CipherSpectrum), classifiers achieved near-perfect performance (PR-AUC 1.000, F1 0.999) by trivially separating virtualization artifacts of malware sandboxes rather than genuine threat signatures. We formulate a comprehensive research claim ledger, document the exact pre-submission criteria needed to resolve source confounding, and introduce an extensible multi-sensor ingestion layer supporting Zeek JSON, Suricata EVE, and Linux eBPF telemetry without payload decryption.
+**Question.** We ask whether combining fingerprints with encrypted-flow behavioural features improves malicious-traffic detection over either feature family alone, without decrypting payloads.
 
----
+**Setup.**
+- Five feature tracks (A: flow; B: JA3; C: JA4; D: JA3+flow; E: JA4+flow).
+- A corpus of 577,238 flows from 25 public packet captures: 19 malicious captures from two sources, and 6 benign captures from one source.
+- Leakage-audited protocol: capture-grouped nested cross-validation, allow-list feature governance, validation-only calibration and thresholds, capture-level bootstrap and Holm-corrected paired contrasts.
+
+**Results.**
+- On the shared TLS population, flow-only and fusion models are both near ceiling. The pre-declared primary model shows no evidence that adding JA3 or JA4 to flow features increases average precision (AP).
+- Fingerprint-only models separate the sources rather than maliciousness. Under capture-grouped evaluation they flag about 98% of benign flows whose client stack was not seen in training (18.4–18.6% test FPR at a validation-selected 1% FPR threshold). A held-out malicious source is detected at 0% or 100%.
+- JA4 identifies the collection source perfectly (AP 1.000).
+- Flow-only AP falls from 0.931 to 0.710 when whole malware families are held out.
+- Handshake-presence flags alone reach AP 0.765 against a prevalence floor of 0.600.
+- The commonly used behavioural-hash holdout reports near-perfect scores (AP 1.000 for all fingerprint tracks), which hide these effects.
+- First-64-packet CNN and GRU models do not outperform information-matched tabular baselines.
+
+**Conclusion.** In this corpus, apparent fingerprint value is client-stack memorisation. The central question remains open until benign data from independent environments is available. We release the leakage-audited benchmark harness, the evidence ledger, and a sensor-agnostic flow contract that refuses semantically incompatible inputs.
 
 ## 1. Keywords
-Network Security, Encrypted Traffic Analysis, Transport Layer Security (TLS), JA3/JA4 Fingerprinting, Zero-Decryption Detection, Dataset Leakage, Source Confounding, Zeek, Suricata, eBPF.
 
----
+Encrypted traffic analysis; TLS fingerprinting; JA3; JA4; flow features; dataset shift; source confounding; evaluation methodology; negative results.
 
 ## 2. Introduction
-Encrypted network protocols now account for over 95% of enterprise and consumer web traffic. While this transition protects user privacy against eavesdropping, adversaries routinely weaponize encryption to conceal command-and-control (C2) beaconing, data exfiltration, and lateral malware staging. Security operations centers (SOCs) have historically responded by deploying enterprise decryption proxies ("TLS break-and-inspect"). However, decryption breaks end-to-end security guarantees, introduces compliance liability under regulations such as GDPR and HIPAA, and is rendered increasingly infeasible by emerging protocol standards such as Encrypted ClientHello (ECH) and TLS 1.3 0-RTT session resumption.
 
-The central challenge of modern network defense is therefore **detecting threats inside encrypted sessions without decrypting payload contents**.
+Encrypted transport removes payload content from network monitoring. Two kinds of observable metadata remain:
+- **The cleartext TLS handshake.** In particular the ClientHello, which JA3 [3] and JA4 [4] condense into client fingerprints.
+- **Encrypted-flow behaviour.** Packet sizes, directions, timing and volume, which earlier work combined with TLS metadata for malware detection [1, 2].
 
----
+Fusing the two families is intuitive. Prior work, however, warns that learning-based security evaluations are often inflated by sampling bias and spurious correlations [6, 7]. Fingerprints are especially exposed to this: they identify the client software stack, and in public datasets the client stack is frequently a property of the collection environment rather than of maliciousness.
 
-## 3. Research Motivation & Problem Definition
-Network analysts can passively observe two distinct feature families from encrypted flows:
-1. **TLS Handshake Metadata**: The unencrypted cryptographic parameters exchanged during session negotiation (TLS version, cipher suite vectors, extension arrays, supported elliptic curves, ALPN tokens, and client fingerprints such as Salesforce JA3 and FoxIO JA4).
-2. **Behavioral Flow Dynamics**: Statistical geometries of packet transmissions (packet sizes, directional byte ratios, burstiness, inter-arrival time distributions, and duration).
+This draft reports an exploratory evaluation designed to make that confound visible rather than hide it. It distinguishes engineering properties that were verified from empirical findings that remain exploratory.
 
-While prior literature has explored handshake hashing and flow modeling independently, there is a lack of rigorous, leakage-controlled research examining:
-- Does fusing modern client fingerprints (JA4) with flow dynamics provide statistically measurable detection gains over flow-only baselines?
-- How severely does environmental and dataset-source confounding artificially inflate published benchmark metrics in encrypted traffic research?
+## 3. Problem Definition
 
----
+Let a flow be described by:
+- flow behavioural features **F**: 74 statistics of counts, rates, packet lengths, inter-arrival times and bursts;
+- TLS structural metadata **S**: ClientHello/ServerHello/SNI presence, offered TLS version, first offered ALPN;
+- a fingerprint **J**: JA3 or JA4.
 
-## 4. Research Questions & Hypotheses
+The question is whether adding J to (F, S) increases detection quality, and whether adding (F, S) to J does. The evaluation must hold under conditions that approximate deployment: unseen captures, unseen malware families and unseen sources. All of this must be done without decrypting payloads.
 
-- **RQ1 (Feature Fusion Advantage):** Does combining TLS client fingerprints (JA3/JA4) with encrypted-flow behavioral statistics improve malicious flow detection compared to using either feature family in isolation?
-  - *Hypothesis $H_1$:* Fusion configurations (Tracks D and E) will achieve higher Precision-Recall AUC on mixed benign/malicious traffic than flow-only (Track A) or fingerprint-only (Tracks B and C) models.
-- **RQ2 (Fingerprint Evolution):** Does FoxIO JA4 provide superior discriminative power and lower collision rates than legacy JA3 MD5 hashes in identifying malicious C2 agents?
-  - *Hypothesis $H_2$:* JA4 will reduce false-positive rates on diverse benign applications due to its structured protocol framing and extension hashing.
-- **RQ3 (Source Confounding Impact):** To what extent do capture-environment discrepancies between benign and malicious datasets introduce spurious correlation in encrypted traffic classification?
-  - *Hypothesis $H_3$:* High reported classification metrics on disparate datasets reflect environment separation rather than malicious pattern detection.
+## 4. Research Questions and Hypotheses
 
----
+- **RQ1 (fusion).** Does D or E outperform A on the same flows (JA3/JA4-available population)? Does D or E outperform B or C?
+  - *H1:* fusion increases AP.
+  - *Status:* **insufficient evidence** (§13.2).
+- **RQ2 (generalisation).** Do the tracks transfer to held-out captures, families and sources?
+  - *Status:* flow-only and fusion transfer to a held-out malicious source is **contradicted** (detection ≤ 35% at the validation threshold). Fingerprint-only transfer is **all-or-nothing** (§13.4).
+- **RQ3 (confounding).** Do evaluation protocol and source identity explain the apparent performance?
+  - *Status:* **preliminary support** (§15).
+- **RQ4 (sequence models).** Do packet-sequence models add value over tabular baselines with the same information?
+  - *Status:* **insufficient evidence**. The GRU is worse than the full-flow baseline in one contrast (§13.5).
+- A comparison of JA4 against JA3 was proposed in the earlier draft. It was **not tested**: no pre-declared contrast exists, and the ETTH JA4 implementation is not FoxIO-conformant (§9).
 
 ## 5. Related Work
-- **Encrypted Traffic Analysis & Flow Statistics:** Anderson and McGrew (Cisco Systems, 2016; 2017) pioneered the use of unencrypted TLS metadata combined with packet length and time sequences for malware detection, demonstrating that C2 channels exhibit distinct statistical geometries.
-- **TLS Handshake Fingerprinting:** Althouse et al. (Salesforce, 2017) introduced **JA3** and **JA3S**, constructing MD5 hashes over ClientHello and ServerHello parameter tuples. In 2023, Brotherston (FoxIO) formulated **JA4+**, modernizing fingerprinting by incorporating protocol framing, extension sorting, and ALPN awareness to mitigate hashing collisions.
-- **Dataset Leakage & Confounding in NIDS:** Arp et al. ("Dos and Don'ts of Machine Learning in Computer Security", USENIX Security 2022) and Sommer and Paxson ("Outside the Closed World", IEEE S&P 2010) demonstrated that network intrusion datasets frequently suffer from severe sampling biases, temporal artifacts, and source confounding, leading to artificially inflated evaluation scores that collapse in operational deployments.
 
----
+**TLS metadata for malware detection.**
+- Anderson and McGrew combined unencrypted TLS handshake metadata, DNS and HTTP context with packet length and timing sequences [1].
+- They later studied label noise and non-stationarity in encrypted malware classification, finding that feature representation mattered as much as the learning algorithm [2].
 
-## 6. Threat Model & Scope
-- **Adversary Capabilities:** The adversary deploys modern malware families (e.g., Lumma Stealer, Remcos RAT, XWorm, DarkGate) communicating over standard TLS (v1.2 or v1.3). The adversary controls application payload data and may utilize legitimate public hosting or shared CDNs.
-- **Defender Capabilities:** The defender operates passive network taps or host sensors (Zeek, Suricata, eBPF). The defender **cannot** access private session keys, install custom root CA certificates on endpoints, or terminate TLS sessions.
-- **Out-of-Scope:** Attacks that do not generate network traffic, non-TLS encrypted protocols (e.g., custom raw cryptographic ciphers over UDP), and active man-in-the-middle attacks.
+**Fingerprinting.**
+- JA3 hashes ClientHello parameters (version, ciphers, extensions, curves, point formats) with MD5 [3].
+- JA4 is a structured, partly sorted fingerprint (protocol, version, SNI, counts, ALPN, then truncated SHA-256 of sorted ciphers and of sorted extensions plus signature algorithms in wire order) [4, 5].
+- Encrypted Client Hello (ECH) [8] removes SNI and other ClientHello fields from passive view.
 
----
+**Evaluation pitfalls.**
+- Sommer and Paxson describe why machine learning for intrusion detection differs from other domains [7].
+- Arp et al. catalogue pitfalls including sampling bias, data snooping, spurious correlations and inappropriate baselines [6].
+- Our design follows their recommendations: grouped splits, training-only preprocessing, explicit baselines and reporting of uncertainty.
+
+**Systems.** Zeek [9] and Suricata [10] can log JA3/JA4 and flow records. We use them only as optional input formats (§7).
+
+## 6. Threat Model and Scope
+
+- **Adversary.** Malware communicating over TLS 1.2/1.3. It controls payloads, may use legitimate hosting, and may change its TLS library.
+- **Defender.** Passive observation: packet capture, or logs from flow sensors. No keys, no interception, no endpoint certificates.
+- **Out of scope:**
+  - active MITM;
+  - payload inspection;
+  - non-TLS encrypted protocols;
+  - QUIC (not reconstructed);
+  - full-ECH traffic, where fingerprints degrade to the outer ClientHello.
 
 ## 7. System Architecture
-ETTH comprises an end-to-end modular architecture:
-1. **Sensor Ingestion Layer:** Ingests live packets via Scapy/Npcap, Zeek JSON logs (`conn.log`, `ssl.log`), Suricata EVE JSON (`flow`, `tls`, `alert`), and Linux eBPF socket events.
-2. **Bidirectional Flow Reconstructor:** Reconstructs canonical 5-tuples using a 15-second idle timeout and TCP FIN/RST tracking.
-3. **Leakage-Controlled Feature Engine:** Derives 80 behavioral statistical features and extracts unencrypted JA3/JA4 fingerprints while stripping all IP, port, and timestamp identifiers.
-4. **Target Attribution Engine (`TargetResolver`):** Implements time-aware DNS correlation and dot-prefixed subdomain validation to attribute flows to logical monitoring targets while rejecting suffix-spoofing attacks.
-5. **Real-Time Inference & WebSocket Engine:** Routes normalized flows through five experimental tracks and broadcasts validated `ETTHStreamEvent` envelopes to an interactive research dashboard.
 
----
+ETTH comprises the following components.
 
-## 8. Dataset Provenance & Acquisition
-ETTH integrates verified datasets with full SHA-256 cryptographic provenance:
-- **DS-008 (Malware-Traffic-Analysis.net):** Primary malicious corpus comprising real-world malware sandbox captures (AsyncRAT, Lumma Stealer, Remcos RAT, XWorm, DarkGate, GuLoader, Pikabot, Meduza Stealer). Reconstructed malicious flows: **2,543**.
-- **DS-004 (CipherSpectrum):** Benign validation baseline containing pristine TLS 1.2 and 1.3 handshakes across verified web services. Reconstructed benign flows: **6**.
-- **Dataset Integrity Safeguards:** All source archives (`MTA-C003.zip` through `MTA-C049.zip`) are cryptographically audited and permanently protected against mutation.
+1. **Corpus builder.** Checksum-verified PCAP ingestion and a dataset registry with capture-level provenance.
+2. **Flow reconstruction.** Bidirectional 5-tuple flows with a 120 s idle timeout and FIN/RST termination.
+   - Forward means the initiator, i.e. the first packet's source.
+   - Lengths are IP lengths.
+   - Only TCP and UDP are reconstructed.
+3. **Feature extraction.** The 74 flow features plus TLS structural metadata. JA3 and ETTH-JA4 are computed from the ClientHello in the first TCP segment.
+4. **Benchmark harness.** Allow-list governance, capture-grouped nested CV, calibration and threshold selection on validation captures only, bootstrap and Holm contrasts, and an append-only experiment registry (§11).
+5. **Real-time path.**
+   - A pickle-free, checksum-pinned model registry.
+   - Schema-enforcing inference: incompatible flows are SKIPPED with a reason and never zero-filled.
+   - Out-of-distribution and in-sample-replay flags.
+   - A validated WebSocket event stream.
+   - Live capture whose flows and features match the offline pipeline on identical synthetic packets (claim C20).
+6. **Sensor adapters (engineering only).** Zeek, Suricata and eBPF-collector records are normalised into the same flow contract.
+   - Their counters are tagged as sensor aggregates, and their JA4 as FoxIO.
+   - Models trained on ETTH packet features refuse both (C18, C19).
+   - The adapters are not connected to the live stream. No cross-sensor correlation and no eBPF program exist.
+   - Detection on sensor telemetry is **blocked** (C21).
 
----
+## 8. Datasets and Provenance
 
-## 9. Feature Extraction & TLS Fingerprinting
-- **Behavioral Statistics (80 features):** Extracted from forward and reverse packet lengths, inter-arrival times (mean, variance, skewness, 10th–90th percentiles), byte volume asymmetry, packets per second, and burst-to-idle ratios.
-- **TLS Handshake Fingerprints:**
-  - `JA3`: $\text{MD5}(\text{Version},\text{Ciphers},\text{Extensions},\text{EllipticCurves},\text{PointFormats})$
-  - `JA4`: Formatted string encoding protocol (`t` for TCP), TLS version (`13`), SNI presence (`d`), extension counts, and SHA-256 truncated hashes of sorted ciphers and extensions.
-- **Semantic Null Preservation:** If a flow lacks a ClientHello, fingerprint values evaluate strictly to `None`. No dummy hashes or zero-imputations are injected.
+Corpus v3 has 577,238 flows from 25 captures. Every capture's SHA-256 and acquisition details are recorded (`data/corpus/`). Labels are **capture-level** and are propagated to flows.
 
----
+| ID | Source | Class | Captures | Flows | ClientHello flows | Offered TLS version |
+|---|---|---|---|---|---|---|
+| DS-008 | Malware-Traffic-Analysis.net exercises [11] | malicious | 10 | 2,543 | 194 | 1.2 and 1.3 |
+| DS-009 | Stratosphere Lab malware captures (MCFP) [12] | malicious | 9 | 447,563 | 66,612 | 1.2 only |
+| DS-011 | Stratosphere Lab CTU-Normal captures [12, 13] | benign | 6 | 127,132 | 13,845 | 1.2 only |
 
-## 10. Experimental Methodology
-We evaluate five mutually exclusive feature tracks:
-- **Track A (Flow-only):** 80 behavioral flow statistics; zero TLS metadata.
-- **Track B (JA3-only):** Isolated JA3 MD5 client hash.
-- **Track C (JA4-only):** Isolated JA4 string fingerprint.
-- **Track D (JA3 + Flow):** 81 features (JA3 hash + 80 flow statistics).
-- **Track E (JA4 + Flow):** 81 features (JA4 signature + 80 flow statistics).
+Observations about this corpus:
+- JA3 and JA4 values never occur in both classes: 0 of 90 JA3 and 0 of 82 JA4 values are shared (C03).
+- The benign traffic is 2017 lab browsing. The READMEs of five of the six captures state Kali Linux with iceweasel 43, but the file names of three captures say "win"; the conflicts are recorded, not resolved. The malicious traffic comes from Windows hosts.
+- Benign sufficiency for generalisation (level C) is **not met**: one benign source, no benign TLS 1.3, one benign environment (C02).
+- The CipherSpectrum samples (DS-004, 6 flows) used in the Phase 7 pilot are not part of corpus v3. Further candidate datasets require registration, licence clarification or a provider request, and were not acquired.
 
----
+## 9. Feature Extraction and TLS Fingerprinting
 
-## 11. Leakage Prevention & Evaluation Protocol
-To prevent optimistic evaluation bias:
-1. **Identifier Stripping:** Source/destination IP addresses, ports, MAC addresses, raw SNI domain strings, timestamps, and capture session IDs are excluded from feature matrices.
-2. **Group-Aware Splitting:** Malware sandbox captures generate repetitive beaconing flows with identical feature vectors. Standard K-Fold cross-validation leaks duplicate vectors across splits. ETTH computes `behavioral_hash` (SHA-256 of the 80 flow features) and enforces `GroupShuffleSplit(n_splits=5, test_size=0.2, random_state=42)`.
-3. **Training-Only Transformers:** Imputation, standard scaling, and categorical encoders are fitted strictly inside training folds.
+- **Flow features (74).**
+  - 15 count, rate and ratio features.
+  - 27 packet-length statistics: mean, median, std, min, max, p25, p75, p90, p95, for all, forward and reverse packets.
+  - 27 inter-arrival statistics, with the same nine statistics and three directions.
+  - 5 burst features with a 1.0 s idle threshold.
+  - Features are undefined (NaN) where a direction has too few packets. They are imputed only with training-fold medians plus missing indicators.
+- **TLS structural (5).**
+  - `clienthello_present`, `serverhello_present`, `sni_present`.
+  - `tls_version`, meaning *offered*: 1.3 if the ClientHello carries `supported_versions`, else 1.2.
+  - `alpn_value`, the first offered ALPN.
+- **JA3.** MD5 of `version,ciphers,extensions,curves,point_formats` with GREASE removed [3].
+- **JA4 (ETTH implementation).** It deviates from the FoxIO specification [5] in six ways:
+  - signature algorithms are sorted;
+  - `n` is used instead of `i` for "no SNI";
+  - the version code is derived from the presence of `supported_versions` only;
+  - a trailing separator is hashed when there are no signature algorithms;
+  - the empty cipher list is hashed instead of being written `000000000000`;
+  - counts are not capped at 99.
 
----
+  On the FoxIO reference ClientHello the ETTH value differs in the third component. Results labelled "JA4" in this draft therefore refer to the ETTH variant and are **not comparable to FoxIO JA4 in the literature**.
+- **Limits of the parser.** Only the first TCP segment of the ClientHello is parsed. Fingerprints of segmented ClientHellos are flagged as possibly truncated: 13 such fingerprints in DS-008 and 1 in DS-009.
 
-## 12. Baselines & Classifiers
-We evaluate three canonical estimators suitable for low-latency operational deployment:
-1. **L2-Regularized Logistic Regression** (Linear baseline).
-2. **Random Forest Classifier** (Non-linear ensemble; 100 estimators, balanced class weights).
-3. **Extreme Gradient Boosting (XGBoost)** (Gradient boosted decision trees; learning rate 0.1, max depth 6).
+## 10. Experimental Design: Feature Tracks
 
----
+The tracks are **not** mutually exclusive: D and E contain all of A's inputs.
 
-## 13. Results & Empirical Evaluation
+| Track | Inputs | Population |
+|---|---|---|
+| A_FLOW | 74 flow + 5 TLS structural = 79 | all flows |
+| B_JA3 | JA3 | JA3-available flows |
+| C_JA4 | ETTH-JA4 | JA4-available flows |
+| D_JA3_FLOW | A + JA3 = 80 | JA3-available flows |
+| E_JA4_FLOW | A + JA4 = 80 | JA4-available flows |
+| A@JA3POP / A@JA4POP | A's inputs | JA3/JA4 population (paired comparison with D/E) |
+| A0_FLOW_STRICT | 74 flow features only | all flows (ablation) |
+| P_AVAILABILITY_PROBE | 3 presence flags | all flows (shortcut probe) |
 
-### Controlled Pilot Results (Phase 7 Step 5)
+## 11. Leakage Prevention and Evaluation Protocol
 
-| Track | Features | Total Samples | Malicious | Benign | Best Model | Avg PR-AUC | Avg F1 | Avg ROC-AUC |
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Track A** (Flow) | 80 | 2,549 | 2,543 | 6 | Logistic Regression | 1.000 | 1.000 | 1.000 |
-| **Track B** (JA3) | 1 | 200 | 194 | 6 | Logistic Regression | 0.997 | 0.982 | 0.958 |
-| **Track C** (JA4) | 1 | 200 | 194 | 6 | Random Forest | 0.998 | 0.982 | 0.979 |
-| **Track D** (JA3+Flow) | 81 | 200 | 194 | 6 | Logistic Regression | 1.000 | 0.997 | 1.000 |
-| **Track E** (JA4+Flow) | 81 | 200 | 194 | 6 | Logistic Regression | 1.000 | 0.997 | 1.000 |
+1. **Feature governance.** A model can receive only allow-listed columns. Identifiers, endpoints, timestamps, capture, dataset and family annotations, raw SNI and labels are forbidden by name and by substring.
+2. **Capture-balanced population.** At most 4,000 flows per capture, drawn deterministically, so that the largest captures do not dominate.
+3. **Splits.** Outer capture-grouped stratified 5-fold CV, with inner capture-grouped folds for hyper-parameter selection on small pre-declared grids. Behavioural-duplicate groups that would cross train and test are purged from training.
+4. **Training-only preprocessing.** Imputation, scaling and encoders are fitted on training folds. Platt calibration and the decision threshold for a 1% FPR are chosen on validation captures, never on test data.
+5. **Additional protocols.**
+   - leave-one-family-out;
+   - leave-one-malicious-source-out;
+   - a source-identifiability probe;
+   - the legacy behavioural-hash `GroupShuffleSplit` holdout, kept only to quantify its optimism;
+   - an encoding ablation;
+   - a matched DS-009 vs DS-011 subset.
+6. **Uncertainty.** A capture-level bootstrap with 1,000 replicates. With only 6 benign captures, every interval is flagged FEW_GROUPS and is probably too narrow.
+7. **Contrasts.** Four pre-declared paired contrasts per suite and model, on identical rows, with Holm correction:
+   - JA3 added to flow;
+   - JA4 added to flow;
+   - flow added to JA3;
+   - flow added to JA4.
 
-*Note: In fingerprint-dependent tracks (B, C, D, E), sample count is 200 because only flows possessing valid unencrypted ClientHello messages are eligible. All missing fingerprints remain semantic nulls.*
+   The **primary model (random forest) was declared before any Phase 9 result**. Other models are sensitivity analyses.
+8. **Status.** Every Phase 9/10 run is **exploratory**. The confirmatory policy (a frozen configuration evaluated once on a never-used source) could not be executed, because no independent source exists.
 
----
+## 12. Baselines and Classifiers
 
-## 14. Statistical Analysis & Uncertainty
-While the pilot evaluation proves that the ETTH feature extraction and model pipelines function mechanically without runtime exceptions, the statistical confidence of the results is severely bounded:
-- Benign validation sample size ($N=6$) yields an effective test set of only 1–2 benign instances per fold.
-- The 95% confidence intervals around F1 and PR-AUC cannot be reliably parameterized due to extreme zero-variance in the majority class.
+Classifiers:
+- a prevalence floor;
+- L2 logistic regression (class-balanced);
+- random forest (150 trees);
+- histogram gradient boosting (100 iterations).
 
----
+Phase 10 adds:
+- masked 1-D CNN and GRU models on the first 64 packets (length, direction, timing, TCP flags; header metadata only), trained on CPU;
+- information-matched tabular baselines on aggregates of the same 64 packets;
+- full-flow tabular baselines, evaluated on identical folds.
 
-## 15. Error Analysis & Source-Confounding Audit
-An in-depth inspection of feature weights revealed that the linear classifier assigned overwhelming importance to `flow_duration` and `inter_arrival_time_min`. In DS-008, sandbox execution overhead introduced microsecond scheduling jitter absent from DS-004 web server captures. 
-Consequently, **the classifiers achieved perfect scores by detecting virtualization artifacts rather than malicious communication behavior**. This finding underscores the necessity of unconfounded dataset acquisition before asserting scientific claims.
+No external state-of-the-art system was re-implemented.
 
----
+## 13. Results (exploratory, source-confounded)
+
+### 13.1 Capture-grouped CV (pooled population: 38,543 malicious / 24,000 benign flows)
+
+| Track (random forest) | AP [95% capture-bootstrap CI] | Test FPR at val. 1% FPR | Recall at that threshold |
+|---|---|---|---|
+| A_FLOW | 0.931 [0.797, 0.986] | 5.8% | 49.5% |
+| B_JA3 | 0.971 [0.868, 1.000] | 18.6% | 99.8% |
+| C_JA4 | 0.994 [0.953, 1.000] | 18.4% | 99.4% |
+| D_JA3_FLOW | 0.988 [0.931, 1.000] | 17.4% | 99.5% |
+| E_JA4_FLOW | 0.991 [0.944, 1.000] | 12.1% | 99.6% |
+| A_FLOW@JA3POP | 0.990 [0.946, 1.000] | 12.2% | 99.5% |
+| A0_FLOW_STRICT | 0.929 [0.793, 0.984] | 6.1% | 42.5% |
+| P_AVAILABILITY_PROBE | 0.765 [0.628, 0.897] | 0.1% | 24.2% |
+
+All intervals are FEW_GROUPS. B–E and A@JA3POP use the JA3/JA4 population: 8,591 malicious and 2,629 benign flows.
+
+### 13.2 Incremental value (RQ1)
+
+**Primary model (random forest).**
+
+| Contrast | ΔAP [CI] | Holm p |
+|---|---|---|
+| JA3 added to flow (A@JA3POP → D) | −0.002 [−0.015, 0.000] | 1.00 |
+| JA4 added to flow (A@JA4POP → E) | +0.000 [−0.003, 0.001] | 1.00 |
+| Flow added to JA3 (B → D) | +0.017 [−0.000, 0.072] | 0.52 |
+| Flow added to JA4 (C → E) | −0.003 [−0.033, 0.014] | 1.00 |
+
+There is **no evidence of a difference**. This is not evidence of equivalence: no equivalence margin was pre-registered. The matched DS-009 vs DS-011 suite gives ΔAP = 0.000, because every model scores ≈ 1.000.
+
+**Sensitivity: logistic regression.**
+- Adding JA3 or JA4 to flow gives ΔAP +0.0004 and +0.0005 on a baseline AP of 0.9994.
+- Holm within the model: p = 0.032 and 0.042.
+- Holm across all 12 model × contrast tests: p = 0.096 and 0.154.
+- Gradient boosting does not reproduce the effect.
+
+We read this as a statistically fragile, practically negligible difference at ceiling, on confounded data (claims C04–C07: INSUFFICIENT_EVIDENCE).
+
+### 13.3 Protocol optimism (RQ3)
+
+- **Legacy behavioural-hash holdout.**
+  - A_FLOW AP 0.992, against 0.931 under capture-grouped CV.
+  - Every fingerprint and fusion track reaches AP 1.000, with fingerprint-only FPR 0.4% at the validation threshold.
+  - Claim C12.
+- **Leave-one-family-out.** A_FLOW AP is 0.710 [0.456, 0.962] (C17).
+
+### 13.4 Source effects (RQ2, RQ3)
+
+**Unseen benign fingerprints (C16).**
+- 18.8% of held-out benign TLS flows carry a fingerprint never seen in their training folds.
+- At the validation threshold, fingerprint-only models flag 98.8% (JA3) and 98.2% (JA4) of those flows, and 0% of benign flows with seen fingerprints.
+- This accounts for the ≈18% test FPR of B and C.
+
+**Leave-one-malicious-source-out (C08), detection rate on the held-out source at the validation threshold:**
+
+| Track | DS-008 held out | DS-009 held out |
+|---|---|---|
+| A | 3.8% | 15.3% |
+| B and C | 0% | 100% |
+| D | 28.9% | 3.4% |
+| E | 35.1% | 26.2% |
+
+- Flow-only and fusion transfer: **contradicted**.
+- Fingerprint-only transfer: **insufficient evidence**. The outcome depends only on how unseen fingerprints are scored.
+- No held-out benign source exists, so the benign false-positive rate on a new environment cannot be measured.
+
+**Source identifiability.**
+- JA4 alone separates DS-008 from DS-009 TLS flows with AP 1.000, against chance 0.023 (C11B).
+- Flow features: AP 0.141 [0.090, 0.298] against chance 0.066. The evidence is insufficient (C11).
+
+**Availability shortcut.** Handshake-presence flags alone reach AP 0.765, compared with a prevalence-floor baseline AP of 0.600 under the same protocol (C10).
+
+### 13.5 Sequence models (RQ4; pooled population)
+
+| Model | AP [CI] |
+|---|---|
+| Information-matched tabular (HGB on 64-packet aggregates) | 0.909 [0.759, 0.973] |
+| Full-flow tabular RF | 0.904 [0.730, 0.984] |
+| Full-flow tabular HGB | 0.886 [0.692, 0.983] |
+| CNN | 0.871 [0.662, 0.979] |
+| GRU | 0.828 [0.603, 0.972] |
+
+Pre-declared contrasts (Holm over 4):
+
+| Contrast | ΔAP [CI] | Holm p |
+|---|---|---|
+| CNN − matched | −0.039 [−0.118, 0.030] | 1.00 |
+| GRU − matched | −0.082 [−0.171, 0.011] | 0.59 |
+| CNN − full-flow | −0.015 [−0.060, 0.029] | 1.00 |
+| GRU − full-flow | −0.058 [−0.105, −0.006] | 0.024 |
+
+On the DS-009/DS-011 subset none of the contrasts is significant. Overall, sequence models add no detectable value here (C13). No transformer was trained.
+
+### 13.6 Real-time engineering measurements
+
+These are operational measurements, not model quality. The research-pilot RF models were replayed on 2,000 corpus flows in-process (`data/experiments/phase9/diagnostics/realtime_check.json`):
+- A_FLOW: median inference latency 5.1 ms per flow.
+- Fingerprint-only tracks: about 0.55 ms per flow.
+- The deployable models were trained on all captures, so **every replayed flow was in-sample**. The engine flags each one `IN_SAMPLE_REPLAY`, and these scores are not evaluation evidence.
+
+## 14. Statistical Analysis and Uncertainty
+
+- **Effective sample size.** It is the number of captures, not flows: 6 benign and 19 malicious captures. Capture-bootstrap intervals with 6 benign groups are unstable and likely anti-conservative.
+- **Seeds.** Each configuration was run with a single seed.
+- **Multiplicity.** Holm is applied within each model's four contrasts. Claims rest on the pre-declared primary model, and cross-model multiplicity is reported as a sensitivity analysis (§13.2).
+- **Equivalence.** Not claimed for any non-significant result.
+- **Reproducibility.** Every reported metric reproduces from the persisted out-of-fold predictions (checksums verified, tolerance 1e-9).
+
+## 15. Error Analysis and Source-Confounding Audit
+
+The evidence is consistent with models learning **collection environment** rather than maliciousness:
+- the classes do not share a single JA3 or JA4 value;
+- JA4 identifies the malicious source perfectly;
+- presence flags alone carry substantial label information;
+- benign flows with novel client stacks are almost always flagged;
+- performance collapses on held-out malicious sources.
+
+Capture-level labels add noise. Background operating-system traffic inside malware captures is labelled malicious.
+
+The earlier draft's attribution of the pilot result to "sandbox scheduling jitter" and specific features had no supporting artefact and has been removed.
 
 ## 16. Explainability
-Feature importance rankings generated by Random Forest and XGBoost indicate that packet length variance and directional byte asymmetry provide the strongest signals within flow features. However, feature correlation must not be equated with causality; observable feature presence indicates associative correlation within the evaluated corpus.
 
----
+Permutation importance is computed on outer test folds, and impurity importance is reported separately (`python -m ml explain`). On source-confounded data, high importance indicates predictive association within this corpus, possibly a capture-environment shortcut. It is not causal, and it is not evidence of malicious behaviour. No SHAP or LIME analysis was performed.
 
-## 17. Limitations & Threats to Validity
-1. **Dataset-Source Confounding:** The primary threat to external validity is the disparate capture environments of DS-008 and DS-004.
-2. **Encrypted ClientHello (ECH):** ECH encrypts the `ClientHelloOuter` payload, concealing SNI and extensions from passive observers. Under full ECH deployment, fingerprinting must rely on Outer extensions or pure behavioral flow geometry.
-3. **Fingerprint Collisions:** Malware leveraging standard operating system network stacks (e.g. `wininet.dll` or standard Windows cURL) exhibits identical JA3/JA4 hashes to benign software on the same host.
+## 17. Limitations and Threats to Validity
 
----
+1. **Confounding.** Dataset identity equals class. There is a single benign source (2017 lab browsing, mostly Kali Linux per its READMEs), no benign TLS 1.3, and largely different operating systems between classes. This is the dominant threat; it blocks C02 and C09.
+2. **Labels.** Labels are capture-level, not flow-level.
+3. **JA4 conformance.** The ETTH JA4 variant is non-conformant (§9), and ClientHellos are parsed from the first segment only.
+4. **Statistics.** There are few groups, a single seed, and no equivalence margin.
+5. **External validity.** No held-out benign environment exists. The confirmatory evaluation was not run.
+6. **Sensors.** Sensor integration was validated with synthetic fixtures only. Sensor telemetry cannot be scored by the current models (C21).
+7. **ECH.** ECH [8] will remove SNI and most ClientHello detail from passive view.
 
-## 18. Ethical & Privacy Considerations
-ETTH strictly adheres to ethical network measurement standards. All processed traffic is derived from public research repositories or synthetic software fixtures. Zero payload inspection is performed, preventing exposure of user credentials, session cookies, or personal communications.
+## 18. Ethics and Privacy
 
----
+- No traffic was decrypted, intercepted or collected from third parties.
+- Datasets are public and used under their stated terms. Raw captures stay local and are not redistributed.
+- Model inputs exclude IP addresses, ports, raw SNI and timestamps.
+- Captures that require registration, a licence or provider permission were not acquired, and no access restriction was bypassed.
 
 ## 19. Reproducibility
-All experimental code, group-aware cross-validation splits, and pipeline configurations are fully reproducible via the provided repository test suite and replication scripts using Python 3.12 and fixed random seed 42.
 
----
+Commands, seeds, artefact locations and environment are documented in `docs/research/REPRODUCIBILITY_GUIDE.md`. The checks used here:
 
-## 20. Conclusion & Future Work
-This paper presented the architecture and controlled pilot evaluation of the Encrypted Traffic Threat Hunter platform. We demonstrated that multi-track feature fusion pipelines can be constructed under strict zero-decryption and leakage-controlled constraints. More importantly, our empirical audit demonstrated that without independent, unconfounded benign corpora, machine learning models yield deceptive benchmark performance. Future work will complete Phase 8 benign dataset acquisition, benchmark generalized performance across expanded threat families, and evaluate Linux eBPF kernel sequence models.
+```
+python -m pytest -q -p no:cacheprovider   # engineering tests
+python -m ml verify                       # re-checks every persisted result
+python -m ml report                       # regenerates the claim ledger
+```
 
----
+Raw captures must be re-acquired from the recorded URLs; their checksums are recorded.
+
+## 20. Conclusion and Future Work
+
+On legitimately available public data, we find no evidence that JA3 or JA4 adds detection value to encrypted-flow features under realistic evaluation. We do find strong evidence that fingerprint "value" in such corpora reflects client-stack and source identity, and that the popular duplicate-grouped holdout hides this.
+
+The research question stays open until the following are done:
+1. benign data from independent environments comparable to the malicious hosts (Windows, modern browsers, enterprise software), each used as a held-out source;
+2. a frozen confirmatory evaluation;
+3. flow-level labels, or documented background-traffic filtering;
+4. FoxIO-conformant JA4 and ClientHello reassembly;
+5. multiple seeds and more benign captures;
+6. an IOC (hash-lookup) baseline.
+
+The contributions that can be claimed now:
+- a leakage-audited benchmark harness;
+- an evidence ledger generated from artefacts;
+- a methodological negative result.
 
 ## 21. References
-1. Anderson, B., & McGrew, D. (2016). Identifying encrypted malware traffic with contextual flow data. *ACM AISec*, 35–46.
-2. Anderson, B., & McGrew, D. (2017). Machine learning for encrypted malware traffic classification: Accounting for passive and active adversaries. *IEEE Transactions on Network and Service Management*, 14(4), 1058–1070.
-3. Althouse, J., Atkinson, J., Blum, N., & Stearns, C. (2017). Open-sourcing JA3: TLS fingerprinting for threat intelligence. *Salesforce Engineering Blog*.
-4. Brotherston, J. (2023). JA4+ Network Fingerprinting. *FoxIO Technical Report*.
-5. Arp, D., Quiring, E., Pendlebury, F., Warnecke, A., Pierazzi, F., Dos Santos, C., Cavallaro, L., & Rieck, K. (2022). Dos and don'ts of machine learning in computer security. *USENIX Security Symposium*, 3971–3988.
-6. Sommer, R., & Paxson, V. (2010). Outside the closed world: On using machine learning for network intrusion detection. *IEEE Symposium on Security and Privacy (S&P)*, 305–316.
-7. Paxson, V. (1999). Bro: a system for detecting network intruders in real-time. *Computer Networks*, 31(23-24), 2435–2463.
-8. Roesch, M. (1999). Snort: Lightweight intrusion detection for networks. *LISA*, 99(1), 229–238.
+
+All entries were checked against the publisher, the venue or the canonical online source during the Phase 8–12 integration (2026-10-17). Web resources are cited with their access date.
+
+1. B. Anderson and D. McGrew. Identifying Encrypted Malware Traffic with Contextual Flow Data. *Proceedings of the 2016 ACM Workshop on Artificial Intelligence and Security (AISec)*, pp. 35–46, 2016.
+2. B. Anderson and D. McGrew. Machine Learning for Encrypted Malware Traffic Classification: Accounting for Noisy Labels and Non-Stationarity. *Proceedings of the 23rd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining (KDD)*, pp. 1723–1732, 2017.
+3. J. Althouse. Open Sourcing JA3. *Salesforce Engineering Blog* (JA3 by J. B. Althouse, J. Atkinson and J. Atkins; code at github.com/salesforce/ja3). https://engineering.salesforce.com/open-sourcing-ja3-92c9e53c3c41/ (accessed 2026-10-17).
+4. J. Althouse. JA4+ Network Fingerprinting. *FoxIO Blog*, 2023. https://blog.foxio.io/ja4-network-fingerprinting-9376fe9ca637 (accessed 2026-10-17).
+5. FoxIO. JA4: TLS Client Fingerprinting, technical details. https://github.com/FoxIO-LLC/ja4/blob/main/technical_details/JA4.md (accessed 2026-10-17).
+6. D. Arp, E. Quiring, F. Pendlebury, A. Warnecke, F. Pierazzi, C. Wressnegger, L. Cavallaro and K. Rieck. Dos and Don'ts of Machine Learning in Computer Security. *31st USENIX Security Symposium*, pp. 3971–3988, 2022.
+7. R. Sommer and V. Paxson. Outside the Closed World: On Using Machine Learning for Network Intrusion Detection. *IEEE Symposium on Security and Privacy*, 2010. doi:10.1109/SP.2010.25.
+8. E. Rescorla, K. Oku, N. Sullivan and C. A. Wood. TLS Encrypted Client Hello. RFC 9849, March 2026.
+9. V. Paxson. Bro: A System for Detecting Network Intruders in Real-Time. *Computer Networks* 31(23–24), pp. 2435–2463, 1999.
+10. Open Information Security Foundation. Suricata EVE JSON Format documentation. https://docs.suricata.io/en/latest/output/eve/eve-json-format.html (accessed 2026-10-17).
+11. B. Duncan. Malware-Traffic-Analysis.net. https://www.malware-traffic-analysis.net/ (accessed 2026-10-17).
+12. Stratosphere Laboratory, Czech Technical University in Prague. Stratosphere datasets (Malware Capture Facility Project and normal captures). https://www.stratosphereips.org/datasets-overview (accessed 2026-10-17).
+13. S. García, M. Grill, J. Stiborek and A. Zunino. An Empirical Comparison of Botnet Detection Methods. *Computers & Security* 45, pp. 100–123, 2014.
+
+*Removed from the earlier draft:*
+- An "IEEE Transactions on Network and Service Management 14(4)" entry for Anderson and McGrew (2017). No such paper was found; the 2017 work is the KDD paper [2].
+- The attribution of JA4+ to Brotherston. JA4+ is by J. Althouse (FoxIO); L. Brotherston authored the earlier FingerprinTLS.
+- An incorrect co-author ("Dos Santos, C.") in Arp et al.
+- Roesch (Snort, LISA 1999), which is no longer cited.
