@@ -5,6 +5,7 @@ import uuid
 import threading
 from typing import Dict, Any, Optional, List, Callable, Tuple
 from backend.event_sources.base import EventSource
+from pipeline.canonical_flow import BYTES_IP_LENGTH, FEATURE_PROVENANCE_ETTH, JA4_IMPLEMENTATION_ETTH
 
 logger = logging.getLogger(__name__)
 
@@ -12,7 +13,7 @@ logger = logging.getLogger(__name__)
 SCAPY_AVAILABLE = False
 try:
     import scapy
-    from scapy.all import sniff, get_if_list, IFACES, IP, IPv6, TCP, UDP, Raw
+    from scapy.all import sniff, get_if_list, IFACES, IP, IPv6, TCP, UDP
     SCAPY_AVAILABLE = True
 except ImportError:
     scapy = None
@@ -99,6 +100,12 @@ def get_available_interfaces() -> List[Dict[str, Any]]:
 
 
 LIVE_FEATURE_WINDOW = 5000   # packets kept per flow for feature computation (bounded memory)
+# Flow boundaries follow the offline reconstructor (pipeline.flow_reconstruction): a packet that
+# arrives after FIN/RST, or more than DEFAULT_FLOW_IDLE_TIMEOUT (120 s) after the previous packet,
+# starts a new flow. Live capture additionally splits flows at LIVE_MAX_FLOW_DURATION so results
+# appear in bounded time; split segments are flagged (live_flow_split) and flow-feature models
+# refuse them, because the offline pipeline would not have split them.
+LIVE_MAX_FLOW_DURATION = 300.0
 
 
 class LiveFlowTracker:
@@ -111,11 +118,15 @@ class LiveFlowTracker:
     (live_feature_window_truncated) instead of being silently approximated.
     Enforces ZERO payload retention and ZERO payload decryption.
     """
-    def __init__(self, key: Tuple, src_ep: str, dst_ep: str, proto: str, start_time: float):
+    def __init__(self, key: Tuple, src_ep: str, dst_ep: str, proto: str, start_time: float,
+                 forward_tuple: Optional[Tuple[str, int]] = None):
         self.key = key
         self.flow_id = f"live_flow_{uuid.uuid4().hex[:10]}"
+        # Forward = initiator = source of the first packet seen, as offline (Flow.forward_ep).
         self.forward_endpoint = src_ep
         self.reverse_endpoint = dst_ep
+        self.forward_tuple = forward_tuple
+        self.split = False          # this segment was cut at LIVE_MAX_FLOW_DURATION or continues a cut flow
         self.protocol = proto
         self.start_time = start_time
         self.last_seen = start_time
@@ -181,7 +192,11 @@ class LiveFlowTracker:
                 self.ja3s_hash = tls_meta.get("ja3s_hash")
                 self.ja3s_string = tls_meta.get("ja3s_string")
 
-    def is_finalized(self, now: float, idle_timeout: float = 15.0, max_duration: float = 60.0) -> bool:
+    def is_finalized(self, now: float, idle_timeout: Optional[float] = None,
+                     max_duration: float = LIVE_MAX_FLOW_DURATION) -> bool:
+        if idle_timeout is None:
+            from pipeline.flow_reconstruction import DEFAULT_FLOW_IDLE_TIMEOUT
+            idle_timeout = DEFAULT_FLOW_IDLE_TIMEOUT
         if self.has_fin_rst:
             return True
         if (now - self.last_seen) >= idle_timeout:
@@ -195,7 +210,7 @@ class LiveFlowTracker:
                                                  extract_iat_features, extract_packet_length_features)
         total_pkts = self.forward_packets + self.reverse_packets
         total_bytes = self.forward_bytes + self.reverse_bytes
-        duration = round(self.last_seen - self.start_time, 6)
+        duration = self.last_seen - self.start_time      # unrounded, as offline (Flow.to_dict)
         base = {
             "duration": duration, "packet_count": total_pkts, "forward_packet_count": self.forward_packets,
             "reverse_packet_count": self.reverse_packets, "byte_count": total_bytes,
@@ -229,6 +244,12 @@ class LiveFlowTracker:
             "clienthello_record_truncated": self.clienthello_record_truncated,
             "live_feature_window_truncated": self.window_truncated,
             "live_feature_window": LIVE_FEATURE_WINDOW,
+            "live_flow_split": self.split,
+            "start_time": self.start_time,
+            "end_time": self.last_seen,
+            "feature_provenance": FEATURE_PROVENANCE_ETTH,
+            "byte_count_semantics": BYTES_IP_LENGTH,
+            "ja4_implementation": JA4_IMPLEMENTATION_ETTH if self.ja4 else None,
             "label": "UNKNOWN",
         })
         return record
@@ -240,8 +261,14 @@ class LiveCaptureSource(EventSource):
     Performs non-blocking packet acquisition, 5-tuple flow aggregation,
     and observable TLS handshake parsing. Emits finalized flows to a callback.
     """
-    def __init__(self):
+    def __init__(self, idle_timeout: Optional[float] = None, max_duration: float = LIVE_MAX_FLOW_DURATION):
         super().__init__(mode="LIVE")
+        from pipeline.flow_reconstruction import DEFAULT_FLOW_IDLE_TIMEOUT
+        self.idle_timeout = DEFAULT_FLOW_IDLE_TIMEOUT if idle_timeout is None else idle_timeout
+        self.max_duration = max_duration
+        self._lock = threading.Lock()
+        self._closed: List[LiveFlowTracker] = []          # rotated out by a new packet, awaiting emission
+        self._split_last_seen: Dict[Tuple, float] = {}    # key -> last packet time of a segment cut at max_duration
         self.state: str = "STOPPED"
         self.selected_interface: Optional[str] = None
         self.packets_observed: int = 0
@@ -312,60 +339,73 @@ class LiveCaptureSource(EventSource):
             dst_ip = ip_layer.dst
             proto_num = ip_layer.proto if pkt.haslayer(IP) else ip_layer.nh
 
-            src_port = 0
-            dst_port = 0
             fin_or_rst = False
             tcp_flag_value = -1
-            proto_str = "TCP" if proto_num == 6 else ("UDP" if proto_num == 17 else str(proto_num))
 
+            # Only TCP and UDP flows are reconstructed, as offline (other protocols are ignored).
             if pkt.haslayer(TCP):
-                tcp_layer = pkt[TCP]
-                src_port = tcp_layer.sport
-                dst_port = tcp_layer.dport
-                flags = int(getattr(tcp_layer, "flags", 0))
+                transport = pkt[TCP]
+                proto_str = "TCP"
+                flags = int(getattr(transport, "flags", 0))
                 tcp_flag_value = flags
                 # Check FIN (0x01) or RST (0x04)
                 if flags and (flags & 0x01 or flags & 0x04):
                     fin_or_rst = True
+                header_len = int(transport.dataofs or 5) * 4
             elif pkt.haslayer(UDP):
-                udp_layer = pkt[UDP]
-                src_port = udp_layer.sport
-                dst_port = udp_layer.dport
+                transport = pkt[UDP]
+                proto_str = "UDP"
+                header_len = 8
+            else:
+                return
+            src_port = transport.sport
+            dst_port = transport.dport
 
-            # IP packet length, matching the offline pipeline (dpkt len(ip)); not the link-layer frame length.
-            pkt_len = len(ip_layer)
+            # IP length from the header, matching the offline pipeline (dpkt len(ip)). len(ip_layer)
+            # would also count Ethernet trailer padding that scapy attaches to short frames.
+            if pkt.haslayer(IP):
+                pkt_len = int(ip_layer.len)
+                ip_payload_len = pkt_len - int(ip_layer.ihl) * 4
+            else:
+                pkt_len = 40 + int(ip_layer.plen)
+                ip_payload_len = int(ip_layer.plen)
+            payload_len = max(0, ip_payload_len - header_len)
 
-            # Canonical 5-Tuple Key
+            # Canonical (direction-independent) 5-tuple key, used for lookup only.
             endpoint_a = (src_ip, src_port)
             endpoint_b = (dst_ip, dst_port)
-            
             if endpoint_a <= endpoint_b:
                 canonical_key = (src_ip, src_port, dst_ip, dst_port, proto_num)
-                is_forward = True
-                src_ep_str = f"{src_ip}:{src_port}"
-                dst_ep_str = f"{dst_ip}:{dst_port}"
             else:
                 canonical_key = (dst_ip, dst_port, src_ip, src_port, proto_num)
-                is_forward = False
-                src_ep_str = f"{dst_ip}:{dst_port}"
-                dst_ep_str = f"{src_ip}:{src_port}"
 
-            # TLS metadata extraction (unencrypted handshakes only)
+            # TLS metadata extraction (unencrypted handshakes only). Transport payload bytes, without
+            # Ethernet padding, exactly as offline (dpkt transport.data).
             tls_meta = None
-            if pkt.haslayer(Raw):
-                raw_bytes = bytes(pkt[Raw])
-                tls_meta = self.parse_tls_metadata(raw_bytes)
+            if payload_len >= 6:
+                tls_meta = self.parse_tls_metadata(bytes(transport.payload)[:payload_len])
 
-            if canonical_key not in self.active_flows:
-                self.active_flows[canonical_key] = LiveFlowTracker(
-                    key=canonical_key,
-                    src_ep=src_ep_str,
-                    dst_ep=dst_ep_str,
-                    proto=proto_str,
-                    start_time=now
-                )
+            with self._lock:
+                flow_tracker = self.active_flows.get(canonical_key)
+                if flow_tracker is not None and (flow_tracker.has_fin_rst or (now - flow_tracker.last_seen) > self.idle_timeout):
+                    # Offline semantics: a packet after FIN/RST or after the idle timeout starts a new flow.
+                    self._closed.append(self.active_flows.pop(canonical_key))
+                    flow_tracker = None
+                if flow_tracker is None:
+                    flow_tracker = LiveFlowTracker(
+                        key=canonical_key,
+                        src_ep=f"{src_ip}:{src_port}",
+                        dst_ep=f"{dst_ip}:{dst_port}",
+                        proto=proto_str,
+                        start_time=now,
+                        forward_tuple=(src_ip, src_port),
+                    )
+                    cut = self._split_last_seen.pop(canonical_key, None)
+                    if cut is not None and (now - cut) <= self.idle_timeout:
+                        flow_tracker.split = True      # continuation of a flow cut at max_duration
+                    self.active_flows[canonical_key] = flow_tracker
+                is_forward = (src_ip, src_port) == flow_tracker.forward_tuple
 
-            flow_tracker = self.active_flows[canonical_key]
             flow_tracker.update(
                 is_forward=is_forward,
                 pkt_len=pkt_len,
@@ -404,25 +444,37 @@ class LiveCaptureSource(EventSource):
         """
         while self.state == "CAPTURING":
             await asyncio.sleep(1.0)
-            now = time.time()
-            to_remove = []
+            for flow_dict in self.drain_finalized(time.time()):
+                await self._deliver(flow_dict)
 
+    def drain_finalized(self, now: float, force: bool = False) -> List[Dict[str, Any]]:
+        """
+        Removes and returns finished flows: those rotated out by a new packet, those closed by
+        FIN/RST (offline semantics: no later packet can join them), idle ones, and segments cut at
+        max_duration (flagged live_flow_split). force=True drains everything (stop()).
+        """
+        with self._lock:
+            done = list(self._closed)
+            self._closed.clear()
             for key, flow in list(self.active_flows.items()):
-                if flow.is_finalized(now=now, idle_timeout=15.0, max_duration=60.0):
-                    to_remove.append(key)
-                    self.finalized_flows_count += 1
-                    flow_dict = flow.to_flow_dict()
-                    if self.callback:
-                        try:
-                            if asyncio.iscoroutinefunction(self.callback):
-                                await self.callback(flow_dict)
-                            else:
-                                self.callback(flow_dict)
-                        except Exception as cb_err:
-                            logger.error(f"Error in live flow callback: {cb_err}")
+                if force or flow.is_finalized(now=now, idle_timeout=self.idle_timeout, max_duration=self.max_duration):
+                    if not force and not flow.has_fin_rst and (now - flow.last_seen) < self.idle_timeout:
+                        flow.split = True                         # cut at max_duration while still active
+                        self._split_last_seen[key] = flow.last_seen
+                    done.append(self.active_flows.pop(key))
+        self.finalized_flows_count += len(done)
+        return [flow.to_flow_dict() for flow in done]
 
-            for key in to_remove:
-                self.active_flows.pop(key, None)
+    async def _deliver(self, flow_dict: Dict[str, Any]) -> None:
+        if not self.callback:
+            return
+        try:
+            if asyncio.iscoroutinefunction(self.callback):
+                await self.callback(flow_dict)
+            else:
+                self.callback(flow_dict)
+        except Exception as cb_err:
+            logger.error(f"Error in live flow callback: {cb_err}")
 
     async def start(self, interface: Optional[str] = None, callback: Optional[Callable] = None):
         """
@@ -444,6 +496,8 @@ class LiveCaptureSource(EventSource):
         self.state = "CAPTURING"
         self.packets_observed = 0
         self.active_flows.clear()
+        self._closed.clear()
+        self._split_last_seen.clear()
         self.finalized_flows_count = 0
         self.capture_errors = 0
         self.error_message = None
@@ -479,20 +533,8 @@ class LiveCaptureSource(EventSource):
             self.sweep_task.cancel()
 
         # Flush any remaining active flows to callback
-        now = time.time()
-        for key, flow in list(self.active_flows.items()):
-            self.finalized_flows_count += 1
-            flow_dict = flow.to_flow_dict()
-            if self.callback:
-                try:
-                    if asyncio.iscoroutinefunction(self.callback):
-                        await self.callback(flow_dict)
-                    else:
-                        self.callback(flow_dict)
-                except Exception as cb_err:
-                    logger.error(f"Error in flushing live flow callback: {cb_err}")
-
-        self.active_flows.clear()
+        for flow_dict in self.drain_finalized(time.time(), force=True):
+            await self._deliver(flow_dict)
 
     def get_status(self) -> Dict[str, Any]:
         elapsed = round(time.time() - self.start_time, 2) if (self.start_time and self.state == "CAPTURING") else 0.0

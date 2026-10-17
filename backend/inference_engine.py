@@ -181,6 +181,8 @@ class InferenceEngine:
                 problems.append(f"{col}: absent")
         if flow.get("live_feature_window_truncated") and any(c in state["numeric"] for c in FLOW_FEATURES):
             problems.append("live feature window truncated: flow statistics would differ from training semantics")
+        if flow.get("live_flow_split") and any(c in state["numeric"] for c in FLOW_FEATURES):
+            problems.append("live flow split at the maximum live duration: flow statistics would differ from training semantics")
         # Contract problems are listed first: they explain the skip even when columns are also absent.
         contract = []
         inputs = list(state["numeric"]) + list(state["categorical"])
