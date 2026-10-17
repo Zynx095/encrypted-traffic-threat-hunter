@@ -1,6 +1,6 @@
 # ETTH Research Report
 
-Generated 2026-10-17T05:31:06.452017Z from persisted artefacts (`ml/reporting/report.py`). No value in this document was entered by hand.
+Generated 2026-10-17T09:09:38.196073Z from persisted artefacts (`ml/reporting/report.py`). No value in this document was entered by hand.
 
 ## Research question
 
@@ -85,7 +85,8 @@ JA3 values shared between classes: 0 of 90; JA4: 0 of 82.
 - **legacy_behavioral_holdout** (BEHAVIORAL_HOLDOUT): Phase 7 protocol (GroupShuffleSplit on behavioral_hash, seed 42) for continuity; captures leak across sides. Tracks: A_FLOW, B_JA3, C_JA4, D_JA3_FLOW, E_JA4_FLOW. Models: logreg, random_forest.
 - **encoding_ablation** (CAPTURE_GROUP_KFOLD): Fingerprint encoding strategies (one-hot, train-frequency, hashing) under capture-grouped CV. Tracks: B_JA3, C_JA4. Models: logreg.
 - **source_identifiability** (CAPTURE_GROUP_KFOLD): Diagnostic, not detection: can features tell the two MALICIOUS sources (DS-008 vs DS-009) apart? Tracks: A_FLOW, C_JA4, E_JA4_FLOW. Models: random_forest.
-- **ja4_v2_comparison** (CAPTURE_GROUP_KFOLD): 5 canonical feature tracks (A-E) under capture-grouped CV evaluated with FoxIO-compliant JA4 v2. Tracks: A_FLOW, B_JA3, C_JA4, D_JA3_FLOW, E_JA4_FLOW, A_FLOW@JA3POP, A_FLOW@JA4POP. Models: random_forest, logreg.
+- **ja4_v2_comparison** (CAPTURE_GROUP_KFOLD): INVALIDATED. Ran on data/processed/v3_ja4_v2, which is not FoxIO JA4 (see 'invalidated'). Tracks: A_FLOW, B_JA3, C_JA4, D_JA3_FLOW, E_JA4_FLOW, A_FLOW@JA3POP, A_FLOW@JA4POP. Models: random_forest, logreg.
+- **ja4_foxio_capture_cv** (CAPTURE_GROUP_KFOLD): Tracks A-E under capture-grouped CV with FoxIO JA4 recomputed from the raw captures (data/processed/v3_ja4_foxio, verified against 139 FoxIO reference vectors). Tracks: A_FLOW, B_JA3, C_JA4, D_JA3_FLOW, E_JA4_FLOW, A_FLOW@JA3POP, A_FLOW@JA4POP. Models: dummy_prior, logreg, random_forest, hist_gb.
 
 Confirmatory evaluation: **BLOCKED** — All currently admitted sources (DS-008, DS-009, DS-011) are used in exploratory suites.
 
@@ -113,54 +114,97 @@ Paired contrasts (logreg; Holm over 4 pre-declared contrasts):
 | flow added to JA3 (B_JA3→D_JA3_FLOW) | — | — | — | — [—, —] | — | NOT_RUN |
 | flow added to JA4 (C_JA4→E_JA4_FLOW) | — | — | — | — [—, —] | — | NOT_RUN |
 
-### ja4_v2_comparison — `ja4_v2_comparison-20261017T050835Z`
+### ja4_foxio_capture_cv — `ja4_foxio_capture_cv-20261017T063740Z`
 
 Seed 42; evaluation population {'per_capture_cap': 4000, 'rows': 62543, 'rows_by_dataset': {'DS-008': 2543, 'DS-009': 36000, 'DS-011': 24000}, 'positives': 38543, 'negatives': 24000, 'captures': 25}
 
 | Track | Model | Enc. | Status | Pos/Neg | AP [95% CI] (status) | ROC-AUC | Recall @ val-FPR≤1% | Test FPR | ECE | Brier |
 |---|---|---|---|---|---|---|---|---|---|---|
-| A_FLOW | random_forest | onehot | COMPLETED | 38543/24000 | 0.931 [0.818, 0.985] (FEW_GROUPS) | 0.909 | 49.5% | 5.8% | 0.104 | 0.121 |
-| C_JA4 | random_forest | onehot | COMPLETED | 8591/2629 | 0.993 [0.935, 1.000] (FEW_GROUPS) | 0.978 | 99.4% | 18.4% | 0.041 | 0.045 |
-| E_JA4_FLOW | random_forest | onehot | COMPLETED | 8591/2629 | 0.990 [0.923, 1.000] (FEW_GROUPS) | 0.976 | 99.6% | 12.1% | 0.018 | 0.022 |
+| A_FLOW | dummy_prior | onehot | COMPLETED | 38543/24000 | 0.600 [0.433, 0.834] (FEW_GROUPS) | 0.463 | 0.0% | 0.0% | 0.069 | 0.243 |
+| A_FLOW | logreg | onehot | COMPLETED | 38543/24000 | 0.875 [0.762, 0.954] (FEW_GROUPS) | 0.872 | 6.8% | 1.7% | 0.098 | 0.143 |
+| A_FLOW | random_forest | onehot | COMPLETED | 38543/24000 | 0.931 [0.797, 0.986] (FEW_GROUPS) | 0.909 | 49.5% | 5.8% | 0.104 | 0.121 |
+| A_FLOW | hist_gb | onehot | COMPLETED | 38543/24000 | 0.898 [0.686, 0.987] (FEW_GROUPS) | 0.886 | 24.8% | 7.8% | 0.123 | 0.135 |
+| B_JA3 | dummy_prior | onehot | COMPLETED | 8591/2629 | 0.767 [0.556, 0.923] (FEW_GROUPS) | 0.475 | 0.0% | 0.0% | 0.047 | 0.181 |
+| B_JA3 | logreg | onehot | COMPLETED | 8591/2629 | 0.970 [0.863, 1.000] (FEW_GROUPS) | 0.912 | 99.8% | 18.6% | 0.042 | 0.046 |
+| B_JA3 | random_forest | onehot | COMPLETED | 8591/2629 | 0.971 [0.868, 1.000] (FEW_GROUPS) | 0.912 | 99.8% | 18.6% | 0.040 | 0.045 |
+| B_JA3 | hist_gb | onehot | COMPLETED | 8591/2629 | 0.999 [0.990, 1.000] (FEW_GROUPS) | 0.997 | 98.6% | 18.4% | 0.038 | 0.028 |
+| C_JA4 | dummy_prior | onehot | COMPLETED | 8578/2621 | 0.767 [0.556, 0.923] (FEW_GROUPS) | 0.475 | 0.0% | 0.0% | 0.047 | 0.181 |
+| C_JA4 | logreg | onehot | COMPLETED | 8578/2621 | 0.998 [0.988, 1.000] (FEW_GROUPS) | 0.995 | 98.5% | 18.4% | 0.048 | 0.052 |
+| C_JA4 | random_forest | onehot | COMPLETED | 8578/2621 | 0.999 [0.989, 1.000] (FEW_GROUPS) | 0.997 | 98.7% | 18.4% | 0.049 | 0.050 |
+| C_JA4 | hist_gb | onehot | COMPLETED | 8578/2621 | 0.951 [0.809, 1.000] (FEW_GROUPS) | 0.875 | 63.4% | 18.4% | 0.090 | 0.054 |
+| D_JA3_FLOW | dummy_prior | onehot | COMPLETED | 8591/2629 | 0.767 [0.556, 0.923] (FEW_GROUPS) | 0.475 | 0.0% | 0.0% | 0.047 | 0.181 |
+| D_JA3_FLOW | logreg | onehot | COMPLETED | 8591/2629 | 1.000 [0.999, 1.000] (FEW_GROUPS) | 0.999 | 99.6% | 1.9% | 0.003 | 0.004 |
+| D_JA3_FLOW | random_forest | onehot | COMPLETED | 8591/2629 | 0.988 [0.931, 1.000] (FEW_GROUPS) | 0.971 | 99.5% | 17.4% | 0.021 | 0.023 |
+| D_JA3_FLOW | hist_gb | onehot | COMPLETED | 8591/2629 | 0.995 [0.963, 1.000] (FEW_GROUPS) | 0.989 | 99.5% | 10.1% | 0.008 | 0.009 |
+| E_JA4_FLOW | dummy_prior | onehot | COMPLETED | 8578/2621 | 0.767 [0.556, 0.923] (FEW_GROUPS) | 0.475 | 0.0% | 0.0% | 0.047 | 0.181 |
+| E_JA4_FLOW | logreg | onehot | COMPLETED | 8578/2621 | 0.953 [0.771, 1.000] (FEW_GROUPS) | 0.917 | 98.7% | 16.7% | 0.016 | 0.033 |
+| E_JA4_FLOW | random_forest | onehot | COMPLETED | 8578/2621 | 0.994 [0.968, 1.000] (FEW_GROUPS) | 0.984 | 99.7% | 14.6% | 0.017 | 0.021 |
+| E_JA4_FLOW | hist_gb | onehot | COMPLETED | 8578/2621 | 1.000 [0.998, 1.000] (FEW_GROUPS) | 0.999 | 99.6% | 9.1% | 0.006 | 0.003 |
+| A_FLOW@JA3POP | dummy_prior | onehot | COMPLETED | 8591/2629 | 0.767 [0.556, 0.923] (FEW_GROUPS) | 0.475 | 0.0% | 0.0% | 0.047 | 0.181 |
+| A_FLOW@JA3POP | logreg | onehot | COMPLETED | 8591/2629 | 0.999 [0.994, 1.000] (FEW_GROUPS) | 0.998 | 99.6% | 1.4% | 0.003 | 0.005 |
+| A_FLOW@JA3POP | random_forest | onehot | COMPLETED | 8591/2629 | 0.990 [0.946, 1.000] (FEW_GROUPS) | 0.976 | 99.5% | 12.2% | 0.018 | 0.022 |
+| A_FLOW@JA3POP | hist_gb | onehot | COMPLETED | 8591/2629 | 0.983 [0.909, 1.000] (FEW_GROUPS) | 0.969 | 99.5% | 12.1% | 0.005 | 0.016 |
+| A_FLOW@JA4POP | dummy_prior | onehot | COMPLETED | 8578/2621 | 0.767 [0.556, 0.923] (FEW_GROUPS) | 0.475 | 0.0% | 0.0% | 0.047 | 0.181 |
+| A_FLOW@JA4POP | logreg | onehot | COMPLETED | 8578/2621 | 0.946 [0.759, 1.000] (FEW_GROUPS) | 0.910 | 90.2% | 15.2% | 0.015 | 0.034 |
+| A_FLOW@JA4POP | random_forest | onehot | COMPLETED | 8578/2621 | 0.995 [0.969, 1.000] (FEW_GROUPS) | 0.986 | 99.7% | 13.0% | 0.018 | 0.021 |
+| A_FLOW@JA4POP | hist_gb | onehot | COMPLETED | 8578/2621 | 0.994 [0.968, 1.000] (FEW_GROUPS) | 0.983 | 99.7% | 13.0% | 0.005 | 0.012 |
+
+Paired contrasts (logreg; Holm over 4 pre-declared contrasts):
+
+| Contrast | Shared rows | AP A | AP B | ΔAP [95% CI] | Holm p | Interpretation |
+|---|---|---|---|---|---|---|
+| JA3 added to flow (A_FLOW@JA3POP→D_JA3_FLOW) | 11220 | 0.9994 | 0.9998 | 0.0004 [0.0000, 0.0053] | 0.0240 | AP higher for B than A (Holm-adjusted); exploratory, source-confounded data |
+| JA4 added to flow (A_FLOW@JA4POP→E_JA4_FLOW) | 11199 | 0.9455 | 0.9529 | 0.0074 [0.0001, 0.0195] | 0.0000 | AP higher for B than A (Holm-adjusted); exploratory, source-confounded data |
+| flow added to JA3 (B_JA3→D_JA3_FLOW) | 11220 | 0.9703 | 0.9998 | 0.0295 [-0.0004, 0.1356] | 1.0000 | No evidence of a difference (this is not evidence of equivalence) |
+| flow added to JA4 (C_JA4→E_JA4_FLOW) | 11199 | 0.9984 | 0.9529 | -0.0454 [-0.2250, 0.0026] | 1.0000 | No evidence of a difference (this is not evidence of equivalence) |
 
 Paired contrasts (random_forest; Holm over 4 pre-declared contrasts):
 
 | Contrast | Shared rows | AP A | AP B | ΔAP [95% CI] | Holm p | Interpretation |
 |---|---|---|---|---|---|---|
-| JA3 added to flow (A_FLOW@JA3POP→D_JA3_FLOW) | — | — | — | — [—, —] | — | NOT_RUN |
-| JA4 added to flow (A_FLOW@JA4POP→E_JA4_FLOW) | — | — | — | — [—, —] | — | NOT_RUN |
-| flow added to JA3 (B_JA3→D_JA3_FLOW) | — | — | — | — [—, —] | — | NOT_RUN |
-| flow added to JA4 (C_JA4→E_JA4_FLOW) | 11220 | 0.9935 | 0.9905 | -0.0030 [-0.0354, 0.0261] | 0.7200 | No evidence of a difference (this is not evidence of equivalence) |
+| JA3 added to flow (A_FLOW@JA3POP→D_JA3_FLOW) | 11220 | 0.9904 | 0.9881 | -0.0023 [-0.0152, 0.0000] | 1.0000 | No evidence of a difference (this is not evidence of equivalence) |
+| JA4 added to flow (A_FLOW@JA4POP→E_JA4_FLOW) | 11199 | 0.9947 | 0.9940 | -0.0007 [-0.0043, 0.0003] | 1.0000 | No evidence of a difference (this is not evidence of equivalence) |
+| flow added to JA3 (B_JA3→D_JA3_FLOW) | 11220 | 0.9710 | 0.9881 | 0.0171 [-0.0000, 0.0718] | 0.5200 | No evidence of a difference (this is not evidence of equivalence) |
+| flow added to JA4 (C_JA4→E_JA4_FLOW) | 11199 | 0.9989 | 0.9940 | -0.0049 [-0.0267, 0.0000] | 1.0000 | No evidence of a difference (this is not evidence of equivalence) |
+
+Paired contrasts (hist_gb; Holm over 4 pre-declared contrasts):
+
+| Contrast | Shared rows | AP A | AP B | ΔAP [95% CI] | Holm p | Interpretation |
+|---|---|---|---|---|---|---|
+| JA3 added to flow (A_FLOW@JA3POP→D_JA3_FLOW) | 11220 | 0.9831 | 0.9946 | 0.0115 [-0.0002, 0.0575] | 1.0000 | No evidence of a difference (this is not evidence of equivalence) |
+| JA4 added to flow (A_FLOW@JA4POP→E_JA4_FLOW) | 11199 | 0.9938 | 0.9996 | 0.0059 [-0.0005, 0.0319] | 1.0000 | No evidence of a difference (this is not evidence of equivalence) |
+| flow added to JA3 (B_JA3→D_JA3_FLOW) | 11220 | 0.9989 | 0.9946 | -0.0044 [-0.0299, 0.0000] | 0.2800 | No evidence of a difference (this is not evidence of equivalence) |
+| flow added to JA4 (C_JA4→E_JA4_FLOW) | 11199 | 0.9510 | 0.9996 | 0.0486 [-0.0007, 0.1900] | 1.0000 | No evidence of a difference (this is not evidence of equivalence) |
 
 Per-capture flagged rate at the validation-selected FPR≤1% threshold (primary model random_forest; benign rows = false-positive rate, malicious rows = detection rate):
 
-| Capture | Class | A_FLOW | C_JA4 | E_JA4_FLOW |
-|---|---|---|---|---|
-| DS008-C001 | MAL | 0.9% (n=1380) | 100.0% (n=45) | 73.3% (n=45) |
-| DS008-C002 | MAL | 0.0% (n=74) | 100.0% (n=17) | 100.0% (n=17) |
-| DS008-C003 | MAL | 1.6% (n=258) | 40.0% (n=50) | 86.0% (n=50) |
-| DS008-C004 | MAL | 0.0% (n=9) | 100.0% (n=2) | 100.0% (n=2) |
-| DS008-C005 | MAL | 0.0% (n=20) | 0.0% (n=8) | 50.0% (n=8) |
-| DS008-C006 | MAL | 18.5% (n=27) | 100.0% (n=6) | 0.0% (n=6) |
-| DS008-C007 | MAL | 12.1% (n=423) | 0.0% (n=10) | 30.0% (n=10) |
-| DS008-C008 | MAL | 37.5% (n=16) | 100.0% (n=2) | 100.0% (n=2) |
-| DS008-C009 | MAL | 35.0% (n=214) | 100.0% (n=51) | 100.0% (n=51) |
-| DS008-C010 | MAL | 13.9% (n=122) | 100.0% (n=3) | 100.0% (n=3) |
-| DS009-CTU-MCB-238-1 | MAL | 38.8% (n=4000) | 100.0% (n=1700) | 100.0% (n=1700) |
-| DS009-CTU-MCB-240-1 | MAL | 41.4% (n=4000) | 100.0% (n=1725) | 100.0% (n=1725) |
-| DS009-CTU-MCB-246-1 | MAL | 48.3% (n=4000) | 100.0% (n=1353) | 100.0% (n=1353) |
-| DS009-CTU-MCB-248-1 | MAL | 77.4% (n=4000) | 100.0% (n=1494) | 100.0% (n=1494) |
-| DS009-CTU-MCB-249-1 | MAL | 69.6% (n=4000) | 100.0% (n=1238) | 100.0% (n=1238) |
-| DS009-CTU-MCB-259-1 | MAL | 100.0% (n=4000) | — | — |
-| DS009-CTU-MCB-260-1 | MAL | 53.9% (n=4000) | 100.0% (n=887) | 99.9% (n=887) |
-| DS009-CTU-MCB-264-1 | MAL | 23.8% (n=4000) | — | — |
-| DS009-CTU-MCB-268-1 | MAL | 19.3% (n=4000) | — | — |
-| DS011-CTU-Normal-20 | BEN | 0.0% (n=4000) | 0.0% (n=370) | 0.0% (n=370) |
-| DS011-CTU-Normal-21 | BEN | 34.4% (n=4000) | 100.0% (n=483) | 65.8% (n=483) |
-| DS011-CTU-Normal-23 | BEN | 0.1% (n=4000) | 0.4% (n=497) | 0.0% (n=497) |
-| DS011-CTU-Normal-24 | BEN | 0.1% (n=4000) | 0.0% (n=423) | 0.0% (n=423) |
-| DS011-CTU-Normal-26 | BEN | 0.0% (n=4000) | 0.0% (n=297) | 0.0% (n=297) |
-| DS011-CTU-Normal-28 | BEN | 0.2% (n=4000) | 0.0% (n=559) | 0.0% (n=559) |
+| Capture | Class | A_FLOW | C_JA4 | D_JA3_FLOW | E_JA4_FLOW |
+|---|---|---|---|---|---|
+| DS008-C001 | MAL | 0.9% (n=1380) | 0.0% (n=45) | 64.4% (n=45) | 68.9% (n=45) |
+| DS008-C002 | MAL | 0.0% (n=74) | 0.0% (n=17) | 94.1% (n=17) | 94.1% (n=17) |
+| DS008-C003 | MAL | 1.6% (n=258) | 24.3% (n=37) | 82.0% (n=50) | 83.8% (n=37) |
+| DS008-C004 | MAL | 0.0% (n=9) | 0.0% (n=2) | 100.0% (n=2) | 100.0% (n=2) |
+| DS008-C005 | MAL | 0.0% (n=20) | 0.0% (n=8) | 50.0% (n=8) | 87.5% (n=8) |
+| DS008-C006 | MAL | 18.5% (n=27) | 100.0% (n=6) | 0.0% (n=6) | 50.0% (n=6) |
+| DS008-C007 | MAL | 12.1% (n=423) | 0.0% (n=10) | 30.0% (n=10) | 100.0% (n=10) |
+| DS008-C008 | MAL | 37.5% (n=16) | 100.0% (n=2) | 100.0% (n=2) | 100.0% (n=2) |
+| DS008-C009 | MAL | 35.0% (n=214) | 100.0% (n=51) | 100.0% (n=51) | 100.0% (n=51) |
+| DS008-C010 | MAL | 13.9% (n=122) | 0.0% (n=3) | 100.0% (n=3) | 100.0% (n=3) |
+| DS009-CTU-MCB-238-1 | MAL | 38.8% (n=4000) | 100.0% (n=1700) | 100.0% (n=1700) | 100.0% (n=1700) |
+| DS009-CTU-MCB-240-1 | MAL | 41.4% (n=4000) | 100.0% (n=1725) | 100.0% (n=1725) | 100.0% (n=1725) |
+| DS009-CTU-MCB-246-1 | MAL | 48.3% (n=4000) | 100.0% (n=1353) | 100.0% (n=1353) | 100.0% (n=1353) |
+| DS009-CTU-MCB-248-1 | MAL | 77.4% (n=4000) | 100.0% (n=1494) | 100.0% (n=1494) | 100.0% (n=1494) |
+| DS009-CTU-MCB-249-1 | MAL | 69.6% (n=4000) | 100.0% (n=1238) | 100.0% (n=1238) | 100.0% (n=1238) |
+| DS009-CTU-MCB-259-1 | MAL | 100.0% (n=4000) | — | — | — |
+| DS009-CTU-MCB-260-1 | MAL | 53.9% (n=4000) | 100.0% (n=887) | 100.0% (n=887) | 100.0% (n=887) |
+| DS009-CTU-MCB-264-1 | MAL | 23.8% (n=4000) | — | — | — |
+| DS009-CTU-MCB-268-1 | MAL | 19.3% (n=4000) | — | — | — |
+| DS011-CTU-Normal-20 | BEN | 0.0% (n=4000) | 0.0% (n=370) | 0.0% (n=370) | 0.5% (n=370) |
+| DS011-CTU-Normal-21 | BEN | 34.4% (n=4000) | 100.0% (n=482) | 94.8% (n=483) | 78.8% (n=482) |
+| DS011-CTU-Normal-23 | BEN | 0.1% (n=4000) | 0.0% (n=495) | 0.0% (n=497) | 0.0% (n=495) |
+| DS011-CTU-Normal-24 | BEN | 0.1% (n=4000) | 0.0% (n=423) | 0.0% (n=423) | 0.0% (n=423) |
+| DS011-CTU-Normal-26 | BEN | 0.0% (n=4000) | 0.0% (n=294) | 0.0% (n=297) | 0.0% (n=294) |
+| DS011-CTU-Normal-28 | BEN | 0.2% (n=4000) | 0.0% (n=557) | 0.0% (n=559) | 0.0% (n=557) |
 
 ### leave_one_family_out — `leave_one_family_out-20261016T181651Z`
 
@@ -586,6 +630,8 @@ Sequence vs tabular contrasts:
 | CNN vs full-flow tabular (tab_trackA_hist_gb→cnn) | 60000 | 0.9257 | 0.8930 | -0.0327 [-0.1136, 0.0114] | 1.0000 | No evidence of a difference (this is not evidence of equivalence) |
 | GRU vs full-flow tabular (tab_trackA_hist_gb→gru) | 60000 | 0.9257 | 0.8714 | -0.0543 [-0.1630, 0.0141] | 0.9040 | No evidence of a difference (this is not evidence of equivalence) |
 
+Suite **ja4_v2_comparison** is INVALIDATED and excluded from results: pipeline/corpus/recompute_ja4_v2.py derived 'ja4_v2' from the stored ETTH v1 string: it copied the v1 third component (sorted signature algorithms) for 41,408 of 80,651 fingerprints, hard-coded one reference-vector mapping, and did not recompute the version field. Results of this suite (suite ja4_v2_comparison-20261017T050835Z) are preserved but are not FoxIO JA4 evidence. Superseded by ja4_foxio_capture_cv.
+
 ## Claim ledger
 
 | ID | Claim | Status | Evidence |
@@ -614,6 +660,11 @@ Sequence vs tabular contrasts:
 | C19 | Models trained on ETTH packet features and ETTH JA4 refuse sensor-aggregate statistics and FoxIO JA4 instead of scoring them. | **SUPPORTED** | backend/inference_engine.py provenance and JA4-implementation rules; tests/test_inference_contract.py (FoxIO reference ClientHello: ETTH JA4 t13d1516h2_8daaf6152771_0adf69b4533f vs FoxIO ..._e5627efa2ab1) and tests/test_cross_phase_integration.py (all five tracks on sensor fixtures). |
 | C20 | Live capture produces the same flows (boundaries, initiator direction) and the same flow and TLS feature values as the offline PCAP pipeline for the same packets. | **SUPPORTED** | tests/test_live_offline_parity.py: synthetic packets written to a PCAP give identical flows and FLOW features (rel/abs 1e-9) through pipeline.flow_reconstruction and LiveCaptureSource. |
 | C21 | ETTH detection models can score flows observed by Zeek, Suricata or eBPF sensors. | **BLOCKED** | No model is trained on sensor-observable features with sensor provenance, and no labelled sensor telemetry is available. Under the current contract only the JA3-only track accepts sensor flows, and those JA3 values are mostly outside the training vocabulary (UNSEEN_CATEGORY). |
+| C22 | pipeline.tls_fingerprinting.generate_ja4_foxio reproduces FoxIO's reference JA4 output for TLS over TCP. | **SUPPORTED** | tests/test_ja4_foxio_reference.py: 139/139 TCP vectors from FoxIO-LLC/ja4 commit c6469a7 (snapshot outputs of FoxIO's reference implementation; captures pinned by SHA-256 in data/reference/foxio_ja4/vectors.json). Implementation id FOXIO_JA4 / ja4_foxio-c6469a7_etth-2. |
+| C23 | TLS Hellos split across TCP segments are fingerprinted from their complete bytes, and incomplete, conflicting or malformed streams produce no fingerprint, identically in live capture and offline reconstruction. | **SUPPORTED** | pipeline/tls_reassembly.py; tests/test_tls_reassembly.py (24 cases: segmentation, wraparound, reordering, retransmission, overlaps, conflicts, timeouts, termination, malformed lengths, eviction, concurrency) and tests/test_hello_acquisition_parity.py (live = offline on the same packets). |
+| C24 | With FoxIO-conformant JA4, adding JA4 to flow features increases average precision on the shared JA4 population (A@JA4POP -> E). | **INSUFFICIENT_EVIDENCE** | ja4_foxio_capture_cv (ja4_foxio_capture_cv-20261017T063740Z), random_forest: dAP=-0.0006663270971376534 CI[-0.004280028258135555, 0.00025102802399783457] (FEW_GROUPS) Holm p=1.0. The suite ja4_v2_comparison (Phase 13 pre-audit) is invalidated and not used. |
+| C25 | With FoxIO-conformant JA4, adding flow features to JA4 increases average precision (C -> E). | **INSUFFICIENT_EVIDENCE** | ja4_foxio_capture_cv (ja4_foxio_capture_cv-20261017T063740Z), random_forest: dAP=-0.0048549772333474905 CI[-0.026685162002926453, 4.4094450675502405e-05] (FEW_GROUPS) Holm p=1.0. The suite ja4_v2_comparison (Phase 13 pre-audit) is invalidated and not used. |
+| C26 | Flows observed by Zeek, Suricata and eBPF collectors are resolved to a single cross-sensor identity. | **UNTESTED** | No cross-sensor correlation is implemented: tests/test_sensor_cross_correlation.py checks, on synthetic fixtures, that each adapter normalises the same flow to comparable fields, but no component joins records across sensors. |
 
 ## Model registry
 
@@ -627,7 +678,7 @@ Sequence vs tabular contrasts:
 
 - Python 3.12.0 on Windows-11-10.0.26200-SP0; CPUs 24
 - Packages: {'numpy': '2.4.6', 'pandas': '3.0.5', 'sklearn': '1.9.0', 'scipy': '1.18.0', 'pyarrow': '25.0.1', 'torch': '2.13.0+cpu', 'dpkt': '1.9.8'}
-- Source revision: 07aba418dd2aad9d92ac428c6c1a839c490f5ad0
+- Source revision: 8db8bf3082abaeee80b2b05340c49ef6f52bd92c+dirty
 
 ## Limitations and negative results
 

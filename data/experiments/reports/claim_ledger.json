@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-17T05:31:06.452017Z",
+  "generated_at": "2026-10-17T09:09:38.196073Z",
   "claims": [
     {
       "claim_id": "C01",
@@ -826,6 +826,112 @@
       "limitations": [
         "Requires authorised, labelled sensor data and a retrained, sensor-aware model."
       ]
+    },
+    {
+      "claim_id": "C22",
+      "claim": "pipeline.tls_fingerprinting.generate_ja4_foxio reproduces FoxIO's reference JA4 output for TLS over TCP.",
+      "status": "SUPPORTED",
+      "evidence_summary": "tests/test_ja4_foxio_reference.py: 139/139 TCP vectors from FoxIO-LLC/ja4 commit c6469a7 (snapshot outputs of FoxIO's reference implementation; captures pinned by SHA-256 in data/reference/foxio_ja4/vectors.json). Implementation id FOXIO_JA4 / ja4_foxio-c6469a7_etth-2.",
+      "supporting_experiments": [],
+      "datasets": [],
+      "evaluation_protocol": "reference-vector conformance test",
+      "metrics": {},
+      "uncertainty": {},
+      "assumptions": [],
+      "known_confounders": [],
+      "limitations": [
+        "QUIC ('q') and DTLS ('d') JA4 are not implemented.",
+        "Non-ASCII ALPN follows FoxIO's reference code ('9'), which differs from the written spec (hex).",
+        "The pcap test is skipped when the reference captures are not fetched; conformance is claimed only from runs where it executed.",
+        "Corpus v3's 'ja4' column remains the historical, non-conformant ETTH_JA4_V1."
+      ]
+    },
+    {
+      "claim_id": "C23",
+      "claim": "TLS Hellos split across TCP segments are fingerprinted from their complete bytes, and incomplete, conflicting or malformed streams produce no fingerprint, identically in live capture and offline reconstruction.",
+      "status": "SUPPORTED",
+      "evidence_summary": "pipeline/tls_reassembly.py; tests/test_tls_reassembly.py (24 cases: segmentation, wraparound, reordering, retransmission, overlaps, conflicts, timeouts, termination, malformed lengths, eviction, concurrency) and tests/test_hello_acquisition_parity.py (live = offline on the same packets).",
+      "supporting_experiments": [],
+      "datasets": [],
+      "evaluation_protocol": "unit and parity tests on synthetic packets",
+      "metrics": {},
+      "uncertainty": {},
+      "assumptions": [],
+      "known_confounders": [],
+      "limitations": [
+        "Synthetic segments only; no real-interface capture was exercised.",
+        "Corpus v3 was built with first-segment parsing and is unchanged; reassembly applies to new builds and live capture."
+      ]
+    },
+    {
+      "claim_id": "C24",
+      "claim": "With FoxIO-conformant JA4, adding JA4 to flow features increases average precision on the shared JA4 population (A@JA4POP -> E).",
+      "status": "INSUFFICIENT_EVIDENCE",
+      "evidence_summary": "ja4_foxio_capture_cv (ja4_foxio_capture_cv-20261017T063740Z), random_forest: dAP=-0.0006663270971376534 CI[-0.004280028258135555, 0.00025102802399783457] (FEW_GROUPS) Holm p=1.0. The suite ja4_v2_comparison (Phase 13 pre-audit) is invalidated and not used.",
+      "supporting_experiments": [
+        "ja4_foxio_capture_cv-20261017T063740Z"
+      ],
+      "datasets": [
+        "DS-008",
+        "DS-009",
+        "DS-011"
+      ],
+      "evaluation_protocol": "capture-grouped 5-fold CV, exploratory",
+      "metrics": {},
+      "uncertainty": {},
+      "assumptions": [],
+      "known_confounders": [
+        "dataset identity equals class at source level (DS-008/DS-009 malicious, DS-011 benign)",
+        "benign captures are 2017 Stratosphere lab browsing (READMEs of 5 of 6 captures state Kali Linux / iceweasel 43; file names of 3 say 'win'); malicious captures are Windows hosts",
+        "capture-level labels propagated to flows (background traffic in malware captures labelled malicious)"
+      ],
+      "limitations": [
+        "Same single-benign-source corpus as every other suite: dataset identity equals class.",
+        "FoxIO JA4 is withheld for ClientHellos that corpus v3 parsed from a truncated first segment."
+      ]
+    },
+    {
+      "claim_id": "C25",
+      "claim": "With FoxIO-conformant JA4, adding flow features to JA4 increases average precision (C -> E).",
+      "status": "INSUFFICIENT_EVIDENCE",
+      "evidence_summary": "ja4_foxio_capture_cv (ja4_foxio_capture_cv-20261017T063740Z), random_forest: dAP=-0.0048549772333474905 CI[-0.026685162002926453, 4.4094450675502405e-05] (FEW_GROUPS) Holm p=1.0. The suite ja4_v2_comparison (Phase 13 pre-audit) is invalidated and not used.",
+      "supporting_experiments": [
+        "ja4_foxio_capture_cv-20261017T063740Z"
+      ],
+      "datasets": [
+        "DS-008",
+        "DS-009",
+        "DS-011"
+      ],
+      "evaluation_protocol": "capture-grouped 5-fold CV, exploratory",
+      "metrics": {},
+      "uncertainty": {},
+      "assumptions": [],
+      "known_confounders": [
+        "dataset identity equals class at source level (DS-008/DS-009 malicious, DS-011 benign)",
+        "benign captures are 2017 Stratosphere lab browsing (READMEs of 5 of 6 captures state Kali Linux / iceweasel 43; file names of 3 say 'win'); malicious captures are Windows hosts",
+        "capture-level labels propagated to flows (background traffic in malware captures labelled malicious)"
+      ],
+      "limitations": [
+        "Same single-benign-source corpus as every other suite: dataset identity equals class.",
+        "FoxIO JA4 is withheld for ClientHellos that corpus v3 parsed from a truncated first segment."
+      ]
+    },
+    {
+      "claim_id": "C26",
+      "claim": "Flows observed by Zeek, Suricata and eBPF collectors are resolved to a single cross-sensor identity.",
+      "status": "UNTESTED",
+      "evidence_summary": "No cross-sensor correlation is implemented: tests/test_sensor_cross_correlation.py checks, on synthetic fixtures, that each adapter normalises the same flow to comparable fields, but no component joins records across sensors.",
+      "supporting_experiments": [],
+      "datasets": [],
+      "evaluation_protocol": "not run",
+      "metrics": {},
+      "uncertainty": {},
+      "assumptions": [],
+      "known_confounders": [],
+      "limitations": [
+        "Needs an implemented correlator that handles NAT, clock skew and missing records, and genuine tool output."
+      ]
     }
   ],
   "statuses": [
@@ -833,6 +939,7 @@
     "CONTRADICTED",
     "INSUFFICIENT_EVIDENCE",
     "PRELIMINARY",
-    "SUPPORTED"
+    "SUPPORTED",
+    "UNTESTED"
   ]
 }
