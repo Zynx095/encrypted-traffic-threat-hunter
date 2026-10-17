@@ -1,5 +1,16 @@
 """
-Recompute JA4 values with versioning (FoxIO JA4 v2) into versioned outputs.
+INVALID - kept only so the provenance of data/processed/v3_ja4_v2 and suite
+ja4_v2_comparison-20261017T050835Z stays inspectable. Use pipeline.corpus.recompute_ja4_foxio.
+
+Defects (audited 2026-10-17):
+* FoxIO's third component hashes the signature algorithms in wire order. The corpus stores only
+  the ETTH v1 string, whose third component hashes them sorted, so it cannot be converted.
+  ``convert_ja4_to_v2`` copied the v1 component unchanged (41,408 of 80,651 fingerprints) except
+  for one hard-coded mapping of the FoxIO documentation example.
+* The version field was not recomputed (FoxIO uses the highest supported_versions value).
+* The manifest's ``ja4_v2_changed_from_v1`` (563,310) counted null != null comparisons.
+
+Original description: recompute JA4 values with versioning (FoxIO JA4 v2) into versioned outputs.
 Preserves original corpus_flows.parquet v3 byte-for-byte and creates
 versioned artifacts in data/processed/v3_ja4_v2/ for research comparisons.
 """
@@ -66,6 +77,7 @@ def convert_ja4_to_v2(row: Dict[str, Any]) -> Optional[str]:
 
 def build_ja4_v2_corpus() -> Dict[str, Any]:
     """Generates the versioned JA4 v2 corpus flows dataset."""
+    raise RuntimeError("recompute_ja4_v2 is invalid (see module docstring); use pipeline.corpus.recompute_ja4_foxio")
     if not SOURCE_PARQUET.exists():
         raise FileNotFoundError(f"Source corpus not found: {SOURCE_PARQUET}")
 
